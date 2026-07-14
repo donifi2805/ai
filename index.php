@@ -2093,6 +2093,188 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
+    /* PBB SMART LOCATION SELECTOR */
+    .pbb-header-box {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 22px 20px;
+      border-radius: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.22);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .pbb-header-box::after {
+      content: '';
+      position: absolute;
+      right: -30px;
+      bottom: -30px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .pbb-search-box {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .pbb-search-input {
+      width: 100%;
+      padding: 15px 16px 15px 48px;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+    .pbb-search-input:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+    .pbb-search-box i {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 18px;
+    }
+    .pbb-region-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .pbb-region-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .pbb-region-tab {
+      padding: 10px 16px;
+      border-radius: 100px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .pbb-region-tab:hover {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .pbb-region-tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+    }
+    .pbb-section-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 20px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px dashed #e2e8f0;
+    }
+    .pbb-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 550px) {
+      .pbb-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .pbb-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 15px 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .pbb-card:hover {
+      border-color: #bfdbfe;
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    .pbb-card:active {
+      transform: scale(0.98);
+      background: #f8fafc;
+    }
+    .pbb-icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .pbb-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .pbb-city-name {
+      font-weight: 800;
+      font-size: 13.5px;
+      color: #0f172a;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pbb-city-meta {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pbb-badge {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .badge-kota { background: #e0e7ff; color: #6d28d9; }
+    .badge-kabupaten { background: #dcfce7; color: #15803d; }
+    .badge-provinsi { background: #fef3c7; color: #b45309; }
+    .pbb-arrow {
+      color: #cbd5e1;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .pbb-card:hover .pbb-arrow {
+      color: var(--primary);
+      transform: translateX(3px);
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
@@ -4166,6 +4348,160 @@
         return m.trim();
     };
     
+            // --- SISTEM PEMILIHAN LOKASI PINTAR PBB ---
+            window.allPbbLocations = [];
+            window.selectedPbbRegion = 'SEMUA';
+            window.searchPbbKeyword = '';
+
+            window.getCityInfo = function(keterangan, produk) {
+                let ket = (keterangan || "").replace(/H2H/gi, "").trim();
+                let cityClean = ket
+                    .replace(/^(Cek|Bayar|Inquiry)\s+(Tagihan\s+)?(PBB\s+)?/i, "")
+                    .replace(/^(Cek|Bayar|Inquiry)\s+/i, "")
+                    .replace(/^Tagihan PBB\s+/i, "")
+                    .trim();
+                
+                let tipe = "KABUPATEN";
+                if (cityClean.toUpperCase().startsWith("KOTA ")) tipe = "KOTA";
+                else if (cityClean.toUpperCase().startsWith("KAB ") || cityClean.toUpperCase().startsWith("KABUPATEN ")) tipe = "KABUPATEN";
+                else if (cityClean.toUpperCase().includes("DKI") || cityClean.toUpperCase().includes("PROVINSI")) tipe = "PROVINSI";
+                
+                let regionClean = "Wilayah Lainnya";
+                let prod = (produk || "").toUpperCase();
+                if (prod.includes("SUMATERA")) regionClean = "Sumatera";
+                else if (prod.includes("RIAU")) regionClean = "Riau & Kep. Riau";
+                else if (prod.includes("JABAR") || prod.includes("BANTEN") || prod.includes("JAKARTA")) regionClean = "DKI, Jabar & Banten";
+                else if (prod.includes("JAWA TENGAH")) regionClean = "Jawa Tengah & DIY";
+                else if (prod.includes("JAWA TIMUR")) regionClean = "Jawa Timur";
+                else if (prod.includes("KALIMANTAN")) regionClean = "Kalimantan";
+                else if (prod.includes("SULAWESI")) regionClean = "Sulawesi";
+                else if (prod.includes("BALI")) regionClean = "Bali";
+                else if (prod.includes("NTB")) regionClean = "Nusa Tenggara Barat";
+                else if (prod.includes("NTT")) regionClean = "Nusa Tenggara Timur";
+                else if (prod.includes("PAPUA")) regionClean = "Papua";
+                
+                return { cityClean, tipe, regionClean };
+            };
+
+            window.switchPbbRegion = function(regionName) {
+                window.selectedPbbRegion = regionName;
+                window.renderPbbLocationsOnly();
+            };
+
+            window.filterPbbSmart = function(keyword) {
+                window.searchPbbKeyword = keyword.toLowerCase().trim();
+                window.renderPbbLocationsOnly();
+            };
+
+            window.renderPbbSystem = function() {
+                const listArea = document.getElementById('listProdukArea');
+                if (!listArea) return;
+                
+                const regions = ['SEMUA', 'DKI, Jabar & Banten', 'Jawa Tengah & DIY', 'Jawa Timur', 'Sumatera', 'Riau & Kep. Riau', 'Kalimantan', 'Sulawesi', 'Bali', 'Nusa Tenggara Barat', 'Nusa Tenggara Timur', 'Papua'];
+                
+                let htmlHeader = `
+                <div class="pbb-header-box">
+                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 4px;"><i class="fas fa-landmark"></i> Pajak Bumi & Bangunan (PBB)</div>
+                    <div style="font-size: 18px; font-weight: 900; line-height: 1.3;">Sistem Pemilihan Lokasi Pintar</div>
+                    <div style="font-size: 12px; opacity: 0.85; margin-top: 4px;">Cek & bayar tagihan PBB dari 160+ Kota/Kabupaten se-Indonesia secara mudah & real-time.</div>
+                </div>
+                
+                <div class="pbb-search-box">
+                    <input type="text" id="pbbSearchInput" class="pbb-search-input" placeholder="🔍 Cari Kota/Kabupaten (contoh: Surabaya, Bogor, Medan)..." oninput="window.filterPbbSmart(this.value)">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                <div class="pbb-region-tabs" id="pbbRegionTabs">
+                    ${regions.map(r => `<div class="pbb-region-tab ${r === window.selectedPbbRegion ? 'active' : ''}" onclick="window.switchPbbRegion('${r}')">${r === 'SEMUA' ? '🌐 Semua Wilayah (' + window.allPbbLocations.length + ')' : r}</div>`).join('')}
+                </div>
+                
+                <div id="pbbCardsContainer"></div>
+                `;
+                
+                listArea.innerHTML = htmlHeader;
+                window.renderPbbLocationsOnly();
+            };
+
+            window.renderPbbLocationsOnly = function() {
+                const container = document.getElementById('pbbCardsContainer');
+                if (!container) return;
+                
+                document.querySelectorAll('.pbb-region-tab').forEach(tab => {
+                    if (tab.innerText.includes(window.selectedPbbRegion) || (window.selectedPbbRegion === 'SEMUA' && tab.innerText.includes('Semua Wilayah'))) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+                
+                let filtered = window.allPbbLocations.filter(loc => {
+                    let matchRegion = window.selectedPbbRegion === 'SEMUA' || loc.regionClean === window.selectedPbbRegion;
+                    let matchSearch = !window.searchPbbKeyword || loc.cityClean.toLowerCase().includes(window.searchPbbKeyword) || loc.keterangan.toLowerCase().includes(window.searchPbbKeyword) || loc.regionClean.toLowerCase().includes(window.searchPbbKeyword);
+                    return matchRegion && matchSearch;
+                });
+                
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; background: #f8fafc; border-radius: 20px; border: 1.5px dashed #cbd5e1; margin-top: 10px;">
+                        <i class="fas fa-search-location" style="font-size: 45px; color: #94a3b8; margin-bottom: 12px;"></i>
+                        <div style="font-weight: 800; font-size: 15px; color: #334155;">Lokasi Tidak Ditemukan</div>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Coba gunakan kata kunci kota lain atau pilih tab 'Semua Wilayah'.</div>
+                    </div>`;
+                    return;
+                }
+                
+                if (window.selectedPbbRegion === 'SEMUA' && !window.searchPbbKeyword) {
+                    const groupOrder = ['DKI, Jabar & Banten', 'Jawa Tengah & DIY', 'Jawa Timur', 'Sumatera', 'Riau & Kep. Riau', 'Kalimantan', 'Sulawesi', 'Bali', 'Nusa Tenggara Barat', 'Nusa Tenggara Timur', 'Papua', 'Wilayah Lainnya'];
+                    let htmlGrouped = "";
+                    
+                    groupOrder.forEach(reg => {
+                        let locsInGroup = filtered.filter(l => l.regionClean === reg);
+                        if (locsInGroup.length === 0) return;
+                        
+                        htmlGrouped += `<div class="pbb-section-title"><i class="fas fa-map-pin" style="color:var(--primary);"></i> Wilayah ${reg} <span style="font-size:11px; font-weight:700; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:100px;">${locsInGroup.length} Lokasi</span></div>`;
+                        htmlGrouped += `<div class="pbb-grid">`;
+                        locsInGroup.forEach(loc => {
+                            let badgeClass = loc.tipe === 'KOTA' ? 'badge-kota' : (loc.tipe === 'KABUPATEN' ? 'badge-kabupaten' : 'badge-provinsi');
+                            htmlGrouped += `
+                            <div class="pbb-card" onclick="siapkanInvoice('${loc.kode}', '${loc.namaProduk.replace(/'/g, "\'")}', ${loc.hargaFinal})">
+                                <div class="pbb-icon-badge"><i class="fas fa-file-invoice-dollar"></i></div>
+                                <div class="pbb-info">
+                                    <div class="pbb-city-name" title="${loc.cityClean}">${loc.cityClean}</div>
+                                    <div class="pbb-city-meta">
+                                        <span class="pbb-badge ${badgeClass}">${loc.tipe}</span>
+                                        <span>• Cek & Bayar</span>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right pbb-arrow"></i>
+                            </div>`;
+                        });
+                        htmlGrouped += `</div>`;
+                    });
+                    container.innerHTML = htmlGrouped;
+                    return;
+                }
+                
+                let htmlGrid = `<div class="pbb-section-title"><i class="fas fa-list-ul" style="color:var(--primary);"></i> Menampilkan ${filtered.length} Lokasi PBB</div>`;
+                htmlGrid += `<div class="pbb-grid">`;
+                filtered.forEach(loc => {
+                    let badgeClass = loc.tipe === 'KOTA' ? 'badge-kota' : (loc.tipe === 'KABUPATEN' ? 'badge-kabupaten' : 'badge-provinsi');
+                    htmlGrid += `
+                    <div class="pbb-card" onclick="siapkanInvoice('${loc.kode}', '${loc.namaProduk.replace(/'/g, "\'")}', ${loc.hargaFinal})">
+                        <div class="pbb-icon-badge"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div class="pbb-info">
+                            <div class="pbb-city-name" title="${loc.cityClean}">${loc.cityClean}</div>
+                            <div class="pbb-city-meta">
+                                <span class="pbb-badge ${badgeClass}">${loc.tipe}</span>
+                                <span style="font-size:10px; color:#94a3b8;">${loc.regionClean}</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right pbb-arrow"></i>
+                    </div>`;
+                });
+                htmlGrid += `</div>`;
+                container.innerHTML = htmlGrid;
+            };
+
             // 2. LOGIKA FILTERING MENU (SESUAI POLA JSON OKE CONNECT)
                     function bukaMenu(kategori) {
                 document.getElementById('judulMenu').innerText = kategori;
@@ -4288,36 +4624,49 @@
                         (i.produk && i.produk.toUpperCase().includes('PBB'))
                     );
                     dataMentah = filtered;
-                    document.getElementById('inputContainer').style.display = "block";
+                    document.getElementById('inputContainer').style.display = "none";
                     document.getElementById('areaFilter').style.display = "none";
                     document.getElementById('listProdukArea').style.display = "block";
                     document.getElementById('btnKembali').style.display = "none";
-                    let html = "";
+                    
                     const config = window.markupConfig || {};
+                    window.allPbbLocations = [];
+                    window.selectedPbbRegion = 'SEMUA';
+                    window.searchPbbKeyword = '';
+                    
                     filtered.forEach(item => {
                         if (item.status !== "1") return;
                         const k = item.kode;
                         const hiddenPrefixes = ['BPAM','BPBB','BHOME','BKPR','BKK','BFNC','BYR','PAY','BSAM','BPLA','BNTPLA','BTEL','BBPJS','BCOMET','BCENTRIN','BMST','BTV'];
                         if(k === 'CPLN' || k === 'FLAZZ2200' || (item.produk||'').toUpperCase().includes('CEK NAMA') || hiddenPrefixes.some(p => k.startsWith(p))) return;
+                        
                         let rawM = config[item.kode] !== undefined ? config[item.kode] : (config[item.produk] !== undefined ? config[item.produk] : config['General']);
                         let markupFinal = window.getMarkupValue(rawM, parseInt(item.harga));
                         let hargaFinal = parseInt(item.harga) + markupFinal;
                         const checkPrefixes = ['CPAM','CPBB','CEK','INQ','CHOME','CKPR','CKK','CFNC','CSAM','CPLA','CNTPLA','CTEL','CBPJS','CCOMET','CCENTRIN','CMST'];
                         if (checkPrefixes.some(p => k.startsWith(p))) hargaFinal = 0;
+                        
                         let namaProduk = item.keterangan.replace(/H2H/gi, "").trim();
                         if (namaProduk.match(/^(Cek|CEK|Inquiry|INQUIRY)\s/)) {
                             namaProduk = namaProduk.replace(/^(Cek|CEK|Inquiry|INQUIRY)\s+/i, "Cek & Bayar ");
                         }
-                        let aksiKlik = `siapkanInvoice('${item.kode}','${namaProduk}',${hargaFinal})`;
-                        html += `<div class="item-produk" onclick="${aksiKlik}">
-                            <div style="flex:1;">
-                                <div style="font-weight:bold;font-size:12px;">${namaProduk}</div>
-                                <div style="font-size:10px; color:#999;">${item.kode}</div>
-                            </div>
-                            <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(hargaFinal)}</div>
-                        </div>`;
+                        
+                        let { cityClean, tipe, regionClean } = window.getCityInfo(item.keterangan, item.produk);
+                        
+                        window.allPbbLocations.push({
+                            kode: item.kode,
+                            namaProduk: namaProduk,
+                            hargaFinal: hargaFinal,
+                            keterangan: item.keterangan,
+                            produk: item.produk || "Tagihan PBB",
+                            cityClean: cityClean,
+                            tipe: tipe,
+                            regionClean: regionClean
+                        });
                     });
-                    document.getElementById('listProdukArea').innerHTML = html || "<div style='padding:20px; text-align:center; color:#999;'>Produk Tidak Tersedia</div>";
+                    
+                    window.allPbbLocations.sort((a, b) => a.cityClean.localeCompare(b.cityClean));
+                    window.renderPbbSystem();
                     return;
                 }
                 else if (kategori === 'VA Bank') {
@@ -4713,7 +5062,8 @@
     
                     window.siapkanInvoice = function(kode, nama, harga) {
                 const judulMenu = document.getElementById('judulMenu').innerText;
-        if (judulMenu !== "E-Wallet" && judulMenu !== "Bebas Nominal Uang Elektronik" && judulMenu !== "Token PLN") {
+                let isPbb = (judulMenu === "PBB" || judulMenu === "Tagihan PBB" || kode.startsWith("CPBB") || kode.startsWith("BPBB") || (nama||"").toUpperCase().includes("PBB"));
+                if (judulMenu !== "E-Wallet" && judulMenu !== "Bebas Nominal Uang Elektronik" && judulMenu !== "Token PLN" && !isPbb) {
                     const hp = document.getElementById('nomorHP').value;
                     if(!hp) return window.showNotice('error', 'Gagal', 'Nomor HP/ID Pelanggan wajib diisi!');
                 }
@@ -4752,9 +5102,9 @@
         <b style="color: #666;">${kode}</b>
     </div>
     <div style="margin-bottom: 15px;">
-        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Nomor Tujuan / ID Pelanggan</label>
+        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">${isPbb ? 'Nomor Objek Pajak (NOP) / ID Pelanggan PBB' : 'Nomor Tujuan / ID Pelanggan'}</label>
         <div class="input-group" style="margin-bottom: 0;">
-            <input type="tel" inputmode="numeric" id="invoiceNomorHP" class="form-input" placeholder="Contoh: 0812xxxx" oninput="window.debounceCekNama('${providerKey}')" style="background: white; border: 2px solid #e1effe; padding-right: 70px;">
+            <input type="tel" inputmode="numeric" id="invoiceNomorHP" class="form-input" placeholder="${isPbb ? 'Contoh: 3578xxxxxxxxxxxxxxxx (18 digit NOP)' : 'Contoh: 0812xxxx'}" oninput="window.debounceCekNama('${providerKey}')" style="background: white; border: 2px solid #e1effe; padding-right: 70px;">
             <i class="fas fa-address-card" style="top: 15px;"></i>
             <button type="button" onclick="window.pasteDariClipboard('invoiceNomorHP')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
         </div>
@@ -4788,8 +5138,10 @@
                 }
                 
         if(judulMenu !== "E-Wallet" && judulMenu !== "Token PLN") {
-                    document.getElementById('invoiceNomorHP').value = document.getElementById('nomorHP').value;
-                    setTimeout(() => window.debounceCekNama(providerKey), 500);
+                    if (!isPbb || document.getElementById('nomorHP').value) {
+                        document.getElementById('invoiceNomorHP').value = document.getElementById('nomorHP').value;
+                        setTimeout(() => window.debounceCekNama(providerKey), 500);
+                    }
                 }
                 modalInvoice.style.display = "flex";
             }
