@@ -7,207 +7,583 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 <style>
         :root {
-            --bg-color: #1a202c;
-            --surface-color: #2d3748;
-            --border-color: #4a5568;
-            --text-color: #e2e8f0;
+            --ink: #edf4ff;
+            --muted: #93a4bd;
+            --muted-strong: #bdcbe0;
+            --canvas: #07111f;
+            --surface: rgba(14, 27, 47, 0.88);
+            --surface-raised: #14243d;
+            --surface-input: #0a1729;
+            --line: rgba(148, 163, 184, 0.16);
+            --line-strong: rgba(129, 140, 248, 0.38);
+            --primary: #6d5dfc;
+            --primary-bright: #8b7fff;
+            --teal: #2dd4bf;
+            --danger: #fb7185;
+            --shadow: 0 20px 52px rgba(0, 0, 0, 0.28);
         }
+
+        * { -webkit-tap-highlight-color: transparent; }
+        html { min-height: 100%; background: var(--canvas); }
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Inter', sans-serif;
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 12% -10%, rgba(109, 93, 252, 0.22), transparent 28rem),
+                radial-gradient(circle at 96% 22%, rgba(45, 212, 191, 0.10), transparent 24rem),
+                var(--canvas);
         }
-        .modal-message-success { color: #4ade80; }
-        .modal-message-error { color: #f87171; }
-        .modal-message-info { color: #60a5fa; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1f2937; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-        @media (max-width: 768px) { body { zoom: 0.8; } }
-        .app-card { background-color: #1e293b; border-radius: 1.5rem; padding: 1.25rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); border: 1px solid #334155; margin-bottom: 0.5rem; }
+        button, input, textarea, select { font: inherit; }
         button { touch-action: manipulation; }
+        button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, a:focus-visible {
+            outline: 3px solid rgba(129, 140, 248, 0.9);
+            outline-offset: 3px;
+        }
+        .modal-message-success { color: #6ee7b7; }
+        .modal-message-error { color: #fda4af; }
+        .modal-message-info { color: #93c5fd; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #43536c; border-radius: 99px; }
+
+        .app-shell {
+            width: min(100%, 1180px);
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+        }
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin: 2px 2px 24px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            gap: 12px;
+        }
+        .brand-mark {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            place-items: center;
+            color: white;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 14px;
+            background: linear-gradient(145deg, #8b7fff, #5544dc 58%, #3d2c9d);
+            box-shadow: 0 10px 24px rgba(81, 65, 214, .35), inset 0 1px rgba(255,255,255,.24);
+        }
+        .brand-mark svg { width: 23px; height: 23px; }
+        .brand-eyebrow, .section-eyebrow {
+            margin: 0 0 3px;
+            color: #a7b8d2;
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+        .brand h1 {
+            margin: 0;
+            color: #f8fbff;
+            font-size: clamp(1.15rem, 4.8vw, 1.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -.035em;
+        }
+        .connection-pill {
+            display: inline-flex;
+            align-items: center;
+            flex: 0 0 auto;
+            gap: 7px;
+            padding: 8px 10px;
+            color: #b8f6e9;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            border: 1px solid rgba(45, 212, 191, .20);
+            border-radius: 999px;
+            background: rgba(20, 102, 100, .17);
+        }
+        .connection-pill::before {
+            width: 7px;
+            height: 7px;
+            content: "";
+            border-radius: 999px;
+            background: var(--teal);
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, .12);
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+        .app-card {
+            position: relative;
+            overflow: hidden;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            background: linear-gradient(145deg, rgba(22, 39, 65, .92), var(--surface));
+            box-shadow: var(--shadow), inset 0 1px rgba(255,255,255,.035);
+        }
+        .app-card::before {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            left: 20px;
+            height: 1px;
+            content: "";
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+        }
+        .section-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .section-title {
+            margin: 0;
+            color: #f4f8ff;
+            font-size: 16px;
+            font-weight: 780;
+            line-height: 1.2;
+            letter-spacing: -.02em;
+        }
+        .section-description {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 8px;
+            color: #c7c2ff;
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            border: 1px solid rgba(139,127,255,.24);
+            border-radius: 999px;
+            background: rgba(109,93,252,.14);
+        }
+
+        .file-state {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            gap: 10px;
+            padding: 11px 12px;
+            border: 1px solid rgba(148,163,184,.13);
+            border-radius: 13px;
+            background: rgba(7, 17, 31, .48);
+        }
+        #mainIndicator {
+            width: 9px;
+            height: 9px;
+            box-shadow: 0 0 0 4px rgba(248,113,113,.13);
+        }
+        #mainIndicator.bg-green-500 { box-shadow: 0 0 0 4px rgba(52,211,153,.14); }
+        .file-state-copy { min-width: 0; }
+        .file-state-label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+        #versionIndicator { display: block; overflow: hidden; color: #e7efff; font-size: 13px; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+        .file-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+        .action-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            min-height: 68px;
+            gap: 5px;
+            padding: 8px 4px;
+            color: #c7d4e9;
+            font-size: 10px;
+            font-weight: 750;
+            line-height: 1.05;
+            border: 1px solid rgba(148,163,184,.14);
+            border-radius: 14px;
+            background: rgba(8, 21, 38, .70);
+            transition: transform .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+        }
+        .action-tile .action-icon { font-size: 20px; line-height: 1; }
+        .action-tile:hover { color: #fff; border-color: rgba(139,127,255,.58); background: rgba(84, 68, 220, .24); transform: translateY(-1px); }
+        .action-tile.action-save:hover { border-color: rgba(45,212,191,.58); background: rgba(13,148,136,.19); }
+
+        .ai-card { border-color: rgba(109,93,252,.24); }
+        .ai-panel {
+            padding: 13px;
+            border: 1px solid rgba(139,127,255,.23);
+            border-radius: 16px;
+            background: linear-gradient(145deg, rgba(70, 58, 172, .20), rgba(7, 18, 35, .26));
+        }
+        .ai-panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 11px; }
+        .ai-panel-title { display: flex; align-items: center; gap: 7px; margin: 0; color: #ddd9ff; font-size: 13px; font-weight: 800; }
+        .ai-meta { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+        .request-chip, .external-link {
+            display: inline-flex;
+            align-items: center;
+            min-height: 22px;
+            padding: 4px 7px;
+            color: #bcc5f9;
+            font-size: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid rgba(139,127,255,.28);
+            border-radius: 7px;
+            background: rgba(40, 36, 107, .33);
+        }
+        .external-link { color: #bdeef3; border-color: rgba(45,212,191,.24); background: rgba(13, 91, 95, .18); }
+        #aiLoadingIndicator { align-self: center; color: #8bf4e1; font-size: 10px; }
+        .field-label { display: block; margin: 0 0 7px; color: #a8b8d0; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+        .ai-model { margin-bottom: 10px; }
+        select, input[type="text"], textarea {
+            color: #eaf1fb !important;
+            border-color: rgba(148,163,184,.22) !important;
+            background: var(--surface-input) !important;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,.20) !important;
+        }
+        select { min-height: 42px; font-size: 12px !important; }
+        input[type="text"] { min-height: 44px; font-size: 13px !important; }
+        textarea { min-height: 105px; font-size: 11px !important; line-height: 1.55; resize: vertical; }
+        select:focus, input[type="text"]:focus, textarea:focus { border-color: rgba(129,140,248,.9) !important; box-shadow: 0 0 0 3px rgba(109,93,252,.14) !important; }
+        .prompt-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; }
+        .icon-button, .prompt-apply {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            border-radius: 11px;
+            transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+        }
+        .prompt-apply { padding: 0 13px; color: white; font-size: 12px; font-weight: 800; background: linear-gradient(135deg, #7566ff, #5d48e3) !important; box-shadow: 0 8px 18px rgba(72,57,210,.25); }
+        .icon-button { width: 44px; padding: 0; font-size: 16px; background: rgba(244,63,94,.76) !important; }
+        .prompt-apply:hover, .icon-button:hover, .run-actions button:hover, .backup-actions button:hover, .upload-specific:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        #aiActivityLog { border-color: rgba(45,212,191,.35) !important; border-radius: 13px; background: #06151d !important; }
+        .command-label { margin-top: 2px; }
+        .run-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .run-actions button, .backup-actions button {
+            min-height: 50px;
+            padding: 9px 8px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 13px;
+            box-shadow: none;
+        }
+        .run-actions span, .backup-actions span { font-size: 17px; }
+        .run-actions button:first-child { background: linear-gradient(135deg, #3973ea, #2757bd) !important; }
+        .run-actions button:nth-child(2) { background: linear-gradient(135deg, #119d92, #087970) !important; }
+        .run-actions button:nth-child(3) { background: linear-gradient(135deg, #6555d7, #4c3fa7) !important; }
+        .run-actions button:nth-child(4) { background: linear-gradient(135deg, #c34b69, #98344d) !important; }
+
+        .publish-card { padding-bottom: 17px; }
+        .export-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .export-card {
+            display: flex;
+            gap: 5px;
+            padding: 5px;
+            border: 1px solid rgba(148,163,184,.16);
+            border-radius: 13px;
+            background: rgba(7,17,31,.46) !important;
+        }
+        .export-card button:first-child { min-width: 0; min-height: 38px; color: #c7d4e9; font-size: 11px; }
+        .export-card button:last-child { width: 38px; min-width: 38px; border-radius: 9px; background: #13836d !important; }
+        .upload-specific {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 47px;
+            gap: 7px;
+            margin: 10px 0 0;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            border: 1px solid rgba(167, 155, 255, .24);
+            border-radius: 13px;
+            background: linear-gradient(135deg, #6c5ce7, #4e3cc9) !important;
+        }
+        .backup-divider { height: 1px; margin: 14px 0; background: var(--line); }
+        .backup-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+        .backup-actions button { flex-direction: row; gap: 7px; }
+        .backup-actions button:first-child { background: linear-gradient(135deg, #c77a18, #a4590b) !important; }
+        .backup-actions button:last-child { background: linear-gradient(135deg, #2486c0, #17619b) !important; }
+
+        .preview-card { overflow: visible; }
+        .preview-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+        .preview-tools button {
+            min-height: 43px;
+            padding: 8px;
+            color: #d5dff0;
+            font-size: 12px;
+            font-weight: 750;
+            border: 1px solid rgba(148,163,184,.17);
+            border-radius: 12px;
+            background: rgba(9,22,39,.70) !important;
+            box-shadow: none;
+        }
+        .preview-tools button:hover { color: white; border-color: rgba(139,127,255,.55); background: rgba(84,68,220,.27) !important; }
+        #btnLockPage:hover { border-color: rgba(251,113,133,.52); background: rgba(190,24,93,.30) !important; }
+        .device-stage {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            padding: 16px 4px 8px;
+            overflow: hidden;
+            border: 1px solid rgba(148,163,184,.12);
+            border-radius: 17px;
+            background: radial-gradient(circle at 50% 0%, rgba(109,93,252,.13), transparent 58%), rgba(5,13,25,.50);
+        }
+        .device-stage::before { position: absolute; top: 0; width: 76px; height: 3px; content: ""; border-radius: 0 0 99px 99px; background: rgba(139,127,255,.7); }
+        #previewContainer {
+            border-width: 7px !important;
+            border-color: #050b15 !important;
+            border-radius: 2rem !important;
+            box-shadow: 0 18px 38px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.1) !important;
+        }
+        #previewNotch > div { height: 18px !important; border-radius: 0 0 10px 10px !important; background: #050b15 !important; }
+        #previewNav { height: 43px; padding: 0 14px; color: #8594aa; font-size: 10px; background: #050b15 !important; }
+        #previewNav button { min-height: 36px; padding: 6px 7px; }
+        .console-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 14px; }
+        .console-panel { height: 132px; overflow: hidden; border-radius: 13px; background: #07101e !important; }
+        .console-panel > div:first-child { padding: 8px 10px; font-size: 10px; }
+        .console-panel > div:first-child button { min-height: 24px; padding: 3px 7px; font-size: 10px; }
+        .console-panel > div:last-child { padding: 9px 10px; font-size: 10px; }
+        .console-error { border-color: rgba(248,113,113,.35) !important; }
+        .console-error > div:first-child { background: rgba(127,29,29,.72) !important; }
+        .console-system { border-color: rgba(45,212,191,.30) !important; }
+        .console-system > div:first-child { background: rgba(6,95,70,.64) !important; }
+
+        .app-footer { display: flex; justify-content: center; gap: 10px; margin-top: 20px; color: #667893; font-size: 10px; }
+        .app-footer span + span::before { margin-right: 10px; content: "•"; color: #536178; }
+
+        #previewSettingsModal, #backupModal, #restoreModal, #serverFilesModal, #serverUploadModal, #alertModal { background: rgba(2, 8, 18, .78) !important; backdrop-filter: blur(8px); }
+        #previewSettingsModal > div, #backupModal > div, #restoreModal > div, #serverFilesModal > div, #serverUploadModal > div, #alertModal > div {
+            overflow: hidden;
+            border-color: rgba(148,163,184,.20) !important;
+            border-radius: 19px !important;
+            background: #101e33 !important;
+            box-shadow: 0 22px 70px rgba(0,0,0,.55) !important;
+        }
+        #previewSettingsModal > div, #backupModal > div, #alertModal > div { width: min(100%, 380px); }
+        #restoreModal > div, #serverFilesModal > div, #serverUploadModal > div { width: min(100%, 520px); }
+        #previewSettingsModal input, #backupModal input, #backupModal select { min-height: 42px; }
+
         .hacker-bg { background: repeating-linear-gradient(0deg, rgba(10,17,40,0.85) 0px, rgba(10,17,40,0.85) 2px, transparent 2px, transparent 4px), radial-gradient(circle at center, #001210 0%, #000 100%); animation: hackerFlicker 0.15s infinite; }
         .hacker-scan-line { position: absolute; top: -10%; left: 0; width: 100%; height: 6px; background: rgba(0, 255, 170, 0.4); box-shadow: 0 0 15px rgba(0, 255, 170, 0.8); animation: hScan 1.8s linear infinite; z-index: 5; }
         @keyframes hScan { to { top: 110%; } }
         @keyframes hackerFlicker { 0%,100% { opacity: 0.98; } 50% { opacity: 1; } }
         .glitch-text { font-weight: bold; text-shadow: 0 0 5px #0fa, 0 0 15px #0fa; color: #0f0; }
+
+        @media (min-width: 680px) {
+            .app-shell { padding-right: 24px; padding-left: 24px; }
+            .app-card { padding: 20px; }
+            .console-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (min-width: 980px) {
+            .workspace { grid-template-columns: minmax(360px, .88fr) minmax(440px, 1.12fr); gap: 18px; }
+            .source-card, .ai-card { grid-column: 1; }
+            .publish-card, .preview-card { grid-column: 2; }
+            .preview-card { grid-row: span 2; }
+            .app-card { padding: 21px; }
+        }
+        @media (max-width: 380px) {
+            .app-shell { padding-right: 12px; padding-left: 12px; }
+            .connection-pill { padding: 7px; font-size: 0; }
+            .connection-pill::before { margin: 1px; }
+            .app-card { padding: 14px; border-radius: 18px; }
+            .action-tile { min-height: 64px; }
+            .prompt-row { grid-template-columns: minmax(0, 1fr) auto; }
+            .prompt-apply { grid-column: 1 / -1; grid-row: 2; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
-<div class="flex flex-col min-h-screen max-w-screen-xl mx-auto p-4 gap-4">
-<header class="text-center">
-<h1 class="text-3xl font-bold text-indigo-400">TestrxBox Tools</h1>
-</header>
-<input type="file" id="fileUploader" accept=".html,.htm,.txt,.php" style="display: none;" onchange="handleFileSelect(event)">
-<textarea id="hiddenEditor" style="display: none;">
-</textarea>
-<div class="flex flex-col app-card gap-3">
-<div class="flex items-center gap-3">
-<div id="mainIndicator" class="w-4 h-4 rounded-full bg-red-500 transition-colors flex-shrink-0">
-</div>
-<span id="versionIndicator" class="text-2xl font-mono font-bold text-gray-600 whitespace-nowrap">[ KOSONG ]</span>
-<!-- [Baris Top Tombol Dibuang Berdasar Revisi] -->
-</div>
-<!-- STRUKTUR LAYOUT SATU BARIS INLINE KHUSUS BAR (Modul: v3) -->
-<div class="grid grid-cols-4 gap-1 mt-4 px-1 pb-1 items-stretch" id="gridCompactBar">
-<button onclick="triggerFileUpload()" class="flex flex-col items-center justify-center bg-gray-700 hover:bg-blue-600 text-white font-bold py-3 rounded-xl transition-colors shadow-sm w-full min-w-0">
-<span class="text-lg leading-tight mb-1">📁</span>
-<span class="text-[0.60rem] leading-none text-center whitespace-nowrap overflow-hidden truncate px-0.5">Lokal</span>
-</button>
-<button onclick="openServerFilesModal()" class="flex flex-col items-center justify-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors shadow-sm w-full min-w-0">
-<span class="text-lg leading-tight mb-1">☁️</span>
-<span class="text-[0.60rem] leading-none text-center whitespace-nowrap overflow-hidden truncate px-0.5">Server</span>
-</button>
-<button onclick="pasteIntoMainEditor()" class="flex flex-col items-center justify-center bg-gray-700 hover:bg-indigo-600 text-white font-bold py-3 rounded-xl transition-colors shadow-sm w-full min-w-0">
-<span class="text-lg leading-tight mb-1">📋</span>
-<span class="text-[0.60rem] leading-none text-center whitespace-nowrap overflow-hidden truncate px-0.5">Tempel</span>
-</button>
-<button onclick="copyToClipboard()" class="flex flex-col items-center justify-center bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-colors shadow-sm w-full min-w-0">
-<span class="text-lg leading-tight mb-1">✂️</span>
-<span class="text-[0.60rem] leading-none text-center whitespace-nowrap overflow-hidden truncate px-0.5">Salin</span>
-</button>
-</div>
-<!-- DIV BUNGKUS AMAN DEMI LESTARI SISTEM HTML DOM DIV CLOSER LAMA (Jangan Dihapus Block INI)-->
-<div class="grid grid-cols-2 gap-3 mt-4" style="display:none !important; width:0; height:0;">
-<button onclick="triggerFileUpload()" class="flex flex-col items-center justify-center bg-gray-700 hover:bg-blue-600 text-white font-bold py-3 px-2 rounded-xl transition-colors shadow-md gap-2">
-<span class="text-2xl mb-1">📁</span>
-<span class="text-xs">File Lokal</span>
-</button>
-<button onclick="openServerFilesModal()" class="flex flex-col items-center justify-center bg-blue-800 hover:bg-blue-700 text-white font-bold py-3 px-2 rounded-xl transition-colors shadow-md gap-2">
-<span class="text-2xl mb-1">☁️</span>
-<span class="text-xs">File Hosting</span>
-</button>
-<button onclick="pasteIntoMainEditor()" class="flex flex-col items-center justify-center bg-gray-700 hover:bg-indigo-600 text-white font-bold py-3 px-2 rounded-xl transition-colors shadow-md gap-2">
-<span class="text-2xl mb-1">📋</span>
-<span class="text-xs">Tempel Kode</span>
-</button>
-<button onclick="copyToClipboard()" class="bg-emerald-700 hover:bg-emerald-600 text-white font-medium py-2 px-3 rounded-md transition-colors text-sm flex items-center gap-1">
-<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
-</path>
-</svg>
-                    Salin Kode
+<body class="text-gray-200">
+<div class="app-shell">
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4.5h-1A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5h11A2.5 2.5 0 0 0 20 17v-5"/><path d="M13 4.5h5.5v5.5"/><path d="m11 13 7.5-8.5"/><path d="M8 9.5v5h5"/></svg>
+            </div>
+            <div>
+                <p class="brand-eyebrow">Mobile workspace</p>
+                <h1>TestrxBox Tools</h1>
+            </div>
+        </div>
+        <span class="connection-pill">Siap dipakai</span>
+    </header>
+
+    <input type="file" id="fileUploader" accept=".html,.htm,.txt,.php" style="display: none;" onchange="handleFileSelect(event)">
+    <textarea id="hiddenEditor" style="display: none;"></textarea>
+
+    <main class="workspace" aria-label="Ruang kerja TestrxBox">
+        <section class="app-card source-card" aria-labelledby="source-title">
+            <div class="section-heading">
+                <div>
+                    <p class="section-eyebrow">01 · Sumber kode</p>
+                    <h2 id="source-title" class="section-title">Mulai dari file Anda</h2>
+                    <p class="section-description">Impor, tempel, atau salin kode yang sedang dikerjakan.</p>
+                </div>
+                <span class="section-badge">Editor</span>
+            </div>
+            <div class="file-state" aria-live="polite">
+                <div id="mainIndicator" class="status-dot w-4 h-4 rounded-full bg-red-500 transition-colors flex-shrink-0"></div>
+                <div class="file-state-copy">
+                    <span class="file-state-label">Dokumen aktif</span>
+                    <span id="versionIndicator" class="font-mono font-bold whitespace-nowrap">[ KOSONG ]</span>
+                </div>
+            </div>
+            <div class="file-actions" id="gridCompactBar">
+                <button type="button" onclick="triggerFileUpload()" class="action-tile bg-gray-700" aria-label="Pilih file lokal">
+                    <span class="action-icon" aria-hidden="true">📁</span><span>Lokal</span>
                 </button>
-</div>
-</div>
-<div class="app-card flex flex-col gap-3">
-<div class="w-full bg-gray-800 p-3 rounded-xl border border-indigo-500 shadow-lg relative mb-2">
-<div class="flex justify-between items-center mb-2">
-<label class="text-xs font-bold text-indigo-300 flex items-center gap-2">
-<span>✨ AI Modifikator</span>
-<span class="text-[0.60rem] bg-indigo-900/50 text-indigo-200 px-2 py-0.5 rounded border border-indigo-700" title="Total API hit di sesi ini">Req: <span id="aiReqCount" class="font-mono font-bold text-white">0</span></span>
-<a href="https://aistudio.google.com/app/plan_information" target="_blank" class="text-[0.60rem] bg-blue-900/50 hover:bg-blue-500 text-blue-200 px-2 py-0.5 rounded border border-blue-700 transition-colors">Cek Pusat</a>
-</label>
-<span id="aiLoadingIndicator" class="hidden text-teal-400 animate-pulse font-mono text-xs">[🧠 Memproses...]</span>
-</div>
-<div class="flex mb-2">
-<select id="aiModelSelect" class="w-full bg-gray-900 border border-gray-600 rounded-lg px-2 py-1.5 text-[11px] text-indigo-300 focus:outline-none focus:border-indigo-500 cursor-pointer shadow-inner">
-<option value="gemini-3.5-flash">⚡ Model: Gemini 3.5 Flash (Default - Cepat & Ringan)</option>
-<option value="gemini-3.1-pro-preview">🧠 Model: Gemini 3.1 Pro Preview (Analitis & Kompleks)</option>
-</select>
-</div>
-<div class="flex gap-2">
-<input type="text" id="aiDirectPrompt" class="flex-1 bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="Cth: Ubah warna tombol Rapi Kode menjadi merah...">
-<button onclick="executeAiPrompt()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1 px-4 rounded-lg shadow text-sm shrink-0">🪄 Apply</button>
-<button onclick="window.aiMemory=[]; document.getElementById('aiDirectPrompt').value=''; showAlert('Memori AI berhasil dikosongkan! AI siap untuk topik baru.', 'success');" class="bg-rose-700 hover:bg-rose-600 text-white font-bold py-1 px-3 rounded-lg shadow text-sm shrink-0" title="Hapus Ingatan AI">🗑️</button>
-</div>
-</div>
-<div id="aiActivityLog" class="hidden mb-2 w-full p-2 bg-gray-900 border border-teal-700 rounded-lg text-[10px] font-mono text-teal-400 h-28 overflow-y-auto custom-scrollbar shadow-[0_0_10px_rgba(0,255,170,0.1)] flex-col gap-1 z-10 relative"></div>
-<textarea id="quickCommandInput" rows="3" class="w-full bg-gray-900 border border-gray-600 rounded-xl shadow-inner text-xs font-mono p-3 text-white focus:outline-none focus:border-teal-500 custom-scrollbar" placeholder='[{"snippet":"...","target":"...","action":"replace"}]'></textarea>
-<div class="grid grid-cols-2 gap-2">
-<button onclick="applyAndExecute()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
-<span class="text-xl">▶️</span> Run</button>
-<button onclick="autoPasteAndExecute()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
-<span class="text-xl">🚀</span> Auto-Run</button>
-<button onclick="appBeautifyCodesHandler()" class="w-full bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
-<span class="text-xl">🪄</span> Rapi Kode</button>
-<button onclick="appFixSyntaxApiTarget()" class="w-full bg-rose-700 hover:bg-rose-600 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
-<span class="text-xl">🩺</span> Syntax Fix</button>
-</div>
-<button style="display:none;">
-</button>
-</div>
-<div class="app-card flex flex-col gap-3">
-<div class="grid grid-cols-2 gap-3 w-full mb-4">
-<div class="flex gap-1 w-full bg-gray-700 p-1 rounded-xl shadow-inner border border-gray-600">
-<button onclick="downloadResult('index')" class="flex-1 bg-transparent hover:bg-teal-600 text-white text-xs font-bold py-2 px-1 rounded-lg transition-colors truncate">📥 Index</button>
-<button onclick="uploadToPublic('index')" class="w-10 shrink-0 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors flex items-center justify-center shadow-md" title="Upload index ke server">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
-</path>
-</svg>
-</button>
-</div>
-<div class="flex gap-1 w-full bg-gray-700 p-1 rounded-xl shadow-inner border border-gray-600">
-<button onclick="downloadResult('paneladmin')" class="flex-1 bg-transparent hover:bg-teal-600 text-white text-xs font-bold py-2 px-1 rounded-lg transition-colors truncate">📥 Panel</button>
-<button onclick="uploadToPublic('paneladmin')" class="w-10 shrink-0 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors flex items-center justify-center shadow-md" title="Upload paneladmin ke server">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12">
-</path>
-</svg>
-</button>
-</div>
-<button onclick="openServerUploadModal()" class="col-span-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold py-3 px-2 rounded-xl transition-colors truncate shadow-md flex items-center justify-center gap-2">
-<span class="text-xl">☁️</span> Upload Ke Folder Spesifik</button>
-</div>
-<div class="grid grid-cols-2 gap-3 w-full">
-<button onclick="openBackupModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-md flex flex-col items-center justify-center gap-1">
-<span class="text-2xl">📦</span>
-<span class="text-xs">Backup</span>
-</button>
-<button onclick="openRestoreModal()" class="bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-md flex flex-col items-center justify-center gap-1">
-<span class="text-2xl">🔄</span>
-<span class="text-xs">Restore</span>
-</button>
-</div>
-</div>
-<div class="app-card flex flex-col gap-3">
-<h2 class="text-xl font-bold text-indigo-400">Pratinjau Layar (Mobile)</h2>
-<div class="mt-2 flex gap-2">
-<button onclick="openPreviewSettingsModal()" class="flex-1 bg-gray-700 hover:bg-indigo-600 text-white py-3 px-4 rounded-xl text-sm font-bold transition-colors shadow-md flex items-center justify-center gap-2">⚙️ Pengaturan</button>
-<button id="btnLockPage" onclick="toggleLock()" class="flex-1 bg-gray-700 hover:bg-rose-600 text-white py-3 px-4 rounded-xl text-sm font-bold transition-colors shadow-md flex items-center justify-center gap-2">🔒 Kunci Layar</button>
-</div>
-<div class="flex justify-center mt-4 w-full px-2">
-<div id="previewContainer" class="border-8 border-gray-900 overflow-hidden bg-white relative shadow-2xl flex flex-col mx-auto" style="border-radius: 2.5rem; transition: all 0.3s ease; width: 100%; max-width: 380px;">
-<div id="previewNotch" class="absolute top-0 inset-x-0 h-6 flex justify-center z-10 pointer-events-none">
-<div class="h-5 bg-gray-900 rounded-b-xl" style="width: 100px;">
-</div>
-</div>
-<div id="iframeWrapper" class="relative w-full overflow-hidden bg-white">
-<iframe id="mobilePreview" class="border-none absolute top-0 left-0" style="transform-origin: top left; max-width: none !important;">
-</iframe>
-</div>
-<div id="previewNav" class="h-12 bg-gray-900 w-full flex justify-around items-center px-6 shrink-0 text-gray-400 z-10">
-<button onclick="historyBackPreview()" class="p-2 hover:text-white transition-colors">❮ Back</button>
-<button onclick="forceUpdatePreview()" class="p-2 hover:text-white transition-colors">● Home</button>
-<button class="p-2 hover:text-white transition-colors cursor-default">■ Recent</button>
-</div>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full">
-<div class="bg-gray-900 rounded-md border border-red-800 flex flex-col h-48">
-<div class="bg-red-900 text-white text-xs font-bold p-2 px-3 flex justify-between items-center">
-<span>Console: Deteksi Error</span>
-<button onclick="document.getElementById('errorConsole').innerHTML=''" class="bg-red-700 hover:bg-red-600 text-white rounded px-2 py-0.5 transition-colors" title="Bersihkan Log">Clear</button>
-</div>
-<div id="errorConsole" class="p-3 font-mono text-xs text-red-400 overflow-y-auto flex-1 whitespace-pre-wrap break-all custom-scrollbar">
-</div>
-</div>
-<div class="bg-gray-900 rounded-md border border-green-800 flex flex-col h-48">
-<div class="bg-green-900 text-white text-xs font-bold p-2 px-3 flex justify-between items-center">
-<span>Console: Sistem Berjalan</span>
-<button onclick="document.getElementById('sysConsole').innerHTML=''" class="bg-green-700 hover:bg-green-600 text-white rounded px-2 py-0.5 transition-colors" title="Bersihkan Log">Clear</button>
-</div>
-<div id="sysConsole" class="p-3 font-mono text-xs text-green-400 overflow-y-auto flex-1 whitespace-pre-wrap break-all custom-scrollbar">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="text-center text-gray-500 text-xs mt-4 pb-4">
-<p>ig@donitata1717</p>
-<p>wa 6285156776974</p>
-<p>modder&programer.</p>
+                <button type="button" onclick="openServerFilesModal()" class="action-tile bg-blue-800" aria-label="Pilih file dari server">
+                    <span class="action-icon" aria-hidden="true">☁️</span><span>Server</span>
+                </button>
+                <button type="button" onclick="pasteIntoMainEditor()" class="action-tile bg-gray-700" aria-label="Tempel kode dari papan klip">
+                    <span class="action-icon" aria-hidden="true">📋</span><span>Tempel</span>
+                </button>
+                <button type="button" onclick="copyToClipboard()" class="action-tile action-save bg-emerald-700" aria-label="Salin kode ke papan klip">
+                    <span class="action-icon" aria-hidden="true">✂️</span><span>Salin</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="app-card ai-card" aria-labelledby="ai-title">
+            <div class="section-heading">
+                <div>
+                    <p class="section-eyebrow">02 · Asisten</p>
+                    <h2 id="ai-title" class="section-title">Modifikasi dengan AI</h2>
+                    <p class="section-description">Uraikan perubahan atau jalankan instruksi JSON secara langsung.</p>
+                </div>
+                <span class="section-badge">AI</span>
+            </div>
+
+            <div class="ai-panel">
+                <div class="ai-panel-head">
+                    <div>
+                        <p class="ai-panel-title"><span aria-hidden="true">✨</span> AI Modifikator</p>
+                        <div class="ai-meta">
+                            <span class="request-chip" title="Total API hit di sesi ini">Req: <span id="aiReqCount" class="font-mono font-bold text-white ml-1">0</span></span>
+                            <a href="https://aistudio.google.com/app/plan_information" target="_blank" rel="noopener noreferrer" class="external-link">Pusat AI ↗</a>
+                        </div>
+                    </div>
+                    <span id="aiLoadingIndicator" class="hidden animate-pulse font-mono">Memproses…</span>
+                </div>
+                <div class="ai-model">
+                    <label class="field-label" for="aiModelSelect">Model aktif</label>
+                    <select id="aiModelSelect" class="w-full rounded-lg px-3 cursor-pointer">
+                        <option value="gemini-3.5-flash">⚡ Gemini 3.5 Flash — cepat & ringan</option>
+                        <option value="gemini-3.1-pro-preview">🧠 Gemini 3.1 Pro Preview — analitis</option>
+                    </select>
+                </div>
+                <div class="prompt-row">
+                    <input type="text" id="aiDirectPrompt" class="min-w-0 rounded-lg px-3" placeholder="Contoh: ubah warna tombol Rapi Kode menjadi merah">
+                    <button type="button" onclick="executeAiPrompt()" class="prompt-apply bg-indigo-600" aria-label="Terapkan perintah AI">🪄 <span class="ml-1">Terapkan</span></button>
+                    <button type="button" onclick="window.aiMemory=[]; document.getElementById('aiDirectPrompt').value=''; showAlert('Memori AI berhasil dikosongkan! AI siap untuk topik baru.', 'success');" class="icon-button bg-rose-700" title="Hapus ingatan AI" aria-label="Hapus ingatan AI">🗑️</button>
+                </div>
+            </div>
+
+            <div id="aiActivityLog" class="hidden w-full p-3 font-mono overflow-y-auto custom-scrollbar flex-col gap-1 z-10 relative"></div>
+            <div>
+                <label class="field-label command-label" for="quickCommandInput">Perintah JSON</label>
+                <textarea id="quickCommandInput" rows="3" class="w-full rounded-xl p-3 font-mono custom-scrollbar" placeholder='[{"snippet":"...","target":"...","action":"replace"}]'></textarea>
+            </div>
+            <div class="run-actions">
+                <button type="button" onclick="applyAndExecute()" class="bg-blue-600 text-white flex justify-center items-center gap-2"><span aria-hidden="true">▶️</span> Jalankan</button>
+                <button type="button" onclick="autoPasteAndExecute()" class="bg-teal-600 text-white flex justify-center items-center gap-2"><span aria-hidden="true">🚀</span> Auto-run</button>
+                <button type="button" onclick="appBeautifyCodesHandler()" class="bg-indigo-700 text-white flex justify-center items-center gap-2"><span aria-hidden="true">🪄</span> Rapi Kode</button>
+                <button type="button" onclick="appFixSyntaxApiTarget()" class="bg-rose-700 text-white flex justify-center items-center gap-2"><span aria-hidden="true">🩺</span> Syntax Fix</button>
+            </div>
+        </section>
+
+        <section class="app-card publish-card" aria-labelledby="publish-title">
+            <div class="section-heading">
+                <div>
+                    <p class="section-eyebrow">03 · Publikasi</p>
+                    <h2 id="publish-title" class="section-title">Simpan & unggah</h2>
+                    <p class="section-description">Ekspor hasil kerja atau kelola cadangan dengan cepat.</p>
+                </div>
+                <span class="section-badge">Deploy</span>
+            </div>
+            <div class="export-grid">
+                <div class="export-card bg-gray-700">
+                    <button type="button" onclick="downloadResult('index')" class="flex-1 bg-transparent text-white font-bold rounded-lg truncate">📥 Index</button>
+                    <button type="button" onclick="uploadToPublic('index')" class="shrink-0 bg-green-600 text-white flex items-center justify-center" title="Upload index ke server" aria-label="Upload index ke server">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    </button>
+                </div>
+                <div class="export-card bg-gray-700">
+                    <button type="button" onclick="downloadResult('paneladmin')" class="flex-1 bg-transparent text-white font-bold rounded-lg truncate">📥 Panel</button>
+                    <button type="button" onclick="uploadToPublic('paneladmin')" class="shrink-0 bg-green-600 text-white flex items-center justify-center" title="Upload paneladmin ke server" aria-label="Upload paneladmin ke server">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <button type="button" onclick="openServerUploadModal()" class="upload-specific bg-indigo-600"><span aria-hidden="true">☁️</span> Upload ke folder spesifik</button>
+            <div class="backup-divider" aria-hidden="true"></div>
+            <div class="backup-actions">
+                <button type="button" onclick="openBackupModal()" class="bg-amber-600 text-white flex items-center justify-center"><span aria-hidden="true">📦</span> Backup</button>
+                <button type="button" onclick="openRestoreModal()" class="bg-sky-600 text-white flex items-center justify-center"><span aria-hidden="true">🔄</span> Restore</button>
+            </div>
+        </section>
+
+        <section class="app-card preview-card" aria-labelledby="preview-title">
+            <div class="section-heading">
+                <div>
+                    <p class="section-eyebrow">04 · Pratinjau</p>
+                    <h2 id="preview-title" class="section-title">Layar mobile</h2>
+                    <p class="section-description">Periksa tampilan sebelum kode dipublikasikan.</p>
+                </div>
+                <span class="section-badge">Live</span>
+            </div>
+            <div class="preview-tools">
+                <button type="button" onclick="openPreviewSettingsModal()" class="bg-gray-700">⚙️ Pengaturan</button>
+                <button type="button" id="btnLockPage" onclick="toggleLock()" class="bg-gray-700">🔒 Kunci layar</button>
+            </div>
+            <div class="device-stage">
+                <div id="previewContainer" class="border-8 border-gray-900 overflow-hidden bg-white relative shadow-2xl flex flex-col mx-auto" style="border-radius: 2.5rem; transition: all 0.3s ease; width: 100%; max-width: 380px;">
+                    <div id="previewNotch" class="absolute top-0 inset-x-0 h-6 flex justify-center z-10 pointer-events-none"><div class="h-5 bg-gray-900 rounded-b-xl" style="width: 100px;"></div></div>
+                    <div id="iframeWrapper" class="relative w-full overflow-hidden bg-white"><iframe id="mobilePreview" title="Pratinjau kode mobile" class="border-none absolute top-0 left-0" style="transform-origin: top left; max-width: none !important;"></iframe></div>
+                    <div id="previewNav" class="w-full flex justify-around items-center shrink-0 z-10">
+                        <button type="button" onclick="historyBackPreview()">❮ Kembali</button>
+                        <button type="button" onclick="forceUpdatePreview()">● Muat ulang</button>
+                        <button type="button" class="cursor-default" aria-label="Recent">■ Recent</button>
+                    </div>
+                </div>
+            </div>
+            <div class="console-grid">
+                <div class="console-panel console-error border border-red-800 flex flex-col">
+                    <div class="text-white font-bold flex justify-between items-center"><span>⚠️ Deteksi error</span><button type="button" onclick="document.getElementById('errorConsole').innerHTML=''" class="bg-red-700 text-white rounded transition-colors" title="Bersihkan log">Bersihkan</button></div>
+                    <div id="errorConsole" class="font-mono text-red-400 overflow-y-auto flex-1 whitespace-pre-wrap break-all custom-scrollbar"></div>
+                </div>
+                <div class="console-panel console-system border border-green-800 flex flex-col">
+                    <div class="text-white font-bold flex justify-between items-center"><span>✓ Aktivitas sistem</span><button type="button" onclick="document.getElementById('sysConsole').innerHTML=''" class="bg-green-700 text-white rounded transition-colors" title="Bersihkan log">Bersihkan</button></div>
+                    <div id="sysConsole" class="font-mono text-green-400 overflow-y-auto flex-1 whitespace-pre-wrap break-all custom-scrollbar"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer" aria-label="Kontak">
+        <span>ig@donitata1717</span><span>wa 6285156776974</span><span>modder &amp; programmer</span>
+    </footer>
 </div>
 <div id="previewSettingsModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 hidden">
 <div class="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 w-full max-w-sm mx-auto border border-gray-700 flex flex-col">
