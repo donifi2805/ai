@@ -1486,7 +1486,6 @@
                     <i class="fas fa-envelope inp-icon"></i>
                 </div>
 
-
                 <div class="profile-upload-field auth-profile-upload">
                     <input type="file" id="regFoto" class="photo-hidden-input" accept="image/jpeg,image/png,image/webp" onchange="previewRegPhoto(this)">
                     <label for="regFoto" class="profile-upload-label">
@@ -1497,7 +1496,6 @@
                         </div>
                     </label>
                 </div>
-
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div class="inp-wrapper">
@@ -1541,7 +1539,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="globalLoader">
         <div class="loader-logo-box">
@@ -1621,7 +1618,6 @@
             </div>
         </div>
 
-
         <div class="menu-container">
             <div class="cat-title" style="padding: 15px 0 10px;">Menu Utama</div>
             <div class="menu-grid" id="mainPpobMenuGrid" style="padding: 0;">
@@ -1678,7 +1674,6 @@
                 <div class="menu-item" onclick="bukaMenu('VA Bank')" style="display:none;">
                     <div class="icon-box"><i class="fas fa-university" style="font-size:24px; color:#34495e;"></i></div><span>VA Bank</span>
                 </div>
-
 
             </div>
 
@@ -1751,8 +1746,6 @@
         </div>
     </div>
 
-
-
     <a id="appBanner" class="app-install-fab" href="BE.apk" title="Install Aplikasi Android">
         <div class="app-install-icon"><i class="fab fa-android"></i></div>
         <div class="app-install-text">Install<br>di Android</div>
@@ -1799,7 +1792,6 @@
             }
         });
     </script>
-
 
     <div id="h2hDashboard" style="display:none; padding: 20px; padding-top: 40px; animation: fadeIn 0.3s; padding-bottom: 20px;">
         <div style="background:var(--grad-main); padding: 25px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(185,28,28,0.2); display:flex; flex-direction:column; gap:10px;">
@@ -1849,11 +1841,9 @@
         </button>
     </div>
 
-
     <div class="frequent-product-switch" id="frequentProductSwitch">
         <button id="btnFrequentProducts" onclick="window.toggleFrequentProducts()"><i class="fas fa-fire"></i> Produk sering di beli</button>
     </div>
-
 
     <div class="live-history-shell">
         <div id="liveHistoryHeader">
@@ -1889,7 +1879,6 @@
         </div>
     </div>
 
-
     <div id="modalTransfer" class="modal" style="z-index: 22000; align-items: center; justify-content: center;">
         <div class="notice-content" style="text-align: left; width: 90%; max-width: 350px; padding: 20px;">
             <h3 id="transferTitle" style="margin-bottom:15px; text-align:center;">Kirim Saldo</h3>
@@ -1906,7 +1895,6 @@
         </div>
     </div>
 
-
     <div id="modalNotifTransfer" class="modal" style="z-index: 23000; align-items: center; justify-content: center;">
         <div class="notice-content" style="background:#e6f9ed; border:2px solid var(--success);">
             <i class="fas fa-check-circle" style="font-size:50px; color:var(--success); margin-bottom:15px;"></i>
@@ -1915,7 +1903,6 @@
             <button class="btn-konfirmasi" style="background:var(--success); margin-top:20px;" onclick="tutupNotifTransfer()">OKE, TERIMA KASIH</button>
         </div>
     </div>
-
 
     <div id="modalRequestSaldo" class="modal" style="z-index: 23000; align-items: center; justify-content: center;">
         <div class="notice-content" style="background:#fff8e1; border:2px solid #f39c12;">
@@ -1929,8 +1916,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div id="fabCetakMasal" style="display:none; position:fixed; bottom:120px; left:50%; transform:translateX(-50%); width:90%; z-index:9999; animation: slideUp 0.3s;">
         <div style="display:flex; gap:10px;">
@@ -2034,7 +2019,6 @@
         </div>
     </div>
 
-
     <div id="modalTopup" class="modal">
         <div class="modal-content" style="max-height: 90vh; overflow-y: auto; min-height: 400px;">
             <div style="display:flex; align-items:center; margin-bottom:15px;">
@@ -2060,14 +2044,12 @@
                 <i class="fas fa-times" onclick="tutupRiwayatArsip()" style="font-size:20px; color:#999; cursor:pointer;"></i>
             </div>
 
-
             <div style="background: #f8fafc; padding: 15px; border-radius: 16px; margin-bottom: 10px; border: 1px solid #edf2f7; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.05);">
 
                 <div style="position:relative; margin-bottom:12px;">
                     <input type="text" id="searchRiwayat" placeholder="Cari ID Trx / Nomor / Produk..." style="width:100%; padding:12px 12px 12px 40px; border:1px solid #cbd5e1; border-radius:12px; font-size:13px; outline:none; box-sizing:border-box; background:white; transition:0.3s;">
                     <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8;"></i>
                 </div>
-
 
                 <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-bottom: 12px;">
                     <div>
@@ -2084,7 +2066,6 @@
                         </select>
                     </div>
                 </div>
-
 
                 <button onclick="window.terapkanFilterRiwayat()" style="width:100%; background:var(--grad-main); color:white; border:none; padding:12px; border-radius:12px; font-weight:700; font-size:13px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3); transition:0.2s; display:flex; align-items:center; justify-content:center; gap:8px;">
                     <i class="fas fa-filter"></i> Terapkan Filter
@@ -2103,7 +2084,6 @@
         </div>
     </div>
 
-
     <div id="modalProductDetail" class="modal" style="z-index: 12000; background:white;">
         <div class="pdp-container" id="pdpContent">
 
@@ -2116,7 +2096,6 @@
             <i class="fas fa-arrow-left"></i>
         </div>
     </div>
-
 
     <div id="modalCheckoutFisik" class="modal" style="z-index: 13000;">
         <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
@@ -2163,7 +2142,6 @@
             <button class="btn-batal" onclick="document.getElementById('modalCheckoutFisik').style.display='none'">BATAL</button>
         </div>
     </div>
-
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -4160,52 +4138,8 @@
                 window.addEventListener('DOMContentLoaded', sinkronisasiData);
         
                 // CLEANER PESAN
-                window.bersihkanPesan = function(txt) {
-        
-                    // PATCH DONI: cegah request mentah provider PO tampil di SN/keterangan user.
-                    if (txt && (/(^|[\s,{])req\s*:\s*topup/i.test(String(txt)) || /kodereseller\s*:/i.test(String(txt)) || /pin\s*:/i.test(String(txt)))) {
-                        if (String(txt).includes('#')) {
-                            let textAfterHash = String(txt).substring(String(txt).indexOf('#') + 1).trim();
-                            return textAfterHash.replace(/\s*@\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$/, '').trim();
-                        }
-                        const statusMatch = String(txt).match(/status\s*[:=]\s*([^,}\n]+)/i);
-                        if (statusMatch && statusMatch[1]) return statusMatch[1].replace(/[\"']/g, '').trim();
-                        return 'Status transaksi sedang diproses';
-                    }
-        
-            if (!txt) return "";
-            // PENGECUALIAN: Jika ini adalah pesan pengecekan saldo user (lokal), jangan diubah
-            if (txt === "Saldo tidak cukup!" || txt === "Saldo tidak mencukupi." || txt === "Saldo Anda tidak mencukupi!") return txt;
-        
-            let m = txt; try { m = JSON.parse(txt).body_respon || txt; } catch (e) {}
-            
-            const lower = m.toLowerCase();
-            // Filter khusus: Hanya ubah jika pesan datang dari server PROVIDER yang menandakan saldo reseller (admin) habis
-            const technicalBalanceErrors = [
-                "not enough balance", 
-                "insufficient balance", 
-                "saldo reseller tidak cukup", 
-                "reseller balance",
-                "saldo anda tidak cukup untuk melakukan transaksi ini"
-            ];
-        
-            if (technicalBalanceErrors.some(err => lower.includes(err))) {
-                return "Admin Belum Restok segera hubungi admin supaya cepat merestok";
-            }
-            
-            // SENSOR KEAMANAN KHFY: Hapus URL API dan kredensial reseller
-            if (m.includes("kodereseller=") || m.includes("password=")) {
-                if (m.includes("#")) {
-                    m = m.substring(m.indexOf("#") + 1).trim();
-                } else {
-                    m = "Transaksi Gagal dari Provider";
-                }
-            }
-            
-            // Pembersihan teks umum (angka saldo, harga, dll)
-            m = m.replace(/\.?\s*Saldo\s+[\d\.,\s\-\=]+(@\d{2}:\d{2})?/gi, "").replace(/Hrg\s+[\d\.,]+/gi, "").replace(/\.?\s*Trx ke-\d+\s+gunakan format yang benar/gi, "");
-            return m.trim();
-        };
+                
+;
         
                 // 2. LOGIKA FILTERING MENU (SESUAI POLA JSON OKE CONNECT)
                         function bukaMenu(kategori) {
@@ -4632,120 +4566,11 @@
                 window.renderFilterGroups();
             }
         
-            window.renderFilterGroups = function() {
-                let area = document.getElementById('areaFilter');
-                if(window.isListModeContext) {
-                    area.style.display = "block"; area.style.gridTemplateColumns = "none";
-                } else {
-                    area.style.display = "grid"; area.style.gridTemplateColumns = "repeat(3, 1fr)";
-                }
+            
+;
         
-                const specialIcons = { 'Telkomsel': 'icons/Telkomsel.png', 'Indosat': 'icons/Indosat.png', 'By.U': 'icons/By.U.png', 'XL': 'icons/XL.png', 'PBB': 'icons/PBB.png', 'Pascabayar': 'icons/TV & Halo.png', 'Axis': 'icons/Axis.png', 'Tri': 'icons/Tri.png', 'Smartfren': 'icons/Smartfren.png', 'Cetak Voucher': 'icons/Voucher.png', 'Token PLN': 'icons/Token PLN.png' };
-        
-                let cleanProviders = [];
-                window.currentProvidersData.forEach(p => {
-                    if(p === 'BAYAR PLN DIRECT' || p === 'PLN PRODUK DIRECT' || p === 'Byu Promo Menarik' || p === '+Masa Aktif Indosat') return;
-                    let clean = p.replace(/H2H/gi, "").replace(/Top\s*Up\s*Saldo\s*/gi, "").replace(/Saldo\s*/gi, "").replace("Customer", "").replace("Driver", "").replace("Penumpang", "").replace(/Admin\s*/gi, "").replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").trim();
-                    cleanProviders.push({ original: p, clean: clean });
-                });
-        
-                let groups = {};
-                cleanProviders.forEach(p => {
-                    let words = p.clean.split(" ");
-                    let groupKey = words[0]; 
-                    if ((words[0].toUpperCase() === "CETAK" || words[0].toUpperCase() === "PAKET") && words.length > 1) groupKey = words[0] + " " + words[1];
-                    if (!groups[groupKey]) groups[groupKey] = [];
-                    groups[groupKey].push(p);
-                });
-        
-                let html = "";
-                for (let key in groups) {
-                    let items = groups[key];
-                    let isGroup = items.length > 1;
-                    
-                    let displayName = isGroup ? key : items[0].clean;
-                    let logoUrl = specialIcons[window.currentMenuContext] ? specialIcons[window.currentMenuContext] : 'icons/' + displayName + '.png';
-                    let imgTag = '<img src="' + logoUrl + '" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/50?text=' + displayName.charAt(0) + '\';">';
-        
-                    if (isGroup) {
-                        let onClickAction = "window.renderSubFilter('" + key + "')";
-                        if (window.isListModeContext) {
-        html += '<div class="filter-card-list" onclick="' + onClickAction + '">';
-        html += imgTag;
-        html += '<span style="font-weight:800; color:var(--primary);">' + displayName + ' <span style="font-size:10px; background:#e2e8f0; color:#475569; padding:2px 6px; border-radius:10px; margin-left:5px;">' + items.length + ' Item</span></span>';
-        html += '<i class="fas fa-folder" style="color:#f59e0b; font-size:16px;"></i>';
-        html += '</div>';
-                        } else {
-        html += '<div class="filter-card" onclick="' + onClickAction + '" style="background:#fffbeb; border-color:#fde68a;">';
-        html += '<i class="fas fa-folder" style="font-size:28px; color:#f59e0b; margin-bottom:6px;"></i>';
-        html += '<span style="color:#d97706; font-weight:800;">' + displayName + '</span>';
-        html += '</div>';
-                        }
-                    } else {
-                        let providerStr = items[0].original;
-                        let onClickAction = "window.filterTampilan('" + providerStr + "', this)";
-                        if (window.isListModeContext) {
-        html += '<div class="filter-card-list" onclick="' + onClickAction + '">';
-        html += imgTag;
-        html += '<span>' + displayName + '</span>';
-        html += '<i class="fas fa-chevron-right"></i>';
-        html += '</div>';
-                        } else {
-        html += '<div class="filter-card" data-provider="' + providerStr + '" onclick="' + onClickAction + '">';
-        html += imgTag;
-        html += '<span>' + displayName + '</span>';
-        html += '</div>';
-                        }
-                    }
-                }
-                area.innerHTML = html;
-            };
-        
-            window.renderSubFilter = function(groupKey) {
-                let area = document.getElementById('areaFilter');
-                const specialIcons = { 'Telkomsel': 'icons/Telkomsel.png', 'Indosat': 'icons/Indosat.png', 'By.U': 'icons/By.U.png', 'XL': 'icons/XL.png', 'PBB': 'icons/PBB.png', 'Pascabayar': 'icons/TV & Halo.png', 'Axis': 'icons/Axis.png', 'Tri': 'icons/Tri.png', 'Smartfren': 'icons/Smartfren.png', 'Cetak Voucher': 'icons/Voucher.png', 'Token PLN': 'icons/Token PLN.png' };
-        
-                let cleanProviders = [];
-                window.currentProvidersData.forEach(p => {
-                    if(p === 'BAYAR PLN DIRECT' || p === 'PLN PRODUK DIRECT' || p === 'Byu Promo Menarik' || p === '+Masa Aktif Indosat') return;
-                    let clean = p.replace(/H2H/gi, "").replace(/Top\s*Up\s*Saldo\s*/gi, "").replace(/Saldo\s*/gi, "").replace("Customer", "").replace("Driver", "").replace("Penumpang", "").replace(/Admin\s*/gi, "").replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").trim();
-                    let words = clean.split(" ");
-                    let gKey = words[0];
-                    if ((words[0].toUpperCase() === "CETAK" || words[0].toUpperCase() === "PAKET") && words.length > 1) gKey = words[0] + " " + words[1];
-                    if (gKey === groupKey) cleanProviders.push({ original: p, clean: clean });
-                });
-        
-                let html = '<div onclick="window.renderFilterGroups()" style="grid-column: 1 / -1; background:#f1f5f9; padding:10px 15px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:10px; margin-bottom:10px; font-weight:bold; color:var(--primary); border:1px solid #cbd5e1;">';
-                html += '<i class="fas fa-arrow-left"></i> Kembali (Kategori ' + groupKey + ')';
-                html += '</div>';
-        
-                cleanProviders.forEach((item, index) => {
-                    let displayName = item.clean;
-                    let providerStr = item.original;
-                    let logoUrl = specialIcons[window.currentMenuContext] ? specialIcons[window.currentMenuContext] : 'icons/' + displayName + '.png';
-                    let imgTag = '<img src="' + logoUrl + '" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/50?text=' + displayName.charAt(0) + '\';">';
-        
-                    let onClickAction = "window.filterTampilan('" + providerStr + "', this)";
-                    if (window.isListModeContext) {
-                        html += '<div class="filter-card-list" onclick="' + onClickAction + '">';
-                        html += imgTag;
-                        html += '<span>' + displayName + '</span>';
-                        html += '<i class="fas fa-chevron-right"></i>';
-                        html += '</div>';
-                    } else {
-                        html += '<div class="filter-card" id="filter-sub-' + index + '" data-provider="' + providerStr + '" onclick="' + onClickAction + '">';
-                        html += imgTag;
-                        html += '<span>' + displayName + '</span>';
-                        html += '</div>';
-                    }
-                });
-                
-                area.innerHTML = html;
-                const listArea = document.getElementById('listProdukArea');
-                const inputCont = document.getElementById('inputContainer');
-                if(listArea) { listArea.innerHTML = ""; listArea.style.display = "none"; }
-                if(inputCont) inputCont.style.display = "none";
-            };
+            
+;
         
         
         
@@ -5561,131 +5386,16 @@
                     }
                 }
         
-                window.cekStatusBerkala = function(idDoc, trxId, tujuan, kode) {
-                    if(intervalCek[idDoc]) return;
-                    intervalCek[idDoc] = setInterval(async () => {
-                        try {
-        const res = await fetch('cek_status.php', { method: 'POST', body: JSON.stringify({ refID: trxId, tujuan: tujuan, kode_produk: kode }) });
-        const json = await res.json();
-        if(json.status !== "PENDING") { clearInterval(intervalCek[idDoc]); window.updateFirestoreStatus(idDoc, json.status, window.bersihkanPesan(json.sn), JSON.stringify(json)); }
-                        } catch(e) {}
-                    }, 10000); 
-                }
+                
+
         
         
-            window.cekStatusQiospayBerkala = function(idDoc, nominal) {
-                    if(window.intervalCek[idDoc]) return;
-                    window.intervalCek[idDoc] = setInterval(async () => {
-                        try {
-        const req = await fetch('cek_topup.php', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nominal: nominal, docId: idDoc })
-        });
-        const res = await req.json();
-        if(res.status === 'success') {
-            clearInterval(window.intervalCek[idDoc]);
-            delete window.intervalCek[idDoc];
             
-            const user = window.auth.currentUser;
-            if(user) {
-                const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc);
-                const trxSnap = await window.getDoc(trxRef);
-                if(trxSnap.exists() && (trxSnap.data().status === 'BERHASIL' || trxSnap.data().status === 'Sukses')) return; // Anti-Double
+;
+        
+        
                 
-                const userRef = window.doc(window.db, "users", user.uid);
-                const userSnap = await window.getDoc(userRef);
-                const newSaldo = (userSnap.exists() ? parseInt(userSnap.data().saldo) || 0 : 0) + parseInt(nominal);
-                
-                /* await window.updateDoc(userRef, { saldo: newSaldo }); // DIHAPUS DEMI KEAMANAN */
-                console.log('Pembayaran valid, menunggu cronjob/backend server memproses saldo...');
-                if(window.kirimNotifTelegram) window.kirimNotifTelegram('topup', { harga: nominal, username: userSnap.exists() ? (userSnap.data().username || 'User') : 'User', trx_id: 'QRIS-' + idDoc });
-                if(window.updateFirestoreStatus) window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup QRIS Otomatis", JSON.stringify(res));
-                
-                if(window.triggerDoniGuard) {
-                    window.triggerDoniGuard({
-                        trx_id: 'QRIS-' + idDoc, action: 'topup', produk: 'TOPUP QRIS GOPAY (QIOSPAY)', nominal: parseInt(nominal), saldo_akhir_client: newSaldo
-                    });
-                }
-                window.showNotice('success', 'Berhasil', 'Topup QRIS Rp ' + new Intl.NumberFormat('id-ID').format(nominal) + ' masuk!');
-                if(document.getElementById('statusQrisAuto')) {
-                    document.getElementById('statusQrisAuto').innerHTML = '<i class="fas fa-check-circle"></i> Pembayaran Diterima!';
-                    document.getElementById('statusQrisAuto').style.color = 'var(--success)';
-                }
-                setTimeout(() => {
-                    localStorage.removeItem('pending_topup');
-                    if(window.tutupModalTopup) window.tutupModalTopup();
-                    if(window.bukaRiwayatArsip) window.bukaRiwayatArsip();
-                }, 2000);
-            }
-        }
-                        } catch(e) {}
-                    }, 10000);
-                };
-        
-        
-                window.cekStatusTopupBerkala = function(idDoc, uniqueCode) {
-                    if(!window.isTopupAuto) return; // Mode manual tidak mengecek API otomatis
-        
-                    if(intervalCek[idDoc]) return;
-                    intervalCek[idDoc] = setInterval(async () => {
-                        try {
-        const req = await fetch('paydisini_cek.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ unique_code: uniqueCode })
-        });
-        const res = await req.json();
-        
-        if(res.success && res.data.status === "Success") {
-            clearInterval(intervalCek[idDoc]); 
-            delete intervalCek[idDoc];
-        
-            // FIX DONIGUARD: Pastikan User Ada
-            const user = window.auth.currentUser;
-            if(user) {
-                // 1. Ambil Saldo Terakhir dari Firestore (Realtime)
-                const userRef = window.doc(window.db, "users", user.uid);
-                const userSnap = await window.getDoc(userRef);
-                const oldSaldo = userSnap.exists() ? (parseInt(userSnap.data().saldo) || 0) : 0;
-                const nominal = parseInt(res.data.balance); // FIX: Ambil dari balance (Net Settlement)
-                const newSaldo = oldSaldo + nominal;
-        
-                // 2. Update Firestore (Client Side) DULUAN
-                // Kita update saldo di client agar sinkron saat DoniGuard mengecek
-                /* await window.updateDoc(userRef, { saldo: newSaldo }); // DIHAPUS DEMI KEAMANAN */
-                console.log('Pembayaran valid, menunggu cronjob/backend server memproses saldo...');
-                if(window.kirimNotifTelegram) window.kirimNotifTelegram('topup', { harga: nominal, username: userSnap.exists() ? (userSnap.data().username || 'User') : 'User', trx_id: uniqueCode });
-                window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup Berhasil");
-        
-                // 3. Lapor ke DoniGuard (Server Side)
-                // Kirim 'saldo_akhir_client' yang SUDAH DITAMBAH agar validasi server sukses
-                if(window.triggerDoniGuard) {
-                                                    window.triggerDoniGuard({
-                        trx_id: uniqueCode,
-                        action: 'topup',
-                        produk: 'TOPUP PAYDISINI',
-                        nominal: nominal,
-                        saldo_akhir_client: newSaldo
-                    });
-                }
-                                                                                                                                                            try {
-                    const uName = userSnap.exists() ? (userSnap.data().username || 'User') : 'User';
-                    const tgNow = new Date();
-                    const tgDateStr = `${tgNow.getDate()}/${tgNow.getMonth()+1}/${tgNow.getFullYear()} ${tgNow.getHours().toString().padStart(2,'0')}:${tgNow.getMinutes().toString().padStart(2,'0')}`;
-                    const tgMsg = `✅ *TOPUP SALDO BERHASIL*\n━━━━━━━━━━━━━━━━━━\n👤 User: ${uName}\n📧 Email: ${user.email}\n💰 Jumlah: Rp ${new Intl.NumberFormat('id-ID').format(nominal)}\n🆔 Trx ID: ${uniqueCode}\n🕒 Waktu: ${tgDateStr}\n━━━━━━━━━━━━━━━━━━\n🏢 BhuleEmarket\n🌐 https://www.bhuleemarket.store`;
-                    
-                    /* PATCH DONI: fetch Telegram langsung dihapus. Notif topup berhasil sekarang lewat window.kirimNotifTelegram -> /bottele/telegram_api.php */
-                } catch(etg) { console.log('TeleErr', etg); }
-                window.showNotice('success', 'Topup Berhasil', 'Saldo Rp '+new Intl.NumberFormat('id-ID').format(nominal)+' Masuk.');
-            }
-        } else if(res.success && (res.data.status === "Canceled" || res.data.status === "Expired")) {
-            clearInterval(intervalCek[idDoc]);
-            delete intervalCek[idDoc];
-            window.updateFirestoreStatus(idDoc, "GAGAL", "Pembayaran Expired/Batal");
-        }
-                        } catch(e) {} 
-                    }, 10000); 
-                }
+
         
                         window.kembaliKeFilter = function() {
                     const modalApp = document.getElementById('modalApp');
@@ -6519,180 +6229,8 @@
                 };
         
                 
-        window.bukaDetailRiwayat = function(str) {
-                    const d = JSON.parse(decodeURIComponent(str));
-                    
-                    // Override Topup Pending langsung ke Instruksi Pembayaran
-                    if (d.kode_produk === 'TOPUP' && (d.status === 'PENDING' || d.status === 'Pending')) {
-                        let mCode = d.metode || 'QRIS';
-                        let fallbackBank = (window.bankManualData || []).find(b => b.code === mCode);
-                        window.selectedTopupMethod = d.metode_lengkap || fallbackBank || { code: mCode, name: mCode === 'SEABANK' ? 'Transfer Seabank' : 'Scan QRIS All Payment', type: mCode === 'SEABANK' ? 'BANK_MANUAL' : 'MANUAL', img: mCode === 'SEABANK' ? 'icons/seabank.png' : 'icons/qris.jpg', desc: '' };
-                        window.currentPendingDocId = d.idDoc;
-                        
-                        // Sinkronisasi Sesi LocalStorage jika ditekan dari riwayat
-                        localStorage.setItem('pending_topup', JSON.stringify({
-        docId: d.idDoc, nominal: d.harga, method: window.selectedTopupMethod, timestamp: new Date().getTime()
-                        }));
-                        
-                        document.getElementById('modalTopup').style.display = "flex";
-                        window.renderTopupStep(4, d.harga);
-                        return;
-                    }
         
-                    const modal = document.getElementById('modalDetailRiwayat');
-                    
-                    // Config Icon & Color
-                    let icon = "fa-check"; let color = "var(--success)"; let statusText = "Transaksi Berhasil";
-                    if(d.status === "PENDING") { icon = "fa-clock"; color = "var(--warning)"; statusText = "Menunggu Pembayaran"; }
-                    else if(d.status === "GAGAL") { icon = "fa-times"; color = "var(--danger)"; statusText = "Transaksi Gagal"; }
-                    
-                    // 1. Parsing SN
-                    let snContent = window.bersihkanPesan(d.sn);
-                    snContent = window.cleanSafeSNRiwayat ? window.cleanSafeSNRiwayat(snContent) : snContent;
-                    if(!snContent || snContent === 'undefined') snContent = "-";
-        
-                    let isPaymentLink = snContent.startsWith('http');
-                    let displaySnContent = isPaymentLink ? 'Menunggu Pembayaran...' : snContent;
-        
-                    // 2. Ekstraksi Kode Voucher (Cari angka 12-25 digit dalam SN)
-                    let matchVoucher = snContent.match(/(\d{12,25})/);
-                    let kodeVoucher = matchVoucher ? matchVoucher[0] : null;
-                    let htmlKodeVoucher = "";
-                    let htmlInfoPLN = "";
-        
-                    // MODIFIKASI: Tampilan Khusus Token PLN (Parser SN)
-                    if ((d.status === 'BERHASIL' || d.status === 'Sukses') && (d.produk.toUpperCase().includes('PLN') || d.produk.toUpperCase().includes('TOKEN'))) {
-                        let cleanSN = window.bersihkanPesan(d.sn);
-                        // Format: TOKEN/NAMA/TARIF/DAYA/KWH
-                        let parts = cleanSN.split('/');
-                        if (parts.length >= 2) {
-        let token = parts[0].trim();
-        let nama = parts[1] ? parts[1].trim() : '-';
-        // Ambil sisa bagian (Tarif/Daya) dan bersihkan pesan error/warning setelah tanda titik
-        let volt = parts.slice(2).join('/').split(' . ')[0].trim();
-        
-        htmlInfoPLN = `<div style="background:#fff1f2; border:1px solid #fecaca; padding:8px; border-radius:10px; margin-bottom:10px; margin-top:5px;">
-            <div style="font-size:10px; font-weight:bold; color:#b91c1c; margin-bottom:4px; border-bottom:1px dashed #fecaca; padding-bottom:2px;"><i class="fas fa-bolt"></i> INFO TOKEN PLN</div>
-            <div style="display:grid; grid-template-columns: 60px 1fr; gap:2px; font-size:10px; margin-bottom:2px;">
-                <span style="color:#666;">Nama:</span><b style="color:#333;">${nama}</b>
-            </div>
-            <div style="display:grid; grid-template-columns: 60px 1fr; gap:2px; font-size:10px; margin-bottom:4px;">
-                <span style="color:#666;">Volt:</span><b style="color:#333;">${volt}</b>
-            </div>
-            <div style="background:white; border:1px solid #e1effe; padding:5px; border-radius:6px; text-align:center;">
-                <div style="font-size:9px; color:#888;">TOKEN</div>
-                <div style="font-size:14px; font-weight:800; color:#333; letter-spacing:1px;">${token}</div>
-            </div>
-        </div>`;
-                        }
-                    }
-                    let htmlTutorial = "";
-        
-                        // --- LOGIKA DETEKSI VOUCHER (MODE KETAT) ---
-                    const namaP = (d.produk || "").toLowerCase();
-                    
-                    // MODIF: Matikan tutorial cara pakai khusus Paket Akrab/KHFY
-                    const isPaketAkrab = (d.provider === 'KHFY') || namaP.includes('akrab') || namaP.includes('fmx') || namaP.includes('xla') || namaP.includes('xda');
-        
-                    if((d.status === 'BERHASIL' || d.status === 'Sukses') && !isPaketAkrab) {
-                        let prefix = "";
-                        let isVoucher = false;
-        
-                        // 1. Deteksi Provider (Hanya set prefix, jangan set isVoucher dulu)
-                        if(namaP.includes('telkomsel') || namaP.includes('tsel') || namaP.includes('by.u') || namaP.includes('simpati') || namaP.includes('loop') || namaP.includes('omn') || namaP.includes('kartu as')) prefix = "*133*";
-                        else if(namaP.includes('indosat') || namaP.includes('isat') || namaP.includes('freedom') || namaP.includes('yellow') || namaP.includes('unli') || namaP.includes('data jumbo') || namaP.includes('mini') || namaP.includes('im3')) prefix = "*556*";
-                        else if(namaP.includes('xl') || namaP.includes('hotrod') || namaP.includes('flex') || namaP.includes('bebas puas') || namaP.includes('harian') || namaP.includes('mingguan') || namaP.includes('akrab') || namaP.includes('xtra') || (namaP.includes('act vocer') && namaP.includes(','))) prefix = "*817*";
-                        else if(namaP.includes('axis') || namaP.includes('aigo') || namaP.includes('bronet') || namaP.includes('combo') || namaP.includes('mini data') || namaP.includes('owl') || namaP.includes('warnet')) prefix = "*838*";
-                        else if(namaP.includes('tri') || namaP.includes('three') || namaP.includes('aon') || namaP.includes('happy') || namaP.includes('kuota voucher') || namaP.includes('janet') || namaP.includes('cinta') || namaP.includes('pamax')) prefix = "*111*";
-                        else if(namaP.includes('smart') || namaP.includes('smf') || namaP.includes('nonstop') || namaP.includes('super kuota') || namaP.includes('gokil') || namaP.includes('volume')) prefix = "*999*";
-        
-                        // 2. VALIDASI KETAT: isVoucher hanya TRUE jika ada kata kunci ini
-                        if (prefix) {
-        const kwWajib = ["voucher", "vcr", "voc", "fisik", "gesek", "cetak", "aigo", "perdana", "kpk", "scratch"];
-        if (kwWajib.some(k => namaP.includes(k))) {
-            isVoucher = true;
-        }
-                        }
-        
-                        // Jika terdeteksi sebagai voucher
-                        if(isVoucher) {
-        // A. Jika Kode Voucher DITEMUKAN di SN
-        if(kodeVoucher) {
-            // Tampilkan Kode Voucher di bawah ID
-            htmlKodeVoucher = `<div class="detail-item" style="background:#fff1f2; padding:8px 10px; border-radius:8px; border:1px dashed #7f1d1d; margin-bottom:10px;"><span style="font-weight:bold; color:#7f1d1d;">Kode Voucher</span><span class="detail-val" style="font-family:monospace; font-size:15px; font-weight:800; color:#333; letter-spacing:1px;">${kodeVoucher}</span></div>`;
-            
-            // Tutorial Spesifik (Kode Lengkap + Tombol Salin)
-            let fullDial = `${prefix}${kodeVoucher}#`;
-            htmlTutorial = `
-            <div style="background:#fff8e1; color:#d35400; padding:12px; border-radius:12px; font-size:12px; margin-top:15px; border:1px solid #f39c12;">
-                <div style="margin-bottom:8px; font-weight:bold; font-size:13px;"><i class="fas fa-lightbulb"></i> Cara Pakai Voucher</div>
-                <div style="font-family:monospace; font-size:14px; font-weight:bold; color:#333; margin-bottom:10px; background:white; padding:8px; border-radius:6px; border:1px solid #ddd; text-align:center;">Ketik ${fullDial}</div>
-                <button onclick="navigator.clipboard.writeText('${fullDial}'); alert('Kode Dial Disalin!')" style="width:100%; background:#d35400; border:none; color:white; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">
-                    <i class="far fa-copy"></i> Salin Kode Dial
-                </button>
-            </div>`;
-        } 
-        // B. Jika Kode TIDAK DITEMUKAN (Fallback ke tutorial umum)
-        else {
-            htmlTutorial = `<div style="background:#fff8e1; color:#d35400; padding:10px; border-radius:8px; font-size:12px; margin-top:10px; text-align:center; border:1px dashed #f39c12; line-height:1.4;">
-                <i class="fas fa-info-circle"></i> Cara Pakai: Ketik <b>${prefix}KodeSN#</b> lalu Panggil
-            </div>`;
-        }
-                        }
-                    }
-        
-                    let html = `
-                        <div class="receipt-header">
-        <div class="receipt-icon" style="background:${color}"><i class="fas ${icon}"></i></div>
-        <div class="receipt-status" style="color:${color}">${statusText}</div>
-        <div style="font-size:12px; color:#999; margin-top:5px;">${d.waktu}</div>
-                        </div>
-                        
-                        <div style="text-align:center;">
-        <div style="font-size:12px; color:#777; font-weight:500;">Total Pembayaran</div>
-        <div class="receipt-amount">Rp ${new Intl.NumberFormat('id-ID').format(d.harga)}</div>
-                        </div>
-                        
-                        <div class="receipt-divider"></div>
-                        
-                        <div class="detail-item"><span>Produk</span><span class="detail-val">${d.produk}</span></div>
-                        <div class="detail-item"><span>Tujuan</span><span class="detail-val">${d.tujuan}</span></div>
-                        <div class="detail-item"><span>ID Transaksi</span><span class="detail-val">#${d.trx_id || '-'}</span></div>
-                        
-                        ${htmlInfoPLN}
-                        ${htmlKodeVoucher}
-                        
-                        <div style="margin-top:20px; font-size:12px; font-weight:bold; color:#555;">SN / Keterangan:</div>
-                        <div class="sn-container">
-        <span class="sn-text" id="snText">${displaySnContent}</span>
-        ${!isPaymentLink ? `<button class="btn-copy" onclick="navigator.clipboard.writeText('${displaySnContent}'); alert('SN Disalin!')"><i class="far fa-copy"></i></button>` : ''}
-                        </div>
-                        ${htmlTutorial}
-                    `;
-        
-                    if (isPaymentLink && d.status === 'PENDING') {
-                        html += `<button class="btn-konfirmasi" style="background:#be123c; margin-top:20px; width:100%; display:flex; justify-content:center; align-items:center; gap:8px; box-shadow: 0 4px 15px rgba(190,18,60, 0.3);" onclick="window.open('${snContent}', '_blank')"><i class="fas fa-external-link-alt"></i> Lanjutkan Pembayaran (DANA)</button>`;
-                    }
-        
-            if((d.status === "PENDING" || d.status === "Pending") && d.checkout_url) {
-                        html += `
-                        <button class="btn-konfirmasi" style="background:var(--primary); margin-top:20px; width:100%;" onclick="window.open('${d.checkout_url.replace('/v1/', '/v3/')}', '_blank')">Bayar Sekarang</button>
-                        <button class="btn-batal" style="margin-top:10px; background:#fff5f5; color:var(--danger); border:1px solid #ffcccc;" onclick="batalkanTopup('${d.idDoc}', '${d.unique_code || d.trx_id}')">Batalkan Topup</button>`;
-                    }
-        
-                    if((d.status === "PENDING" || d.status === "Pending") && d.is_po) {
-                         html += `<button class="btn-batal" style="margin-top:15px; background:#fff5f5; color:var(--danger); border:1px solid #ffcccc; width:100%; font-weight:bold; padding:12px; border-radius:8px;" onclick="window.batalkanPO('${d.idDoc}', '${d.trx_id}', ${d.harga})"><i class="fas fa-times-circle"></i> Batalkan Pre-Order</button>`;
-                    }
-        
-            html += `
-                    <button class="btn-konfirmasi" style="margin-top:20px; background:#00b894; color:white; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);" onclick="window.isShareMode=false; window.siapkanPrint('${str}')"><i class="fas fa-print"></i> Cetak Struk</button>
-                        <button class="btn-konfirmasi" style="margin-top:10px; background:linear-gradient(135deg, #25D366, #128C7E); color:white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);" onclick="window.siapkanShare('${str}')"><i class="fab fa-whatsapp"></i> Bagikan</button>
-                        <button class="btn-konfirmasi" style="margin-top:10px; background:var(--bg); color:#555; border:1px solid #ddd;" onclick="document.getElementById('modalDetailRiwayat').style.display='none'">Tutup</button>
-                    `;
-                    
-                    document.getElementById('detailRiwayatContent').innerHTML = html;
-                    modal.style.display = "flex";
-                }
+
                 
                 // PATCH DONI: Sanitizer tambahan untuk data lama yang sudah terlanjur menyimpan msg mentah provider.
                 window.cleanSafeSNRiwayat = function(txt, fallback = 'Status transaksi sedang diproses') {
@@ -8844,60 +8382,11 @@
                 // --- INTEGRASI ICS STORE (PAKET AKRAB V2) ---
                 window.icsData = [];
         
-                window.loadIcsData = async function() {
-                    const areaList = document.getElementById('listProdukArea');
-                    const areaFilter = document.getElementById('areaFilter');
-                    
-                    if(areaFilter) areaFilter.innerHTML = "";
-                    if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin'></i> Memuat Produk...</div>";
+                
+;
         
-                    try {
-                        const req = await fetch('ics_proxy.php?action=list');
-                        const res = await req.json();
-                        
-                    if(res.success && res.data) {
-        res.data.forEach(item => {
-            if (item.code === 'CFMX') {
-                item.type = 'fmax';
-                item.price = 0;
-            }
-        });
-        res.data.forEach(function(item) { if (item.type && (item.type.toUpperCase() === 'XDA' || item.type.toUpperCase() === 'AKRAB FRESH (XDA)')) item.type = 'XDA(Smart)'; });
-        window.icsData = res.data;
-        window.renderIcsFilters();
-                        } else {
-        if(areaList) areaList.innerHTML = `<div style='text-align:center; padding:20px;'>Gagal: ${res.message || 'Data Kosong'}</div>`;
-                        }
-                    } catch(e) {
-                        console.error(e);
-                        if(areaList) areaList.innerHTML = "<div style='text-align:center; color:red; padding:20px;'>Gagal koneksi ke server.</div>";
-                    }
-                };
-        
-                window.renderIcsFilters = function() {
-                    const rawTypes = window.icsData.map(i => (i.type || 'Lainnya').toUpperCase());
-                    const types = [...new Set(rawTypes)].sort();
-                    
-                    let html = '';
-                    types.forEach(t => {
-                        html += `<div class="filter-card" onclick="window.filterIcs('${t}', this)" style="min-width:auto; padding:8px 12px; margin:0; display:inline-flex; align-items:center; justify-content:center; height:auto; border-radius:8px; background:white; border:1px solid #eee; white-space:nowrap; flex-shrink:0;">
-        <span style="font-size:11px; font-weight:bold; color:#555;">${t}</span>
-                        </div>`;
-                    });
-                    
-                    const areaFilter = document.getElementById('areaFilter');
-                    
-                    if(areaFilter) {
-                        areaFilter.innerHTML = html;
-                        areaFilter.style.display = "flex";
-                        areaFilter.style.overflowX = "auto";
-                        areaFilter.style.gap = "8px";
-                        areaFilter.style.padding = "10px 5px";
-                        areaFilter.style.gridTemplateColumns = "none";
-                        areaFilter.style.scrollbarWidth = "none"; 
-                    }
-                    if(types.length > 0) window.filterIcs(types[0], document.querySelector('#areaFilter .filter-card'));
-                };
+                
+;
         
                 window.escapeAkrabHtml = function(value) {
                     return String(value ?? '').replace(/[&<>"']/g, function(ch) {
@@ -8966,182 +8455,14 @@
                 };
         
         
-                window.filterIcs = function(type, el) {
-                    document.querySelectorAll('.filter-card, .akrab-btn').forEach(e => e.classList.remove('active'));
-                    if(el) el.classList.add('active');
+                
+;
         
-                    const products = window.icsData.filter(i => (i.type || 'Lainnya').toUpperCase() === type);
-                    products.sort((a,b) => parseInt(a.price) - parseInt(b.price));
+                
+;
         
-                    let html = '';
-                    let markup = 0;
-                    if(window.markupConfig) {
-                         if(window.markupConfig['Paket Akrab v2'] !== undefined) markup = parseInt(window.markupConfig['Paket Akrab v2']);
-                         else if(window.markupConfig['General']) markup = parseInt(window.markupConfig['General']);
-                    }
-        
-            products.forEach(p => {
-                        let pName = p.name || 'Produk';
-                        let pCode = p.code || '-';
-                        let rawM = (window.markupConfig && window.markupConfig[pCode] !== undefined) ? window.markupConfig[pCode] : markup;
-                        let configMarkup = window.getMarkupValue(rawM, parseInt(p.price));
-                        let currentMarkup = (pCode === 'CFMX' || pName.toLowerCase().includes('cek')) ? 0 : configMarkup;
-                        let finalPrice = parseInt(p.price) + currentMarkup;
-                        let desc = p.description || '';
-        
-                        const isPO = (arguments.length > 2 ? arguments[2] : false) || document.getElementById('judulMenu').innerText === 'PO Akrab';
-                        let isAvailable = isPO || (p.status === 'available' && p.stock > 0);
-                        let clickEvent = isPO ? `onclick="window.siapkanInvoicePO('${pCode}', '${pName}', ${finalPrice}, 'ICS')"` : (isAvailable ? `onclick="window.siapkanInvoiceIcs('${pCode}', '${pName}', ${finalPrice}, '${p.type}')"` : `onclick="alert('Stok Habis')"`);
-                        let statusText = isPO ? 'PRE-ORDER' : (isAvailable ? '' : 'KOSONG');
-        
-                        html += window.renderAkrabProductCard({
-                            name: pName,
-                            price: finalPrice,
-                            stock: isAvailable ? p.stock : 0,
-                            desc: desc,
-                            status: statusText,
-                            source: 'ICS',
-                            disabled: !isAvailable && !isPO,
-                            clickEvent: clickEvent
-                        });
-                    });
-                    
-                    const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
-                    if (window.inlineAkrabMode) {
-                        const areaListInline = document.getElementById('inlineAkrabList');
-                        if(areaListInline) areaListInline.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
-                    } else if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
-                        const modalProduk = document.getElementById('modalProdukList');
-                        const areaListModal = document.getElementById('listProdukModalArea');
-                        const judulKategori = document.getElementById('judulKategoriModal');
-                        if(judulKategori) judulKategori.innerText = arguments[0]; 
-                        if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
-                        if(modalProduk) modalProduk.style.display = 'flex';
-                    } else {
-                        const areaList = document.getElementById('listProdukArea');
-                        if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
-                    }
-                };
-        
-                window.siapkanInvoiceIcs = function(kode, nama, harga, type) {
-                    window.currentInvoiceData = { kode, nama, baseHarga: harga, isIcs: true };
-                    
-                    let placeholder = "Masukkan Nomor HP";
-                    if((type || '').toUpperCase().includes('URL') || (type || '').toUpperCase().includes('LINK')) placeholder = "Tempel Link di sini";
-        
-                    const html = `
-                        <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
-                        <div style="background: #f8fafc; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px;">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <div style="font-size: 11px; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px;">Konfirmasi Pesanan</div>
-            <div style="font-size: 15px; font-weight: 800; color: #2c3e50; margin-top: 5px;">${nama}</div>
-        </div>
-        <div class="invoice-row" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 15px;">
-            <span>Kode Produk</span><b style="color: #666;">${kode}</b>
-        </div>
-        <div style="margin-bottom: 15px;">
-            <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Tujuan / Nomor HP</label>
-            <div class="input-group" style="margin-bottom: 0;">
-                <input type="tel" inputmode="numeric" id="inputIcsTujuan" class="form-input" placeholder="${placeholder}" style="background: white; border: 2px solid #e1effe; color:#333; font-weight:bold; padding-right: 70px;">
-                <i class="fas fa-pen" style="top: 15px;"></i>
-                <button type="button" onclick="window.pasteDariClipboard('inputIcsTujuan')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
-            </div>
-        </div>
-        <div class="invoice-row invoice-total" style="padding-top: 15px; margin-top: 5px;">
-            <span>TOTAL BAYAR</span>
-            <b style="color: var(--primary); font-size: 18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
-        </div>
-                        </div>
-                        <div id="icsCustomFooter">
-        <button class="btn-konfirmasi" onclick="window.prosesBayarIcs()">BAYAR SEKARANG</button>
-        <button class="btn-batal" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
-                        </div>`;
-                    
-                    document.getElementById('invoiceContent').innerHTML = html;
-                    document.getElementById('statusCekNama').style.display = 'none';
-                    document.getElementById('modalInvoice').style.display = 'flex';
-                    setTimeout(() => { const inp = document.getElementById('inputIcsTujuan'); if(inp) inp.focus(); }, 300);
-                };
-        
-                window.prosesBayarIcs = async function() {
-                    const user = window.auth.currentUser;
-                    if(!user) return;
-                    
-                    const data = window.currentInvoiceData;
-                    const hp = document.getElementById('inputIcsTujuan').value;
-                    if(!hp) return alert("Mohon isi Tujuan!");
-        
-                    document.getElementById('modalInvoice').style.display = 'none';
-                    window.showNotice('loading', 'Memproses', 'Sedang memproses transaksi...');
-        
-                    try {
-                        const userRef = window.doc(window.db, "users", user.uid);
-                        const userSnap = await window.getDoc(userRef);
-                        const curSaldo = userSnap.data().saldo || 0;
-        
-                        if(curSaldo < data.baseHarga) return window.showNotice('error', 'Gagal', 'Saldo tidak mencukupi!');
-        if (!(await window.cekSinkronisasiDoniGuard(user.uid, curSaldo))) return;
-                        await window.updateDoc(userRef, { saldo: curSaldo - data.baseHarga });
-        
-                        const req = await fetch(`ics_proxy.php?action=trx`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            code: data.kode, 
-            dest: hp, 
-            refid: 'IS-' + hp + '-' + Math.floor(10000000 + Math.random() * 90000000).toString() 
-        })
-                        });
-                        const res = await req.json();
-        
-                        if(res.success && res.data) {
-        const trxId = res.data.refid;
-        const msg = res.data.message || "Transaksi diproses";
-        
-        window.showNotice('success', 'Berhasil', msg);
-        
-        // --- INTEGRASI DONIGUARD (FIX: Catat Transaksi ICS/Akrab v2) ---
-        // Menyamakan saldo buku besar dengan saldo firestore setelah pembelian
-        if(window.triggerDoniGuard) {
-            window.triggerDoniGuard({
-                action: 'transaksi',
-                produk: data.nama,
-                nominal: data.baseHarga,
-                trx_id: trxId,
-                saldo_akhir_client: curSaldo - data.baseHarga
-            });
-        }
-        // --------------------------------------------------
-        
-        await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
-            uid: user.uid,
-            username: userSnap.data().username,
-            tujuan: hp,
-            produk: data.nama,
-            kode_produk: data.kode,
-            harga: data.baseHarga,
-            status: 'PENDING',
-            sn: msg,
-            trx_id: trxId,
-            provider: 'ICS',
-            timestamp: window.serverTimestamp()
-        });
-                        } else {
-        const freshUserSnap = await window.getDoc(userRef);
-        const latestCurSaldo = freshUserSnap.exists() ? (freshUserSnap.data().saldo || 0) : 0;
-        await window.updateDoc(userRef, { saldo: latestCurSaldo + data.baseHarga }); 
-        window.showNotice('error', 'Gagal', window.bersihkanPesan((res.data ? res.data.message : res.message) || 'Gagal dari server pusat'));
-                        }
-                    } catch(e) {
-                        try {
-         const userRef = window.doc(window.db, "users", user.uid);
-         const freshUserSnapCatch = await window.getDoc(userRef);
-         const latestCurSaldoCatch = freshUserSnapCatch.exists() ? (freshUserSnapCatch.data().saldo || 0) : 0;
-         await window.updateDoc(userRef, { saldo: latestCurSaldoCatch + data.baseHarga });
-                        } catch(ex){}
-                        window.showNotice('error', 'Error', 'Terjadi kesalahan sistem: ' + e.message);
-                    }
-                };
+                
+;
         
         
                 // --- INTEGRASI ICS STORE (PAKET AKRAB V2) ---
@@ -11073,7 +10394,6 @@
     </script>
     </div>
 
-
     <div id="pageAkrabSpesial" class="full-page">
         <div class="header" style="padding-bottom:20px; margin-bottom:20px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -11085,7 +10405,6 @@
         </div>
         <div id="akrabSpesialContent" style="padding: 0 10px;"></div>
     </div>
-
 
     <div id="pageAllProduk" class="full-page">
         <div class="header" style="padding: 25px 25px 60px; border-radius: 0 0 30px 30px; margin-bottom: -30px;">
@@ -11116,7 +10435,6 @@
         </div>
     </div>
 
-
     <div id="pageLapak" class="full-page">
         <div class="header" style="padding-bottom:40px; margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -11130,7 +10448,6 @@
             <div class="lapak-tab" id="tabPenjualan" onclick="switchLapakTab('penjualan')">Penjualan Saya</div>
             <div class="lapak-tab" id="tabAlamat" onclick="switchLapakTab('alamat')">Alamat Saya</div>
         </div>
-
 
         <div id="containerLapakSaya" style="padding:20px;">
             <div style="background:white; padding:15px; border-radius:15px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
@@ -11148,7 +10465,6 @@
             <h4 style="margin-bottom:10px;">Barang Jualan Saya</h4>
             <div id="listProdukLapak"></div>
         </div>
-
 
         <div id="containerPenjualanSaya" style="padding:20px; display:none;">
             <h4 style="margin-bottom:10px;">Pesanan Masuk</h4>
@@ -11201,7 +10517,6 @@
             <button class="btn-batal" onclick="document.getElementById('modalEditLapak').style.display='none'">Batal</button>
         </div>
     </div>
-
 
     <div id="pageBuku" class="full-page buku-page">
         <div class="buku-header">
@@ -11270,8 +10585,6 @@
         <div id="bukuList" class="buku-list"></div>
     </div>
 
-
-
     <div id="modalBukuRekap" class="buku-modal-overlay" onclick="if(event.target === this) tutupRekapBukuBulanan()">
         <div class="buku-modal-card">
             <div class="buku-modal-head">
@@ -11293,8 +10606,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div id="modalBukuManual" class="buku-modal-overlay" onclick="if(event.target === this) tutupBukuManualForm()">
         <div class="buku-modal-card">
@@ -11326,7 +10637,6 @@
             </div>
         </div>
     </div>
-
 
     <div id="pageProfil" class="full-page">
         <div class="prof-header">
@@ -11380,14 +10690,9 @@
         </div>
     </div>
 
-
-
-
-
     <div id="modalPrinterSettings" class="modal">
         <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
             <h3 style="margin-bottom:10px; border-bottom:1px dashed #eee; padding-bottom:10px;">Pengaturan Printer</h3>
-
 
             <div style="background:#f0f0f0; padding:15px; border-radius:10px; border:1px solid #ccc; margin-bottom:15px; text-align:center;">
                 <div style="font-size:10px; color:#666; margin-bottom:5px; font-weight:bold;"><i class="fas fa-eye"></i> Pratinjau Struk (Live)</div>
@@ -11427,7 +10732,6 @@
             <button class="btn-batal" onclick="document.getElementById('modalPrinterSettings').style.display='none'">BATAL</button>
         </div>
     </div>
-
 
     <style>
         .chat-fab { background: #25D366; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
@@ -11496,7 +10800,6 @@
         <div class="modal-content">
             <h3 style="margin-bottom:15px;">Cetak Struk</h3>
 
-
             <button id="btnConnectPrinter" class="btn-konfirmasi" onclick="connectPrinter()" style="background:#0984e3; margin-bottom:15px;">
                 <i class="fab fa-bluetooth"></i> Hubungkan ke Printer
             </button>
@@ -11506,11 +10809,9 @@
                 <input type="number" id="inputLiveMarkup" class="form-input" placeholder="0" oninput="updateLivePreview(this.value)" style="font-weight:bold; color:var(--primary);">
             </div>
 
-
             <div style="background:#f8f9fa; border:1px solid #ccc; padding:15px; font-family:'Courier New', monospace; font-size:12px; margin-bottom:15px; max-height:300px; overflow-y:auto; box-shadow:inset 0 2px 5px rgba(0,0,0,0.05);">
                 <pre id="printPreviewArea" style="white-space:pre-wrap; margin:0; color:#333;">Memuat Preview...</pre>
             </div>
-
 
             <button id="btnPrintNow" class="btn-konfirmasi" onclick="printStruk()" style="background:var(--success);">
                 <i class="fas fa-print"></i> PRINT SEKARANG
@@ -11522,7 +10823,6 @@
             <button class="btn-batal" onclick="document.getElementById('modalPrintPreview').style.display='none'" style="margin-top:10px;">Tutup</button>
         </div>
     </div>
-
 
     <script>
         // Konfigurasi Printer Default
@@ -11963,8 +11263,6 @@
         };
     </script>
 
-
-
     <script>
         // Memastikan variabel interval tersedia
         window.intervalCek = window.intervalCek || {};
@@ -12310,8 +11608,6 @@
         })();
     </script>
 
-
-
     <div id="modalMyQR" class="modal" style="z-index: 24000; align-items: center; justify-content: center;">
         <div class="notice-content" style="text-align: center;">
             <h3 style="margin-bottom:10px; color:var(--primary);">QR Akun Saya</h3>
@@ -12322,7 +11618,6 @@
         </div>
     </div>
 
-
     <div id="modalQRScanner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:99999; flex-direction:column;">
         <div style="padding:15px; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.5); color:white; position:absolute; top:0; width:100%; z-index:2; box-sizing:border-box;">
             <div style="font-weight:bold; font-size:16px;">Scan QR Transfer</div>
@@ -12330,7 +11625,6 @@
         </div>
         <div id="qr-reader" style="width:100%; height:100vh; display:flex; align-items:center; justify-content:center;"></div>
     </div>
-
 
     <div id="qrisFullscreen" class="qris-overlay">
         <div class="qris-close" onclick="document.getElementById('qrisFullscreen').style.display='none'"><i class="fas fa-times"></i></div>
@@ -12583,7 +11877,6 @@
             }
         })();
     </script>
-
 
     <script>
         // SCRIPT REFRESH CACHE PWA BHULEEMARKET
