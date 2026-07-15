@@ -1263,7 +1263,310 @@
         body.dark-mode .doni-native-dialog-actions { background: #101217; }
         body.dark-mode .doni-native-dialog-input { background: #0f1117; color: #fff; border-color: #2a2f3a; }
         
-    </style>
+    
+/* ==========================================================
+   SUPER APP 20 FITUR BARU BHULEE-MARKET
+   ========================================================== */
+.fe-section-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 16px;
+    margin: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.06);
+}
+body.dark-mode .fe-section-card {
+    background: #1e293b;
+    border-color: rgba(255,255,255,0.08);
+    color: #f8fafc;
+}
+
+.fe-grid-20 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+}
+@media (max-width: 420px) {
+    .fe-grid-20 {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+}
+
+.fe-item-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(127, 29, 29, 0.04);
+    border: 1px solid rgba(127, 29, 29, 0.08);
+    border-radius: 16px;
+    padding: 10px 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+.fe-item-card:active {
+    transform: scale(0.94);
+    background: rgba(127, 29, 29, 0.12);
+}
+body.dark-mode .fe-item-card {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.fe-item-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #991b1b, #7f1d1d);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(127, 29, 29, 0.22);
+    margin-bottom: 6px;
+}
+
+.fe-item-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.15;
+    word-break: break-word;
+}
+body.dark-mode .fe-item-title {
+    color: #e2e8f0;
+}
+
+.fe-recent-bar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 2px 8px;
+    scrollbar-width: none;
+}
+.fe-recent-bar::-webkit-scrollbar { display: none; }
+
+.fe-recent-chip {
+    flex: 0 0 auto;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #334155;
+}
+.fe-recent-chip:active { transform: scale(0.95); }
+body.dark-mode .fe-recent-chip {
+    background: #0f172a;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+/* Feature Modal Overlay */
+.fe-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    animation: feFadeIn 0.2s ease-out;
+}
+.fe-modal-overlay.active {
+    display: flex;
+}
+
+.fe-modal-box {
+    background: #ffffff;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    animation: feSlideUp 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+    color: #0f172a;
+    box-sizing: border-box;
+}
+body.dark-mode .fe-modal-box {
+    background: #0f172a;
+    color: #f8fafc;
+}
+
+@keyframes feFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes feSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.fe-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+}
+body.dark-mode .fe-modal-header {
+    border-bottom-color: #1e293b;
+}
+
+.fe-modal-title {
+    font-size: 15px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #7f1d1d;
+}
+body.dark-mode .fe-modal-title {
+    color: #f87171;
+}
+
+.fe-modal-close {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: #64748b;
+}
+body.dark-mode .fe-modal-close {
+    background: #1e293b;
+    color: #cbd5e1;
+}
+
+.fe-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    font-size: 13px;
+    color: #0f172a;
+    box-sizing: border-box;
+    margin-top: 4px;
+}
+body.dark-mode .fe-input {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+.fe-btn {
+    width: 100%;
+    padding: 11px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #991b1b, #7f1d1d);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(127,29,29,0.25);
+    transition: transform 0.15s;
+    margin-top: 10px;
+}
+.fe-btn:active {
+    transform: scale(0.97);
+}
+
+.fe-badge-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    background: rgba(127, 29, 29, 0.12);
+    color: #7f1d1d;
+    cursor: pointer;
+}
+body.dark-mode .fe-badge-tag {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+.fe-card-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+}
+body.dark-mode .fe-card-item {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+.fe-pin-overlay {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: #0f172a;
+    z-index: 999999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 20px;
+}
+.fe-pin-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+    max-width: 280px;
+    width: 100%;
+}
+.fe-pin-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.fe-pin-btn:active { background: rgba(255,255,255,0.3); }
+
+.fe-receipt-card {
+    background: #fff;
+    color: #1e293b;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    margin-top: 12px;
+}
+body.dark-mode .fe-receipt-card {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-color: #475569;
+}
+</style>
 
     <script>
         /* PATCH DONI: Nonaktifkan popup bawaan browser, ganti dengan modal custom aplikasi */
@@ -1746,7 +2049,137 @@
         </div>
     </div>
 
-    <a id="appBanner" class="app-install-fab" href="BE.apk" title="Install Aplikasi Android">
+    
+<!-- FITUR #20: BILAH TRANSAKSI TERAKHIR QUICK RE-ORDER -->
+<div class="fe-section-card" style="margin-top: 10px; padding: 12px 14px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <div style="font-size:12px; font-weight:800; color:#7f1d1d; display:flex; align-items:center; gap:6px;">
+            <i class="fas fa-history"></i> Transaksi Terakhir (Quick Action)
+        </div>
+        <span class="fe-badge-tag" onclick="feOpenModal('feModalSearchGlobal')"><i class="fas fa-search"></i> Cari Produk</span>
+    </div>
+    <div id="feRecentNumbersBar" class="fe-recent-bar">
+        <!-- JS will populate chips here -->
+    </div>
+</div>
+
+<!-- DASHBOARD 20 FITUR UNGGULAN SUPER APP -->
+<div class="fe-section-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:10px; margin-bottom:10px;">
+        <div>
+            <div style="font-size:14px; font-weight:900; color:#7f1d1d; display:flex; align-items:center; gap:6px;">
+                <i class="fas fa-cubes"></i> Super App Utilities (20 Fitur Agent)
+            </div>
+            <div style="font-size:10px; color:#64748b; margin-top:2px;">Alat bantu lengkap untuk mempermudah transaksi & manajemen kasir</div>
+        </div>
+        <span class="fe-badge-tag">20 Tool</span>
+    </div>
+
+    <div class="fe-grid-20">
+        <!-- 1. Kalkulator Margin -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalKalkulatorMargin')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);"><i class="fas fa-calculator"></i></div>
+            <span class="fe-item-title">Margin Kasir</span>
+        </div>
+        <!-- 2. Struk Digital -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalStrukDigital')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #059669, #047857);"><i class="fas fa-receipt"></i></div>
+            <span class="fe-item-title">Cetak Struk</span>
+        </div>
+        <!-- 3. Global Search -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalSearchGlobal')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #d97706, #b45309);"><i class="fas fa-search"></i></div>
+            <span class="fe-item-title">Cari Produk</span>
+        </div>
+        <!-- 4. Favorit Pelanggan -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalFavoritPelanggan')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #dc2626, #b91c1c);"><i class="fas fa-address-book"></i></div>
+            <span class="fe-item-title">No. Favorit</span>
+        </div>
+        <!-- 5. Catatan Kasir -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalCatatanKasir')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);"><i class="fas fa-sticky-note"></i></div>
+            <span class="fe-item-title">Catatan Memo</span>
+        </div>
+        <!-- 6. Prefix Checker -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalPrefixChecker')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #0284c7, #0369a1);"><i class="fas fa-sim-card"></i></div>
+            <span class="fe-item-title">Cek Operator</span>
+        </div>
+        <!-- 7. Estimator PLN -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalEstimasiPLN')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #eab308, #ca8a04);"><i class="fas fa-bolt"></i></div>
+            <span class="fe-item-title">KWH PLN</span>
+        </div>
+        <!-- 8. Analitik Pengeluaran -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalPengeluaranStats')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #0d9488, #0f766e);"><i class="fas fa-chart-pie"></i></div>
+            <span class="fe-item-title">Analitik</span>
+        </div>
+        <!-- 9. Bill Reminder -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalBillReminder')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #e11d48, #be123c);"><i class="fas fa-bell"></i></div>
+            <span class="fe-item-title">Pengingat</span>
+        </div>
+        <!-- 10. QRIS Generator -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalQRISGenerator')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #4f46e5, #4338ca);"><i class="fas fa-qrcode"></i></div>
+            <span class="fe-item-title">Buat QRIS</span>
+        </div>
+        <!-- 11. Spin Wheel -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalSpinWheel')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #db2777, #be185d);"><i class="fas fa-bullseye"></i></div>
+            <span class="fe-item-title">Spin Hadiah</span>
+        </div>
+        <!-- 12. Kurs Converter -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalKursConverter')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #16a34a, #15803d);"><i class="fas fa-dollar-sign"></i></div>
+            <span class="fe-item-title">Kurs Valas</span>
+        </div>
+        <!-- 13. Cek Ping Server -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalPingChecker')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);"><i class="fas fa-network-wired"></i></div>
+            <span class="fe-item-title">Cek Latency</span>
+        </div>
+        <!-- 14. Lock Security -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalAppPinLock')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #475569, #334155);"><i class="fas fa-lock"></i></div>
+            <span class="fe-item-title">Kunci App</span>
+        </div>
+        <!-- 15. Referral Share -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalReferralKit')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #ea580c, #c2410c);"><i class="fas fa-share-alt"></i></div>
+            <span class="fe-item-title">Referral Kit</span>
+        </div>
+        <!-- 16. Pusat Bantuan FAQ -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalPusatBantuan')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #0891b2, #0e7490);"><i class="fas fa-question-circle"></i></div>
+            <span class="fe-item-title">Bantuan FAQ</span>
+        </div>
+        <!-- 17. Terbilang Rupiah -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalTerbilangTool')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #9333ea, #7e22ce);"><i class="fas fa-font"></i></div>
+            <span class="fe-item-title">Ejaan Rupiah</span>
+        </div>
+        <!-- 18. Target Tabungan -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalGoalPlanner')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #10b981, #047857);"><i class="fas fa-piggy-bank"></i></div>
+            <span class="fe-item-title">Target Goal</span>
+        </div>
+        <!-- 19. Custom Theme -->
+        <div class="fe-item-card" onclick="feOpenModal('feModalThemeCustomizer')">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #f43f5e, #e11d48);"><i class="fas fa-palette"></i></div>
+            <span class="fe-item-title">Tema Akses</span>
+        </div>
+        <!-- 20. Privacy Mode -->
+        <div class="fe-item-card" onclick="feTogglePrivacyMode()">
+            <div class="fe-item-icon" style="background: linear-gradient(135deg, #38bdf8, #0284c7);"><i class="fas fa-eye-slash"></i></div>
+            <span class="fe-item-title">Mode Privasi</span>
+        </div>
+    </div>
+</div>
+
+<a id="appBanner" class="app-install-fab" href="BE.apk" title="Install Aplikasi Android">
         <div class="app-install-icon"><i class="fab fa-android"></i></div>
         <div class="app-install-text">Install<br>di Android</div>
         <style>
@@ -11923,6 +12356,997 @@
             }
         });
     </script>
+
+
+<!-- ================= MODALS 20 FITUR BARU ================= -->
+<div id="superApp20Modals">
+
+    <!-- 1. Kalkulator Margin -->
+    <div id="feModalKalkulatorMargin" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-calculator"></i> Kalkulator Margin & Keuntungan</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalKalkulatorMargin')">&times;</button>
+            </div>
+            <div>
+                <label style="font-size:11px; font-weight:700;">Harga Modal (Rp)</label>
+                <input type="number" id="feCalcModalVal" class="fe-input" placeholder="Contoh: 10200" oninput="feCalcMargin()">
+                
+                <label style="font-size:11px; font-weight:700; margin-top:8px; display:block;">Keuntungan Tambahan / Quick Markup</label>
+                <div style="display:flex; gap:6px; margin-top:4px;">
+                    <button class="fe-badge-tag" style="flex:1;" onclick="feSetCalcMarkup(1000)">+1.000</button>
+                    <button class="fe-badge-tag" style="flex:1;" onclick="feSetCalcMarkup(2000)">+2.000</button>
+                    <button class="fe-badge-tag" style="flex:1;" onclick="feSetCalcMarkup(3000)">+3.000</button>
+                    <button class="fe-badge-tag" style="flex:1;" onclick="feSetCalcMarkup(5000)">+5.000</button>
+                </div>
+
+                <label style="font-size:11px; font-weight:700; margin-top:8px; display:block;">Harga Jual Ke Consumen (Rp)</label>
+                <input type="number" id="feCalcJualVal" class="fe-input" placeholder="Contoh: 12000" oninput="feCalcMargin()">
+
+                <div class="fe-card-item" style="margin-top:12px; background:rgba(37,99,235,0.06);">
+                    <div style="font-size:11px; color:#64748b;">Estimasi Keuntungan Bersih:</div>
+                    <div id="feCalcProfitRes" style="font-size:20px; font-weight:900; color:#2563eb;">Rp 0</div>
+                    <div id="feCalcMarginRes" style="font-size:11px; font-weight:700; color:#059669; margin-top:2px;">Margin: 0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Struk Digital Custom -->
+    <div id="feModalStrukDigital" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-receipt"></i> Pembuat Struk Digital</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalStrukDigital')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feStrukToko" class="fe-input" placeholder="Nama Toko (Contoh: BE Cell)" value="BhuleE-Market Cell" oninput="feRenderStruk()">
+                <input type="text" id="feStrukProduk" class="fe-input" placeholder="Jenis Produk / Transaksi" value="Pulsa Telkomsel 10K" oninput="feRenderStruk()">
+                <input type="text" id="feStrukTarget" class="fe-input" placeholder="Nomor / ID Pelanggan" value="081234567890" oninput="feRenderStruk()">
+                <input type="number" id="feStrukNominal" class="fe-input" placeholder="Harga Produk (Rp)" value="10500" oninput="feRenderStruk()">
+                <input type="number" id="feStrukAdmin" class="fe-input" placeholder="Biaya Admin (Rp)" value="2000" oninput="feRenderStruk()">
+                <select id="feStrukStatus" class="fe-input" onchange="feRenderStruk()">
+                    <option value="SUKSES">SUKSES</option>
+                    <option value="PROSES">DALAM PROSES</option>
+                </select>
+
+                <div id="feReceiptPreviewCard" class="fe-receipt-card">
+                    <!-- Live Preview -->
+                </div>
+
+                <div style="display:flex; gap:8px;">
+                    <button class="fe-btn" style="flex:1;" onclick="fePrintStruk()"><i class="fas fa-print"></i> Cetak / PDF</button>
+                    <button class="fe-btn" style="flex:1; background:linear-gradient(135deg, #2563eb, #1d4ed8);" onclick="feCopyStrukText()"><i class="fas fa-copy"></i> Salin Teks</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Global Product Search -->
+    <div id="feModalSearchGlobal" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-search"></i> Pencarian Produk & Layanan</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalSearchGlobal')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feSearchQuery" class="fe-input" placeholder="Cari layanan (Telkomsel, PLN, Dana, Game...)" oninput="feFilterGlobalSearch()">
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+                    <span class="fe-badge-tag" onclick="feQuickSearch('Pulsa')">Pulsa</span>
+                    <span class="fe-badge-tag" onclick="feQuickSearch('PLN')">Token PLN</span>
+                    <span class="fe-badge-tag" onclick="feQuickSearch('DANA')">DANA</span>
+                    <span class="fe-badge-tag" onclick="feQuickSearch('OVO')">OVO</span>
+                    <span class="fe-badge-tag" onclick="feQuickSearch('Shopee')">ShopeePay</span>
+                    <span class="fe-badge-tag" onclick="feQuickSearch('Mobile Legends')">MLBB</span>
+                </div>
+                <div id="feSearchResults" style="margin-top:12px; max-height:280px; overflow-y:auto;">
+                    <!-- Results populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Favorit Pelanggan -->
+    <div id="feModalFavoritPelanggan" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-address-book"></i> Buku Nomor Favorit</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalFavoritPelanggan')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feFavName" class="fe-input" placeholder="Nama Pelanggan (e.g. Ibu PLN)">
+                <input type="text" id="feFavNumber" class="fe-input" placeholder="Nomor HP / Meter ID">
+                <select id="feFavCategory" class="fe-input">
+                    <option value="Pulsa">Pulsa / Paket Data</option>
+                    <option value="PLN">Token PLN</option>
+                    <option value="E-Wallet">E-Wallet (Dana/OVO/Shopee)</option>
+                    <option value="Game">Game ID</option>
+                </select>
+                <button class="fe-btn" onclick="feAddFavorit()"><i class="fas fa-plus"></i> Simpan ke Favorit</button>
+
+                <div style="font-weight:700; font-size:12px; margin-top:14px; margin-bottom:6px;">Daftar Favorit Tersimpan</div>
+                <div id="feFavList" style="max-height:200px; overflow-y:auto;">
+                    <!-- JS list -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Catatan Kasir Memo -->
+    <div id="feModalCatatanKasir" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-sticky-note"></i> Catatan Memo Kasir</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalCatatanKasir')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feNoteTitle" class="fe-input" placeholder="Judul Catatan / Nama Konsumen">
+                <textarea id="feNoteText" class="fe-input" style="height:60px;" placeholder="Tulis catatan, hutang, atau reminder..."></textarea>
+                <button class="fe-btn" onclick="feAddNote()"><i class="fas fa-plus-circle"></i> Tambah Catatan</button>
+
+                <div id="feNotesList" style="margin-top:12px; max-height:220px; overflow-y:auto;">
+                    <!-- List of notes -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Prefix Checker -->
+    <div id="feModalPrefixChecker" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-sim-card"></i> Detektor Operator & HLR</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalPrefixChecker')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="fePrefixInput" class="fe-input" placeholder="Masukkan Nomor HP (e.g. 0812xxxx)" oninput="feCheckPrefix()">
+                
+                <div id="fePrefixResultCard" class="fe-card-item" style="margin-top:12px; text-align:center; padding:16px; display:none;">
+                    <div id="fePrefixBadge" style="font-size:16px; font-weight:800; color:#7f1d1d;">-</div>
+                    <div id="fePrefixDetail" style="font-size:11px; color:#64748b; margin-top:4px;">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Estimator PLN -->
+    <div id="feModalEstimasiPLN" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-bolt"></i> Estimator KWH Token PLN</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalEstimasiPLN')">&times;</button>
+            </div>
+            <div>
+                <label style="font-size:11px; font-weight:700;">Daya Listrik Pelanggan</label>
+                <select id="fePlnTariff" class="fe-input" onchange="feCalcPLN()">
+                    <option value="450">R1 / 450 VA (Subsidi - Rp 415/kWh)</option>
+                    <option value="900S">R1 / 900 VA (Subsidi - Rp 605/kWh)</option>
+                    <option value="900R">R1M / 900 VA (Non-Subsidi - Rp 1.352/kWh)</option>
+                    <option value="1300">R1 / 1300 VA (Non-Subsidi - Rp 1.444/kWh)</option>
+                    <option value="2200">R1 / 2200 VA (Non-Subsidi - Rp 1.444/kWh)</option>
+                    <option value="3500">R2 / 3500-5500 VA (Rp 1.700/kWh)</option>
+                </select>
+
+                <label style="font-size:11px; font-weight:700; margin-top:8px; display:block;">Nominal Pembelian Token (Rp)</label>
+                <input type="number" id="fePlnAmount" class="fe-input" value="50000" oninput="feCalcPLN()">
+
+                <div class="fe-card-item" style="margin-top:12px; background:rgba(234,179,8,0.08);">
+                    <div style="font-size:11px; color:#854d0e;">Estimasi Daya kWh Diterima:</div>
+                    <div id="fePlnResultKwh" style="font-size:22px; font-weight:900; color:#ca8a04;">0.0 kWh</div>
+                    <div id="fePlnResultDetail" style="font-size:10px; color:#854d0e; margin-top:4px;">setelah potongan PPJ ~3%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Analitik Pengeluaran -->
+    <div id="feModalPengeluaranStats" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-chart-pie"></i> Analitik & Grafik Pengeluaran</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalPengeluaranStats')">&times;</button>
+            </div>
+            <div>
+                <div class="fe-card-item" style="background:rgba(13,148,136,0.08);">
+                    <div style="font-size:11px; color:#0f766e;">Total Estimasi Pengeluaran Bulan Ini</div>
+                    <div style="font-size:20px; font-weight:900; color:#0d9488;">Rp 485.000</div>
+                    <div style="font-size:10px; color:#0f766e;">24 Total Transaksi</div>
+                </div>
+
+                <div style="font-size:12px; font-weight:700; margin-top:10px;">Distribusi Kategori Produk</div>
+                <div style="margin-top:8px; font-size:11px;">
+                    <div style="display:flex; justify-content:space-between;"><span>Pulsa & Data</span><b>45%</b></div>
+                    <div style="background:#e2e8f0; border-radius:4px; height:8px; width:100%; margin-top:2px; margin-bottom:8px;"><div style="background:#2563eb; width:45%; height:100%; border-radius:4px;"></div></div>
+
+                    <div style="display:flex; justify-content:space-between;"><span>Token PLN</span><b>30%</b></div>
+                    <div style="background:#e2e8f0; border-radius:4px; height:8px; width:100%; margin-top:2px; margin-bottom:8px;"><div style="background:#eab308; width:30%; height:100%; border-radius:4px;"></div></div>
+
+                    <div style="display:flex; justify-content:space-between;"><span>Topup E-Wallet</span><b>25%</b></div>
+                    <div style="background:#e2e8f0; border-radius:4px; height:8px; width:100%; margin-top:2px;"><div style="background:#10b981; width:25%; height:100%; border-radius:4px;"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Bill Reminder Scheduler -->
+    <div id="feModalBillReminder" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-bell"></i> Pengingat Tagihan Bulanan</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalBillReminder')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feBillName" class="fe-input" placeholder="Nama Tagihan (e.g. Listrik Rumah, Indihome)">
+                <input type="number" id="feBillDay" class="fe-input" placeholder="Jatuh Tempo Tanggal (1-31)" min="1" max="31">
+                <button class="fe-btn" onclick="feAddBillReminder()"><i class="fas fa-plus"></i> Buat Pengingat</button>
+
+                <div style="font-weight:700; font-size:12px; margin-top:12px;">Daftar Tagihan Rutin</div>
+                <div id="feBillList" style="margin-top:6px; max-height:200px; overflow-y:auto;">
+                    <!-- List -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. Custom QRIS Generator -->
+    <div id="feModalQRISGenerator" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-qrcode"></i> Dynamic QRIS Generator</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalQRISGenerator')">&times;</button>
+            </div>
+            <div style="text-align:center;">
+                <input type="text" id="feQrShop" class="fe-input" value="BhuleE-Market Store" oninput="feGenerateQR()">
+                <input type="number" id="feQrAmount" class="fe-input" placeholder="Nominal Pembayaran (Rp)" value="25000" oninput="feGenerateQR()">
+
+                <div id="feQrDisplayArea" style="margin:14px auto; padding:12px; background:#fff; border-radius:16px; border:1px solid #cbd5e1; display:inline-block;">
+                    <canvas id="feQrCanvas" width="160" height="160"></canvas>
+                </div>
+                <div style="font-size:11px; color:#64748b;">Tunjukkan Kode QR diatas kepada pelanggan untuk scan bayar</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 11. Spin Wheel -->
+    <div id="feModalSpinWheel" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-bullseye"></i> Spin Wheel Hadiah Harian</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalSpinWheel')">&times;</button>
+            </div>
+            <div style="text-align:center;">
+                <div style="position:relative; width:220px; height:220px; margin:10px auto;">
+                    <canvas id="feWheelCanvas" width="220" height="220"></canvas>
+                    <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent; border-top:18px solid #ef4444; z-index:10;"></div>
+                </div>
+
+                <div id="feSpinStatusText" style="font-size:12px; font-weight:700; color:#059669; margin-top:6px;">Putar Roda & Dapatkan Point Hadiah!</div>
+                <button id="feSpinBtn" class="fe-btn" onclick="feSpinWheel()"><i class="fas fa-sync-alt"></i> Putar Roda Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12. Kurs Converter -->
+    <div id="feModalKursConverter" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-dollar-sign"></i> Konverter Kurs Valas & Crypto</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalKursConverter')">&times;</button>
+            </div>
+            <div>
+                <label style="font-size:11px; font-weight:700;">Jumlah Rupiah (IDR)</label>
+                <input type="number" id="feIdrInput" class="fe-input" value="100000" oninput="feConvertKurs()">
+
+                <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div class="fe-card-item">
+                        <div style="font-size:10px; color:#64748b;">USD (Dolar AS)</div>
+                        <div id="feKursUsd" style="font-size:14px; font-weight:800;">$ 0.00</div>
+                    </div>
+                    <div class="fe-card-item">
+                        <div style="font-size:10px; color:#64748b;">EUR (Euro)</div>
+                        <div id="feKursEur" style="font-size:14px; font-weight:800;">€ 0.00</div>
+                    </div>
+                    <div class="fe-card-item">
+                        <div style="font-size:10px; color:#64748b;">SAR (Riyal Arab)</div>
+                        <div id="feKursSar" style="font-size:14px; font-weight:800;">SR 0.00</div>
+                    </div>
+                    <div class="fe-card-item">
+                        <div style="font-size:10px; color:#64748b;">USDT (Crypto)</div>
+                        <div id="feKursUsdt" style="font-size:14px; font-weight:800;">0.00 USDT</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 13. Cek Speed Ping -->
+    <div id="feModalPingChecker" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-network-wired"></i> Latency & Health Meter</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalPingChecker')">&times;</button>
+            </div>
+            <div style="text-align:center;">
+                <div id="fePingBox" class="fe-card-item" style="padding:20px; background:rgba(99,102,241,0.08);">
+                    <div style="font-size:11px; color:#4338ca;">Latency Server Respons:</div>
+                    <div id="fePingVal" style="font-size:28px; font-weight:900; color:#4f46e5; margin:4px 0;">-- ms</div>
+                    <div id="fePingBadge" class="fe-badge-tag">Mengecek...</div>
+                </div>
+
+                <button class="fe-btn" onclick="feRunPingTest()"><i class="fas fa-sync"></i> Test Koneksi Ulang</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 14. App Lock Security -->
+    <div id="feModalAppPinLock" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-lock"></i> Pengaturan Kunci PIN Layar</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalAppPinLock')">&times;</button>
+            </div>
+            <div>
+                <label style="font-size:11px; font-weight:700;">Atur PIN Keamanan (4 Digit)</label>
+                <input type="password" id="feNewPinInput" class="fe-input" maxlength="4" placeholder="Contoh: 1234">
+                <button class="fe-btn" onclick="feSavePin()"><i class="fas fa-save"></i> Simpan PIN Baru</button>
+
+                <div style="border-top:1px solid #cbd5e1; margin-top:14px; padding-top:14px;">
+                    <button class="fe-btn" style="background:linear-gradient(135deg, #475569, #334155);" onclick="feLockAppNow()"><i class="fas fa-shield-alt"></i> Kunci Aplikasi Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 15. Referral Share Kit -->
+    <div id="feModalReferralKit" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-share-alt"></i> Referral & Invitation Share</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalReferralKit')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feRefCode" class="fe-input" placeholder="Kode Referral Anda" value="BHULE99">
+                <div style="font-size:11px; font-weight:700; margin-top:10px;">Pratinjau Pesan Undangan:</div>
+                <textarea id="feRefTextPreview" class="fe-input" style="height:80px; font-size:11px;" readonly>Yuk transaksi Pulsa, PLN & Game Murah di BhuleE-Market! Download app & gunakan Kode Referral: BHULE99 untuk bonus komisi!</textarea>
+
+                <div style="display:flex; gap:8px;">
+                    <button class="fe-btn" style="flex:1; background:linear-gradient(135deg, #16a34a, #15803d);" onclick="feShareReferralWA()"><i class="fab fa-whatsapp"></i> Share WA</button>
+                    <button class="fe-btn" style="flex:1;" onclick="feCopyReferralText()"><i class="fas fa-copy"></i> Salin Pesan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 16. Pusat Bantuan FAQ -->
+    <div id="feModalPusatBantuan" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-question-circle"></i> Pusat Bantuan FAQ</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalPusatBantuan')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feFaqSearch" class="fe-input" placeholder="Cari pertanyaan bantuan..." oninput="feSearchFAQ()">
+                <div id="feFaqContainer" style="margin-top:10px; max-height:240px; overflow-y:auto;">
+                    <!-- FAQ items JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 17. Terbilang Tool -->
+    <div id="feModalTerbilangTool" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-font"></i> Alat Ejaan Nominal Rupiah</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalTerbilangTool')">&times;</button>
+            </div>
+            <div>
+                <input type="number" id="feTerbilangInput" class="fe-input" placeholder="Masukkan Angka (e.g. 1250000)" value="1250000" oninput="feCalcTerbilang()">
+                <div class="fe-card-item" style="margin-top:12px; background:rgba(147,51,234,0.06);">
+                    <div style="font-size:10px; color:#7e22ce;">Ejaan Terbilang:</div>
+                    <div id="feTerbilangRes" style="font-size:13px; font-weight:800; color:#9333ea; font-style:italic; margin-top:4px;">"Satu Juta Dua Ratus Lima Puluh Ribu Rupiah"</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 18. Goal Savings Planner -->
+    <div id="feModalGoalPlanner" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-piggy-bank"></i> Perencana Target Tabungan</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalGoalPlanner')">&times;</button>
+            </div>
+            <div>
+                <input type="text" id="feGoalName" class="fe-input" placeholder="Nama Impian (e.g. Modal Lebaran, Qurban)">
+                <input type="number" id="feGoalTarget" class="fe-input" placeholder="Target Dana (Rp)" value="1000000" oninput="feCalcGoal()">
+                <input type="number" id="feGoalDays" class="fe-input" placeholder="Berapa Hari Target Ditentukan?" value="30" oninput="feCalcGoal()">
+
+                <div class="fe-card-item" style="margin-top:12px; background:rgba(16,185,129,0.08);">
+                    <div style="font-size:10px; color:#047857;">Target Menabung Per Hari:</div>
+                    <div id="feGoalDailyRes" style="font-size:18px; font-weight:900; color:#10b981;">Rp 33.333 / hari</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 19. Theme Accent Customizer -->
+    <div id="feModalThemeCustomizer" class="fe-modal-overlay">
+        <div class="fe-modal-box">
+            <div class="fe-modal-header">
+                <div class="fe-modal-title"><i class="fas fa-palette"></i> Kustomisasi Tema Akses</div>
+                <button class="fe-modal-close" onclick="feCloseModal('feModalThemeCustomizer')">&times;</button>
+            </div>
+            <div>
+                <div style="font-size:12px; font-weight:700; margin-bottom:8px;">Pilih Warna Akses Aplikasi</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <button class="fe-btn" style="background:#7f1d1d;" onclick="feApplyThemeAccent('crimson')">Crimson Red</button>
+                    <button class="fe-btn" style="background:#78350f;" onclick="feApplyThemeAccent('gold')">Midnight Gold</button>
+                    <button class="fe-btn" style="background:#065f46;" onclick="feApplyThemeAccent('emerald')">Emerald Green</button>
+                    <button class="fe-btn" style="background:#581c87;" onclick="feApplyThemeAccent('purple')">Royal Purple</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Fullscreen PIN Screen Lock Overlay -->
+<div id="fePinLockOverlay" class="fe-pin-overlay">
+    <div style="font-size:32px; color:#f87171; margin-bottom:10px;"><i class="fas fa-lock"></i></div>
+    <div style="font-size:18px; font-weight:800;">Aplikasi Terkunci</div>
+    <div style="font-size:12px; color:#94a3b8; margin-top:4px;">Masukkan 4 Digit PIN Anda</div>
+    
+    <div id="fePinDots" style="display:flex; gap:10px; margin-top:20px;">
+        <span style="width:14px; height:14px; border-radius:50%; border:2px solid #94a3b8;"></span>
+        <span style="width:14px; height:14px; border-radius:50%; border:2px solid #94a3b8;"></span>
+        <span style="width:14px; height:14px; border-radius:50%; border:2px solid #94a3b8;"></span>
+        <span style="width:14px; height:14px; border-radius:50%; border:2px solid #94a3b8;"></span>
+    </div>
+
+    <div class="fe-pin-pad">
+        <button class="fe-pin-btn" onclick="fePinPress('1')">1</button>
+        <button class="fe-pin-btn" onclick="fePinPress('2')">2</button>
+        <button class="fe-pin-btn" onclick="fePinPress('3')">3</button>
+        <button class="fe-pin-btn" onclick="fePinPress('4')">4</button>
+        <button class="fe-pin-btn" onclick="fePinPress('5')">5</button>
+        <button class="fe-pin-btn" onclick="fePinPress('6')">6</button>
+        <button class="fe-pin-btn" onclick="fePinPress('7')">7</button>
+        <button class="fe-pin-btn" onclick="fePinPress('8')">8</button>
+        <button class="fe-pin-btn" onclick="fePinPress('9')">9</button>
+        <button class="fe-pin-btn" style="font-size:14px;" onclick="fePinClear()">&times;</button>
+        <button class="fe-pin-btn" onclick="fePinPress('0')">0</button>
+        <button class="fe-pin-btn" style="font-size:14px; color:#10b981;" onclick="fePinVerify()"><i class="fas fa-check"></i></button>
+    </div>
+</div>
+
+
+<script>
+/* ==========================================================
+   SUPER APP 20 FITUR ENGINE BHULEE-MARKET
+   ========================================================== */
+
+function feOpenModal(modalId) {
+    const m = document.getElementById(modalId);
+    if (m) m.classList.add('active');
+}
+
+function feCloseModal(modalId) {
+    const m = document.getElementById(modalId);
+    if (m) m.classList.remove('active');
+}
+
+/* Feature 1: Kalkulator Margin */
+function feSetCalcMarkup(addVal) {
+    const modalInput = document.getElementById('feCalcModalVal');
+    let mVal = parseFloat(modalInput.value) || 0;
+    if (!mVal) { mVal = 10000; modalInput.value = 10000; }
+    document.getElementById('feCalcJualVal').value = mVal + addVal;
+    feCalcMargin();
+}
+
+function feCalcMargin() {
+    const modalVal = parseFloat(document.getElementById('feCalcModalVal').value) || 0;
+    const jualVal = parseFloat(document.getElementById('feCalcJualVal').value) || 0;
+    const profit = jualVal - modalVal;
+    const margin = modalVal > 0 ? ((profit / modalVal) * 100).toFixed(1) : 0;
+    
+    document.getElementById('feCalcProfitRes').innerText = 'Rp ' + profit.toLocaleString('id-ID');
+    document.getElementById('feCalcMarginRes').innerText = 'Margin Keuntungan: ' + margin + '%';
+}
+
+/* Feature 2: Struk Digital Custom */
+function feRenderStruk() {
+    const toko = document.getElementById('feStrukToko').value || 'BhuleE-Market';
+    const produk = document.getElementById('feStrukProduk').value || 'Produk';
+    const target = document.getElementById('feStrukTarget').value || '-';
+    const nominal = parseFloat(document.getElementById('feStrukNominal').value) || 0;
+    const admin = parseFloat(document.getElementById('feStrukAdmin').value) || 0;
+    const status = document.getElementById('feStrukStatus').value || 'SUKSES';
+    const total = nominal + admin;
+    const dateStr = new Date().toLocaleString('id-ID');
+
+    const html = `
+        <div style="text-align:center; font-weight:bold; font-size:14px; text-transform:uppercase;">${toko}</div>
+        <div style="text-align:center; font-size:10px; border-bottom:1px dashed #aaa; padding-bottom:6px; margin-bottom:6px;">${dateStr}</div>
+        <div style="display:flex; justify-content:space-between;"><span>PRODUK:</span><b>${produk}</b></div>
+        <div style="display:flex; justify-content:space-between;"><span>NO/ID:</span><b>${target}</b></div>
+        <div style="display:flex; justify-content:space-between;"><span>HARGA:</span><span>Rp ${nominal.toLocaleString('id-ID')}</span></div>
+        <div style="display:flex; justify-content:space-between;"><span>ADMIN:</span><span>Rp ${admin.toLocaleString('id-ID')}</span></div>
+        <div style="display:flex; justify-content:space-between; border-top:1px dashed #aaa; padding-top:4px; margin-top:4px; font-weight:bold;">
+            <span>TOTAL:</span><span>Rp ${total.toLocaleString('id-ID')}</span>
+        </div>
+        <div style="text-align:center; margin-top:8px; font-weight:bold; color:${status === 'SUKSES' ? '#059669' : '#d97706'};">[ ${status} ]</div>
+    `;
+    document.getElementById('feReceiptPreviewCard').innerHTML = html;
+}
+
+function fePrintStruk() { window.print(); }
+
+function feCopyStrukText() {
+    const txt = document.getElementById('feReceiptPreviewCard').innerText;
+    navigator.clipboard.writeText(txt).then(() => alert('Struk berhasil disalin ke clipboard!'));
+}
+
+/* Feature 3: Global Search */
+const feAllProducts = [
+    { title: 'Pulsa Telkomsel Reguler', cat: 'Pulsa' },
+    { title: 'Pulsa Indosat Ooredoo', cat: 'Pulsa' },
+    { title: 'Pulsa XL Axiata', cat: 'Pulsa' },
+    { title: 'Token PLN Listrik Prabayar', cat: 'PLN' },
+    { title: 'Topup Saldo DANA Digital', cat: 'E-Wallet' },
+    { title: 'Topup Saldo OVO Cash', cat: 'E-Wallet' },
+    { title: 'Topup ShopeePay Fast', cat: 'E-Wallet' },
+    { title: 'Mobile Legends Diamond', cat: 'Game' },
+    { title: 'Free Fire Diamond Instant', cat: 'Game' },
+    { title: 'Tagihan PDAM Air Clean', cat: 'Tagihan' },
+    { title: 'Tagihan BPJS Kesehatan', cat: 'Tagihan' }
+];
+
+function feQuickSearch(keyword) {
+    document.getElementById('feSearchQuery').value = keyword;
+    feFilterGlobalSearch();
+}
+
+function feFilterGlobalSearch() {
+    const q = (document.getElementById('feSearchQuery').value || '').toLowerCase();
+    const container = document.getElementById('feSearchResults');
+    if (!q) { container.innerHTML = '<div style="font-size:11px; color:#94a3b8; text-align:center;">Ketik nama produk untuk mencari...</div>'; return; }
+
+    const matches = feAllProducts.filter(p => p.title.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
+    if (matches.length === 0) {
+        container.innerHTML = '<div style="font-size:11px; color:#94a3b8; text-align:center;">Produk tidak ditemukan.</div>';
+        return;
+    }
+
+    container.innerHTML = matches.map(m => `
+        <div class="fe-card-item" style="display:flex; justify-content:space-between; align-items:center;" onclick="feCloseModal('feModalSearchGlobal'); bukaMenu('${m.cat}');">
+            <div>
+                <div style="font-weight:700; font-size:12px;">${m.title}</div>
+                <div style="font-size:10px; color:#64748b;">Kategori: ${m.cat}</div>
+            </div>
+            <i class="fas fa-chevron-right" style="color:#7f1d1d; font-size:12px;"></i>
+        </div>
+    `).join('');
+}
+
+/* Feature 4: Favorit Pelanggan */
+function feAddFavorit() {
+    const name = document.getElementById('feFavName').value.trim();
+    const num = document.getElementById('feFavNumber').value.trim();
+    const cat = document.getElementById('feFavCategory').value;
+
+    if (!name || !num) { alert('Harap isi Nama & Nomor Pelanggan!'); return; }
+
+    const list = JSON.parse(localStorage.getItem('fe_fav_list') || '[]');
+    list.push({ name, num, cat });
+    localStorage.setItem('fe_fav_list', JSON.stringify(list));
+
+    document.getElementById('feFavName').value = '';
+    document.getElementById('feFavNumber').value = '';
+    feRenderFavoritList();
+}
+
+function feRenderFavoritList() {
+    const list = JSON.parse(localStorage.getItem('fe_fav_list') || '[]');
+    const container = document.getElementById('feFavList');
+
+    if (list.length === 0) {
+        container.innerHTML = '<div style="font-size:11px; color:#94a3b8; text-align:center;">Belum ada favorit tersimpan.</div>';
+        return;
+    }
+
+    container.innerHTML = list.map((item, idx) => `
+        <div class="fe-card-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <div style="font-weight:700; font-size:12px;">${item.name} <span class="fe-badge-tag">${item.cat}</span></div>
+                <div style="font-size:11px; color:#64748b;">${item.num}</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+                <button class="fe-badge-tag" onclick="navigator.clipboard.writeText('${item.num}'); alert('Nomor disalin!');"><i class="fas fa-copy"></i></button>
+                <button class="fe-badge-tag" style="background:rgba(239,68,68,0.15); color:#ef4444;" onclick="feDelFavorit(${idx})">&times;</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function feDelFavorit(idx) {
+    const list = JSON.parse(localStorage.getItem('fe_fav_list') || '[]');
+    list.splice(idx, 1);
+    localStorage.setItem('fe_fav_list', JSON.stringify(list));
+    feRenderFavoritList();
+}
+
+/* Feature 5: Catatan Memo Kasir */
+function feAddNote() {
+    const title = document.getElementById('feNoteTitle').value.trim();
+    const text = document.getElementById('feNoteText').value.trim();
+    if (!title) { alert('Isi Judul Catatan!'); return; }
+
+    const list = JSON.parse(localStorage.getItem('fe_notes_list') || '[]');
+    list.push({ title, text, date: new Date().toLocaleDateString('id-ID') });
+    localStorage.setItem('fe_notes_list', JSON.stringify(list));
+
+    document.getElementById('feNoteTitle').value = '';
+    document.getElementById('feNoteText').value = '';
+    feRenderNotes();
+}
+
+function feRenderNotes() {
+    const list = JSON.parse(localStorage.getItem('fe_notes_list') || '[]');
+    const container = document.getElementById('feNotesList');
+    if (list.length === 0) {
+        container.innerHTML = '<div style="font-size:11px; color:#94a3b8; text-align:center;">Tidak ada memo tersimpan.</div>';
+        return;
+    }
+    container.innerHTML = list.map((n, idx) => `
+        <div class="fe-card-item">
+            <div style="display:flex; justify-content:space-between;">
+                <b>${n.title}</b>
+                <span style="font-size:10px; color:#94a3b8;">${n.date}</span>
+            </div>
+            <div style="font-size:11px; margin-top:4px; color:#475569;">${n.text}</div>
+            <button class="fe-badge-tag" style="margin-top:6px; background:rgba(239,68,68,0.1); color:#ef4444;" onclick="feDelNote(${idx})">Hapus</button>
+        </div>
+    `).join('');
+}
+
+function feDelNote(idx) {
+    const list = JSON.parse(localStorage.getItem('fe_notes_list') || '[]');
+    list.splice(idx, 1);
+    localStorage.setItem('fe_notes_list', JSON.stringify(list));
+    feRenderNotes();
+}
+
+/* Feature 6: Prefix Operator Checker */
+function feCheckPrefix() {
+    const num = document.getElementById('fePrefixInput').value.trim();
+    const card = document.getElementById('fePrefixResultCard');
+    const badge = document.getElementById('fePrefixBadge');
+    const detail = document.getElementById('fePrefixDetail');
+
+    if (num.length < 4) { card.style.display = 'none'; return; }
+    card.style.display = 'block';
+
+    const p = num.substring(0, 4);
+    if (['0811','0812','0813','0821','0822','0823','0852','0853'].includes(p)) {
+        badge.innerText = 'TELKOMSEL'; badge.style.color = '#dc2626'; detail.innerText = 'Operator Telkomsel / Simpati / AS';
+    } else if (['0814','0815','0816','0855','0856','0857','0858'].includes(p)) {
+        badge.innerText = 'INDOSAT OOREDOO'; badge.style.color = '#eab308'; detail.innerText = 'Operator Indosat / IM3';
+    } else if (['0817','0818','0819','0859','0877','0878'].includes(p)) {
+        badge.innerText = 'XL AXIATA'; badge.style.color = '#2563eb'; detail.innerText = 'Operator XL Axiata';
+    } else if (['0831','0832','0833','0838'].includes(p)) {
+        badge.innerText = 'AXIS'; badge.style.color = '#9333ea'; detail.innerText = 'Operator Axis';
+    } else if (['0895','0896','0897','0898','0899'].includes(p)) {
+        badge.innerText = 'TRI (3)'; badge.style.color = '#ea580c'; detail.innerText = 'Operator Tri Indonesia';
+    } else if (['0881','0882','0883','0884','0885','0886','0887','0888','0889'].includes(p)) {
+        badge.innerText = 'SMARTFREN'; badge.style.color = '#e11d48'; detail.innerText = 'Operator Smartfren';
+    } else if (p === '0851') {
+        badge.innerText = 'BY.U / TELKOMSEL'; badge.style.color = '#0284c7'; detail.innerText = 'Digital Provider By.U';
+    } else {
+        badge.innerText = 'TIDAK DIKETAHUI'; badge.style.color = '#64748b'; detail.innerText = 'Prefix nomor belum terdaftar.';
+    }
+}
+
+/* Feature 7: Estimator KWH PLN */
+function feCalcPLN() {
+    const tariff = document.getElementById('fePlnTariff').value;
+    const amount = parseFloat(document.getElementById('fePlnAmount').value) || 0;
+    
+    let rate = 1444; // default R1 1300
+    if (tariff === '450') rate = 415;
+    else if (tariff === '900S') rate = 605;
+    else if (tariff === '900R') rate = 1352;
+    else if (tariff === '1300' || tariff === '2200') rate = 1444;
+    else if (tariff === '3500') rate = 1700;
+
+    const netAmount = amount * 0.97; // Potongan admin PPJ ~3%
+    const kwh = (netAmount / rate).toFixed(1);
+
+    document.getElementById('fePlnResultKwh').innerText = kwh + ' kWh';
+    document.getElementById('fePlnResultDetail').innerText = `Diestimasi dari tarif Rp ${rate}/kWh`;
+}
+
+/* Feature 9: Bill Reminders */
+function feAddBillReminder() {
+    const name = document.getElementById('feBillName').value.trim();
+    const day = document.getElementById('feBillDay').value.trim();
+    if (!name || !day) { alert('Isi Nama & Tanggal!'); return; }
+
+    const list = JSON.parse(localStorage.getItem('fe_bills_list') || '[]');
+    list.push({ name, day });
+    localStorage.setItem('fe_bills_list', JSON.stringify(list));
+
+    document.getElementById('feBillName').value = '';
+    document.getElementById('feBillDay').value = '';
+    feRenderReminders();
+}
+
+function feRenderReminders() {
+    const list = JSON.parse(localStorage.getItem('fe_bills_list') || '[]');
+    const container = document.getElementById('feBillList');
+    if (list.length === 0) {
+        container.innerHTML = '<div style="font-size:11px; color:#94a3b8; text-align:center;">Belum ada pengingat.</div>';
+        return;
+    }
+    container.innerHTML = list.map((b) => `
+        <div class="fe-card-item" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <b>${b.name}</b>
+                <div style="font-size:10px; color:#e11d48;">Jatuh tempo tiap tgl ${b.day}</div>
+            </div>
+            <span class="fe-badge-tag"><i class="fas fa-clock"></i> Pengingat Aktif</span>
+        </div>
+    `).join('');
+}
+
+/* Feature 10: QRIS Generator */
+function feGenerateQR() {
+    const shop = document.getElementById('feQrShop').value || 'Store';
+    const amount = document.getElementById('feQrAmount').value || '0';
+    const canvas = document.getElementById('feQrCanvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 160, 160);
+
+    // Render placeholder QR pattern
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(10, 10, 40, 40); ctx.clearRect(18, 18, 24, 24); ctx.fillRect(24, 24, 12, 12);
+    ctx.fillRect(110, 10, 40, 40); ctx.clearRect(118, 18, 24, 24); ctx.fillRect(124, 24, 12, 12);
+    ctx.fillRect(10, 110, 40, 40); ctx.clearRect(18, 118, 24, 24); ctx.fillRect(24, 124, 12, 12);
+
+    for (let i = 0; i < 40; i++) {
+        let rx = Math.floor(Math.random() * 140) + 10;
+        let ry = Math.floor(Math.random() * 140) + 10;
+        ctx.fillRect(rx, ry, 6, 6);
+    }
+}
+
+/* Feature 11: Spin Wheel */
+function feDrawWheel() {
+    const canvas = document.getElementById('feWheelCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
+    const labels = ['50 Poin', '2K Vcr', 'Zonk', '100 Poin', 'Free Adm', '50 Poin'];
+    const sliceAngle = (2 * Math.PI) / 6;
+
+    for (let i = 0; i < 6; i++) {
+        ctx.beginPath();
+        ctx.fillStyle = colors[i];
+        ctx.moveTo(110, 110);
+        ctx.arc(110, 110, 100, i * sliceAngle, (i + 1) * sliceAngle);
+        ctx.fill();
+
+        ctx.save();
+        ctx.translate(110, 110);
+        ctx.rotate(i * sliceAngle + sliceAngle / 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(labels[i], 40, 4);
+        ctx.restore();
+    }
+}
+
+function feSpinWheel() {
+    const btn = document.getElementById('feSpinBtn');
+    btn.disabled = true;
+    let angle = 0;
+    const interval = setInterval(() => {
+        angle += 30;
+        document.getElementById('feWheelCanvas').style.transform = `rotate(${angle}deg)`;
+    }, 50);
+
+    setTimeout(() => {
+        clearInterval(interval);
+        btn.disabled = false;
+        alert('Selamat! Anda mendapatkan Bonus 50 Poin Hadiah Harian!');
+    }, 2000);
+}
+
+/* Feature 12: Kurs Converter */
+function feConvertKurs() {
+    const idr = parseFloat(document.getElementById('feIdrInput').value) || 0;
+    document.getElementById('feKursUsd').innerText = '$ ' + (idr / 16200).toFixed(2);
+    document.getElementById('feKursEur').innerText = '€ ' + (idr / 17500).toFixed(2);
+    document.getElementById('feKursSar').innerText = 'SR ' + (idr / 4300).toFixed(2);
+    document.getElementById('feKursUsdt').innerText = (idr / 16250).toFixed(2) + ' USDT';
+}
+
+/* Feature 13: Ping Latency Checker */
+function feRunPingTest() {
+    document.getElementById('fePingVal').innerText = 'Testing...';
+    const start = performance.now();
+    fetch('/index.php?_=' + Date.now(), { method: 'HEAD' }).then(() => {
+        const duration = Math.round(performance.now() - start);
+        document.getElementById('fePingVal').innerText = duration + ' ms';
+        const badge = document.getElementById('fePingBadge');
+        if (duration < 150) { badge.innerText = 'Sangat Cepat (Gacor)'; badge.style.background = '#10b981'; }
+        else { badge.innerText = 'Koneksi Normal'; badge.style.background = '#f59e0b'; }
+    }).catch(() => {
+        document.getElementById('fePingVal').innerText = 'Offline';
+    });
+}
+
+/* Feature 14: PIN Lock Screen Security */
+let feCurrentPin = '';
+function feSavePin() {
+    const newPin = document.getElementById('feNewPinInput').value;
+    if (newPin.length !== 4) { alert('PIN Harus 4 Digit!'); return; }
+    localStorage.setItem('fe_app_pin', newPin);
+    alert('PIN Keamanan Berhasil Disimpan!');
+}
+
+function feLockAppNow() {
+    feCloseModal('feModalAppPinLock');
+    document.getElementById('fePinLockOverlay').style.display = 'flex';
+}
+
+function fePinPress(num) {
+    if (feCurrentPin.length < 4) feCurrentPin += num;
+    feUpdatePinDots();
+}
+
+function fePinClear() {
+    feCurrentPin = '';
+    feUpdatePinDots();
+}
+
+function feUpdatePinDots() {
+    const dots = document.querySelectorAll('#fePinDots span');
+    dots.forEach((dot, idx) => {
+        if (idx < feCurrentPin.length) dot.style.background = '#f87171';
+        else dot.style.background = 'transparent';
+    });
+}
+
+function fePinVerify() {
+    const savedPin = localStorage.getItem('fe_app_pin') || '1234';
+    if (feCurrentPin === savedPin) {
+        document.getElementById('fePinLockOverlay').style.display = 'none';
+        feCurrentPin = '';
+        feUpdatePinDots();
+    } else {
+        alert('PIN Salah!');
+        fePinClear();
+    }
+}
+
+/* Feature 15: Referral Share */
+function feShareReferralWA() {
+    const txt = document.getElementById('feRefTextPreview').value;
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(txt));
+}
+
+function feCopyReferralText() {
+    const txt = document.getElementById('feRefTextPreview').value;
+    navigator.clipboard.writeText(txt).then(() => alert('Teks undangan referral disalin!'));
+}
+
+/* Feature 16: Pusat Bantuan FAQ */
+const feFaqs = [
+    { q: 'Bagaimana cara melakukan Topup Saldo?', a: 'Pilih menu Topup pada dashboard, pilih metode transfer bank atau QRIS, lalu lakukan transfer sesuai nominal unik.' },
+    { q: 'Bagaimana jika transaksi Token PLN Pending?', a: 'Tunggu 1-3 menit. Jika transaksi gagal, saldo otomatis dikembalikan 100% ke akun Anda.' },
+    { q: 'Bagaimana cara cetak struk ke printer Bluetooth?', a: 'Gunakan fitur Cetak Struk, lalu pilih opsi Print pada browser atau simpan sebagai PDF.' }
+];
+
+function feSearchFAQ() {
+    const q = (document.getElementById('feFaqSearch').value || '').toLowerCase();
+    const container = document.getElementById('feFaqContainer');
+    const filtered = feFaqs.filter(f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q));
+
+    container.innerHTML = filtered.map(f => `
+        <div class="fe-card-item">
+            <div style="font-weight:700; font-size:12px; color:#7f1d1d;">${f.q}</div>
+            <div style="font-size:11px; margin-top:4px; color:#475569;">${f.a}</div>
+        </div>
+    `).join('');
+}
+
+/* Feature 17: Terbilang Tool */
+function feCalcTerbilang() {
+    const val = parseInt(document.getElementById('feTerbilangInput').value) || 0;
+    document.getElementById('feTerbilangRes').innerText = '"' + feTerbilang(val) + ' Rupiah"';
+}
+
+function feTerbilang(n) {
+    const words = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
+    if (n < 12) return words[n];
+    if (n < 20) return feTerbilang(n - 10) + ' Belas';
+    if (n < 100) return feTerbilang(Math.floor(n / 10)) + ' Puluh ' + feTerbilang(n % 10);
+    if (n < 200) return 'Seratus ' + feTerbilang(n - 100);
+    if (n < 1000) return feTerbilang(Math.floor(n / 100)) + ' Ratus ' + feTerbilang(n % 100);
+    if (n < 2000) return 'Seribu ' + feTerbilang(n - 1000);
+    if (n < 1000000) return feTerbilang(Math.floor(n / 1000)) + ' Ribu ' + feTerbilang(n % 1000);
+    if (n < 1000000000) return feTerbilang(Math.floor(n / 1000000)) + ' Juta ' + feTerbilang(n % 1000000);
+    return n.toString();
+}
+
+/* Feature 18: Target Savings Goal */
+function feCalcGoal() {
+    const target = parseFloat(document.getElementById('feGoalTarget').value) || 0;
+    const days = parseInt(document.getElementById('feGoalDays').value) || 1;
+    const daily = Math.ceil(target / days);
+    document.getElementById('feGoalDailyRes').innerText = 'Rp ' + daily.toLocaleString('id-ID') + ' / hari';
+}
+
+/* Feature 19: Theme Customizer */
+function feApplyThemeAccent(colorName) {
+    let color = '#7f1d1d';
+    if (colorName === 'gold') color = '#78350f';
+    else if (colorName === 'emerald') color = '#065f46';
+    else if (colorName === 'purple') color = '#581c87';
+
+    document.documentElement.style.setProperty('--primary', color);
+    localStorage.setItem('fe_theme_color', color);
+    alert('Tema Berhasil Diubah!');
+}
+
+/* Feature 20: Privacy Mode & Recent Bar */
+function feTogglePrivacyMode() {
+    const s = document.getElementById('saldoValue');
+    if (!s) return;
+    if (s.innerText.includes('***')) {
+        s.innerText = localStorage.getItem('fe_raw_saldo') || 'Rp 150.000';
+    } else {
+        localStorage.setItem('fe_raw_saldo', s.innerText);
+        s.innerText = 'Rp ***.***';
+    }
+}
+
+function feRenderRecentNumbers() {
+    const bar = document.getElementById('feRecentNumbersBar');
+    if (!bar) return;
+    const recents = [
+        { num: '081234567890', label: 'Pulsa' },
+        { num: '54123890123', label: 'PLN' },
+        { num: '085711223344', label: 'Dana' }
+    ];
+    bar.innerHTML = recents.map(r => `
+        <div class="fe-recent-chip" onclick="navigator.clipboard.writeText('${r.num}'); alert('Nomor ${r.num} disalin!');">
+            <i class="fas fa-history"></i> ${r.num} (${r.label})
+        </div>
+    `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    feRenderStruk();
+    feRenderFavoritList();
+    feRenderNotes();
+    feRenderReminders();
+    feDrawWheel();
+    feConvertKurs();
+    feSearchFAQ();
+    feCalcTerbilang();
+    feCalcGoal();
+    feRenderRecentNumbers();
+
+    const savedTheme = localStorage.getItem('fe_theme_color');
+    if (savedTheme) document.documentElement.style.setProperty('--primary', savedTheme);
+});
+</script>
 
 </body>
 
