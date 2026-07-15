@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "default": "classic",
+  "themes": [
+    {
+      "id": "classic",
+      "name": "Klasik Merah",
+      "description": "Tampilan asli yang familiar dengan menu geser dua baris.",
+      "style": "classic.css",
+      "accent": "#991b1b",
+      "surface": "#fff7f7",
+      "layout": "Menu geser",
+      "icon": "fa-layer-group",
+      "dark": false,
+      "menuOrder": []
+    },
+    {
+      "id": "aurora",
+      "name": "Aurora Bento",
+      "description": "Kartu lembut, saldo mengambang, dan menu bento empat kolom.",
+      "style": "aurora.css",
+      "accent": "#7c3aed",
+      "surface": "#eef2ff",
+      "layout": "Bento 4 kolom",
+      "icon": "fa-wand-magic-sparkles",
+      "dark": false,
+      "menuOrder": ["E-Wallet", "Pulsa", "DIGITAL", "Token PLN", "Telkomsel", "XL", "Indosat", "By.U"]
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal Store",
+      "description": "Susunan menu dua kolom berbentuk daftar, ringkas dan mudah dipindai.",
+      "style": "minimal.css",
+      "accent": "#047857",
+      "surface": "#ecfdf5",
+      "layout": "Daftar 2 kolom",
+      "icon": "fa-list-check",
+      "dark": false,
+      "menuOrder": ["Pulsa", "E-Wallet", "Token PLN", "Tagihan", "PBB", "TV & Halo", "DIGITAL", "Pulsa TF"]
+    },
+    {
+      "id": "midnight",
+      "name": "Midnight Dock",
+      "description": "Dashboard gelap dengan kartu tegas, menu tiga kolom, dan dock navigasi futuristik.",
+      "style": "midnight.css",
+      "accent": "#22d3ee",
+      "surface": "#0f172a",
+      "layout": "Grid 3 kolom",
+      "icon": "fa-moon",
+      "dark": true,
+      "menuOrder": ["DIGITAL", "Pulsa", "E-Wallet", "Token PLN", "Telkomsel", "By.U", "XL", "Indosat"]
+    }
+  ]
+}

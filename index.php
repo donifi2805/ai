@@ -23,6 +23,11 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Sistem tema disimpan terpisah di public_html/tema/ -->
+    <link rel="stylesheet" href="/tema/base.css?v=1">
+    <link rel="stylesheet" id="appThemeStylesheet" href="/tema/classic.css?v=1">
+    <script defer src="/tema/tema.js?v=1"></script>
+
     <!-- Menambahkan Parameter Versi (?v=...) untuk Cache-Busting pada Preload -->
     <link rel="preload" as="image" href="icons/Pulsa.png?v=1.1">
     <link rel="preload" as="image" href="icons/E-Wallet.png?v=1.1">
@@ -1558,8 +1563,8 @@
                     <div class="brand-pandawa-subtitle">Layanan digital cepat & praktis</div>
                 </div>
                 <div style="display: flex; gap: 8px;">
-                    <button type="button" onclick="toggleDarkTheme()" class="theme-toggle-btn" title="Beralih Tema Gelap/Terang" aria-label="Beralih Tema Gelap/Terang" style="width: 38px; height: 38px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; padding:0;">
-                        <i id="themeToggleIcon" class="fas fa-moon" style="color:#fff; font-size:15px;"></i>
+                    <button type="button" onclick="openThemePanel()" class="theme-toggle-btn" title="Pilih Tema Tampilan" aria-label="Buka pilihan tema tampilan" style="width: 38px; height: 38px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; padding:0;">
+                        <i id="themeToggleIcon" class="fas fa-palette" style="color:#fff; font-size:15px;"></i>
                     </button>
                     <div onclick="handleLogout()" style="width: 38px; height: 38px; background: rgba(239, 68, 68, 0.15); backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.3); transition: 0.2s;">
                         <i class="fas fa-sign-out-alt" style="color:#fca5a5; font-size:15px;"></i>
@@ -10655,6 +10660,7 @@
             <div class="prof-row"><span>Terdaftar Sejak</span><b id="pJoin">-</b></div>
         </div>
         <div style="padding:20px;">
+            <button type="button" class="theme-profile-button" onclick="openThemePanel()"><i class="fas fa-palette"></i> Tema &amp; Tata Letak</button>
             <button class="btn-konfirmasi" onclick="bukaPengaturanPrinter()" style="background:linear-gradient(135deg, #6c5ce7, #a29bfe); margin-bottom:10px; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);"><i class="fas fa-print"></i> Pengaturan Printer</button>
             <button id="btnLapak" class="btn-konfirmasi" onclick="navSwitch('lapak')" style="display:none; background: linear-gradient(135deg, #f39c12, #d35400); margin-bottom:15px;"><i class="fas fa-store"></i> Buka Lapak Saya</button>
             <button class="btn-konfirmasi" onclick="navSwitch('pesanan_fisik')" style="display:none !important; background:linear-gradient(135deg, #3498db, #2980b9); margin-bottom:10px;"><i class="fas fa-box"></i> Pesanan Saya</button>
@@ -10687,6 +10693,26 @@
         </div>
         <div class="nav-item" onclick="navSwitch('profil', this)">
             <i class="fas fa-user"></i>Profil
+        </div>
+    </div>
+
+    <!-- Pemilih tema: katalog dan stylesheet berasal dari public_html/tema/ -->
+    <div id="themePickerModal" class="theme-picker-modal" role="dialog" aria-modal="true" aria-labelledby="themePickerTitle" aria-hidden="true">
+        <div class="theme-picker-sheet">
+            <div class="theme-picker-head">
+                <div class="theme-picker-head-icon"><i class="fas fa-swatchbook"></i></div>
+                <div class="theme-picker-title">
+                    <strong id="themePickerTitle">Tema &amp; Tata Letak</strong>
+                    <span>Warna, bentuk kartu, susunan menu, dan navigasi ikut berubah.</span>
+                </div>
+                <button type="button" class="theme-picker-close" onclick="closeThemePanel()" aria-label="Tutup pilihan tema"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="themePickerList" class="theme-picker-list" aria-live="polite"></div>
+            <div id="themePickerStatus" class="theme-picker-status"><i class="fas fa-spinner fa-spin"></i> Memuat katalog tema...</div>
+            <div class="theme-picker-actions">
+                <button type="button" class="theme-preview-btn" onclick="previewSelectedTheme()"><i class="fas fa-eye"></i> Pratinjau 7 detik</button>
+                <button type="button" class="theme-apply-btn" onclick="applySelectedTheme()"><i class="fas fa-check"></i> Terapkan Tema</button>
+            </div>
         </div>
     </div>
 

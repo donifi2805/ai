@@ -1,0 +1,2 @@
+/* Klasik Merah: mempertahankan bentuk dan susunan bawaan. */
+body[data-app-theme="classic"]{--primary:#7f1d1d;--success:#7f1d1d;--grad-main:linear-gradient(135deg,#991b1b 0%,#7f1d1d 100%)}
