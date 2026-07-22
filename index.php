@@ -3149,6 +3149,7 @@
                 }
                 console.log("Markup Cache Loaded Berhasil");
             } catch(e) { console.log("Gagal load cachemarkup.json", e); }
+        }
         } catch(e) { console.error("Config Error:", e); }
     };
     
@@ -3911,56 +3912,7 @@
         } catch(e) { console.error("KAJE credit error:", e); }
     };
     /*
-        if(!idDoc || !target) return;
-        try {
-            const trxRef = window.doc(window.db, "users", senderUid, "riwayat_transaksi", idDoc);
-            const trxSnap = await window.getDoc(trxRef);
-            if (trxSnap.exists() && trxSnap.data().kaje_credited === true) return;
-    
-            let q = window.query(window.collection(window.db, 'users'), window.where('username', '==', target));
-            let snap = await window.getDocs(q);
-            if(snap.empty) {
-                q = window.query(window.collection(window.db, 'users'), window.where('email', '==', target));
-                snap = await window.getDocs(q);
-            }
-    
-            if(!snap.empty) {
-                const tUid = snap.docs[0].id;
-                if (tUid === senderUid) return;
-                const tData = snap.docs[0].data();
-                const tRef = window.doc(window.db, 'users', tUid);
-                const tNewSaldo = (tData.saldo || 0) + parseInt(nominal);
-    
-                await window.updateDoc(tRef, { saldo: tNewSaldo });
-                await window.addDoc(window.collection(window.db, 'users', tUid, 'riwayat_transaksi'), {
-                    uid: tUid, username: tData.username || 'User', tujuan: senderName,
-                    produk: 'Terima Saldo (KAJE)', kode_produk: 'TRANSFER', harga: parseInt(nominal),
-                    status: 'BERHASIL', sn: 'Terima dari ' + senderName,
-                    trx_id: 'KJIN' + Date.now(), timestamp: window.serverTimestamp()
-                });
-                
-                if(window.updateFirestoreStatus) {
-                    window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
-                }
-                if(statusAkhir === 'GAGAL') {
-                    window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                } else {
-                    window.showNotice('success', 'Transaksi Sukses', sn);
-                }
-                return;
-                }
-                if(statusAkhir === 'GAGAL') {
-                    window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                } else {
-                    window.showNotice('success', 'Transaksi Sukses', sn);
-                }
-                return;
-                }
-            }
-        } catch(e) { console.error("KAJE credit error:", e); }
-    };
-    
-    
+        // KAJE credit function - commented out
     */
     window.triggerDoniGuard = async (data) => {
         try {
@@ -9014,27 +8966,28 @@
     
                 await window.updateDoc(trxRef, {
                     status: statusAkhir,
-                    sn: sn,
-                    raw_json: JSON.stringify(res)
-                });
-                
                 if(statusAkhir === 'GAGAL') {
                     const trxSnap = await window.getDoc(trxRef);
                     if (!trxSnap.data().isRefunded) {
                         const amount = parseInt(trxSnap.data().harga || 0);
                         const userRef = window.doc(window.db, "users", user.uid);
                         const uSnap = await window.getDoc(userRef);
-                        
                         await window.updateDoc(userRef, { saldo: (uSnap.data().saldo || 0) + amount });
-                        if(window.updateFirestoreStatus) {
-                            window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+                        await window.updateDoc(trxRef, { isRefunded: true, sn: sn + ' (REFUND OTOMATIS)' });
+                        if(window.triggerDoniGuard) {
+                            window.triggerDoniGuard({
+                                action: 'topup',
+                                produk: 'REFUND: ' + (trxSnap.data().produk || 'Paket Akrab'),
+                                nominal: amount,
+                                trx_id: ((trxSnap.data().trx_id || trxId) + '-REF'),
+                                saldo_akhir_client: (uSnap.data().saldo || 0) + amount
+                            });
                         }
-                        if(statusAkhir === 'GAGAL') {
-                            window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                        } else {
-                            window.showNotice('success', 'Transaksi Sukses', sn);
-                        }
-                        return;
+                        window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                    }
+                } else {
+                    window.showNotice('success', 'Transaksi Sukses', sn);
+                }
             }
         }
     }
