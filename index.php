@@ -1,2657 +1,4049 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-  <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- ANTI CACHE / CACHE BUSTING (Memaksa browser mengambil versi terbaru) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <!-- ==================================================================== -->
+
   <title>Pandawa-Digital - Super App PPOB</title>
+
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#2563eb">
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Menambahkan Parameter Versi (?v=...) untuk Cache-Busting pada Preload -->
   <link rel="preload" as="image" href="icons/Pulsa.png?v=1.1">
   <link rel="preload" as="image" href="icons/E-Wallet.png?v=1.1">
   <link rel="preload" as="image" href="icons/Games.png?v=1.1">
-  <link rel="preload" as="image" href="icons/Token%20PLN.png?v=1.1">
+  <link rel="preload" as="image" href="icons/Token PLN.png?v=1.1">
   <link rel="preload" as="image" href="icons/Telkomsel.png?v=1.1">
   <link rel="preload" as="image" href="icons/Indosat.png?v=1.1">
   <link rel="preload" as="image" href="icons/By.U.png?v=1.1">
+  <link rel="preload" as="image" href="https://cdn-icons-png.flaticon.com/512/2554/2554978.png">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #f8fafc;
+      --white: #fff;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text-dark: #0f172a;
+      --text-grey: #64748b;
+      --grad-main: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      padding-bottom: 85px;
+      color: var(--text-dark);
+      -webkit-tap-highlight-color: transparent;
+      min-height: 100vh;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .header {
+      background: var(--primary);
+      padding: 40px 20px 70px;
+      border-radius: 0 0 32px 32px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .saldo-box {
+      margin: -55px 15px 20px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 2;
+      border: 1px solid #f0f0f0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .saldo-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #f0f0f0;
+      padding-bottom: 15px;
+      margin-bottom: 5px;
+    }
+
+    .btn-topup {
+      background: linear-gradient(135deg, #0066b2, #0099ff);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 102, 178, 0.3);
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-topup:active {
+      transform: scale(0.95);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px dashed #f0f0f0;
+    }
+
+    .action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .action-item:active {
+      transform: scale(0.95);
+    }
+
+    .action-icon {
+      width: 45px;
+      height: 45px;
+      background: #f0f7ff;
+      color: var(--primary);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .menu-container {
+      background: #fff;
+      margin: 0 15px 20px;
+      border-radius: 24px;
+      padding: 5px 15px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* MENU GRID MODERN */
+    .cat-title {
+      padding: 20px 20px 10px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cat-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 16px;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px 10px;
+      padding: 5px 5px;
+    }
+
+    .menu-item {
+      text-align: center;
+      font-size: 12.5px;
+      cursor: pointer;
+      color: var(--text-dark);
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      line-height: 1.4;
+      transition: all 0.2s ease;
+    }
+
+    .menu-item:active {
+      transform: scale(0.92);
+      opacity: 0.8;
+    }
+
+    #menuDrawer {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #menuDrawer.expanded {
+      max-height: 800px;
+      opacity: 1;
+      margin-top: 15px;
+    }
+
+    #btnMoreContainer {
+      text-align: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #eee;
+    }
+
+    .icon-box {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 12px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+      border: 1.5px solid rgba(37, 99, 235, 0.15);
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .menu-item:active .icon-box {
+      transform: scale(0.85) translateY(4px);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.05);
+    }
+
+    .icon-box img {
+      width: 60%;
+      height: 60%;
+      object-fit: contain;
+    }
+
+    /* RIWAYAT TRANSAKSI (List View Modern) */
+    .history-container {
+      padding: 0 20px;
+      margin-bottom: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .history-card {
+      background: #ffffff;
+      padding: 12px 14px;
+      border-radius: 16px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .history-card:active {
+      background: #f8fafc;
+      transform: scale(0.98);
+    }
+
+    .h-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #eff6ff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.1);
+    }
+
+    .h-content {
+      flex: 1;
+    }
+
+    .h-prod {
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+      line-height: 1.3;
+      letter-spacing: -0.2px;
+    }
+
+    .h-date {
+      font-size: 10px;
+      color: var(--text-grey);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .h-right {
+      text-align: right;
+    }
+
+    .h-price {
+      font-weight: 900;
+      color: var(--primary);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .h-badge {
+      font-size: 9px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      display: inline-block;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .bg-BERHASIL {
+      background: #e6f9ed;
+      color: var(--success);
+    }
+
+    .bg-PENDING {
+      background: #fff8e1;
+      color: #f39c12;
+    }
+
+    .bg-GAGAL {
+      background: #fdeaea;
+      color: var(--danger);
+    }
+
+    .loading-badge {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 8px;
+      color: #0088cc;
+      display: block;
+    }
+
+    .fa-spin {
+      animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* MODAL MODERN BOTTOM SHEET */
+    .modal {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      align-items: flex-end;
+      z-index: 11000;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      width: 100%;
+      height: auto;
+      max-height: 95vh;
+      padding: 25px 20px 20px;
+      border-radius: 28px 28px 0 0 !important;
+      display: flex;
+      flex-direction: column;
+      animation: slideUpSmooth 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-sizing: border-box;
+      position: relative;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 45px;
+      height: 5px;
+      background: #cbd5e1;
+      border-radius: 10px;
+      z-index: 9999;
+    }
+
+    @keyframes slideUpSmooth {
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 16px;
+      top: 18px;
+      color: #a0aec0;
+      font-size: 18px;
+      transition: 0.3s;
+      z-index: 5;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 10px 10px 40px;
+      border: 2px solid #edf2f7;
+      border-radius: 12px;
+      font-size: 12px;
+      outline: none;
+      background: #f8fafc;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(0, 102, 178, 0.1);
+    }
+
+    .form-input:focus+i {
+      color: var(--primary);
+    }
+
+    #areaFilter {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 10px 0;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+
+    .filter-card-list {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .filter-card-list:last-child {
+      border-bottom: none;
+    }
+
+    .filter-card-list:active {
+      background: #e3f2fd;
+    }
+
+    .filter-card-list img {
+      width: 35px;
+      height: 35px;
+      object-fit: contain;
+      margin-right: 15px;
+    }
+
+    .filter-card-list span {
+      flex: 1;
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      text-align: left;
+    }
+
+    .filter-card-list i {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .filter-card {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .filter-card:active {
+      transform: scale(0.95);
+      background: #f0f7ff;
+    }
+
+    .filter-card.active {
+      border-color: var(--primary);
+      background: #e3f2fd;
+    }
+
+    .filter-card img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+
+    .filter-card span {
+      display: block;
+      font-size: 10px;
+      font-weight: bold;
+      color: #555;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    #inputContainer {
+      display: none;
+      margin-bottom: 15px;
+    }
+
+    #btnKembali {
+      display: none;
+      font-size: 18px;
+      color: var(--primary);
+      cursor: pointer;
+      margin-right: 12px;
+      transition: 0.2s;
+    }
+
+    #btnKembali:active {
+      transform: scale(0.8);
+    }
+
+    #listProdukArea {
+      flex: 1;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      background: #fdfdfd;
+      padding: 5px;
+      position: relative;
+      max-height: 50vh;
+    }
+
+    .item-produk {
+      padding: 15px;
+      border-bottom: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: white;
+      margin-bottom: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      transition: 0.2s;
+    }
+
+    .item-produk:active {
+      background: #e3f2fd;
+    }
+
+    .invoice-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .invoice-total {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      border-top: 1px dashed #ccc;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-konfirmasi {
+      width: 100%;
+      padding: 15px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .btn-batal {
+      width: 100%;
+      padding: 15px;
+      background: #f0f0f0;
+      color: #555;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .sn-box {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #333;
+      word-break: break-all;
+      margin-top: 10px;
+      line-height: 1.4;
+      border: 1px solid #ddd;
+    }
+
+    #operatorBadge {
+      position: absolute;
+      right: 75px;
+      top: 15px;
+      font-size: 10px;
+      background: #e1effe;
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-weight: 800;
+      display: none;
+      z-index: 6;
+      text-transform: uppercase;
+    }
+
+    .product-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      padding: 0 20px 20px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-info {
+      padding: 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .btn-buy-shop {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: white;
+      border-radius: 6px;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* LOADER KEREN DENGAN EFEK BLUR */
+    #globalLoader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader-logo-box {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 20px;
+      padding: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+      animation: pulseLogo 2s infinite ease-in-out;
+    }
+
+    .custom-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e1effe;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes pulseLogo {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 35px rgba(0, 153, 255, 0.2);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+    }
+
+    /* AUTH UI FLAT MINIMALIST (PERFORMANCE OPTIMIZED) */
+    #authOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, #eff6ff, #dbeafe, #f8fafc);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .auth-fx-bg {
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+                  radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+      z-index: 0;
+      filter: blur(60px);
+      animation: bgPulse 10s infinite alternate ease-in-out;
+    }
+
+    @keyframes bgPulse {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(2%, 2%) scale(1.05); }
+    }
+
+    .auth-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 30px;
+      padding: 40px 35px;
+      box-shadow: 0 20px 50px rgba(37, 99, 235, 0.1),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: var(--text-dark);
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      } 
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .brand-logo-glow {
+      width: 102px;
+      height: 102px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      animation: logoFloat 4s infinite ease-in-out alternate;
+    }
+
+    @keyframes logoFloat {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    .auth-h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin: 0;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.8px;
+    }
+
+    .auth-desc {
+      color: var(--text-grey);
+      font-size: 13px;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .form-area {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .inp-wrapper {
+      position: relative;
+    }
+
+    .inp-modern {
+      width: 100%;
+      background: rgba(241, 245, 249, 0.8);
+      border: 2px solid rgba(226, 232, 240, 0.8);
+      border-radius: 16px;
+      padding: 16px 16px 16px 52px;
+      color: var(--text-dark);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .inp-modern::placeholder {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .inp-modern:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15), 0 8px 20px rgba(37, 99, 235, 0.05);
+    }
+
+    .inp-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+
+    .inp-modern:focus ~ .inp-icon {
+      color: var(--primary);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .inp-eye {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 5px;
+      transition: all 0.3s;
+    }
+
+    .inp-eye:hover {
+      color: var(--primary);
+    }
+
+    .btn-modern-auth {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 16px;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-modern-auth:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-modern-auth:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-modern-auth i {
+      margin-left: 8px;
+      transition: transform 0.3s;
+    }
+
+    .btn-modern-auth:hover i {
+      transform: translateX(4px);
+    }
+
+    .auth-switcher {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-grey);
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .link-accent {
+      color: var(--primary);
+      font-weight: 700; 
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .link-accent:hover {
+      text-decoration: underline;
+      color: #1d4ed8;
+    }
+
+    .reset-link {
+      text-align: right;
+      margin-top: -8px;
+      margin-bottom: 5px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .reset-link span {
+      color: var(--text-grey);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .reset-link span:hover {
+      color: var(--primary);
+    }
+
+    .auth-fx-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 35vh;
+      background: var(--grad-main);
+      border-radius: 0 0 32px 32px;
+      z-index: 0;
+      box-shadow: 0 10px 30px rgba(5, 150, 105, 0.1);
+    }
+
+    .auth-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 380px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 40px 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+      border: 1px solid #f1f5f9;
+      color: var(--text-dark);
+      animation: fadeInUp 0.4s ease-out;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .brand-logo-glow {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      animation: logoFloat 3s infinite ease-in-out alternate;
+    }
+
+
+      100% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .auth-h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .auth-desc {
+      color: var(--text-grey);
+      font-size: 13px;
+      margin-top: 5px;
+      font-weight: 400;
+    }
+
+    .form-area {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .inp-wrapper {
+      position: relative;
+    }
+
+    .inp-modern {
+      width: 100%;
+      background: #f1f5f9;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 15px 15px 15px 48px;
+      color: var(--text-dark);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.2s;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .inp-modern::placeholder {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .inp-modern:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.08);
+    }
+
+    .inp-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 18px;
+      transition: 0.2s;
+    }
+
+    .inp-modern:focus~.inp-icon {
+      color: var(--primary);
+    }
+
+    .inp-eye {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .inp-eye:hover {
+      color: var(--primary);
+    }
+
+    .btn-modern-auth {
+      background: var(--grad-main);
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-modern-auth:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 10px rgba(5, 150, 105, 0.15);
+    }
+
+    .btn-modern-auth i {
+      margin-left: 8px;
+    }
+
+    .auth-switcher {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-grey);
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .link-accent {
+      color: var(--primary);
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .link-accent:hover {
+      text-decoration: underline;
+      color: #047857;
+    }
+
+    .reset-link {
+      text-align: right;
+      margin-top: -8px;
+      margin-bottom: 5px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .reset-link span {
+      color: var(--text-grey);
+      cursor: pointer;
+    }
+
+    .reset-link span:hover {
+      color: var(--primary);
+    }
+
+    /* MODAL BROADCAST */
+    #modalBroadcast {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 21000;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+    }
+
+    .bc-content {
+      background: white;
+      width: 85%;
+      max-width: 350px;
+      border-radius: 20px;
+      overflow: hidden;
+      animation: zoomIn 0.4s;
+      position: relative;
+      text-align: center;
+    }
+
+    .bc-img {
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: contain;
+      background: #000;
+      display: none;
+    }
+
+    .bc-body {
+      padding: 25px 20px 20px;
+    }
+
+    .bc-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #333;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .bc-text {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .bc-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      font-size: 14px;
+    }
+
+    /* MODAL NOTICE CUSTOM */
+    #modalNotice {
+      align-items: center;
+      justify-content: center;
+      z-index: 20000;
+    }
+
+    .notice-content {
+      background: white;
+      width: 85%;
+      max-width: 320px;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: zoomIn 0.3s;
+      box-sizing: border-box;
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .notice-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .icon-success {
+      color: var(--success);
+    }
+
+    .icon-error {
+      color: var(--danger);
+    }
+
+    .icon-loading {
+      color: var(--primary);
+    }
+
+    #mainAppContent {
+      display: none;
+    }
+
+    /* DETAIL RIWAYAT MODERN (RECEIPT STYLE) */
+    .receipt-header {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .receipt-icon {
+      width: 65px;
+      height: 65px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s;
+    }
+
+    .receipt-status {
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .receipt-amount {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin: 5px 0 25px;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .receipt-divider {
+      border-top: 2px dashed #cbd5e1;
+      margin: 25px -25px;
+      position: relative;
+    }
+
+    .receipt-divider::before,
+    .receipt-divider::after {
+      content: '';
+      position: absolute;
+      top: -12px;
+      width: 24px;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .receipt-divider::before {
+      left: -12px;
+    }
+
+    .receipt-divider::after {
+      right: -12px;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: #64748b;
+      align-items: center;
+    }
+
+    .detail-val {
+      font-weight: 700;
+      color: #1e293b;
+      text-align: right;
+      max-width: 65%;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .sn-container {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 14px;
+      margin-top: 15px;
+      border: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .sn-text {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #10b981;
+      word-break: break-all;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-copy {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:active {
+      transform: scale(0.9);
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .modal-invoice {
+      padding: 30px 20px 25px !important;
+      border-radius: 30px 30px 0 0 !important;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    /* MODAL TOPUP */
+    .topup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 15px;
+    }
+
+    .topup-card {
+      background: #f8fafc;
+      border: 1px solid #edf2f7;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      min-height: 75px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topup-card:active {
+      transform: scale(0.95);
+    }
+
+    .topup-card.active {
+      border-color: var(--primary);
+      background: #e3f2fd;
+    }
+
+    .topup-card i {
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .topup-card span {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .nominal-preset {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .preset-item {
+      background: #eee;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .preset-item:active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* BOTTOM NAV */
+    /* BOTTOM NAV RAPIH & SLIM */
+    .bottom-nav {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      width: auto;
+      height: 65px;
+      background: #ffffff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      z-index: 9999;
+      border-radius: 28px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .nav-item {
+      text-align: center;
+      color: #b0bec5;
+      font-size: 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      cursor: pointer;
+      transition: 0.2s;
+      position: relative;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .nav-item i {
+      font-size: 18px;
+      margin-bottom: 4px;
+      display: block;
+      transition: 0.2s;
+    }
+
+    .nav-item.active i {
+      transform: translateY(-2px);
+    }
+
+    /* TOMBOL TENGAH MENGAMBANG (ABSOLUTE) */
+    .nav-fab {
+      background: linear-gradient(135deg, #0066b2, #0099ff);
+      color: white;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -25px;
+      box-shadow: 0 10px 25px rgba(0, 153, 255, 0.4);
+      border: 4px solid rgba(255, 255, 255, 0.8);
+      font-size: 22px;
+      transition: 0.2s;
+    }
+
+    .nav-fab:active {
+      transform: scale(0.95);
+    }
+
+    /* CART & SHOP UPDATES */
+    .btn-see-more {
+      width: 100%;
+      padding: 12px;
+      background: white;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      font-weight: bold;
+      border-radius: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      display: block;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 60px 1fr 30px;
+      gap: 15px;
+      align-items: center;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    }
+
+    .cart-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .cart-desc {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* PAGES (CART & PROFILE) */
+    .full-page {
+      display: none;
+      padding-bottom: 90px;
+      animation: fadeIn 0.3s;
+    }
+
+    .cart-item {
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    }
+
+    .prof-header {
+      background: var(--grad-main);
+      padding: 40px 20px 60px;
+      border-radius: 0 0 30px 30px;
+      text-align: center;
+      color: white;
+      margin-bottom: -40px;
+    }
+
+    .prof-card {
+      background: white;
+      margin: 0 20px;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .prof-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed #eee;
+      font-size: 13px;
+    }
+
+    .prof-row:last-child {
+      border-bottom: none;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: 25%;
+      background: var(--danger);
+      color: white;
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    /* SHOPPING STYLE SHOPEE-LIKE */
+    .pdp-container {
+      background: white;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding-bottom: 80px;
+    }
+
+    .pdp-image {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+
+    .pdp-header {
+      padding: 15px;
+      background: white;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .pdp-price {
+      font-size: 24px;
+      color: var(--primary);
+      font-weight: 800;
+      margin: 5px 0;
+    }
+
+    .pdp-title {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    .pdp-desc-box {
+      padding: 15px;
+      background: white;
+      margin-bottom: 10px;
+    }
+
+    .pdp-label {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: block;
+      color: #555;
+    }
+
+    .pdp-desc-text {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .pdp-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      padding: 10px 15px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+      box-sizing: border-box;
+    }
+
+    .btn-cart-add {
+      flex: 1;
+      background: #e67e22;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .btn-buy-now {
+      flex: 1;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .lapak-tabs {
+      display: flex;
+      background: white;
+      border-bottom: 1px solid #eee;
+      margin-top: -20px;
+      border-radius: 20px 20px 0 0;
+      position: relative;
+      z-index: 10;
+    }
+
+    .lapak-tab {
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #999;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+
+    .lapak-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .seller-order-card {
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eee;
+    }
+
+    /* ORDER STATUS TABS */
+    .order-tabs {
+      display: flex;
+      background: white;
+      padding: 0 10px;
+      border-bottom: 1px solid #eee;
+      overflow-x: auto;
+    }
+
+    .order-tab {
+      padding: 15px;
+      font-size: 13px;
+      color: #777;
+      white-space: nowrap;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .order-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: bold;
+    }
+
+    .order-card {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .order-status {
+      font-size: 11px;
+      font-weight: bold;
+      float: right;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    /* STYLE PAGINASI & FILTER TANGGAL */
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 15px;
+      padding: 10px;
+    }
+
+    .page-num {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .page-num.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .filter-date-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 15px;
+      background: #f8fafc;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #eee;
+    }
+
+    .filter-date-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    /* CSS TABEL TAGIHAN RAPI */
+    .bill-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+      color: #333;
+      text-align: left;
+    }
+
+    .bill-table tr {
+      border-bottom: 1px dashed #eee;
+    }
+
+    .bill-table td {
+      padding: 8px 4px;
+      vertical-align: top;
+    }
+
+    .bill-table .label {
+      color: #666;
+      width: 45%;
+      font-weight: normal;
+      font-size: 12px;
+    }
+
+    .bill-table .value {
+      font-weight: 600;
+      text-align: right;
+      color: #000;
+      word-break: break-word;
+      font-size: 13px;
+    }
+
+    .bill-header {
+      background: #f0f9ff;
+      color: #0099ff;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      border: 1px solid #cceeff;
+    }
+
+
+    /* STYLE TOPUP BARU (STEPPED) */
+    .tu-cat {
+      padding: 15px;
+      border-radius: 15px;
+      border: 1px solid #edf2f7;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: 0.2s;
+      background: white;
+      box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    .tu-cat:active {
+      transform: scale(0.98);
+      background: #f0f9ff;
+      border-color: var(--primary);
+    }
+
+    .tu-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-right: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .tu-method {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tu-method:last-child {
+      border-bottom: none;
+    }
+
+    .tu-method:active {
+      background: #f9f9f9;
+    }
+
+    .tu-invoice-box {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      animation: slideUp 0.3s;
+    }
+
+    .chat-fab {
+      position: fixed;
+      bottom: 90px;
+      right: 15px;
+      width: 44px;
+      height: 44px;
+      background: #25D366;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      z-index: 9998;
+      cursor: pointer;
+      transition: all 0.2s;
+      animation: popIn 0.3s;
+    }
+
+    .chat-fab:active {
+      transform: scale(0.9);
+    }
+
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      background: #f0f2f5;
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid #e1e4e8;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .chat-bubble {
+      max-width: 85%;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 9px;
+      position: relative;
+      word-wrap: break-word;
+      line-height: 1.3;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .chat-bubble.me {
+      align-self: flex-end;
+      background: #d1e7dd;
+      color: #0f5132;
+      border-bottom-right-radius: 2px;
+    }
+
+    .chat-bubble.other {
+      align-self: flex-start;
+      background: white;
+      color: #333;
+      border-bottom-left-radius: 2px;
+    }
+
+    .chat-bubble.admin {
+      align-self: flex-start;
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .chat-name {
+      font-size: 8px;
+      font-weight: bold;
+      margin-bottom: 1px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .chat-time {
+      font-size: 7px;
+      color: rgba(0, 0, 0, 0.4);
+      text-align: right;
+      margin-top: 1px;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      background: white;
+      padding: 5px;
+      border-top: 1px solid #eee;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0);
+      }
+
+      to {
+        transform: scale(1);
+      }
+    }
+
+    /* CHAT V2 STYLES (WHATSAPP STYLE) */
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      background: white;
+      padding: 8px 10px;
+      border-top: 1px solid #eee;
+      position: relative;
+      z-index: 20;
+    }
+
+    .chat-textarea {
+      resize: none;
+      overflow-y: hidden;
+      min-height: 40px;
+      max-height: 120px;
+      padding: 12px 15px;
+      border-radius: 20px;
+      background: #f0f2f5;
+      border: 1px solid #e1e4e8;
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.4;
+      font-family: inherit;
+      transition: height 0.1s;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .chat-textarea:focus {
+      background: white;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.1);
+    }
+
+    .btn-send-chat {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 153, 255, 0.3);
+      transition: 0.2s;
+      margin-bottom: 2px;
+    }
+
+    .btn-send-chat:active {
+      transform: scale(0.9);
+    }
+
+    .chat-reply-bar {
+      background: #f0f4f8;
+      padding: 8px 12px;
+      border-left: 4px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      border-top: 1px solid #eee;
+      width: 100%;
+      box-sizing: border-box;
+      animation: slideUp 0.2s;
+    }
+
+    .reply-content {
+      flex: 1;
+      overflow: hidden;
+      margin-right: 10px;
+    }
+
+    .reply-name {
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 2px;
+      font-size: 10px;
+    }
+
+    .reply-text {
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 10px;
+    }
+
+    .quoted-msg {
+      background: rgba(0, 0, 0, 0.04);
+      border-left: 3px solid #ccc;
+      padding: 6px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      font-size: 10px;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+
+    .chat-bubble.me .quoted-msg {
+      background: rgba(0, 0, 0, 0.1);
+      border-left-color: #0f5132;
+    }
+
+    .reply-btn {
+      margin-left: 8px;
+      color: #95a5a6;
+      cursor: pointer;
+      font-size: 12px;
+      transition: 0.2s;
+      padding: 4px;
+    }
+
+    .reply-btn:hover {
+      color: var(--primary);
+      background: #e1effe;
+      border-radius: 50%;
+    }
+
+    .chat-name-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+
+
+
+
+    /* FULLSCREEN QRIS CSS */
+    .qris-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 30000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .qris-overlay img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .qris-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+
+    .qris-close:active {
+      transform: scale(0.9);
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+
+    /* CSS MODAL FULLSCREEN & AKRAB UI */
+    .modal-fullscreen {
+      align-items: flex-start !important;
+    }
+
+    .modal-fullscreen .modal-content {
+      height: 100vh !important;
+      max-height: 100vh !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+    }
+
+    .modal-fullscreen .modal-content::before {
+      display: none !important;
+    }
+
+    .akrab-header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 18px 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .akrab-search-container {
+      padding: 12px 15px;
+      background: #fff;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .akrab-search-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      background: #f8fafc;
+    }
+
+    .akrab-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 15px;
+      background: #fff;
+    }
+
+    .akrab-btn {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 5px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .akrab-btn i {
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+
+    .akrab-btn.active {
+      background: #eff6ff;
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+
+    .akrab-section-title {
+      padding: 0 15px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    document.addEventListener('input', function(e) {
+        const phoneInputIds = ['nomorHP', 'invoiceNomorHP', 'newTopupPhone', 'inputIcsTujuan', 'inputKhfyTujuan', 'inputPOTujuan', 'inputWzTujuan'];
+        if (e.target && phoneInputIds.includes(e.target.id)) {
+            let val = e.target.value;
+            // Cek apakah awalnya memiliki +62 sebelum huruf/simbol dihapus
+            let hasPlus62 = val.trim().startsWith('+62');
+            
+            // Hapus semua karakter yang BUKAN angka
+            let clean = val.replace(/[^0-9]/g, '');
+            
+            // Penyesuaian +62 atau 62 menjadi 0
+            if (hasPlus62) {
+                clean = '0' + clean.slice(2);
+            } else if (clean.startsWith('62')) {
+                clean = '0' + clean.slice(2);
+            }
+            
+            e.target.value = clean;
+        }
+    });
+    
+    window.pasteDariClipboard = async function(id) {
+        const input = document.getElementById(id);
+        if (!input) return;
+        try {
+            // Coba pakai sistem Aplikasi (Bridge AIDE)
+            if (typeof AndroidShare !== "undefined" && typeof AndroidShare.pasteFromClipboard === "function") {
+                const text = AndroidShare.pasteFromClipboard();
+                if (text) {
+                    input.value = text;
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                } else {
+                    alert("Clipboard sistem kosong.");
+                }
+            } else {
+                // Fallback ke Web Browser biasa
+                const text = await navigator.clipboard.readText();
+                input.value = text;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        } catch (err) {
+            alert('Tombol ini butuh izin khusus. Alternatif: Tekan dan Tahan kolom input, lalu pilih Tempel/Paste.');
+        }
+    };
+  </script>
+
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-<style>
-/* ============================================================
-   PANDAMA-DIGITAL PPOB — Professional Stylesheet
-   ============================================================ */
-:root {
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --primary-light: #dbeafe;
-  --bg: #f1f5f9;
-  --white: #ffffff;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --text-dark: #0f172a;
-  --text-grey: #64748b;
-  --text-light: #94a3b8;
-  --border: #e2e8f0;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
-  --shadow-lg: 0 10px 30px rgba(0,0,0,0.08);
-  --grad-main: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 30px;
-}
+</head>
 
-*, *::before, *::after { box-sizing: border-box; }
+<body>
+  <div id="authOverlay" style="display: flex;">
+    <div class="auth-fx-bg"></div>
 
-body {
-  margin: 0;
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  padding-bottom: 85px;
-  color: var(--text-dark);
-  -webkit-tap-highlight-color: transparent;
-  min-height: 100vh;
-  font-size: 14px;
-  line-height: 1.5;
-}
+    <!-- FORM LOGIN -->
+    <div class="auth-card" id="loginForm">
+      <div class="auth-brand">
+        <img src="icons/pandawa.png" class="brand-logo-glow" alt="Logo">
+        <h1 class="auth-h1">Pandawa-Digital</h1>
+        <p class="auth-desc">Agen Resmi PPOB & AKRAB 2026.   cepat mudah dan stabil</p>
+      </div>
 
-/* ===== HEADER ===== */
-.header {
-  background: var(--grad-main);
-  padding: 35px 20px 75px;
-  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 4px 20px rgba(37,99,235,0.2);
-  overflow: hidden;
-}
-.header::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -30%;
-  width: 200px; height: 200px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.header-top {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding-top: 10px;
-  position: relative;
-  z-index: 2;
-}
-.header-logo {
-  width: 50px; height: 50px;
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  flex-shrink: 0;
-}
-.header-logo img { height: 32px; width: auto; object-fit: contain; }
-.header-greeting {
-  font-size: 11px;
-  color: #bfdbfe;
-  font-weight: 600;
-  margin-bottom: 2px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.header-name {
-  font-weight: 800;
-  font-size: 19px;
-  color: #fff;
-  letter-spacing: -0.5px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  line-height: 1.2;
-}
-.header-version {
-  font-size: 10px;
-  color: #bfdbfe;
-  font-weight: 700;
-  margin-top: 2px;
-}
-.header-actions { display: flex; gap: 8px; }
-.header-btn {
-  width: 38px; height: 38px;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.1);
-  transition: all 0.2s;
-  color: #fff;
-  font-size: 15px;
-}
-.header-btn:active { transform: scale(0.9); }
-.header-btn.danger { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
-
-/* ===== SALDO BOX ===== */
-.saldo-box {
-  margin: -55px 15px 20px;
-  background: var(--white);
-  padding: 20px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  z-index: 2;
-  border: 1px solid #f1f5f9;
-}
-.saldo-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.saldo-label {
-  font-size: 12px;
-  color: var(--text-grey);
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.saldo-value {
-  font-size: 26px;
-  font-weight: 900;
-  color: #1e3a8a;
-  letter-spacing: -1px;
-}
-.action-grid {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 10px;
-  margin-top: 18px;
-  padding-top: 15px;
-  border-top: 1px dashed #f1f5f9;
-}
-.action-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.action-item:active { transform: scale(0.92); }
-.action-icon {
-  width: 46px; height: 46px;
-  background: #eff6ff;
-  color: var(--primary);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  box-shadow: var(--shadow-sm);
-}
-.action-text { font-size: 11px; font-weight: 600; color: var(--text-dark); }
-
-/* ===== MENU CONTAINER ===== */
-.menu-container {
-  background: var(--white);
-  margin: 0 15px 20px;
-  border-radius: var(--radius-lg);
-  padding: 5px 15px 20px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(0,0,0,0.04);
-  position: relative;
-  z-index: 2;
-}
-.cat-title {
-  padding: 18px 0 12px;
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--text-dark);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.cat-title::before {
-  content: '';
-  width: 4px; height: 16px;
-  background: var(--primary);
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 18px 8px;
-  padding: 0;
-}
-.menu-item {
-  text-align: center;
-  font-size: 12px;
-  cursor: pointer;
-  color: var(--text-dark);
-  font-weight: 700;
-  line-height: 1.3;
-  transition: transform 0.15s, opacity 0.15s;
-}
-.menu-item:active { transform: scale(0.9); opacity: 0.7; }
-.icon-box {
-  width: 58px; height: 58px;
-  margin: 0 auto 10px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(145deg, #ffffff, #f1f5f9);
-  box-shadow: 0 8px 20px rgba(37,99,235,0.08);
-  border: 1.5px solid rgba(37,99,235,0.1);
-  overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-.menu-item:active .icon-box { transform: scale(0.85) translateY(4px); }
-.icon-box img { width: 60%; height: 60%; object-fit: contain; }
-
-#menuDrawer {
-  max-height: 0; opacity: 0; overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-#menuDrawer.expanded { max-height: 800px; opacity: 1; margin-top: 10px; }
-#btnMoreContainer { text-align: center; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e2e8f0; }
-#btnMore {
-  background: #f1f5f9;
-  padding: 8px 24px;
-  border-radius: 20px;
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--primary);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-#btnMore:active { transform: scale(0.95); }
-
-/* ===== HISTORY CARDS ===== */
-.history-container {
-  padding: 0 20px;
-  margin-bottom: 15px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-.history-card {
-  background: var(--white);
-  padding: 12px 14px;
-  border-radius: var(--radius-md);
-  margin-bottom: 8px;
-  border: 1px solid rgba(0,0,0,0.03);
-  cursor: pointer;
-  transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: var(--shadow-sm);
-}
-.history-card:active { background: #f8fafc; transform: scale(0.98); }
-.h-icon {
-  width: 40px; height: 40px;
-  border-radius: var(--radius-sm);
-  background: #eff6ff;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.h-content { flex: 1; }
-.h-prod {
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--text-dark);
-  margin-bottom: 4px;
-  line-height: 1.3;
-}
-.h-date { font-size: 10px; color: var(--text-grey); font-weight: 500; display: flex; align-items: center; gap: 4px; }
-.h-right { text-align: right; }
-.h-price {
-  font-weight: 800;
-  color: var(--primary);
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-.h-badge {
-  font-size: 9px;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-weight: 700;
-  display: inline-block;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-.bg-BERHASIL { background: #d1fae5; color: #065f46; }
-.bg-PENDING  { background: #fef3c7; color: #92400e; }
-.bg-GAGAL    { background: #fee2e2; color: #991b1b; }
-
-/* ===== MODAL (Bottom Sheet) ===== */
-.modal {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  align-items: flex-end;
-  z-index: 11000;
-}
-.modal-center { align-items: center; justify-content: center; }
-.modal-content {
-  background: var(--white);
-  width: 100%;
-  max-height: 92vh;
-  padding: 28px 20px 20px;
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  display: flex;
-  flex-direction: column;
-  animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1);
-  position: relative;
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.12);
-}
-.modal-content::before {
-  content: '';
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px; height: 4px;
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-/* ===== AUTH OVERLAY (Login/Register) ===== */
-#authOverlay {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #f8fafc 100%);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  overflow: hidden;
-}
-.auth-fx-bg {
-  position: absolute;
-  inset: -10%;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(37,99,235,0.12) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(16,185,129,0.08) 0%, transparent 40%);
-  filter: blur(60px);
-  animation: bgPulse 10s infinite alternate ease-in-out;
-}
-@keyframes bgPulse {
-  0%   { transform: translate(0,0) scale(1); }
-  100% { transform: translate(2%,2%) scale(1.05); }
-}
-.auth-card {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 400px;
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
-  padding: 40px 35px;
-  box-shadow: 0 20px 50px rgba(37,99,235,0.1);
-  border: 1px solid rgba(255,255,255,0.5);
-  animation: fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-@keyframes zoomIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
-.auth-brand { text-align: center; }
-.brand-logo-glow {
-  width: 90px; height: 90px;
-  object-fit: contain;
-  margin-bottom: 12px;
-  animation: logoFloat 4s infinite ease-in-out alternate;
-}
-@keyframes logoFloat {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(-8px) rotate(1.5deg); }
-}
-.auth-h1 {
-  font-size: 28px;
-  font-weight: 900;
-  margin: 0;
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: -0.8px;
-}
-.auth-desc { color: var(--text-grey); font-size: 13px; margin-top: 4px; font-weight: 500; }
-.form-area { display: flex; flex-direction: column; gap: 16px; }
-.inp-wrapper { position: relative; }
-.inp-modern {
-  width: 100%;
-  background: rgba(241,245,249,0.8);
-  border: 2px solid rgba(226,232,240,0.8);
-  border-radius: var(--radius-md);
-  padding: 16px 16px 16px 52px;
-  color: var(--text-dark);
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
-  transition: all 0.3s;
-  outline: none;
-}
-.inp-modern::placeholder { color: var(--text-light); font-weight: 500; }
-.inp-modern:focus {
-  background: var(--white);
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(37,99,235,0.12);
-}
-.inp-icon {
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-light);
-  font-size: 18px;
-  transition: all 0.3s;
-}
-.inp-modern:focus ~ .inp-icon { color: var(--primary); transform: translateY(-50%) scale(1.1); }
-.inp-eye {
-  position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-light);
-  cursor: pointer;
-  padding: 5px;
-  transition: all 0.3s;
-}
-.inp-eye:hover { color: var(--primary); }
-.btn-modern-auth {
-  background: var(--grad-main);
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: var(--radius-md);
-  color: var(--white);
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(37,99,235,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-  letter-spacing: 0.5px;
-}
-.btn-modern-auth:active { transform: scale(0.97); }
-.btn-modern-auth i { margin-left: 8px; }
-.auth-switcher { text-align: center; font-size: 13px; color: var(--text-grey); font-weight: 500; }
-.link-accent { color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: none; }
-.link-accent:hover { text-decoration: underline; }
-.reset-link { text-align: right; font-size: 12px; font-weight: 600; }
-.reset-link span { color: var(--text-grey); cursor: pointer; }
-.reset-link span:hover { color: var(--primary); }
-
-/* ===== NOTICE MODAL ===== */
-#modalNotice { align-items: center; justify-content: center; z-index: 20000; }
-.notice-content {
-  background: var(--white);
-  width: 85%;
-  max-width: 320px;
-  padding: 30px;
-  border-radius: var(--radius-lg);
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  animation: zoomIn 0.3s;
-}
-.notice-icon { font-size: 50px; margin-bottom: 15px; }
-.icon-success { color: var(--success); }
-.icon-error   { color: var(--danger); }
-.icon-loading { color: var(--primary); }
-
-/* ===== BOTTOM NAV ===== */
-.bottom-nav {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  height: 65px;
-  background: var(--white);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 0 10px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-  z-index: 9999;
-  border-radius: 25px;
-  border: 1px solid #f1f5f9;
-}
-.nav-item {
-  text-align: center;
-  color: #94a3b8;
-  font-size: 10px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  cursor: pointer;
-  transition: color 0.2s;
-  position: relative;
-  font-weight: 600;
-}
-.nav-item.active { color: var(--primary); }
-.nav-item i { font-size: 20px; margin-bottom: 3px; display: block; transition: transform 0.2s; }
-.nav-item.active i { transform: translateY(-3px); }
-.nav-fab {
-  background: var(--grad-main);
-  color: var(--white);
-  width: 55px; height: 55px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: -25px;
-  box-shadow: 0 10px 25px rgba(37,99,235,0.4);
-  border: 4px solid rgba(255,255,255,0.8);
-  font-size: 22px;
-  transition: transform 0.15s;
-}
-.nav-fab:active { transform: scale(0.92); }
-
-/* ===== GLOBAL LOADER ===== */
-#globalLoader {
-  position: fixed;
-  inset: 0;
-  background: var(--white);
-  z-index: 99999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.4s ease;
-}
-.loader-logo-box {
-  width: 80px; height: 80px;
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 25px;
-  animation: pulseLogo 2s infinite ease-in-out;
-}
-@keyframes pulseLogo {
-  0%,100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-  50%     { transform: scale(1.05); box-shadow: 0 15px 35px rgba(37,99,235,0.2); }
-}
-.custom-spinner {
-  width: 40px; height: 40px;
-  border: 4px solid #dbeafe;
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-/* ===== FORM ELEMENTS ===== */
-.input-group { position: relative; margin-bottom: 15px; }
-.input-group i {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-light);
-  font-size: 16px;
-  z-index: 5;
-}
-.form-input {
-  width: 100%;
-  padding: 12px 12px 12px 42px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  outline: none;
-  background: #f8fafc;
-  transition: all 0.25s;
-  color: var(--text-dark);
-  font-weight: 600;
-}
-.form-input:focus {
-  border-color: var(--primary);
-  background: var(--white);
-  box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
-}
-.form-input:focus + i { color: var(--primary); }
-select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
-
-.btn-konfirmasi {
-  width: 100%;
-  padding: 14px;
-  background: var(--primary);
-  color: var(--white);
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-.btn-konfirmasi:active { transform: scale(0.97); }
-.btn-batal {
-  width: 100%;
-  padding: 14px;
-  background: #f1f5f9;
-  color: var(--text-grey);
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-/* ===== FILTER & PRODUCTS ===== */
-#areaFilter {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 10px;
-  padding: 10px 0;
-  max-height: 50vh;
-  overflow-y: auto;
-}
-.filter-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.15s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.filter-card:active { transform: scale(0.95); background: #f0f7ff; }
-.filter-card.active { border-color: var(--primary); background: #eff6ff; }
-.filter-card img { width: 32px; height: 32px; object-fit: contain; }
-.filter-card span { font-size: 10px; font-weight: 700; color: #475569; line-height: 1.2; }
-
-#listProdukArea {
-  flex: 1;
-  overflow-y: auto;
-  border-radius: var(--radius-sm);
-  background: #fafafa;
-  padding: 5px;
-  max-height: 50vh;
-}
-.item-produk {
-  padding: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  background: var(--white);
-  margin-bottom: 8px;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(0,0,0,0.03);
-  box-shadow: var(--shadow-sm);
-  transition: background 0.15s;
-}
-.item-produk:active { background: #eff6ff; }
-.invoice-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #555; }
-.invoice-total {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-dark);
-  border-top: 1px dashed var(--border);
-  padding-top: 10px;
-  margin-top: 10px;
-}
-
-/* ===== PRODUCT LIST (SHOP) ===== */
-.product-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  padding: 0 20px 20px;
-}
-.product-card {
-  background: var(--white);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-}
-.product-info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
-.btn-buy-shop {
-  width: 100%; padding: 7px;
-  border: 1.5px solid var(--primary);
-  color: var(--primary);
-  background: var(--white);
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-buy-shop:active { background: var(--primary); color: var(--white); }
-.btn-see-more {
-  width: 100%; padding: 12px;
-  background: var(--white);
-  border: 1.5px solid var(--primary);
-  color: var(--primary);
-  font-weight: 700;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  text-align: center;
-  font-size: 13px;
-  transition: all 0.15s;
-}
-.btn-see-more:active { background: var(--primary); color: var(--white); }
-
-/* ===== FULL PAGES ===== */
-.full-page { display: none; padding-bottom: 90px; animation: fadeIn 0.3s; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.prof-header {
-  background: var(--grad-main);
-  padding: 40px 20px 60px;
-  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-  text-align: center;
-  color: var(--white);
-  margin-bottom: -40px;
-}
-.prof-card {
-  background: var(--white);
-  margin: 0 20px;
-  padding: 20px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  position: relative;
-  z-index: 2;
-}
-.prof-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px dashed var(--border);
-  font-size: 13px;
-}
-.prof-row:last-child { border-bottom: none; }
-
-/* ===== QRIS OVERLAY ===== */
-.qris-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  z-index: 30000;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-.qris-overlay img { max-width: 90%; max-height: 80%; border-radius: var(--radius-sm); }
-.qris-close {
-  position: absolute;
-  top: 20px; right: 20px;
-  color: var(--white); font-size: 28px;
-  cursor: pointer;
-  width: 40px; height: 40px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.2);
-  border-radius: 50%;
-  transition: background 0.2s;
-}
-.qris-close:active { transform: scale(0.9); }
-
-/* ===== MISC ===== */
-#mainAppContent { display: none; }
-#inputContainer { display: none; margin-bottom: 15px; }
-#btnKembali { display: none; font-size: 18px; color: var(--primary); cursor: pointer; margin-right: 12px; }
-#operatorBadge {
-  position: absolute;
-  right: 80px; top: 50%;
-  transform: translateY(-50%);
-  font-size: 9px;
-  background: #dbeafe;
-  color: var(--primary);
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-weight: 700;
-  display: none;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-.sn-box {
-  background: #f1f5f9;
-  padding: 10px;
-  border-radius: 8px;
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-  color: var(--text-dark);
-  word-break: break-all;
-  margin-top: 10px;
-  line-height: 1.4;
-  border: 1px solid var(--border);
-}
-.cart-badge {
-  position: absolute;
-  top: -6px; right: 20%;
-  background: var(--danger);
-  color: var(--white);
-  font-size: 9px;
-  padding: 2px 6px;
-  border-radius: 10px;
-  display: none;
-  font-weight: 700;
-}
-.pagination-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-.page-num {
-  width: 32px; height: 32px;
-  display: flex; align-items: center; justify-content: center;
-  background: #f1f5f9;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 12px;
-  transition: all 0.15s;
-}
-.page-num.active { background: var(--primary); color: var(--white); }
-.chat-fab {
-  position: fixed;
-  bottom: 95px;
-  right: 15px;
-  width: 44px; height: 44px;
-  background: #25D366;
-  color: var(--white);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(37,211,102,0.4);
-  z-index: 9998;
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.chat-fab:active { transform: scale(0.9); }
-.chat-fab i { font-size: 22px; }
-.modal-invoice {
-  padding: 30px 20px 25px !important;
-  background: linear-gradient(180deg, var(--white), #f8fafc);
-}
-.akrab-header {
-  background: var(--grad-main);
-  color: var(--white);
-  padding: 18px 15px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.akrab-search-container { padding: 12px 15px; background: var(--white); border-bottom: 1px solid var(--border); }
-.akrab-search-input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  outline: none;
-  background: #f8fafc;
-}
-.akrab-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 10px;
-  padding: 15px;
-  background: var(--white);
-}
-.akrab-btn {
-  background: #f8fafc;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 5px;
-  text-align: center;
-  font-size: 10px;
-  font-weight: 800;
-  color: #475569;
-  cursor: pointer;
-  transition: all 0.15s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-.akrab-btn:active { transform: scale(0.95); }
-.akrab-btn.active { background: #eff6ff; border-color: var(--primary); color: var(--primary); }
-.akrab-btn i { font-size: 16px; }
-.akrab-section-title {
-  padding: 0 15px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-light);
-  text-transform: uppercase;
-  margin-top: 10px;
-}
-.modal-fullscreen { align-items: flex-start !important; }
-.modal-fullscreen .modal-content {
-  height: 100vh !important; max-height: 100vh !important;
-  border-radius: 0 !important; padding: 0 !important;
-}
-.modal-fullscreen .modal-content::before { display: none !important; }
-#modalBroadcast { align-items: center; justify-content: center; z-index: 21000; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); }
-.bc-content {
-  background: var(--white);
-  width: 85%; max-width: 350px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  animation: zoomIn 0.4s;
-  position: relative;
-  text-align: center;
-}
-.bc-img { width: 100%; max-height: 300px; object-fit: contain; background: #000; display: none; }
-.bc-body { padding: 25px 20px 20px; }
-.bc-title { font-size: 18px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; }
-.bc-text { font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 20px; }
-.bc-close-btn {
-  position: absolute; top: 10px; right: 10px;
-  background: rgba(0,0,0,0.5); color: var(--white);
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-/* ===== WA CHAT STYLES ===== */
-#modalChatPublic {
-  display: none;
-  position: fixed;
-  bottom: 85px; right: 20px;
-  width: 340px; max-width: 90vw;
-  height: 500px; max-height: 75vh;
-  z-index: 12000;
-  background: #efeae2;
-  border-radius: var(--radius-md);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  flex-direction: column;
-  overflow: hidden;
-  animation: zoomInWA 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-}
-@keyframes zoomInWA {
-  from { opacity: 0; transform: scale(0.8) translateY(20px); transform-origin: bottom right; }
-  to   { opacity: 1; transform: scale(1) translateY(0); transform-origin: bottom right; }
-}
-.wa-header { background: #00a884; color: var(--white); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-.wa-header-left { display: flex; align-items: center; gap: 10px; }
-.wa-header-icon {
-  width: 35px; height: 35px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0; color: var(--white);
-}
-.wa-header-title { display: flex; flex-direction: column; }
-.wa-header-title b { font-size: 14px; line-height: 1.2; }
-.wa-header-title span { font-size: 10px; opacity: 0.9; }
-
-/* ===== RECEIPT DETAIL ===== */
-.receipt-header { text-align: center; margin-bottom: 25px; }
-.receipt-icon {
-  width: 65px; height: 65px;
-  margin: 0 auto 15px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px; color: var(--white);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-.receipt-status { font-weight: 800; font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px; }
-.receipt-amount { font-size: 30px; font-weight: 900; color: var(--text-dark); margin: 5px 0 25px; letter-spacing: -1px; }
-.detail-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px; color: var(--text-grey); align-items: center; }
-.detail-val { font-weight: 700; color: var(--text-dark); text-align: right; max-width: 65%; word-break: break-word; }
-.sn-container {
-  background: #1e293b;
-  padding: 14px;
-  border-radius: var(--radius-sm);
-  margin-top: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-.sn-text { font-family: 'Courier New', monospace; font-size: 13px; color: var(--success); word-break: break-all; font-weight: 700; }
-.btn-copy {
-  color: var(--white);
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  width: 36px; height: 36px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.btn-copy:active { transform: scale(0.9); background: var(--primary); }
-
-/* ===== PRINT PREVIEW ===== */
-#printPreviewArea {
-  font-family: 'Courier New', Courier, monospace;
-  white-space: pre-wrap;
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.3;
-  color: #000;
-}
-</style>
-
-<script>
-// ===== GLOBAL: Phone Number Normalization =====
-document.addEventListener('input', function(e) {
-    const ids = ['nomorHP','invoiceNomorHP','newTopupPhone','inputIcsTujuan','inputKhfyTujuan','inputPOTujuan','inputWzTujuan'];
-    if (e.target && ids.includes(e.target.id)) {
-        let val = e.target.value;
-        const hasPlus62 = val.trim().startsWith('+62');
-        let clean = val.replace(/[^0-9]/g, '');
-        if (hasPlus62) clean = '0' + clean.slice(2);
-        else if (clean.startsWith('62')) clean = '0' + clean.slice(2);
-        e.target.value = clean;
-    }
-});
-
-window.pasteDariClipboard = async function(id) {
-    const input = document.getElementById(id);
-    if (!input) return;
-    try {
-        if (typeof AndroidShare !== "undefined" && typeof AndroidShare.pasteFromClipboard === "function") {
-            const text = AndroidShare.pasteFromClipboard();
-            if (text) { input.value = text; input.dispatchEvent(new Event('input', { bubbles: true })); }
-            else alert("Clipboard kosong.");
-        } else {
-            const text = await navigator.clipboard.readText();
-            input.value = text;
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-    } catch (err) {
-        alert('Butuh izin clipboard. Alternatif: tekan & tahan kolom input, pilih Tempel.');
-    }
-};
-</script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signOut, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, onSnapshot, addDoc, query, orderBy, limit, serverTimestamp, updateDoc, doc, setDoc, getDoc, deleteDoc, where, getDocs, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDYj0BA6cZDUxNBA7lmxBoXzah7H4y8yu4",
-    authDomain: "pandawa-store.firebaseapp.com",
-    projectId: "pandawa-store",
-    storageBucket: "pandawa-store.firebasestorage.app",
-    messagingSenderId: "974440930132",
-    appId: "1:974440930132:web:57fcb857cfd5ac51b386c1"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = initializeFirestore(app, {
-    localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
-});
-const auth = getAuth(app);
-
-// Expose to global scope
-window.auth = auth; window.db = db;
-const fns = { setDoc, getDoc, updateDoc, doc, serverTimestamp, collection, addDoc, getDocs, where, query, onSnapshot, deleteDoc, orderBy, limit, runTransaction };
-Object.keys(fns).forEach(k => window[k] = fns[k]);
-
-// ===== TELEGRAM NOTIFICATION =====
-window.kirimNotifTelegram = function(tipe, data) {
-    const botToken = "7507761189:AAGUCYltzj_IMuDRgjUzUPiZDz4nbVXvOME";
-    const chatId = "-1002997407612";
-    const threadId = (tipe === 'transaksi' || tipe === 'preorder') ? "6" : "7";
-    const now = new Date();
-    const months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-    const t = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} | ${String(now.getHours()).padStart(2,'0')}.${String(now.getMinutes()).padStart(2,'0')}.${String(now.getSeconds()).padStart(2,'0')}`;
-
-    let tujuanMasked = "-";
-    if (data.tujuan) { const s = String(data.tujuan); tujuanMasked = s.length > 5 ? s.slice(0,-5)+"*****" : "*****"; }
-
-    let text = '';
-    if (tipe === 'transaksi') {
-        text = `<b>✅ TRANSAKSI BERHASIL</b>\n━━━━━━━━━━━━━━━━━━\n📦 Produk : ${data.produk}\n🎯 Tujuan : ${tujuanMasked}\n💸 Harga : Rp${new Intl.NumberFormat('id-ID').format(data.harga)}\n🕒 Waktu : ${t}\n👤 User : ${data.username}\n🆔 ID : ${data.trx_id}\n━━━━━━━━━━━━━━━━━━\nwww.pandawa-digital.com`;
-    } else if (tipe === 'preorder') {
-        text = `<b>⏳ PRE-ORDER MASUK</b>\n━━━━━━━━━━━━━━━━━━\n📦 Produk : ${data.produk}\n🎯 Tujuan : ${tujuanMasked}\n💸 Harga : Rp${new Intl.NumberFormat('id-ID').format(data.harga)}\n🕒 Waktu : ${t}\n👤 User : ${data.username}\n📌 Status : Pending\n━━━━━━━━━━━━━━━━━━\nwww.pandawa-digital.com`;
-    } else if (tipe === 'topup') {
-        text = `<b>✅ DEPOSIT BERHASIL</b>\n━━━━━━━━━━━━━━━━━━\n💳 Jumlah : Rp${new Intl.NumberFormat('id-ID').format(data.harga)}\n🕒 Waktu : ${t}\n👤 User : ${data.username}\n📌 Status : Berhasil\n━━━━━━━━━━━━━━━━━━\nwww.pandawa-digital.com`;
-    }
-    text = text.replace(/ICS/gi,'(***)').replace(/KHFY/gi,'(****)').replace(/KAJE/gi,'(****)');
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({chat_id:chatId, message_thread_id:threadId, text, parse_mode:"HTML"})
-    }).catch(()=>{});
-};
-
-// ===== CONFIG =====
-window.getMarkupValue = (val, basePrice) => {
-    if (!val) return 0;
-    const s = String(val).trim();
-    if (s.includes('%')) return Math.ceil(basePrice * (parseFloat(s.replace('%','').replace(',','.'))||0) / 100);
-    return parseInt(s.replace(/[^0-9-]/g,''))||0;
-};
-
-window.fetchConfig = async function() {
-    try {
-        if (!window.db) return;
-        const d = await getDoc(doc(db,"pengaturan","config"));
-        if (d.exists()) {
-            const cfg = d.data();
-            window.whatsappAdmin = cfg.wa || "628xxx";
-            window.isTopupAuto = false;
-            window.hidePoAkrab = cfg.hidePoAkrab;
-            window.maintenanceAkrabSpesial = cfg.maintenanceAkrabSpesial;
-            window.maintenanceQris = cfg.maintenanceQris;
-            window.maintenanceQrisGopay = cfg.maintenanceQrisGopay;
-            window.maintenanceGopayTf = cfg.maintenanceGopayTf;
-            window.maintenanceTotal = cfg.maintenanceTotal;
-            if (window.applyMaintenanceTotalLock && window.auth?.currentUser) window.applyMaintenanceTotalLock(window.auth.currentUser);
-
-            const elAkrab = document.getElementById('menuAkrabAll');
-            if (elAkrab) elAkrab.style.display = cfg.hideAkrabAll ? 'none' : 'block';
-            const elPo = document.getElementById('menuPoAkrab');
-            if (elPo) elPo.style.display = cfg.hidePoAkrab ? 'none' : 'block';
-
-            const sv = cfg.appVersion||"";
-            if (sv) {
-                const lv = localStorage.getItem('appVersion');
-                if (lv !== sv) {
-                    const up = new URLSearchParams(location.search);
-                    if (up.get('v') !== sv) { up.set('v',sv); location.href = location.pathname+'?'+up.toString(); return; }
-                    else localStorage.setItem('appVersion', sv);
-                }
-            }
-        }
-        try {
-            const mr = await fetch('markup/cachemarkup.json?v='+Date.now());
-            const md = await mr.json();
-            window.markupConfig = { General:0 };
-            window.markupConfigArray = Array.isArray(md) ? md : [];
-            window.markupWzProducts = {};
-            if (Array.isArray(md)) {
-                md.forEach(item => {
-                    if (!item||typeof item!=='object') return;
-                    if (item.kode_produk) window.markupConfig[String(item.kode_produk).toUpperCase()] = item.markup;
-                    if (item.markup_key) window.markupConfig[String(item.markup_key).toUpperCase()] = item.markup;
-                    if (item.nama_produk) window.markupConfig[item.nama_produk] = item.markup;
-                });
-            } else if (md && typeof md === 'object') {
-                Object.keys(md).forEach(key => {
-                    if (key==='wz_products' && md[key] && typeof md[key]==='object') {
-                        Object.keys(md[key]).forEach(code => {
-                            const row = md[key][code];
-                            const m = row && typeof row==='object' ? row.markup : row;
-                            window.markupConfig[String(code).toUpperCase()] = m;
-                            window.markupWzProducts[String(code).toUpperCase()] = m;
-                        });
-                    } else {
-                        const val = md[key];
-                        window.markupConfig[key] = val && typeof val==='object' && 'markup' in val ? val.markup : val;
-                    }
-                });
-            }
-        } catch(_) {}
-    } catch(e) { console.error("Config Error:",e); }
-};
-
-window.isAdminUser = user => user && (user.email==='doni888855519@gmail.com'||user.email==='suwarno8797@gmail.com');
-window.isMaintenanceOn = v => v===true||v==='true'||v===1||v==='1'||v==='YA'||v==='ya'||v==='yes';
-
-window.blockMaintenanceTopupMethod = function(method, user) {
-    if (!method) return false;
-    const code = String(method.code||method.id||'').toUpperCase();
-    const name = String(method.name||'').toUpperCase();
-    if ((code==='QRIS_GOPAY'||code==='QRISGOPAY'||name.includes('QRIS GOPAY')) && window.isMaintenanceOn(window.maintenanceQrisGopay)) {
-        window.showNotice('error','Maintenance','QRIS GoPay Otomatis sedang diperbaiki. Gunakan metode lain.'); return true;
-    }
-    if ((code==='GOPAY_TF'||code==='GOPAYTF'||name.includes('TRANSFER GOPAY')) && window.isMaintenanceOn(window.maintenanceGopayTf)) {
-        window.showNotice('error','Maintenance','Transfer GoPay Otomatis sedang diperbaiki. Gunakan metode lain.'); return true;
-    }
-    return false;
-};
-
-window.applyMaintenanceTotalLock = function(user) {
-    const old = document.getElementById('maintenanceTotalOverlay');
-    if (old) old.remove();
-    if (!window.isMaintenanceOn(window.maintenanceTotal)) { document.body.style.overflow=''; return false; }
-    const lock = document.createElement('div');
-    lock.id = 'maintenanceTotalOverlay';
-    lock.style.cssText = 'position:fixed;inset:0;z-index:999999999;background:linear-gradient(135deg,#7f1d1d,#dc2626);display:flex;align-items:center;justify-content:center;padding:22px;box-sizing:border-box;color:white;text-align:center;';
-    lock.innerHTML = `<div style="width:100%;max-width:420px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);border-radius:26px;padding:28px 22px;box-shadow:0 20px 60px rgba(0,0,0,0.28);backdrop-filter:blur(12px);"><div style="width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:34px;"><i class="fas fa-tools"></i></div><h2 style="margin:0 0 10px;font-size:24px;font-weight:900;">Website Sedang Maintenance</h2><p style="margin:0;font-size:14px;line-height:1.7;">Mohon maaf, layanan sedang dalam pemeliharaan total.</p><div style="margin-top:18px;font-size:12px;opacity:0.8;">Silakan coba kembali beberapa saat lagi.</div></div>`;
-    document.body.appendChild(lock);
-    document.body.style.overflow = 'hidden';
-    return true;
-};
-
-// ===== AUTH STATE LISTENER =====
-let unsubscribeRiwayat = null;
-let allRiwayatData = [];
-let filteredRiwayatData = [];
-let currentRiwayatPage = 1;
-const itemsPerPage = 10;
-
-onAuthStateChanged(auth, async (user) => {
-    const ao = document.getElementById('authOverlay');
-    const mc = document.getElementById('mainAppContent');
-    const loader = document.getElementById('globalLoader');
-
-    if (user) {
-        ao.style.display = 'none';
-        if (loader) { loader.style.display = 'flex'; loader.style.opacity = '1';
-            setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => { loader.style.display = 'none'; }, 500); }, 800); }
-        mc.style.display = 'block';
-
-        document.querySelector('.header')?.style?.setProperty?.('display','block');
-        document.querySelector('.saldo-box')?.style?.setProperty?.('display','flex');
-        document.getElementById('shop-container')?.style?.setProperty?.('display','grid');
-        document.getElementById('liveHistoryHeader')?.style?.setProperty?.('display','flex');
-
-        if (window.navSwitch) window.navSwitch('home', document.querySelector('.nav-item'));
-
-        await window.fetchConfig();
-        if (window.applyMaintenanceTotalLock && window.applyMaintenanceTotalLock(user)) return;
-
-        try {
-            const userRef = doc(db,"users",user.uid);
-            const snap = await getDoc(userRef);
-            if (!snap.exists()) {
-                await setDoc(userRef, { username: user.displayName||(user.email?user.email.split('@')[0]:"Pengguna"), nama: user.displayName||"Pengguna", whatsapp:"", email:user.email||"", saldo:0, createdAt: serverTimestamp() });
-            }
-        } catch(_) {}
-
-        loadUserBalance(user.uid);
-        setTimeout(() => { initRiwayatListener(user); window.checkBroadcast(user); }, 100);
-        setTimeout(() => { if (window.initTransferListener) window.initTransferListener(user); }, 500);
-
-        (async () => {
-            try {
-                const snap = await getDoc(doc(db,"users",user.uid));
-                if (snap.exists()) {
-                    const s = snap.data().saldo||0;
-                    const res = await (await fetch('doniguard.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ uid:user.uid, action:'check', produk:'AUDIT_LOGIN', nominal:0, saldo_akhir_client:s }) })).json();
-                    if (res.status==='success' && res.audit?.force_sync) {
-                        await updateDoc(doc(db,"users",user.uid), { saldo: parseInt(res.audit.correct_balance) });
-                        location.reload();
-                    }
-                }
-            } catch(_) {}
-        })();
-    } else {
-        ao.style.display = 'flex';
-        mc.style.display = 'none';
-        const btn = document.getElementById('btnLogin');
-        if (btn) { btn.innerHTML = 'Login <i class="fas fa-arrow-right"></i>'; btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
-        if (loader) loader.style.display = 'none';
-        document.getElementById('maintenanceTotalOverlay')?.remove();
-        document.body.style.overflow = '';
-    }
-});
-
-function loadUserBalance(uid) {
-    onSnapshot(doc(db,"users",uid), d => {
-        if (!d.exists()) return;
-        const data = d.data();
-
-        if (data.role === 'merchant_h2h') {
-            document.querySelector('.header')?.style?.setProperty?.('display','none');
-            document.querySelector('.saldo-box')?.style?.setProperty?.('display','none');
-            document.getElementById('shop-container')?.style?.setProperty?.('display','none');
-            document.querySelector('.bottom-nav')?.style?.setProperty?.('display','none');
-            document.querySelector('.chat-fab')?.style?.setProperty?.('display','none');
-            document.getElementById('appBanner')?.style?.setProperty?.('display','none');
-            const hDash = document.getElementById('h2hDashboard');
-            if (hDash) {
-                hDash.style.display = 'block';
-                document.getElementById('h2hName').innerText = data.username||data.nama||"Merchant H2H";
-                document.getElementById('h2hSaldo').innerText = "Rp "+new Intl.NumberFormat('id-ID').format(data.saldo||0);
-                document.getElementById('h2hEmail').innerText = data.email||(auth.currentUser?.email)||"-";
-                document.getElementById('h2hPhone').innerText = data.whatsapp||"-";
-                document.getElementById('h2hApiKey').innerText = data.api_key||data.apikey||data.apiKey||"Belum ada API Key";
-                document.getElementById('h2hJoin').innerText = data.createdAt ? new Date(data.createdAt.seconds*1000).toLocaleDateString('id-ID') : "-";
-            }
-        } else {
-            document.querySelector('.bottom-nav')?.style?.setProperty?.('display','flex');
-            document.querySelector('.chat-fab')?.style?.setProperty?.('display', data.chat_disabled ? 'none' : 'flex');
-        }
-
-        const sv = document.getElementById('saldoValue');
-        if (sv) sv.innerText = "Rp "+new Intl.NumberFormat('id-ID').format(data.saldo||0);
-        const hn = document.getElementById('headerName');
-        if (hn) hn.innerText = data.username||data.nama||"Pengguna";
-    });
-}
-
-window.toggleAuth = mode => {
-    document.getElementById('loginForm').style.display = mode==='login' ? 'block' : 'none';
-    document.getElementById('registerForm').style.display = mode==='register' ? 'block' : 'none';
-};
-
-window.togglePassword = (id, el) => {
-    const inp = document.getElementById(id);
-    if (inp.type === "password") { inp.type = "text"; el.classList.replace("fa-eye","fa-eye-slash"); el.style.color = "var(--primary)"; }
-    else { inp.type = "password"; el.classList.replace("fa-eye-slash","fa-eye"); el.style.color = "#94a3b8"; }
-};
-
-window.handleLogin = async () => {
-    const email = document.getElementById('logEmail').value;
-    const pass = document.getElementById('logPass').value;
-    const btn = document.getElementById('btnLogin');
-    if (!email||!pass) return window.showNotice('error','Peringatan','Isi email dan password!');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memuat...';
-    btn.disabled = true;
-    try {
-        await signInWithEmailAndPassword(auth, email, pass);
-    } catch(e) {
-        if (['auth/invalid-credential','auth/wrong-password','auth/user-not-found','auth/invalid-email'].includes(e.code))
-            window.showNotice('error','Login Gagal','Periksa email/password anda.');
-        else window.showNotice('error','Login Gagal',e.message);
-        btn.innerHTML = orig; btn.disabled = false;
-    }
-};
-
-window.handleRegister = async () => {
-    const u = document.getElementById('regUsername').value.trim();
-    const n = document.getElementById('regNama').value.trim();
-    const w = document.getElementById('regWA').value.trim();
-    const e = document.getElementById('regEmail').value.trim();
-    const p = document.getElementById('regPass').value;
-    const pc = document.getElementById('regPassConfirm').value;
-    if (!u||!n||!w||!e||!p||!pc) return alert("Lengkapi semua data!");
-    if (!/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/.test(e)) return alert("Hanya @gmail.com / @yahoo.com!");
-    if (p!==pc) return alert("Konfirmasi sandi tidak cocok!");
-    if (p.length<6) return alert("Sandi minimal 6 karakter!");
-    try {
-        const res = await createUserWithEmailAndPassword(auth, e, p);
-        await setDoc(doc(db,"users",res.user.uid), { username:u, nama:n, whatsapp:w, email:e, saldo:0, createdAt:serverTimestamp() });
-        alert("Registrasi Berhasil!");
-    } catch(err) { alert("Gagal: "+err.message); }
-};
-
-window.handleResetPassword = () => {
-    const e = document.getElementById('logEmail').value;
-    if (!e) return alert("Masukkan email di kolom Login!");
-    sendPasswordResetEmail(auth, e).then(()=>alert("Link reset dikirim ke email!")).catch(err=>alert(err.message));
-};
-window.handleLogout = () => signOut(auth);
-
-window.handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-        if (typeof AndroidShare !== 'undefined') { await signInWithRedirect(auth, provider); return; }
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        const ref = doc(db,"users",user.uid);
-        if (!(await getDoc(ref)).exists()) {
-            await setDoc(ref, { username:user.displayName||"User", nama:user.displayName||"User", whatsapp:"", email:user.email, saldo:0, createdAt:serverTimestamp() });
-        }
-        window.showNotice('success','Berhasil','Selamat datang!');
-    } catch(e) { window.showNotice('error','Login Gagal','Gagal masuk dengan Google.'); }
-};
-
-// ===== SHOP =====
-window.allProductsData = []; window.currentProduct = {}; window.checkoutItem = null;
-
-onSnapshot(collection(db,"produk"), snap => {
-    window.allProductsData = [];
-    snap.forEach(d => { const data = d.data(); data.id = d.id; window.allProductsData.push(data); });
-    renderHomeShop();
-});
-
-function createProductCard(data) {
-    const isFisik = data.tipe==='fisik'||(data.kategori&&data.kategori.includes('FISIK'));
-    const action = isFisik ? `bukaDetailProduk('${data.id}')` : `siapkanInvoice('${data.kode||data.id}','${data.nama}',${data.harga})`;
-    return `<div class="product-card" onclick="${action}" style="cursor:pointer;">
-        <img src="${data.img||'https://via.placeholder.com/150'}" style="width:100%;height:120px;object-fit:cover;background:#eee;">
-        <div class="product-info">
-            <div style="font-size:12px;font-weight:700;margin-bottom:4px;line-height:1.2;height:28px;overflow:hidden;">${data.nama}</div>
-            <div style="font-size:13px;color:var(--primary);font-weight:700;">Rp ${new Intl.NumberFormat('id-ID').format(data.harga)}</div>
-            ${isFisik?'<div style="font-size:9px;background:#eee;color:#555;display:inline-block;padding:2px 6px;border-radius:4px;margin-top:2px;"><i class="fas fa-box"></i> Fisik</div>':''}
-            <button class="btn-buy-shop" style="margin-top:8px;">Beli</button>
+      <div class="form-area">
+        <div class="inp-wrapper">
+          <input type="email" id="logEmail" class="inp-modern" placeholder="Email / Username">
+          <i class="fas fa-user-circle inp-icon"></i>
         </div>
-    </div>`;
-}
+        <div class="inp-wrapper">
+          <input type="password" id="logPass" class="inp-modern" placeholder="Kata Sandi">
+          <i class="fas fa-key inp-icon"></i>
+          <i class="fas fa-eye inp-eye" onclick="togglePassword('logPass', this)"></i>
+        </div>
+      </div>
 
-function renderHomeShop() {
-    const div = document.getElementById('shop-container');
-    const display = window.allProductsData.slice(0,6);
-    let html = display.map(d=>createProductCard(d)).join('');
-    if (window.allProductsData.length>6) html += `<div style="grid-column:1/-1;"><div class="btn-see-more" onclick="navSwitch('shop_full')">Tampilkan Semua <i class="fas fa-arrow-right"></i></div></div>`;
-    div.innerHTML = html;
-}
+      <div class="reset-link">
+        <span onclick="handleResetPassword()">Lupa kata sandi?</span>
+      </div>
 
-window.renderFullShop = (override=null) => {
-    const div = document.getElementById('fullShopContainer');
-    const src = override||window.allProductsData;
-    if (!src||!src.length) { div.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999;">Tidak ada produk</div>'; return; }
-    div.innerHTML = src.map(d=>{
-        const isFisik = d.tipe==='fisik'||(d.kategori&&d.kategori.includes('FISIK'));
-        const action = isFisik ? `bukaDetailProduk('${d.id}')` : `siapkanInvoice('${d.kode||d.id}','${d.nama}',${d.harga})`;
-        return `<div class="product-card" onclick="${action}">
-            <img src="${d.img||'https://via.placeholder.com/150'}" style="width:100%;height:140px;object-fit:cover;background:#eee;">
-            <div class="product-info"><div style="font-size:12px;font-weight:700;margin-bottom:4px;line-height:1.2;">${d.nama}</div>
-            <div style="font-size:13px;color:var(--primary);font-weight:700;">Rp ${new Intl.NumberFormat('id-ID').format(d.harga)}</div>
-            ${isFisik?'<div style="font-size:10px;color:#999;"><i class="fas fa-box"></i> Fisik</div>':''}
-            <button class="btn-buy-shop" style="margin-top:8px;">Beli</button></div></div>`;
-    }).join('');
-};
+      <button id="btnLogin" class="btn-modern-auth" onclick="handleLogin()">
+        Login <i class="fas fa-arrow-right"></i>
+      </button>
 
-window.handleShopSearch = kw => {
-    if (!kw) return window.renderFullShop();
-    const q = kw.toLowerCase();
-    window.renderFullShop(window.allProductsData.filter(p=>p.nama.toLowerCase().includes(q)));
-};
+      <button onclick="handleGoogleLogin()" style="width:100%; padding:14px; border-radius:14px; border:1px solid #cbd5e1; background:white; color:#333; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-top:10px; transition:0.2s;">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> MASUK DENGAN GOOGLE
+      </button>
 
-// ===== HISTORY LISTENER =====
-function initRiwayatListener(user) {
-    if (unsubscribeRiwayat) unsubscribeRiwayat();
-    const q = query(collection(db,"users",user.uid,"riwayat_transaksi"), orderBy("timestamp","desc"), limit(10));
-    unsubscribeRiwayat = onSnapshot(q, snap => {
-        const container = document.getElementById('riwayat-container');
-        let html = '';
-        snap.forEach(docSnap => {
-            const data = docSnap.data();
-            const idDoc = docSnap.id;
-            const st = (data.status||'').toString().trim().toUpperCase();
+      <div class="auth-switcher">
+        Belum punya akun? <span class="link-accent" onclick="toggleAuth('register')">Daftar Disini</span>
+      </div>
+    </div>
 
-            if (st==='PENDING') {
-                if (data.is_po===true) { /* wait */ }
-                else if (data.kode_produk==='TOPUP') {
-                    if (data.metode==='QRIS_AUTO' && window.cekStatusQiospayBerkala) window.cekStatusQiospayBerkala(idDoc, data.harga);
-                    else if ((data.metode==='QRIS_GOPAY'||data.metode==='GOPAY_TF') && window.startIndopayChecker) window.startIndopayChecker(idDoc, data.harga);
-                    else if (window.cekStatusTopupBerkala) window.cekStatusTopupBerkala(idDoc, data.unique_code||data.trx_id);
-                } else if (data.provider==='ICS' && window.monitorIcsTrx && !window['monitor_'+idDoc]) {
-                    window['monitor_'+idDoc]=true; window.monitorIcsTrx(data.trx_id, idDoc);
-                } else if ((data.provider==='KAJE'||String(data.trx_id||'').startsWith('KJ')) && window.monitorKajeTrx && !window['monitor_'+idDoc]) {
-                    window['monitor_'+idDoc]=true;
-                    let id = data.trx_id;
-                    if (data.sn?.includes('#KJ')) { const p = data.sn.split('#'); if (p.length>1) id = p[1].split(' ')[0].trim(); }
-                    window.monitorKajeTrx(id, idDoc);
-                } else if ((data.provider==='WZ'||String(data.trx_id||'').toLowerCase().startsWith('wz')) && window.monitorWzTrx && !window['monitor_'+idDoc]) {
-                    window['monitor_'+idDoc]=true; window.monitorWzTrx(data.trx_id, idDoc);
-                } else if (data.provider!=='KHFY' && window.cekStatusBerkala) {
-                    window.cekStatusBerkala(idDoc, data.trx_id, data.tujuan, data.kode_produk);
-                } else if (window.monitorKhfyTrx && !window['monitor_'+idDoc]) {
-                    window['monitor_'+idDoc]=true; window.monitorKhfyTrx(data.trx_id, idDoc);
-                }
-            } else if ((st==='GAGAL'||st==='EXPIRED'||st==='CANCELED') && data.isRefunded!==true && data.kode_produk!=='TOPUP' && data.status_awal==='PENDING' && window.updateFirestoreStatus) {
-                window.updateFirestoreStatus(idDoc, st, data.sn, data.raw_json, true);
+    <!-- FORM REGISTER -->
+    <div class="auth-card" id="registerForm" style="display: none;">
+      <div class="auth-brand" style="margin-bottom: 10px;">
+        <h1 class="auth-h1">Buat Akun</h1>
+        <p class="auth-desc">Bergabung sekarang dan nikmati kemudahan transaksi.</p>
+      </div>
+
+      <div class="form-area">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="inp-wrapper">
+            <input type="text" id="regUsername" class="inp-modern" placeholder="Username">
+            <i class="fas fa-at inp-icon"></i>
+          </div>
+          <div class="inp-wrapper">
+            <input type="text" id="regNama" class="inp-modern" placeholder="Nama Lengkap">
+            <i class="fas fa-id-card inp-icon"></i>
+          </div>
+        </div>
+
+        <div class="inp-wrapper">
+          <input type="tel" id="regWA" class="inp-modern" placeholder="WhatsApp (08xx)">
+          <i class="fab fa-whatsapp inp-icon"></i>
+        </div>
+
+        <div class="inp-wrapper">
+          <input type="email" id="regEmail" class="inp-modern" placeholder="Alamat Email">
+          <i class="fas fa-envelope inp-icon"></i>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="inp-wrapper">
+            <input type="password" id="regPass" class="inp-modern" placeholder="Sandi">
+            <i class="fas fa-lock inp-icon"></i>
+          </div>
+          <div class="inp-wrapper">
+            <input type="password" id="regPassConfirm" class="inp-modern" placeholder="Ulangi">
+            <i class="fas fa-check inp-icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-modern-auth" style="background: linear-gradient(135deg, #10b981, #059669); margin-top:10px;" onclick="handleRegister()">
+        DAFTAR GRATIS <i class="fas fa-paper-plane"></i>
+      </button>
+
+      <div class="auth-switcher">
+        Sudah punya akun? <span class="link-accent" onclick="toggleAuth('login')">Masuk Akun</span>
+      </div>
+    </div>
+  </div>
+  <div id="globalLoader">
+    <div class="loader-logo-box">
+      <img src="icons/pandawa.png" style="width: 100%; height: 100%; object-fit: contain;">
+    </div>
+    <div class="custom-spinner"></div>
+    <p style="margin-top: 20px; font-weight: 700; color: #333; font-size: 13px; letter-spacing: 0.5px;">Memuat Data...</p>
+    <p style="margin-top: 5px; font-size: 10px; color: #888;">Sinkronisasi Produk & Akun</p>
+  </div>
+
+  <div id="mainAppContent">
+
+    <div class="header" style="background: var(--grad-main); overflow: hidden; padding: 35px 20px 75px; border-radius: 0 0 32px 32px; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);">
+      <div class="header-top" style="display:flex; align-items:center; gap: 15px; padding-top: 10px; position: relative; z-index: 2;">
+        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+          <img src="icons/pandawa.png" style="height: 32px; width: auto; object-fit: contain;">
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:11px; color:#94a3b8; font-weight: 600; margin-bottom:2px; display:flex; align-items:center; gap:5px;"><i class="fas fa-sun" style="color:#facc15;"></i> Selamat Datang,</div>
+          <div id="headerName" style="font-weight:800; font-size:19px; color:#fff; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); line-height:1.2;">Pengguna</div>
+
+          <div style="font-size:10px; color:#cbd5e1; font-weight:bold; margin-top:2px;"><i class="fas fa-code-branch"></i> v1.0.7</div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <div onclick="bukaRiwayatArsip()" style="width: 38px; height: 38px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s;">
+            <i class="fas fa-bell" style="color:#fff; font-size:15px;"></i>
+          </div>
+          <div onclick="handleLogout()" style="width: 38px; height: 38px; background: rgba(239, 68, 68, 0.15); backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.3); transition: 0.2s;">
+            <i class="fas fa-sign-out-alt" style="color:#fca5a5; font-size:15px;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="saldo-box">
+      <div class="saldo-info" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+        <div>
+          <div style="font-size:12px; color:#777; margin-bottom:5px; display:flex; align-items:center; gap:5px;"><i class="fas fa-wallet" style="color:var(--primary)"></i> Saldo Kamu</div>
+          <div id="saldoValue" style="font-size:24px; font-weight:900; color:#1e3a8a;">Rp 0</div>
+        </div>
+        <i class="fas fa-history" style="font-size: 20px; color: #cbd5e1; cursor: pointer;" onclick="bukaRiwayatArsip()"></i>
+      </div>
+
+      <div class="action-grid">
+        <div class="action-item" onclick="bukaModalTopup()">
+          <div class="action-icon"><i class="fas fa-plus"></i></div>
+          <span class="action-text">Topup</span>
+        </div>
+        <div class="action-item" onclick="bukaModalTransfer('kirim')">
+          <div class="action-icon"><i class="fas fa-paper-plane"></i></div>
+          <span class="action-text">Kirim</span>
+        </div>
+        <div class="action-item" onclick="bukaModalTransfer('minta')">
+          <div class="action-icon"><i class="fas fa-hand-holding-usd"></i></div>
+          <span class="action-text">Minta</span>
+        </div>
+        <div class="action-item" onclick="showMyQR()">
+          <div class="action-icon"><i class="fas fa-id-badge"></i></div>
+          <span class="action-text">QR Saya</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-container">
+      <div class="cat-title" style="padding: 15px 0 10px;">Menu Utama</div>
+      <div class="menu-grid" style="padding: 0;">
+        <div class="menu-item" onclick="bukaMenu('Pulsa')">
+          <div class="icon-box"><i class="fas fa-mobile-alt" style="font-size:28px; color:#3b82f6;"></i></div><span>Pulsa</span>
+        </div>
+        <div class="menu-item" onclick="bukaMenu('E-Wallet')">
+          <div class="icon-box"><i class="fas fa-wallet" style="font-size:26px; color:#10b981;"></i></div><span>E-Wallet</span>
+        </div>
+        <div class="menu-item" onclick="bukaMenu('DIGITAL')">
+          <div class="icon-box"><i class="fas fa-gamepad" style="font-size:26px; color:#8b5cf6;"></i></div><span>DIGITAL</span>
+        </div>
+        <div class="menu-item" onclick="bukaMenu('Token PLN')">
+          <div class="icon-box"><i class="fas fa-bolt" style="font-size:26px; color:#f59e0b;"></i></div><span>Token PLN</span>
+        </div>
+        <div class="menu-item" onclick="bukaMenu('Telkomsel')">
+          <div class="icon-box"><img src="icons/Telkomsel.png" style="width:70%; height:70%; object-fit:contain;"></div><span>Telkomsel</span>
+        </div>
+
+        <div class="menu-item" onclick="bukaMenu('By.U')">
+          <div class="icon-box"><img src="icons/By.U.png" style="width:70%; height:70%; object-fit:contain;"></div><span>By.U</span>
+        </div>
+        <div class="menu-item" id="menuAkrabAll" onclick="bukaMenu('Paket Akrab All')">
+          <div class="icon-box"><i class="fas fa-users" style="font-size:24px; color:#14b8a6;"></i></div><span>Paket Akrab</span>
+        </div>
+        <div class="menu-item" onclick="bukaMenu('PBB')">
+          <div class="icon-box"><i class="fas fa-landmark" style="font-size:26px; color:#e11d48;"></i></div><span>PBB</span>
+        </div>
+
+      </div>
+
+      <div id="menuDrawer">
+        <div class="cat-title">Menu Lainnya</div>
+        <div class="menu-grid" style="padding:0">
+
+          <div class="menu-item" onclick="bukaMenu('Indosat')">
+            <div class="icon-box"><img src="icons/Indosat.png" style="width:70%; height:70%; object-fit:contain;"></div><span>Indosat</span>
+          </div>
+          <div class="menu-item" onclick="bukaMenu('XL')">
+            <div class="icon-box"><img src="icons/XL.png" style="width:70%; height:70%; object-fit:contain;"></div><span>XL</span>
+          </div>
+          <div class="menu-item" onclick="bukaMenu('Pulsa Transfer')">
+            <div class="icon-box"><i class="fas fa-exchange-alt" style="font-size:24px; color:#ec4899;"></i></div><span>Pulsa TF</span>
+          </div>
+          <div class="menu-item" onclick="bukaMenu('Tagihan')">
+            <div class="icon-box"><i class="fas fa-file-invoice-dollar" style="font-size:24px; color:#64748b;"></i></div><span>Tagihan</span>
+          </div>
+
+          <div class="menu-item" onclick="bukaMenu('Pascabayar')">
+            <div class="icon-box"><i class="fas fa-tv" style="font-size:24px; color:#6366f1;"></i></div><span>TV & Halo</span>
+          </div>
+          <div class="menu-item" onclick="bukaMenu('Axis')">
+            <div class="icon-box"><i class="fas fa-broadcast-tower" style="font-size:24px; color:#a855f7;"></i></div><span>Axis</span>
+          </div>
+          <div class="menu-item" onclick="bukaMenu('Tri')">
+            <div class="icon-box"><img src="icons/Tri.png" style="width:70%; height:70%; object-fit:contain;"></div><span>Tri</span>
+          </div>
+          <div class="menu-item" onclick="bukaMenu('Smartfren')">
+            <div class="icon-box"><img src="icons/Smartfren.png" style="width:70%; height:70%; object-fit:contain;"></div><span>Smartfren</span>
+          </div>
+          <div class="menu-item" onclick="bukaMenu('Topup E\'Tol')" style="display:none;">
+            <div class="icon-box"><i class="fas fa-car" style="font-size:24px; color:#f59e0b;"></i></div><span>E-Tol</span>
+          </div>
+
+          <div class="menu-item" onclick="bukaMenu('VA Bank')" style="display:none;">
+            <div class="icon-box"><i class="fas fa-university" style="font-size:24px; color:#34495e;"></i></div><span>VA Bank</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="btnMoreContainer">
+        <div id="btnMore" onclick="toggleMenuLainnya()" style="background:#f0f7ff; padding:8px 20px; border-radius:20px; display:inline-block; font-size:12px; font-weight:bold; color:var(--primary); cursor:pointer; transition:0.2s;">
+          <i class="fas fa-chevron-down"></i> Menu Lainnya
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div id="appBanner" style="display: none; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 16px; margin: 0 15px 20px; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3); position: relative; z-index: 2; overflow: hidden;">
+    <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.05); border-radius: 50%; filter: blur(10px);"></div>
+    <div style="display: flex; align-items: center; gap: 14px; flex: 1; position: relative; z-index: 3;">
+      <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 14px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0; animation: pulseIcon 2s infinite;">
+        <i class="fab fa-android" style="font-size: 26px; color: #a4c639;"></i>
+      </div>
+      <div>
+        <div style="font-weight: 900; font-size: 14px; color: #ffffff; margin-bottom: 3px; letter-spacing: 0.5px;">Pandawa Digital App</div>
+        <div style="font-size: 10.5px; color: #94a3b8; line-height: 1.4;">Install untuk transaksi lebih cepat, ringan & aman! 🚀</div>
+      </div>
+    </div>
+    <a href="Pandawa.apk" style="background: #ffffff; color: #1e3a8a; padding: 10px 18px; border-radius: 20px; font-size: 12px; font-weight: 800; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s; white-space: nowrap; margin-left: 10px; position: relative; z-index: 3;">INSTALL</a>
+    <style>
+      @keyframes pulseIcon {
+        0% {
+          transform: scale(1);
+        }
+
+        50% {
+          transform: scale(1.08);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Deteksi 100% akurat: Cek apakah interface Java (AndroidShare) tersedia dari AIDE
+        const isApp = typeof AndroidShare !== 'undefined';
+        const banner = document.getElementById('appBanner');
+        if (banner) {
+            banner.style.display = isApp ? 'none' : 'flex';
+        }
+    });
+  </script>
+
+
+  <div id="h2hDashboard" style="display:none; padding: 20px; padding-top: 40px; animation: fadeIn 0.3s; padding-bottom: 20px;">
+    <div style="background:var(--grad-main); padding: 25px 20px; border-radius: 20px; color: white; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,153,255,0.2); display:flex; flex-direction:column; gap:10px;">
+      <div style="font-size:12px; opacity:0.9; display:flex; align-items:center; gap:5px;"><i class="fas fa-server"></i> Akun Merchant H2H</div>
+      <div id="h2hName" style="font-size:24px; font-weight:900; letter-spacing:-0.5px; line-height:1.2;">Loading...</div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed rgba(255,255,255,0.3); padding-top:12px; margin-top:5px;">
+        <div>
+          <div style="font-size:10px; opacity:0.8; margin-bottom:2px;">Saldo Tersedia</div>
+          <div id="h2hSaldo" style="font-size:18px; font-weight:bold;">Rp 0</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px; opacity:0.8; margin-bottom:2px;">Terdaftar Sejak</div>
+          <div id="h2hJoin" style="font-size:12px; font-weight:bold;">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:white; padding: 18px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 20px; border:1px solid #f0f4f8;">
+      <div style="font-size:13px; font-weight:800; color:#2c3e50; margin-bottom:12px;"><i class="fas fa-id-card" style="color:var(--primary); margin-right:5px;"></i> Detail Profil</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; justify-content:space-between; font-size:12px; border-bottom:1px dashed #eee; padding-bottom:8px;">
+          <span style="color:#7f8c8d;">Email</span><strong id="h2hEmail" style="color:#2c3e50;">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:12px;">
+          <span style="color:#7f8c8d;">Nomor HP / WA</span><strong id="h2hPhone" style="color:#2c3e50;">-</strong>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:white; padding: 18px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 20px; border:1px solid #f0f4f8;">
+      <div style="font-size:13px; font-weight:800; color:#2c3e50; margin-bottom:12px;"><i class="fas fa-key" style="color:#e67e22; margin-right:5px;"></i> API Credentials</div>
+      <div style="background:#f8fafc; border:1px solid #edf2f7; padding:12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+        <code id="h2hApiKey" style="font-size:12px; color:#d35400; font-weight:bold; word-break:break-all;">Loading...</code>
+        <div onclick="navigator.clipboard.writeText(document.getElementById('h2hApiKey').innerText); window.showNotice('success','Disalin','API Key disalin ke clipboard');" style="background:#e1effe; color:var(--primary); width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; margin-left:10px;">
+          <i class="fas fa-copy"></i>
+        </div>
+      </div>
+      <div style="font-size:10px; color:#95a5a6; margin-top:8px; line-height:1.4;"><i class="fas fa-info-circle"></i> Gunakan API Key ini untuk melakukan integrasi Web 2 Host.</div>
+    </div>
+
+    <button onclick="window.open('https://www.pandawa-digital.com/getdoc.php', '_blank')" style="width:100%; padding:15px; background:linear-gradient(135deg, #2c3e50, #34495e); color:white; border:none; border-radius:12px; font-weight:800; font-size:13px; box-shadow:0 4px 15px rgba(44,62,80,0.3); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+      <i class="fas fa-laptop-code"></i> Tutorial Connect Web 2 Host
+    </button>
+
+    <button onclick="handleLogout()" style="width:100%; padding:15px; background:#fff5f5; color:var(--danger); border:1px solid #ffcccc; border-radius:12px; font-weight:800; font-size:13px; margin-top:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+      <i class="fas fa-sign-out-alt"></i> Keluar Akun
+    </button>
+  </div>
+
+
+  <div id="liveHistoryHeader" style="display:flex; align-items:center; padding:15px 20px 5px;">
+    <div style="font-weight:bold; font-size:14px; color:#555; flex:1;">Riwayat Live</div>
+    <div id="btnModeMasal" onclick="toggleModeMasal()" style="font-size:10px; font-weight:bold; background:#e1effe; color:black; padding:6px 12px; border-radius:15px; cursor:pointer; margin-right:10px; transition:0.2s;">
+      <i class="fas fa-print"></i> Cetak Masal
+    </div>
+    <div style="font-size:10px; color:var(--primary); font-weight:bold; cursor:pointer;" onclick="bukaRiwayatArsip()">Lihat Semua <i class="fas fa-chevron-right"></i></div>
+  </div>
+  <div id="riwayat-container" class="history-container">
+    <p style="text-align:center; font-size:11px; color:#999; padding:10px;">Memuat riwayat...</p>
+  </div>
+
+  <div id="shop-container" class="product-list"></div>
+
+  <div id="modalNotice" class="modal">
+    <div class="notice-content">
+      <div id="noticeIcon" class="notice-icon"></div>
+      <div id="noticeTitle" style="font-weight:bold; font-size:18px; margin-bottom:10px;"></div>
+      <div id="noticeMsg" style="font-size:13px; color:#666; line-height:1.4;"></div>
+      <button class="btn-konfirmasi" id="btnNoticeClose" style="display:none; margin-top:20px;" onclick="tutupNotice()">OKE</button>
+    </div>
+  </div>
+
+
+  <div id="modalTransfer" class="modal" style="z-index: 22000; align-items: center; justify-content: center;">
+    <div class="notice-content" style="text-align: left; width: 90%; max-width: 350px; padding: 20px;">
+      <h3 id="transferTitle" style="margin-bottom:15px; text-align:center;">Kirim Saldo</h3>
+      <div class="input-group">
+        <label style="font-size:12px; font-weight:bold;">Email / Username Tujuan</label>
+        <input type="text" id="transferTarget" class="form-input" placeholder="Masukkan Email / Username">
+      </div>
+      <div class="input-group">
+        <label style="font-size:12px; font-weight:bold;">Nominal (Rp)</label>
+        <input type="number" id="transferNominal" class="form-input" placeholder="Contoh: 50000">
+      </div>
+      <button id="btnProsesTransfer" class="btn-konfirmasi" onclick="prosesTransfer()">PROSES</button>
+      <button class="btn-batal" onclick="document.getElementById('modalTransfer').style.display='none'">BATAL</button>
+    </div>
+  </div>
+
+
+  <div id="modalNotifTransfer" class="modal" style="z-index: 23000; align-items: center; justify-content: center;">
+    <div class="notice-content" style="background:#e6f9ed; border:2px solid var(--success);">
+      <i class="fas fa-check-circle" style="font-size:50px; color:var(--success); margin-bottom:15px;"></i>
+      <div style="font-weight:bold; font-size:18px; margin-bottom:10px; color:#27ae60;">Transfer Masuk!</div>
+      <div id="notifTransferMsg" style="font-size:13px; color:#333; line-height:1.4;"></div>
+      <button class="btn-konfirmasi" style="background:var(--success); margin-top:20px;" onclick="tutupNotifTransfer()">OKE, TERIMA KASIH</button>
+    </div>
+  </div>
+
+
+  <div id="modalRequestSaldo" class="modal" style="z-index: 23000; align-items: center; justify-content: center;">
+    <div class="notice-content" style="background:#fff8e1; border:2px solid #f39c12;">
+      <i class="fas fa-hand-holding-usd" style="font-size:50px; color:#f39c12; margin-bottom:15px;"></i>
+      <div style="font-weight:bold; font-size:18px; margin-bottom:10px; color:#d35400;">Permintaan Saldo</div>
+      <div id="requestSaldoMsg" style="font-size:13px; color:#333; line-height:1.4;"></div>
+      <input type="hidden" id="requestDataId">
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button class="btn-konfirmasi" style="flex:1; background:var(--success);" onclick="terimaRequestSaldo()">TERIMA</button>
+        <button class="btn-batal" style="flex:1; background:var(--danger); color:white;" onclick="tolakRequestSaldo()">TOLAK</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div id="fabCetakMasal" style="display:none; position:fixed; bottom:120px; left:50%; transform:translateX(-50%); width:90%; z-index:9999; animation: slideUp 0.3s;">
+    <div style="display:flex; gap:10px;">
+      <button onclick="window.isShareMode=false; prosesPrintMasal()" class="btn-konfirmasi" style="flex:1; padding:12px; font-size:14px; margin-top:0; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border:2px solid white;">
+        <i class="fas fa-print"></i> Print (<span id="countMasal">0</span>)
+      </button>
+      <button onclick="prosesShareMasal()" class="btn-konfirmasi" style="flex:1; padding:12px; font-size:14px; margin-top:0; background:linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); border:2px solid white;">
+        <i class="fab fa-whatsapp"></i> Share (<span id="countMasalShare">0</span>)
+      </button>
+    </div>
+  </div>
+
+  <div id="modalBroadcast" class="modal">
+    <div class="bc-content">
+      <div class="bc-close-btn" onclick="tutupBroadcast()"><i class="fas fa-times"></i></div>
+      <img id="bcImageDisplay" class="bc-img" src="" alt="Siaran">
+      <div class="bc-body">
+        <div id="bcTitleDisplay" class="bc-title"></div>
+        <div id="bcTextDisplay" class="bc-text"></div>
+        <button class="btn-konfirmasi" onclick="tutupBroadcast()">TUTUP</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalApp" class="modal">
+    <div class="modal-content">
+
+      <div id="akrabUI" style="display:none;">
+        <div class="akrab-header">
+          <i class="fas fa-arrow-left" onclick="tutupModal()" style="font-size:20px; cursor:pointer;"></i>
+          <span style="font-weight:800; font-size:16px; letter-spacing:1px;">PAKET AKRAB</span>
+        </div>
+        <div class="akrab-search-container">
+          <input type="text" id="akrabSearch" class="akrab-search-input" placeholder="Cari produk..." oninput="window.filterAkrabSearch()">
+        </div>
+      </div>
+
+      <div id="defaultModalHeader" style="display:flex; align-items:center; margin-bottom:15px;">
+        <i class="fas fa-arrow-left" id="btnKembali" onclick="kembaliKeFilter()"></i>
+        <h3 id="judulMenu" style="margin:0; font-size:18px;">Pilih Produk</h3>
+        <div style="flex:1"></div>
+        <i class="fas fa-times" onclick="tutupModal()" style="font-size:20px; color:#999; cursor:pointer;"></i>
+      </div>
+
+      <div id="inputContainer">
+        <div class="input-group">
+          <input type="tel" inputmode="numeric" id="nomorHP" class="form-input" placeholder="Masukkan Nomor HP / ID Pelanggan" style="padding-right: 150px; height: 45px; border-radius: 14px;">
+          <i class="fas fa-address-card" style="top: 13px;"></i>
+          <div id="operatorBadge" style="top: 13px; right: 75px; padding: 3px 8px; border-radius: 6px; line-height: 1.2;"></div>
+          <button type="button" onclick="window.pasteDariClipboard('nomorHP')" style="position:absolute; right:8px; top:8px; background:var(--primary); color:white; border:none; border-radius:10px; padding:0 12px; height: 29px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10; box-shadow: 0 2px 5px rgba(37,99,235,0.2);">PASTE</button>
+        </div>
+
+        <div id="areaBebasNominal" style="display:none; margin-top:10px; background: rgba(0,102,178,0.03); padding: 15px; border-radius: 16px; border: 1px dashed rgba(0,102,178,0.2);">
+          <label style="font-size:12px; font-weight:800; color:var(--primary); margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Nominal Pengisian</label>
+          <div class="input-group" style="margin-bottom:0;">
+            <input type="tel" id="inputQty" class="form-input" placeholder="Contoh: 25000" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <i class="fas fa-coins"></i>
+          </div>
+        </div>
+      </div>
+
+      <div id="areaFilter"></div>
+      <div id="statusLoading" style="text-align:center; font-size:13px; color:#666; display:none; padding:40px;">Sedang memproses data...</div>
+      <div id="listProdukArea"></div>
+    </div>
+  </div>
+
+  <div id="modalProdukList" class="modal" style="z-index:11500;">
+    <div class="modal-content" style="height:85vh; display:flex; flex-direction:column; padding:0; overflow:hidden;">
+      <div style="display:flex; align-items:center; padding:15px; border-bottom:1px solid #eee; background:white; z-index:10; border-radius:15px 15px 0 0; box-shadow:0 2px 5px rgba(0,0,0,0.02);">
+        <h3 id="judulKategoriModal" style="margin:0; font-size:16px; flex:1; color:#333; font-weight:800;">Daftar Produk</h3>
+        <i class="fas fa-times" onclick="document.getElementById('modalProdukList').style.display='none'" style="font-size:20px; color:#999; cursor:pointer; padding:5px;"></i>
+      </div>
+      <div id="listProdukModalArea" style="flex:1; overflow-y:auto; padding:15px; background:#fdfdfd;"></div>
+    </div>
+  </div>
+
+  <div id="modalTagihan" class="modal">
+    <div class="modal-content">
+      <h3 style="margin-bottom:15px; text-align:center; border-bottom:1px dashed #eee; padding-bottom:10px;">Rincian Tagihan</h3>
+      <div id="tagihanContent" style="font-size:13px; line-height:1.6; color:#333;"></div>
+      <div style="background:#f0f9ff; padding:10px; border-radius:8px; margin:15px 0; text-align:center; border:1px solid #b3e5fc;">
+        <span style="font-size:11px; color:#555;">Total Bayar</span><br>
+        <strong id="tagihanTotal" style="font-size:20px; color:var(--primary);">Rp 0</strong>
+      </div>
+      <input type="hidden" id="tagihanDataRaw">
+      <button class="btn-konfirmasi" onclick="prosesBayarTagihan()">BAYAR SEKARANG</button>
+      <button class="btn-batal" onclick="document.getElementById('modalTagihan').style.display='none'">TUTUP</button>
+    </div>
+  </div>
+
+  <div id="modalInvoice" class="modal" style="z-index: 12000;">
+    <div class="modal-content modal-invoice">
+      <h3 style="margin-bottom:20px; text-align:center;">Konfirmasi Pembayaran</h3>
+      <div id="statusCekNama" style="display:none; text-align:center; font-size:12px; color:var(--primary); margin-top:-10px; margin-bottom:15px;"><i class="fas fa-circle-notch fa-spin"></i> Sedang mengecek nama pemilik...</div>
+      <div id="invoiceContent"></div>
+      <div id="invoiceFooter">
+        <button id="btnKonfirmasiBayar" class="btn-konfirmasi" onclick="this.disabled=true; this.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Memproses...'; window.prosesBayarFinal();">KONFIRMASI BAYAR</button>
+        <button class="btn-batal" onclick="tutupInvoice()">BATAL</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="modalTopup" class="modal">
+    <div class="modal-content" style="max-height: 90vh; overflow-y: auto; min-height: 400px;">
+      <div style="display:flex; align-items:center; margin-bottom:15px;">
+        <i class="fas fa-arrow-left" id="btnBackTopup" onclick="backTopupStep()" style="font-size:18px; color:#333; cursor:pointer; margin-right:15px; display:none;"></i>
+        <h3 id="titleTopup" style="margin:0; font-size:18px;">Isi Saldo</h3>
+        <div style="flex:1"></div>
+        <i class="fas fa-times" onclick="tutupModalTopup()" style="font-size:20px; color:#999; cursor:pointer;"></i>
+      </div>
+
+      <div id="areaTopupSteps" style="padding-bottom: 20px;">
+
+        <div style="text-align:center; padding:40px; color:#999;"><i class="fas fa-circle-notch fa-spin"></i> Memuat Metode Pembayaran...</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalArsip" class="modal">
+    <div class="modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
+      <div style="display:flex; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0; font-size:18px;">Semua Riwayat</h3>
+        <div style="flex:1"></div>
+        <i class="fas fa-sync-alt" onclick="refreshRiwayatArsip()" style="font-size:16px; color:var(--primary); cursor:pointer; margin-right:20px; background:#e1effe; padding:8px; border-radius:50%;"></i>
+        <i class="fas fa-times" onclick="tutupRiwayatArsip()" style="font-size:20px; color:#999; cursor:pointer;"></i>
+      </div>
+
+
+      <div style="background: #f8fafc; padding: 15px; border-radius: 16px; margin-bottom: 10px; border: 1px solid #edf2f7; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.05);">
+
+        <div style="position:relative; margin-bottom:12px;">
+          <input type="text" id="searchRiwayat" placeholder="Cari ID Trx / Nomor / Produk..." style="width:100%; padding:12px 12px 12px 40px; border:1px solid #cbd5e1; border-radius:12px; font-size:13px; outline:none; box-sizing:border-box; background:white; transition:0.3s;">
+          <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8;"></i>
+        </div>
+
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-bottom: 12px;">
+          <div>
+            <label style="font-size:10px; font-weight:700; color:#64748b; margin-bottom:5px; display:block; text-transform:uppercase;">Tanggal</label>
+            <input type="date" id="filterTgl" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:10px; font-size:12px; outline:none; box-sizing:border-box; background:white; color:#333;">
+          </div>
+          <div>
+            <label style="font-size:10px; font-weight:700; color:#64748b; margin-bottom:5px; display:block; text-transform:uppercase;">Status</label>
+            <select id="filterStatus" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:10px; font-size:12px; outline:none; box-sizing:border-box; background:white; color:#333; appearance:none;">
+              <option value="SEMUA">Semua</option>
+              <option value="BERHASIL">Berhasil</option>
+              <option value="GAGAL">Gagal</option>
+              <option value="PENDING">Pending</option>
+            </select>
+          </div>
+        </div>
+
+
+        <button onclick="window.terapkanFilterRiwayat()" style="width:100%; background:var(--grad-main); color:white; border:none; padding:12px; border-radius:12px; font-weight:700; font-size:13px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3); transition:0.2s; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <i class="fas fa-filter"></i> Terapkan Filter
+        </button>
+      </div>
+
+      <div id="listArsipArea" style="flex:1; overflow-y:auto; padding:5px;"></div>
+      <div id="paginationRiwayat" class="pagination-container"></div>
+    </div>
+  </div>
+  </div>
+  <div id="modalDetailRiwayat" class="modal">
+    <div class="modal-content" style="height:auto; max-height:85vh; overflow-y:auto; border-radius: 25px 25px 0 0; padding: 20px 25px;">
+      <div id="detailRiwayatContent"></div>
+    </div>
+  </div>
+
+
+  <div id="modalProductDetail" class="modal" style="z-index: 12000; background:white;">
+    <div class="pdp-container" id="pdpContent">
+
+    </div>
+    <div class="pdp-footer">
+      <button class="btn-cart-add" onclick="aksiKeranjang()"><i class="fas fa-cart-plus"></i> Keranjang</button>
+      <button class="btn-buy-now" onclick="aksiBeliLangsung()">Beli Sekarang</button>
+    </div>
+    <div style="position:absolute; top:15px; left:15px; background:rgba(0,0,0,0.3); width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:white;" onclick="document.getElementById('modalProductDetail').style.display='none'">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+  </div>
+
+
+  <div id="modalCheckoutFisik" class="modal" style="z-index: 13000;">
+    <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+      <h3>Pengiriman & Pembayaran</h3>
+      <div class="input-group">
+        <label style="font-size:12px; font-weight:bold;">Provinsi Tujuan</label>
+        <select id="shipProv" class="form-input" onchange="window.loadCities(this.value, 'shipCity')" style="padding-left:15px;">
+          <option value="">Pilih Provinsi</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label style="font-size:12px; font-weight:bold;">Kota Tujuan</label>
+        <select id="shipCity" class="form-input" onchange="window.loadDistricts(this.value, 'shipDist')" style="padding-left:15px;">
+          <option value="">Pilih Kota</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label style="font-size:12px; font-weight:bold;">Kecamatan Tujuan</label>
+        <select id="shipDist" class="form-input" onchange="window.hitungOngkirKlikResi()" style="padding-left:15px;">
+          <option value="">Pilih Kecamatan</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label style="font-size:12px; font-weight:bold;">Alamat Lengkap (RT/RW/No Rumah)</label>
+        <textarea id="shipAlamat" class="form-input" rows="2" placeholder="Nama Jalan, Blok, Nomor Rumah"></textarea>
+      </div>
+      <div class="input-group">
+        <label style="font-size:12px; font-weight:bold;">Kode Pos</label>
+        <input type="text" id="shipKodepos" class="form-input" placeholder="Kode Pos">
+      </div>
+
+      <label style="font-size:12px; font-weight:bold;">Pilih Layanan Kurir</label>
+      <select id="shipKurir" class="form-input" onchange="window.updateTotalDenganOngkir()">
+        <option value="">-- Pilih Lokasi Dulu --</option>
+      </select>
+
+      <div style="background:#f8f9fa; padding:15px; border-radius:10px; margin: 15px 0;">
+        <div class="invoice-row"><span>Subtotal Barang</span><b id="coSubtotal">Rp 0</b></div>
+        <div class="invoice-row"><span>Ongkos Kirim</span><b id="coOngkir">Rp 0</b></div>
+        <div class="invoice-row invoice-total"><span>TOTAL BAYAR</span><b id="coTotal" style="color:var(--primary); font-size:18px;">Rp 0</b></div>
+      </div>
+
+      <button class="btn-konfirmasi" onclick="prosesCheckoutFisik()">BAYAR SEKARANG</button>
+      <button class="btn-batal" onclick="document.getElementById('modalCheckoutFisik').style.display='none'">BATAL</button>
+    </div>
+  </div>
+
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signOut, GoogleAuthProvider, signInWithRedirect, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, onSnapshot, addDoc, query, orderBy, limit, serverTimestamp, updateDoc, doc, setDoc, getDoc, deleteDoc, where, getDocs, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYj0BA6cZDUxNBA7lmxBoXzah7H4y8yu4",
+      authDomain: "pandawa-store.firebaseapp.com",
+      projectId: "pandawa-store",
+      storageBucket: "pandawa-store.firebasestorage.app",
+      messagingSenderId: "974440930132",
+      appId: "1:974440930132:web:57fcb857cfd5ac51b386c1"
+    };
+    const app = initializeApp(firebaseConfig);
+                    // --- PENGHEMAT KUOTA: OFFLINE PERSISTENCE (MODERN) ---
+    const db = initializeFirestore(app, {
+        localCache: persistentLocalCache({
+            tabManager: persistentMultipleTabManager()
+        })
+    });
+    const auth = getAuth(app);
+    
+    // Ekspos ke Global agar bisa dibaca script biasa
+    window.auth = auth; window.db = db;
+    window.setDoc = setDoc; window.getDoc = getDoc; window.updateDoc = updateDoc; window.doc = doc; window.serverTimestamp = serverTimestamp; window.collection = collection; window.addDoc = addDoc; window.getDocs = getDocs; window.where = where; window.query = query; window.onSnapshot = onSnapshot; window.deleteDoc = deleteDoc; window.orderBy = orderBy; window.limit = limit; window.runTransaction = runTransaction;
+    
+    window.kirimNotifTelegram = function(tipe, data) {
+        const botToken = "7507761189:AAGUCYltzj_IMuDRgjUzUPiZDz4nbVXvOME";
+        const chatId = "-1002997407612";
+        let threadId = (tipe === 'transaksi' || tipe === 'preorder') ? "6" : "7";
+        
+        let text = "";
+        let now = new Date();
+        let months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+        let timeStr = now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear() + " | " + now.getHours().toString().padStart(2,'0') + "." + now.getMinutes().toString().padStart(2,'0') + "." + now.getSeconds().toString().padStart(2,'0');
+    
+        if (tipe === 'transaksi') {
+            let tujuanMasked = "-";
+            if (data.tujuan) {
+                let tStr = data.tujuan.toString();
+                tujuanMasked = tStr.length > 5 ? tStr.substring(0, tStr.length - 5) + "*****" : "*****";
             }
-
-            const wt = data.timestamp ? data.timestamp.toDate().toLocaleTimeString('id-ID').slice(0,5) : '';
-            const ds = encodeURIComponent(JSON.stringify({idDoc,...data,waktu:wt}));
-            let icon = 'fa-receipt';
-            const pl = (data.produk||'').toLowerCase();
-            if (pl.includes('pulsa')||pl.includes('telkomsel')||pl.includes('indosat')) icon='fa-mobile-alt';
-            else if (pl.includes('pln')||pl.includes('token')) icon='fa-bolt';
-            else if (pl.includes('dana')||pl.includes('gopay')||pl.includes('ovo')||pl.includes('shopee')) icon='fa-wallet';
-            else if (pl.includes('game')||pl.includes('diamond')||pl.includes('ff')) icon='fa-gamepad';
-
-            html += `<div class="history-card" id="card-${idDoc}">
-                <div class="area-chk-masal" style="display:none;margin-right:12px;">
-                    <input type="checkbox" class="chk-masal" value="${encodeURIComponent(JSON.stringify(data))}" onchange="updateButtonMasal()" style="transform:scale(1.3);accent-color:var(--primary);">
+            text = `<b>✅ TRANSAKSI BERHASIL</b>\n━━━━━━━━━━━━━━━━━━\n📦 Produk : ${data.produk}\n🎯 Tujuan : ${tujuanMasked}\n💸 Harga : Rp${new Intl.NumberFormat('id-ID').format(data.harga)}\n🕒 Waktu : ${timeStr}\n👤 User : ${data.username}\n🆔 ID Transaksi : ${data.trx_id}\n━━━━━━━━━━━━━━━━━━\n🎉 Pesanan Anda telah berhasil diproses.\nTerima kasih atas kepercayaan Anda menggunakan layanan kami.\nwww.pandawa-digital.com`;
+        } else if (tipe === 'preorder') {
+            let tujuanMasked = "-";
+            if (data.tujuan) {
+                let tStr = data.tujuan.toString();
+                tujuanMasked = tStr.length > 5 ? tStr.substring(0, tStr.length - 5) + "*****" : "*****";
+            }
+            text = `<b>⏳ PRE-ORDER MASUK</b>\n━━━━━━━━━━━━━━━━━━\n📦 Produk : ${data.produk}\n🎯 Tujuan : ${tujuanMasked}\n💸 Harga : Rp${new Intl.NumberFormat('id-ID').format(data.harga)}\n🕒 Waktu : ${timeStr}\n👤 User : ${data.username}\n🆔 ID Transaksi : ${data.trx_id}\n📌 Status : Pending (Dalam Antrian)\n━━━━━━━━━━━━━━━━━━\n🎉 Pesanan Pre-Order Anda telah masuk antrian.\nTerima kasih atas kepercayaan Anda menggunakan layanan kami.\nwww.pandawa-digital.com`;
+        } else if (tipe === 'topup') {
+            text = `<b>✅ DEPOSIT BERHASIL</b>\n━━━━━━━━━━━━━━━━━━\n💳 Jumlah : Rp${new Intl.NumberFormat('id-ID').format(data.harga)}\n🕒 Waktu : ${timeStr}\n👤 User ID : ${data.username}\n📌 Status : Berhasil\n🆔 ID Transaksi : ${data.trx_id}\n━━━━━━━━━━━━━━━━━━\n✨ Deposit berhasil diproses ke akun Anda.\nTerima kasih telah menggunakan layanan kami.\nwww.pandawa-digital.com`;
+        }
+    
+                    text = text.replace(/ICS/gi, '(***)').replace(/KHFY/gi, '(****)').replace(/KAJE/gi, '(****)');
+    
+        if (data.tujuan && data.tujuan.toString().length > 5) {
+            let tStr = data.tujuan.toString();
+            let masked = tStr.substring(0, tStr.length - 5) + "*****";
+            text = text.split(tStr).join(masked); 
+        }
+    
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: chatId, message_thread_id: threadId, text: text, parse_mode: "HTML" })
+        }).catch(e => console.log(e));
+    };
+    
+    
+    // --- DEFINISI FETCH CONFIG TERPUSAT ---
+    window.getMarkupValue = (val, basePrice) => {
+    if (!val) return 0;
+    let sVal = String(val).trim();
+    if (sVal.includes('%')) {
+        let percent = parseFloat(sVal.replace('%', '').replace(',', '.')) || 0;
+        return Math.ceil(basePrice * (percent / 100));
+    }
+    return parseInt(sVal.replace(/[^0-9-]/g, '')) || 0;
+        };
+    
+        window.fetchConfig = async function() {
+        try {
+            if(!window.db) return;
+            const d = await getDoc(doc(window.db, "pengaturan", "config"));
+            if(d.exists()) {
+                window.whatsappAdmin = d.data().wa || "628xxx";
+                window.isTopupAuto = false;
+    
+                window.hidePoAkrab = d.data().hidePoAkrab;
+                window.maintenanceAkrabSpesial = d.data().maintenanceAkrabSpesial;
+                window.maintenanceQris = d.data().maintenanceQris;
+                window.maintenanceQrisGopay = d.data().maintenanceQrisGopay;
+                window.maintenanceGopayTf = d.data().maintenanceGopayTf;
+                window.maintenanceTotal = d.data().maintenanceTotal;
+                if (window.applyMaintenanceTotalLock && window.auth && window.auth.currentUser) {
+                    window.applyMaintenanceTotalLock(window.auth.currentUser);
+                }
+                
+                const elAkrab = document.getElementById('menuAkrabAll');
+                if (elAkrab) elAkrab.style.display = d.data().hideAkrabAll ? 'none' : 'block';
+                
+                const elPo = document.getElementById('menuPoAkrab');
+                if (elPo) elPo.style.display = d.data().hidePoAkrab ? 'none' : 'block';
+    
+                // --- SISTEM VERSI DAN CACHE (DISEMPURNAKAN) ---
+                const serverVersion = d.data().appVersion || "";
+                if (serverVersion) {
+                    const localVersion = localStorage.getItem('appVersion');
+                    if (localVersion !== serverVersion) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        if (urlParams.get('v') !== serverVersion) {
+                            // Paksa ambil file baru dari server dengan parameter versi
+                            urlParams.set('v', serverVersion);
+                            window.location.href = window.location.pathname + '?' + urlParams.toString();
+                            return;
+                        } else {
+                            // Jika URL sudah berubah dan berhasil dimuat, baru simpan versi ke lokal
+                            localStorage.setItem('appVersion', serverVersion);
+                        }
+                    }
+                }
+                // ------------------------------
+            }
+            
+            try {
+                const mRes = await fetch('markup/cachemarkup.json?v=' + new Date().getTime());
+                const mData = await mRes.json();
+                window.markupConfig = { General: 0 };
+                window.markupConfigArray = Array.isArray(mData) ? mData : [];
+                window.markupWzProducts = {};
+    
+                if (Array.isArray(mData)) {
+                    mData.forEach(item => {
+                        if (!item || typeof item !== 'object') return;
+                        if(item.kode_produk) window.markupConfig[String(item.kode_produk).toUpperCase()] = item.markup;
+                        if(item.markup_key) window.markupConfig[String(item.markup_key).toUpperCase()] = item.markup;
+                        if(item.nama_produk) window.markupConfig[item.nama_produk] = item.markup;
+                    });
+                } else if (mData && typeof mData === 'object') {
+                    Object.keys(mData).forEach(key => {
+                        if (key === 'wz_products' && mData[key] && typeof mData[key] === 'object') {
+                            Object.keys(mData[key]).forEach(code => {
+                                const row = mData[key][code];
+                                const markup = row && typeof row === 'object' ? row.markup : row;
+                                window.markupConfig[String(code).toUpperCase()] = markup;
+                                window.markupWzProducts[String(code).toUpperCase()] = markup;
+                            });
+                        } else {
+                            const val = mData[key];
+                            window.markupConfig[key] = val && typeof val === 'object' && 'markup' in val ? val.markup : val;
+                        }
+                    });
+                }
+                console.log("Markup Cache Loaded Berhasil");
+            } catch(e) { console.log("Gagal load cachemarkup.json", e); }
+        } catch(e) { console.error("Config Error:", e); }
+    };
+    
+    window.isAdminUser = function(user) {
+        return user && (user.email === 'doni888855519@gmail.com' || user.email === 'suwarno8797@gmail.com');
+    };
+    
+    window.isMaintenanceOn = function(value) {
+        return value === true || value === 'true' || value === 1 || value === '1' || value === 'YA' || value === 'ya' || value === 'yes';
+    };
+    
+    window.blockMaintenanceTopupMethod = function(method, user) {
+        if (!method) return false;
+    
+        const code = String(method.code || method.id || '').toUpperCase();
+        const name = String(method.name || '').toUpperCase();
+    
+        const isQrisGopay = code === 'QRIS_GOPAY' || code === 'QRISGOPAY' || name.includes('QRIS GOPAY');
+        const isGopayTf = code === 'GOPAY_TF' || code === 'GOPAYTF' || name.includes('TRANSFER GOPAY');
+    
+        if (isQrisGopay && window.isMaintenanceOn(window.maintenanceQrisGopay)) {
+            window.showNotice('error', 'Maintenance', 'Mohon maaf, metode QRIS GoPay Otomatis sedang dalam perbaikan. Silakan gunakan metode topup lain.');
+            return true;
+        }
+    
+        if (isGopayTf && window.isMaintenanceOn(window.maintenanceGopayTf)) {
+            window.showNotice('error', 'Maintenance', 'Mohon maaf, metode Transfer GoPay Otomatis sedang dalam perbaikan. Silakan gunakan metode topup lain.');
+            return true;
+        }
+    
+        return false;
+    };
+    
+    window.applyMaintenanceTotalLock = function(user) {
+        const oldLock = document.getElementById('maintenanceTotalOverlay');
+        if (oldLock) oldLock.remove();
+    
+        if (!window.isMaintenanceOn(window.maintenanceTotal)) {
+            document.body.style.overflow = '';
+            return false;
+        }
+    
+        const lock = document.createElement('div');
+        lock.id = 'maintenanceTotalOverlay';
+        lock.style.cssText = 'position:fixed; inset:0; z-index:999999999; background:linear-gradient(135deg,#7f1d1d,#dc2626); display:flex; align-items:center; justify-content:center; padding:22px; box-sizing:border-box; color:white; text-align:center; pointer-events:auto;';
+        lock.innerHTML = `
+            <div style="width:100%; max-width:420px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); border-radius:26px; padding:28px 22px; box-shadow:0 20px 60px rgba(0,0,0,0.28); backdrop-filter:blur(12px);">
+                <div style="width:76px; height:76px; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:34px;"><i class="fas fa-tools"></i></div>
+                <h2 style="margin:0 0 10px; font-size:24px; font-weight:900; letter-spacing:-0.5px;">Website Sedang Maintenance</h2>
+                <p style="margin:0; font-size:14px; line-height:1.7; opacity:0.95;">Mohon maaf, layanan sedang dalam pemeliharaan total. Untuk sementara website tidak dapat digunakan.</p>
+                <div style="margin-top:18px; font-size:12px; opacity:0.8;">Silakan coba kembali beberapa saat lagi.</div>
+            </div>
+        `;
+        document.body.appendChild(lock);
+        document.body.style.overflow = 'hidden';
+        return true;
+    };
+    
+    
+    
+    // AUTH LISTENER
+    /* AUTH LISTENER */
+            /* AUTH LISTENER DENGAN ANIMASI LOADING */
+    onAuthStateChanged(auth, async (user) => {
+        const authOverlay = document.getElementById('authOverlay');
+        const mainContent = document.getElementById('mainAppContent');
+        const loader = document.getElementById('globalLoader');
+        const loaderText = document.querySelector('#globalLoader p');
+    
+        if (user) {
+                                            // 1. ANIMASI TRANSISI (Tampilkan Loader dulu)
+            authOverlay.style.display = "none";
+            
+            // Pastikan loader tampil & konten utama siap di background
+            if(loader) {
+                loader.style.display = "flex";
+                loader.style.opacity = "1";
+                
+                                                        // Hilangkan loader setelah 0.8 detik (Loading Cepat)
+                setTimeout(() => {
+                    loader.style.opacity = "0";
+                    setTimeout(() => { loader.style.display = "none"; }, 500);
+                }, 800);
+            }
+            mainContent.style.display = "block"; 
+    
+            // FIX: Paksa Tampil Elemen Home (Hard Force)
+            // Ini memastikan Header & Saldo muncul meskipun navSwitch belum siap
+            const h = document.querySelector('.header'); if(h) h.style.display = 'block';
+            const s = document.querySelector('.saldo-box'); if(s) s.style.display = 'flex';
+            const sh = document.getElementById('shop-container'); if(sh) sh.style.display = 'grid';
+            const lh = document.getElementById('liveHistoryHeader'); if(lh) lh.style.display = 'flex';
+    
+            // Auto switch ke Home segera
+            if(window.navSwitch) window.navSwitch('home', document.querySelector('.nav-item'));
+    
+            // 2. Load Data di Background
+            await window.fetchConfig();
+            if (window.applyMaintenanceTotalLock && window.applyMaintenanceTotalLock(user)) {
+                return;
+            }
+    
+            // --- FIX: AUTO RECOVERY AKUN LAMA / DATA HILANG ---
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
+                        username: user.displayName || (user.email ? user.email.split('@')[0] : "Pengguna"),
+                        nama: user.displayName || "Pengguna",
+                        whatsapp: "",
+                        email: user.email || "",
+                        saldo: 0,
+                        createdAt: serverTimestamp()
+                    });
+                    console.log("Auto-recovery: Dokumen user berhasil dibuat.");
+                }
+            } catch(e) { console.error("Gagal auto-recovery:", e); }
+            // --------------------------------------------------
+    
+            loadUserBalance(user.uid);
+            
+            // 3. Load Riwayat dengan sedikit delay agar render menu mulus
+            setTimeout(() => {
+                initRiwayatListener(user);
+            // Cek Siaran Masal
+            window.checkBroadcast(user);
+            }, 100);
+            setTimeout(() => {
+                if(window.initTransferListener) window.initTransferListener(user);
+            }, 500);
+    
+    
+            // 4. --- AUDIT INTEGRITAS DONIGUARD (ASYNCHRONOUS BACKGROUND) ---
+            // Dibungkus async IIFE agar tidak memblokir tampilan menu
+            (async () => {
+                try {
+                    const initialSnap = await window.getDoc(window.doc(window.db, "users", user.uid));
+                    if(initialSnap.exists()) {
+                        const currentSaldo = initialSnap.data().saldo || 0;
+                        // Cek audit di background
+                        const response = await fetch('doniguard.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                uid: user.uid,
+                                action: 'check',
+                                produk: 'AUDIT_LOGIN',
+                                nominal: 0,
+                                saldo_akhir_client: currentSaldo
+                            })
+                        });
+                        const res = await response.json();
+                        if (res.status === 'success' && res.audit && res.audit.force_sync === true) {
+                            console.warn("DoniGuard: Mengoreksi Saldo");
+                            await window.updateDoc(window.doc(window.db, "users", user.uid), {
+                                saldo: parseInt(res.audit.correct_balance)
+                            });
+                            // Hanya reload jika saldo dikoreksi
+                            window.location.reload();
+                        }
+                    }
+                } catch(e) { console.log("Background Check Skipped"); }
+            })();
+    
+        } else {
+            // Mode Belum Login
+            authOverlay.style.display = "flex";
+            mainContent.style.display = "none";
+            const btnLogin = document.getElementById('btnLogin');
+            if (btnLogin) {
+                btnLogin.innerHTML = 'Login <i class="fas fa-arrow-right"></i>';
+                btnLogin.disabled = false;
+                btnLogin.style.opacity = '1';
+                btnLogin.style.cursor = 'pointer';
+            }
+            if(loader) loader.style.display = "none";
+            const oldLock = document.getElementById('maintenanceTotalOverlay');
+            if (oldLock) oldLock.remove();
+            document.body.style.overflow = '';
+        }
+    });
+    
+    async function loadUserBalance(uid) {
+        onSnapshot(doc(db, "users", uid), (d) => {
+            if(d.exists()) {
+                                    const data = d.data();
+                
+                // --- MODIFIKASI H2H DETECTOR ---
+                if (data.role === 'merchant_h2h') {
+                    // Sembunyikan elemen B2C
+                    const h = document.querySelector('.header'); if(h) h.style.display = 'none';
+                    const s = document.querySelector('.saldo-box'); if(s) s.style.display = 'none';
+                    const sh = document.getElementById('shop-container'); if(sh) sh.style.display = 'none';
+                    const bn = document.querySelector('.bottom-nav'); if(bn) bn.style.display = 'none';
+                    const fab = document.querySelector('.chat-fab'); if(fab) fab.style.display = 'none';
+                    const dl = document.getElementById('appBanner'); if(dl) dl.style.display = 'none';
+                    
+                    // Tampilkan H2H Dashboard
+                    const hDash = document.getElementById('h2hDashboard');
+                    if(hDash) {
+                        hDash.style.display = 'block';
+                        document.getElementById('h2hName').innerText = data.username || data.nama || "Merchant H2H";
+                        document.getElementById('h2hSaldo').innerText = "Rp " + new Intl.NumberFormat('id-ID').format(data.saldo || 0);
+                        document.getElementById('h2hEmail').innerText = data.email || (window.auth && window.auth.currentUser ? window.auth.currentUser.email : "-");
+                        document.getElementById('h2hPhone').innerText = data.whatsapp || "-";
+                                                    document.getElementById('h2hApiKey').innerText = data.api_key || data.apikey || data.apiKey || "Belum ada API Key (Generate via Admin)";
+                        document.getElementById('h2hJoin').innerText = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString('id-ID') : "-";
+                    }
+                } else {
+                    // Tampilan Normal (B2C)
+                    const bn = document.querySelector('.bottom-nav'); if(bn) bn.style.display = 'flex';
+                    const fab = document.querySelector('.chat-fab'); if(fab) fab.style.display = data.chat_disabled ? 'none' : 'flex';
+                }
+                // -------------------------------
+    
+                const saldoVal = document.getElementById('saldoValue');
+                if(saldoVal) saldoVal.innerText = "Rp " + new Intl.NumberFormat('id-ID').format(data.saldo || 0);
+                
+                const headName = document.getElementById('headerName');
+                if(headName) headName.innerText = data.username || data.nama || "Pengguna";
+            }
+        });
+    }
+    
+    window.toggleAuth = (mode) => {
+        document.getElementById('loginForm').style.display = mode === 'login' ? 'block' : 'none';
+        document.getElementById('registerForm').style.display = mode === 'register' ? 'block' : 'none';
+    };
+    
+            window.togglePassword = (id, el) => {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+            el.classList.remove("fa-eye");
+            el.classList.add("fa-eye-slash");
+            el.style.color = "var(--primary)";
+        } else {
+            input.type = "password";
+            el.classList.remove("fa-eye-slash");
+            el.classList.add("fa-eye");
+            el.style.color = "#94a3b8";
+        }
+    };
+    
+    
+    window.handleLogin = async () => {
+        const email = document.getElementById('logEmail').value;
+        const pass = document.getElementById('logPass').value;
+        const btn = document.getElementById('btnLogin');
+    
+        if(!email || !pass) return window.showNotice('error', 'Peringatan', 'Mohon isi email dan password!');
+        
+        // Animasi Loading
+        const oriHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memuat...';
+        btn.disabled = true;
+        btn.style.opacity = '0.8';
+        btn.style.cursor = 'not-allowed';
+    
+        try {
+            await signInWithEmailAndPassword(auth, email, pass);
+        } catch(e) {
+            if (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found' || e.code === 'auth/invalid-email') {
+            window.showNotice('error', 'Login Gagal', 'Mohon periksa kembali email/password anda.');
+        } else {
+            window.showNotice('error', 'Login Gagal', e.message);
+        }
+            // Reset Tombol jika gagal
+            btn.innerHTML = oriHtml;
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+        }
+    };
+    
+    window.handleRegister = async () => {
+        const username = document.getElementById('regUsername').value.trim();
+        const nama = document.getElementById('regNama').value.trim();
+        const wa = document.getElementById('regWA').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const pass = document.getElementById('regPass').value;
+        const passConfirm = document.getElementById('regPassConfirm').value;
+    
+        if(!username || !nama || !wa || !email || !pass || !passConfirm) return alert("Mohon lengkapi semua data!");
+        
+        // Validasi Email Domain (@gmail.com atau @yahoo.com)
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
+        if(!emailRegex.test(email)) return alert("Hanya email @gmail.com atau @yahoo.com yang diizinkan!");
+    
+        // Validasi Password Match
+        if(pass !== passConfirm) return alert("Konfirmasi kata sandi tidak cocok!");
+        if(pass.length < 6) return alert("Kata sandi minimal 6 karakter!");
+    
+        try {
+            const res = await createUserWithEmailAndPassword(auth, email, pass);
+            await setDoc(doc(db, "users", res.user.uid), { 
+                username: username,
+                nama: nama, 
+                whatsapp: wa,
+                email: email, 
+                saldo: 0, 
+                createdAt: serverTimestamp() 
+            });
+            alert("Registrasi Berhasil!");
+        } catch(e) { alert("Gagal Daftar: " + e.message); }
+    };
+    
+    window.handleResetPassword = () => {
+        const email = document.getElementById('logEmail').value;
+        if(!email) return alert("Masukkan email di kolom Login terlebih dahulu!");
+        sendPasswordResetEmail(auth, email).then(() => alert("Link reset sandi dikirim ke email!")).catch(e => alert(e.message));
+    };
+    
+    window.handleLogout = () => signOut(auth);
+    
+    window.handleGoogleLogin = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            const isApp = typeof AndroidShare !== 'undefined';
+            if (isApp) {
+                await signInWithRedirect(auth, provider);
+            } else {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                const userRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userRef);
+    
+                if (!docSnap.exists()) {
+                    await setDoc(userRef, {
+                        username: user.displayName || "User",
+                        nama: user.displayName || "User",
+                        whatsapp: "",
+                        email: user.email,
+                        saldo: 0,
+                        createdAt: serverTimestamp()
+                    });
+                }
+                window.showNotice('success', 'Berhasil', 'Selamat datang, ' + (user.displayName || 'Pengguna'));
+            }
+        } catch (error) {
+            console.error("Google Login Error:", error);
+            window.showNotice('error', 'Login Gagal', 'Gagal masuk dengan Google.');
+        }
+    };
+    
+                    window.allProductsData = []; window.currentProduct = {}; window.checkoutItem = null;
+    
+    // Listener Shop (Simpan Data, Render Home)
+    onSnapshot(collection(db, "produk"), (snap) => {
+        window.allProductsData = [];
+        snap.forEach(d => {
+            let data = d.data();
+            data.id = d.id;
+            window.allProductsData.push(data);
+        });
+        renderHomeShop();
+    });
+    
+    window.renderHomeShop = () => {
+        const div = document.getElementById('shop-container');
+        const limit = 6;
+        const displayData = window.allProductsData.slice(0, limit);
+        
+        let html = displayData.map(data => createProductCard(data)).join('');
+        
+        // Tombol Lihat Semua
+        if(window.allProductsData.length > limit) {
+            html += `<div style="grid-column: 1 / -1;"><div class="btn-see-more" onclick="navSwitch('shop_full')">Tampilkan Produk Lainnya <i class="fas fa-arrow-right"></i></div></div>`;
+        }
+        div.innerHTML = html;
+    };
+    
+            window.renderFullShop = (dataOverride = null) => {
+        const div = document.getElementById('fullShopContainer');
+        const source = dataOverride || window.allProductsData;
+        
+        if(!source || source.length === 0) {
+             div.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">Produk tidak ditemukan</div>';
+             return;
+        }
+        
+                    div.innerHTML = source.map(data => {
+            const isFisik = data.tipe === 'fisik' || (data.kategori && data.kategori.includes('FISIK'));
+            const clickAction = isFisik 
+                ? `bukaDetailProduk('${data.id}')` 
+                : `siapkanInvoice('${data.kode || data.id}','${data.nama}',${data.harga})`;
+            
+            return `<div class="product-card" onclick="${clickAction}">
+                <img src="${data.img||'https://via.placeholder.com/150'}" style="width:100%; height:140px; object-fit:cover; background:#eee;">
+                <div class="product-info">
+                    <div style="font-size:12px; font-weight:bold; margin-bottom:4px; line-height:1.2; height:28px; overflow:hidden;">${data.nama}</div>
+                    <div style="font-size:13px; color:var(--primary); font-weight:bold;">Rp ${new Intl.NumberFormat('id-ID').format(data.harga)}</div>
+                    ${isFisik ? `<div style="font-size:10px; color:#999; margin-top:2px;"><i class="fas fa-box"></i> Produk Fisik</div>` : ''}
+                    <button class="btn-buy-shop" style="margin-top:8px;">Beli</button>
                 </div>
-                <div style="flex:1;display:flex;align-items:center;width:100%;" onclick="if(!window.isModeMasal) bukaDetailRiwayat('${ds}')">
-                    <div class="h-icon"><i class="fas ${icon}"></i></div>
-                    <div class="h-content"><div class="h-prod">${data.produk}</div>
-                        <div class="h-date"><i class="far fa-clock"></i> ${wt} &bull; ${data.tujuan}</div></div>
-                    <div class="h-right"><div class="h-price">Rp ${new Intl.NumberFormat('id-ID').format(data.harga)}</div>
-                        <div class="h-badge bg-${data.status}">${data.status}</div></div>
+            </div>`;
+        }).join('');
+    };
+    
+    
+    window.handleShopSearch = (keyword) => {
+        if(!keyword) return renderFullShop();
+        const lower = keyword.toLowerCase();
+        const filtered = window.allProductsData.filter(p => p.nama.toLowerCase().includes(lower));
+        renderFullShop(filtered);
+    };
+    
+    
+            function createProductCard(data) {
+        // Deteksi tipe produk (Fisik atau Digital)
+        const isFisik = data.tipe === 'fisik' || (data.kategori && data.kategori.includes('FISIK'));
+        
+        // Tentukan aksi klik: Buka Detail (Fisik) atau Invoice Digital
+        const clickAction = isFisik 
+            ? `bukaDetailProduk('${data.id}')` 
+            : `siapkanInvoice('${data.kode || data.id}','${data.nama}',${data.harga})`;
+    
+        return `<div class="product-card" onclick="${clickAction}" style="cursor:pointer;">
+            <img src="${data.img||'https://via.placeholder.com/150'}" style="width:100%; height:120px; object-fit:cover; background:#eee;">
+            <div class="product-info">
+                <div>
+                    <div style="font-size:12px; font-weight:bold; margin-bottom:4px; line-height:1.2; height:28px; overflow:hidden;">${data.nama}</div>
+                    <div style="font-size:13px; color:var(--primary); font-weight:bold;">Rp ${new Intl.NumberFormat('id-ID').format(data.harga)}</div>
+                    ${isFisik ? `<div style="font-size:9px; background:#eee; color:#555; display:inline-block; padding:2px 5px; border-radius:4px; margin-top:2px;"><i class="fas fa-box"></i> Barang Fisik</div>` : ''}
+                </div>
+                <div style="margin-top:8px;">
+                    <button class="btn-buy-shop" style="width:100%; background:var(--bg); color:var(--primary); border:1px solid var(--primary); font-size:11px;">Beli</button>
+                </div>
+            </div>
+        </div>`;
+    }
+    
+                    // Listener Riwayat Menu Utama (Hanya 10 Terbaru)
+    let unsubscribeRiwayat = null;
+    function initRiwayatListener(user) {
+        if(unsubscribeRiwayat) unsubscribeRiwayat();
+        
+        const qRiwayat = query(collection(db, "users", user.uid, "riwayat_transaksi"), orderBy("timestamp", "desc"), limit(10));
+        
+        unsubscribeRiwayat = onSnapshot(qRiwayat, (snap) => {
+            const container = document.getElementById('riwayat-container');
+            let html = "";
+            
+            snap.forEach((docSnap) => {
+                const data = docSnap.data();
+                                    const idDoc = docSnap.id;
+    
+                                    // LOGIKA BARU: AUTO-CEK STATUS PENDING (Topup & PPOB)
+                                    const statNow = (data.status || "").toString().trim().toUpperCase();
+                                    if(statNow === 'PENDING') {
+                    if(data.is_po === true) {
+                        // Transaksi Pre-Order (PO) dibiarkan PENDING menunggu Admin
+                    } else if(data.kode_produk === 'TOPUP') {
+                        // Cek Topup Saldo
+                        if (data.metode === 'QRIS_AUTO') {
+                            if(window.cekStatusQiospayBerkala) window.cekStatusQiospayBerkala(idDoc, data.harga);
+                        } else if (data.metode === 'QRIS_GOPAY' || data.metode === 'GOPAY_TF') {
+                            if(window.startIndopayChecker) window.startIndopayChecker(idDoc, data.harga);
+                        } else {
+                            if(window.cekStatusTopupBerkala) window.cekStatusTopupBerkala(idDoc, data.unique_code || data.trx_id);
+                        }
+                                            } else if (data.provider === 'ICS') {
+                        if(window.monitorIcsTrx && !window['monitor_'+idDoc]) {
+                            window['monitor_'+idDoc] = true;
+                            window.monitorIcsTrx(data.trx_id, idDoc);
+                        }
+    
+                    } else if (data.provider === 'KAJE' || (data.trx_id && data.trx_id.startsWith('KJ')) || (data.sn && data.sn.includes('#KJ'))) {
+                        if(window.monitorKajeTrx && !window['monitor_'+idDoc]) {
+                            window['monitor_'+idDoc] = true;
+                            // Ambil ID KJ bersih (jika nyelip di SN)
+                            let realKajeId = data.trx_id;
+                            if(data.sn && data.sn.includes('#KJ')) {
+                                const parts = data.sn.split('#');
+                                if(parts.length > 1) realKajeId = parts[1].split(' ')[0].trim();
+                            }
+                            window.monitorKajeTrx(realKajeId, idDoc);
+                        }
+                    } else if (data.provider === 'WZ' || (data.trx_id && String(data.trx_id).toLowerCase().startsWith('wz'))) {
+                        if(window.monitorWzTrx && !window['monitor_'+idDoc]) {
+                            window['monitor_'+idDoc] = true;
+                            window.monitorWzTrx(data.trx_id, idDoc);
+                        }
+                    } else if (data.provider !== 'KHFY') {
+                        // FIX: Cek Transaksi Umum (JANGAN CEK KHFY DISINI)
+                        if(window.cekStatusBerkala) window.cekStatusBerkala(idDoc, data.trx_id, data.tujuan, data.kode_produk);
+                    } else {
+                        // FIX: Aktifkan monitoring Khfy jika halaman direfresh (Single Instance)
+                        if(window.monitorKhfyTrx && !window['monitor_'+idDoc]) {
+                            window['monitor_'+idDoc] = true;
+                            window.monitorKhfyTrx(data.trx_id, idDoc);
+                        }
+                    }
+                } else if ((statNow === 'GAGAL' || statNow === 'EXPIRED' || statNow === 'CANCELED') && data.isRefunded !== true && data.kode_produk !== 'TOPUP') {
+                    // FIX AUTOREFUND: Jika transaksi ini dari awal PENDING, dan sekarang GAGAL tanpa refund, paksa refund
+                    if (data.status_awal === 'PENDING') {
+                        if (window.updateFirestoreStatus) {
+                            window.updateFirestoreStatus(idDoc, statNow, data.sn, data.raw_json, true);
+                        }
+                    }
+                }
+                let waktuStr = data.timestamp ? data.timestamp.toDate().toLocaleTimeString('id-ID').slice(0,5) : "";
+                const dataString = encodeURIComponent(JSON.stringify({idDoc, ...data, waktu: waktuStr}));
+    
+                let iconClass = "fa-receipt";
+                let pLower = (data.produk || "").toLowerCase();
+                if(pLower.includes("pulsa") || pLower.includes("telkomsel") || pLower.includes("indosat")) iconClass = "fa-mobile-alt";
+                else if(pLower.includes("pln") || pLower.includes("token")) iconClass = "fa-bolt";
+                else if(pLower.includes("dana") || pLower.includes("gopay") || pLower.includes("ovo") || pLower.includes("shopee")) iconClass = "fa-wallet";
+                else if(pLower.includes("game") || pLower.includes("diamond") || pLower.includes("ff")) iconClass = "fa-gamepad";
+    
+                                    html += `<div class="history-card" id="card-${idDoc}">
+                    <div class="area-chk-masal" style="display:none; margin-right:12px;">
+                        <input type="checkbox" class="chk-masal" value="${encodeURIComponent(JSON.stringify(data))}" onchange="updateButtonMasal()" style="transform:scale(1.3); accent-color:var(--primary);">
+                    </div>
+                    <div style="flex:1; display:flex; align-items:center; width:100%;" onclick="if(!window.isModeMasal) bukaDetailRiwayat('${dataString}')">
+                        <div class="h-icon"><i class="fas ${iconClass}"></i></div>
+                        <div class="h-content">
+                            <div class="h-prod">${data.produk}</div>
+                            <div class="h-date"><i class="far fa-clock"></i> ${waktuStr} &bull; <i class="fas fa-bullseye" style="margin-left:4px;"></i> ${data.tujuan}</div>
+                        </div>
+                        <div class="h-right">
+                            <div class="h-price">Rp ${new Intl.NumberFormat('id-ID').format(data.harga)}</div>
+                            <div class="h-badge bg-${data.status}">${data.status}</div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html || "<p style='text-align:center;font-size:11px;color:#999;padding:10px;'>Belum ada transaksi.</p>";
+        });
+    }
+    
+            // SISTEM SEMUA RIWAYAT (FILTER, SEARCH & PAGINASI)
+    let allRiwayatData = [];
+    let filteredRiwayatData = [];
+    let currentRiwayatPage = 1;
+    const itemsPerPage = 10;
+    
+            window.bukaRiwayatArsip = async (force = false) => {
+        const user = auth.currentUser;
+        if(!user) return;
+        document.getElementById('modalArsip').style.display = "flex";
+        const area = document.getElementById('listArsipArea');
+        if(allRiwayatData.length > 0 && !force) { window.terapkanFilterRiwayat(); return; }
+        
+        area.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:24px; color:var(--primary);'></i><p style='margin-top:10px;'>Menggabungkan Riwayat...</p></div>";
+    
+        try {
+            allRiwayatData = [];
+            // 1. Ambil Data Live (Firebase)
+            const q = query(collection(db, "users", user.uid, "riwayat_transaksi"), orderBy("timestamp", "desc"));
+            const snap = await getDocs(q);
+            snap.forEach(d => {
+                let item = d.data();
+                item.idDoc = d.id; item.source = 'LIVE';
+                item.timestamp_str = item.timestamp ? item.timestamp.toDate().toISOString() : new Date().toISOString();
+                delete item.timestamp;
+                allRiwayatData.push(item);
+            });
+    
+            // 2. Ambil Data Arsip (Hosting)
+            try {
+                const res = await fetch(`api_riwayat.php?action=get_arsip&uid=${user.uid}`);
+                const arsip = await res.json();
+                if(arsip && arsip.data) {
+                    arsip.data.forEach(item => { item.source = 'ARSIP'; allRiwayatData.push(item); });
+                }
+            } catch(e) {}
+    
+            allRiwayatData.sort((a,b) => new Date(b.timestamp_str) - new Date(a.timestamp_str));
+            window.terapkanFilterRiwayat();
+        } catch(e) { area.innerHTML = "Gagal memuat riwayat."; }
+    };
+    
+    window.refreshRiwayatArsip = () => {
+        // Paksa download ulang
+        window.bukaRiwayatArsip(true);
+    };
+    
+    window.terapkanFilterRiwayat = () => {
+        const keyword = document.getElementById('searchRiwayat').value.toLowerCase();
+        const tgl = document.getElementById('filterTgl').value;
+        const status = document.getElementById('filterStatus').value;
+        
+        filteredRiwayatData = allRiwayatData.filter(d => {
+            // 1. Logika Search Cerdas
+            const searchTarget = ( (d.produk||'') + ' ' + (d.tujuan||'') + ' ' + (d.trx_id||'') + ' ' + (d.sn||'') ).toLowerCase();
+            const matchSearch = !keyword || searchTarget.includes(keyword);
+            
+            // 2. Logika Tanggal
+            const dDate = d.timestamp_str ? d.timestamp_str.split('T')[0] : '';
+            const matchDate = !tgl || dDate === tgl;
+            
+            // 3. Logika Status
+            let matchStatus = true;
+            if(status !== 'SEMUA') {
+                const s = (d.status || '').toUpperCase();
+                if(status === 'BERHASIL') matchStatus = (s === 'BERHASIL' || s === 'SUKSES');
+                else matchStatus = s === status;
+            }
+            
+            return matchSearch && matchDate && matchStatus;
+        });
+        
+        currentRiwayatPage = 1;
+        renderRiwayatPage();
+    };
+    
+    function renderRiwayatPage() {
+        const area = document.getElementById('listArsipArea');
+        const paginArea = document.getElementById('paginationRiwayat');
+        
+        if(filteredRiwayatData.length === 0) {
+            area.innerHTML = "<div style='text-align:center; padding:40px; color:#94a3b8;'><i class='fas fa-search' style='font-size:30px; margin-bottom:10px; opacity:0.5;'></i><p>Tidak ada riwayat yang cocok.</p></div>";
+            paginArea.innerHTML = "";
+            return;
+        }
+    
+        const totalPages = Math.ceil(filteredRiwayatData.length / itemsPerPage);
+        const start = (currentRiwayatPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageData = filteredRiwayatData.slice(start, end);
+    
+        let html = "";
+        pageData.forEach(d => {
+            const dObj = d.timestamp_str ? new Date(d.timestamp_str) : new Date();
+            const waktuStr = dObj.toLocaleString('id-ID');
+            const dataString = encodeURIComponent(JSON.stringify({...d, waktu: waktuStr}));
+            let badge = d.source === 'ARSIP' ? `<i class="fas fa-server" style="color:#94a3b8; font-size:10px; margin-left:5px;"></i>` : `<i class="fab fa-gripfire" style="color:#ff7675; font-size:10px; margin-left:5px;"></i>`;
+    
+            html += `<div class="history-card" onclick="bukaDetailRiwayat('${dataString}')" style="border-bottom:1px solid #f1f5f9; padding:8px 8px;">
+                <div class="h-content">
+                    <div class="h-prod" style="font-size:9.5px;">${d.produk} ${badge}</div>
+                    <div class="h-date" style="margin-top:2px;"><i class="far fa-clock"></i> ${waktuStr} • ${d.tujuan}</div>
+                </div>
+                <div class="h-right">
+                    <div class="h-price">Rp ${new Intl.NumberFormat('id-ID').format(d.harga)}</div>
+                    <div class="h-badge bg-${d.status}" style="margin-top:3px;">${d.status}</div>
                 </div>
             </div>`;
         });
-        container.innerHTML = html || "<p style='text-align:center;font-size:11px;color:#999;padding:10px;'>Belum ada transaksi.</p>";
-    });
-}
-
-// ===== SHOW NOTICE =====
-window.showNotice = function(type, title, msg) {
-    const modal = document.getElementById('modalNotice');
-    const icon = document.getElementById('noticeIcon');
-    const mTitle = document.getElementById('noticeTitle');
-    const mMsg = document.getElementById('noticeMsg');
-    const btn = document.getElementById('btnNoticeClose');
-
-    icon.className = 'notice-icon';
-    if (type==='success') { icon.innerHTML='<i class="fas fa-check-circle icon-success"></i>'; btn.style.display='block'; }
-    else if (type==='error') { icon.innerHTML='<i class="fas fa-times-circle icon-error"></i>'; btn.style.display='block'; }
-    else if (type==='loading') { icon.innerHTML='<i class="fas fa-circle-notch fa-spin icon-loading"></i>'; btn.style.display='none'; }
-    mTitle.innerText = title||'';
-    mMsg.innerText = msg||'';
-    modal.style.display = 'flex';
-};
-
-window.tutupNotice = function() {
-    document.getElementById('modalNotice').style.display='none';
-};
-
-window.bersihkanPesan = function(txt) {
-    let m = txt;
-    try { m = JSON.parse(txt).body_respon||txt; } catch(_) {}
-    if (m.includes("kodereseller=")||m.includes("password=")) {
-        m = m.includes("#") ? m.slice(m.indexOf("#")+1).trim() : "Transaksi Gagal dari Provider";
-    }
-    m = m.replace(/\.?\s*Saldo\s+[\d\.,\s\-\=]+(@\d{2}:\d{2})?/gi,"").replace(/Hrg\s+[\d\.,]+/gi,"");
-    return m.trim();
-};
-
-// ===== CHECK STATUS INTERVALS =====
-window.intervalCek = window.intervalCek || {};
-
-window.cekStatusBerkala = function(idDoc, trxId, tujuan, kode) {
-    if (window.intervalCek[idDoc]) return;
-    window.intervalCek[idDoc] = setInterval(async () => {
-        try {
-            const res = await (await fetch('cek_status.php', { method:'POST', body:JSON.stringify({refID:trxId, tujuan, kode_produk:kode}) })).json();
-            const st = (res.status||'').toString().trim().toUpperCase();
-            if (st!=='PENDING') {
-                clearInterval(window.intervalCek[idDoc]); delete window.intervalCek[idDoc];
-                const psn = window.bersihkanPesan(res.sn);
-                if (window.updateFirestoreStatus) window.updateFirestoreStatus(idDoc, st, psn, JSON.stringify(res));
-            }
-        } catch(_) {}
-    }, 10000);
-};
-
-window.cekStatusQiospayBerkala = function(idDoc, nominal) {
-    if (window.intervalCek[idDoc]) return;
-    window.intervalCek[idDoc] = setInterval(async () => {
-        try {
-            const res = await (await fetch('cek_topup.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({nominal, docId:idDoc}) })).json();
-            if (res.status==='success') {
-                clearInterval(window.intervalCek[idDoc]); delete window.intervalCek[idDoc];
-                const user = auth.currentUser;
-                if (!user) return;
-                const trxRef = doc(db,"users",user.uid,"riwayat_transaksi",idDoc);
-                const trxSnap = await getDoc(trxRef);
-                if (trxSnap.exists() && (trxSnap.data().status==='BERHASIL'||trxSnap.data().status==='Sukses')) return;
-                if (window.updateFirestoreStatus) window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup QRIS Otomatis", JSON.stringify(res));
-                if (window.triggerDoniGuard) window.triggerDoniGuard({ trx_id:'QRIS-'+idDoc, action:'topup', produk:'TOPUP QRIS', nominal:parseInt(nominal), saldo_akhir_client:0 });
-                window.showNotice('success','Berhasil','Topup Rp '+new Intl.NumberFormat('id-ID').format(nominal)+' masuk!');
-                setTimeout(()=>{ if (window.tutupModalTopup) window.tutupModalTopup(); }, 2000);
-            }
-        } catch(_) {}
-    }, 10000);
-};
-
-window.cekStatusTopupBerkala = function(idDoc, uniqueCode) {
-    if (!window.isTopupAuto) return;
-    if (window.intervalCek[idDoc]) return;
-    window.intervalCek[idDoc] = setInterval(async () => {
-        try {
-            const res = await (await fetch('paydisini_cek.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({unique_code:uniqueCode}) })).json();
-            if (res.success && res.data?.status==="Success") {
-                clearInterval(window.intervalCek[idDoc]); delete window.intervalCek[idDoc];
-                const user = auth.currentUser;
-                if (!user) return;
-                const nominal = parseInt(res.data.balance);
-                window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup Berhasil");
-                if (window.triggerDoniGuard) window.triggerDoniGuard({ trx_id:uniqueCode, action:'topup', produk:'TOPUP', nominal, saldo_akhir_client:0 });
-                window.showNotice('success','Topup Berhasil','Saldo Rp '+new Intl.NumberFormat('id-ID').format(nominal)+' Masuk.');
-            } else if (res.success && (res.data?.status==="Canceled"||res.data?.status==="Expired")) {
-                clearInterval(window.intervalCek[idDoc]); delete window.intervalCek[idDoc];
-                window.updateFirestoreStatus(idDoc, "GAGAL", "Pembayaran Expired/Batal");
-            }
-        } catch(_) {}
-    }, 10000);
-};
-
-// ===== MASS PRINT MODE =====
-window.isModeMasal = false;
-window.toggleModeMasal = function() {
-    window.isModeMasal = !window.isModeMasal;
-    const btn = document.getElementById('btnModeMasal');
-    const chks = document.querySelectorAll('.area-chk-masal');
-    const fab = document.getElementById('fabCetakMasal');
-    if (window.isModeMasal) {
-        btn.innerHTML = '<i class="fas fa-times"></i> Batalkan';
-        btn.style.background = '#ff7675'; btn.style.color = 'white';
-        chks.forEach(el=>el.style.display='block');
-        fab.style.display = 'block';
-        document.getElementById('riwayat-container').style.paddingBottom = '120px';
-    } else {
-        btn.innerHTML = '<i class="fas fa-print"></i> Cetak Masal';
-        btn.style.background = '#dbeafe'; btn.style.color = '#1e3a8a';
-        chks.forEach(el=>el.style.display='none');
-        fab.style.display = 'none';
-        document.getElementById('riwayat-container').style.paddingBottom = '10px';
-        document.querySelectorAll('.chk-masal').forEach(c=>c.checked=false);
-        updateButtonMasal();
-    }
-};
-window.updateButtonMasal = function() {
-    const n = document.querySelectorAll('.chk-masal:checked').length;
-    document.getElementById('countMasal').innerText = n;
-    const cs = document.getElementById('countMasalShare');
-    if (cs) cs.innerText = n;
-};
-window.prosesShareMasal = function() { window.isShareMode=true; window.prosesPrintMasal(); };
-window.prosesPrintMasal = function() {
-    const cbs = document.querySelectorAll('.chk-masal:checked');
-    if (!cbs.length) return alert("Pilih minimal 1 transaksi!");
-    const items = [];
-    cbs.forEach(cb=>{ try { items.push(JSON.parse(decodeURIComponent(cb.value))); } catch(_){} });
-    generateStrukMasal(items);
-};
-function generateStrukMasal(items) {
-    window.activePrintData = items;
-    window.activePrintType = 'mass';
-    const inputM = document.getElementById('inputLiveMarkup');
-    if (inputM) inputM.value = window.printerSettings?.markup||0;
-    const markup = parseInt(window.printerSettings?.markup)||0;
-    const w = window.printerSettings?.paperSize==='58'?32:48;
-    const line = '-'.repeat(w);
-    const d = new Date();
-    const ds = d.toLocaleDateString('id-ID');
-    const ts = d.toLocaleTimeString('id-ID').slice(0,5);
-    const center = txt=>{ if(!txt) return ''; let r=''; for(const l of txt.split('\n')){ let rem=l; while(rem.length>0){ const ch=rem.slice(0,w); rem=rem.slice(w); r+=' '.repeat(Math.max(0,Math.floor((w-ch.length)/2)))+ch+'\n'; } } return r.replace(/\n$/,''); };
-    const lr = (left,right)=>{ left=String(left); right=String(right); let o='', r=left, ml=w-right.length-1; while(r.length>0){ if(r.length<=ml){ o+=r+' '.repeat(w-r.length-right.length)+right; r=''; } else { o+=r.slice(0,ml)+'\n'; r=r.slice(ml); } } return o; };
-    let rec = '';
-    rec += center((window.printerSettings?.storeName||'TOKO').toUpperCase())+'\n';
-    if (window.printerSettings?.address) rec += center(window.printerSettings.address)+'\n';
-    rec += line+'\n'+center('STRUK REKAPITULASI')+'\n'+center(ds+' '+ts)+'\n'+line+'\n';
-    let total = 0;
-    items.forEach((item,i)=>{
-        const raw = parseInt(item.harga)+markup;
-        const h = Math.ceil(raw/500)*500;
-        total += h;
-        rec += `${i+1}. ${item.produk}\n${lr(item.tujuan||'-','Rp '+new Intl.NumberFormat('id-ID').format(h))}\n`;
-    });
-    rec += line+'\n'+lr(`TOTAL (${items.length} Trx)`,'Rp '+new Intl.NumberFormat('id-ID').format(total))+'\n'+line+'\n';
-    if (window.printerSettings?.footer) rec += center(window.printerSettings.footer)+'\n';
-    rec += center('Dicetak Masal')+'\n\n\n';
-    window.currentReceiptData = rec;
-    document.getElementById('printPreviewArea').innerText = rec;
-    document.getElementById('modalPrintPreview').style.display = 'flex';
-    window.updatePrintButtonState();
-}
-
-// ===== ARCHIVE HISTORY =====
-window.bukaRiwayatArsip = async (force=false) => {
-    const user = auth.currentUser;
-    if (!user) return;
-    document.getElementById('modalArsip').style.display = 'flex';
-    const area = document.getElementById('listArsipArea');
-    if (allRiwayatData.length>0 && !force) { window.terapkanFilterRiwayat(); return; }
-    area.innerHTML = "<div style='text-align:center;padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:24px;color:var(--primary);'></i><p>Memuat Riwayat...</p></div>";
-    try {
-        allRiwayatData = [];
-        const q = query(collection(db,"users",user.uid,"riwayat_transaksi"), orderBy("timestamp","desc"));
-        const snap = await getDocs(q);
-        snap.forEach(d=>{ const d2 = d.data(); d2.fireId = d.id; allRiwayatData.push(d2); });
-        snap = await getDocs(query(collection(db,"users",user.uid,"riwayat_topup"), orderBy("timestamp","desc")));
-        snap.forEach(d=>{ const d2 = d.data(); d2.fireId = d.id; allRiwayatData.push(d2); });
-        allRiwayatData.sort((a,b)=>(b.timestamp?.seconds||0)-(a.timestamp?.seconds||0));
-        window.terapkanFilterRiwayat();
-    } catch(e) { area.innerHTML = "<div style='text-align:center;color:red;padding:20px;'>Gagal memuat riwayat.</div>"; }
-};
-
-window.terapkanFilterRiwayat = function() {
-    const search = (document.getElementById('searchRiwayat')?.value||'').toLowerCase();
-    const tgl = document.getElementById('filterTgl')?.value||'';
-    const status = document.getElementById('filterStatus')?.value||'SEMUA';
-    filteredRiwayatData = allRiwayatData.filter(d=>{
-        if (search && !((d.produk||'').toLowerCase().includes(search)||(d.trx_id||'').toLowerCase().includes(search)||(d.tujuan||'').includes(search))) return false;
-        if (tgl && d.timestamp) { const dd = new Date(d.timestamp.seconds*1000).toISOString().slice(0,10); if (dd!==tgl) return false; }
-        if (status!=='SEMUA' && (d.status||'').toUpperCase()!==status) return false;
-        return true;
-    });
-    currentRiwayatPage = 1;
-    renderRiwayatPage();
-};
-
-function renderRiwayatPage() {
-    const area = document.getElementById('listArsipArea');
-    const start = (currentRiwayatPage-1)*itemsPerPage;
-    const pageData = filteredRiwayatData.slice(start, start+itemsPerPage);
-    let html = pageData.map(d=>{
-        const wt = d.timestamp ? new Date(d.timestamp.seconds*1000).toLocaleString('id-ID') : '';
-        return `<div class="history-card" onclick="bukaDetailRiwayat('${encodeURIComponent(JSON.stringify({...d,waktu:wt}))}')">
-            <div class="h-icon"><i class="fas fa-receipt"></i></div>
-            <div class="h-content"><div class="h-prod">${d.produk}</div>
-                <div class="h-date">${wt}</div></div>
-            <div class="h-right"><div class="h-price">Rp ${new Intl.NumberFormat('id-ID').format(d.harga)}</div>
-                <div class="h-badge bg-${d.status}">${d.status}</div></div>
-        </div>`;
-    }).join('') || "<div style='text-align:center;padding:20px;color:#999;'>Tidak ada riwayat.</div>";
-    area.innerHTML = html;
-    const totalPages = Math.ceil(filteredRiwayatData.length/itemsPerPage);
-    let pag = '';
-    for (let i=1; i<=totalPages; i++) pag += `<div class="page-num ${i===currentRiwayatPage?'active':''}" onclick="currentRiwayatPage=${i};renderRiwayatPage();">${i}</div>`;
-    document.getElementById('paginationRiwayat').innerHTML = pag;
-}
-
-// ===== EXPORTS for non-module scripts =====
-window.loadUserBalance = loadUserBalance;
-window.initRiwayatListener = initRiwayatListener;
-window.renderHomeShop = renderHomeShop;
-window.createProductCard = createProductCard;
-window.updateFirestoreStatus = async function(idDoc, status, sn, raw, isRefund) {
-    const user = auth.currentUser;
-    if (!user) return;
-    const ref = doc(db,"users",user.uid,"riwayat_transaksi",idDoc);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) return;
-    const cur = (snap.data().status||'').toUpperCase();
-    if (cur==='BERHASIL'||cur==='SUKSES') return;
-    const updateData = { status, sn, raw_json: raw||'' };
-    if (isRefund) updateData.isRefunded = true;
-    await updateDoc(ref, updateData);
-    if (isRefund) {
-        const amount = parseInt(snap.data().harga||0);
-        const uRef = doc(db,"users",user.uid);
-        const uSnap = await getDoc(uRef);
-        await updateDoc(uRef, { saldo: (uSnap.data().saldo||0)+amount });
-    }
-};
-window.refreshRiwayatArsip = () => window.bukaRiwayatArsip(true);
-window.tutupRiwayatArsip = () => document.getElementById('modalArsip').style.display='none';
-window.bukaDetailRiwayat = function(str) {
-    const data = JSON.parse(decodeURIComponent(str));
-    const st = (data.status||'').toUpperCase();
-    const iconBg = st==='BERHASIL'?'var(--success)':st==='PENDING'?'var(--warning)':'var(--danger)';
-    const html = `<div class="receipt-header">
-        <div class="receipt-icon" style="background:${iconBg}"><i class="fas ${st==='BERHASIL'?'fa-check-circle':st==='PENDING'?'fa-clock':'fa-times-circle'}"></i></div>
-        <div class="receipt-status" style="color:${iconBg}">${data.status||'-'}</div>
-        <div class="receipt-amount">Rp ${new Intl.NumberFormat('id-ID').format(data.harga)}</div>
-    </div>
-    <div class="detail-item"><span>Produk</span><span class="detail-val">${data.produk||'-'}</span></div>
-    <div class="detail-item"><span>Tujuan</span><span class="detail-val">${data.tujuan||'-'}</span></div>
-    <div class="detail-item"><span>ID Transaksi</span><span class="detail-val">${data.trx_id||data.fireId||'-'}</span></div>
-    <div class="detail-item"><span>Waktu</span><span class="detail-val">${data.waktu||'-'}</span></div>
-    ${data.sn?`<div class="sn-container"><span class="sn-text">${data.sn}</span><div class="btn-copy" onclick="navigator.clipboard.writeText('${data.sn.replace(/'/g,"\\'")}');alert('Disalin!')"><i class="fas fa-copy"></i></div></div>`:''}
-    <button class="btn-batal" onclick="document.getElementById('modalDetailRiwayat').style.display='none'" style="margin-top:20px;">TUTUP</button>`;
-    document.getElementById('detailRiwayatContent').innerHTML = html;
-    document.getElementById('modalDetailRiwayat').style.display = 'flex';
-};
-window.tutupModal = function() { document.getElementById('modalApp').style.display='none'; };
-window.tutupInvoice = function() { document.getElementById('modalInvoice').style.display='none'; };
-window.kembaliKeFilter = function() {
-    document.getElementById('inputContainer').style.display='none';
-    document.getElementById('btnKembali').style.display='none';
-    document.getElementById('areaFilter').style.display='grid';
-    document.getElementById('listProdukArea').style.display='block';
-};
-window.toggleMenuLainnya = function() {
-    document.getElementById('menuDrawer').classList.toggle('expanded');
-    const b = document.getElementById('btnMore');
-    b.innerHTML = document.getElementById('menuDrawer').classList.contains('expanded') ? '<i class="fas fa-chevron-up"></i> Sembunyikan' : '<i class="fas fa-chevron-down"></i> Menu Lainnya';
-};
-
-// ===== MODAL APP / PRODUK =====
-window.bukaMenu = async function(kategori) {
-    if (kategori==='Paket Akrab All') {
-        document.getElementById('akrabUI').style.display='block';
-        document.getElementById('defaultModalHeader').style.display='none';
-        document.getElementById('inputContainer').style.display='none';
-        document.getElementById('modalApp').style.display='flex';
-        document.getElementById('judulMenu').innerText = 'Paket Akrab All';
-        window.loadGabunganData();
-        return;
-    }
-    document.getElementById('akrabUI').style.display='none';
-    document.getElementById('defaultModalHeader').style.display='flex';
-    document.getElementById('judulMenu').innerText = kategori;
-    document.getElementById('modalApp').style.display='flex';
-    document.getElementById('inputContainer').style.display='block';
-    document.getElementById('btnKembali').style.display='none';
-    document.getElementById('operatorBadge').style.display='none';
-    document.getElementById('areaBebasNominal').style.display='none';
-    document.getElementById('areaFilter').innerHTML = '';
-    document.getElementById('listProdukArea').innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-circle-notch fa-spin"></i> Memuat produk...</div>';
-
-    try {
-        const res = await (await fetch(`produk.php?kategori=${kategori}`)).json();
-        if (res.success && res.data) {
-            window.produkData = res.data;
-            renderFilterButtons(kategori);
-        } else {
-            document.getElementById('listProdukArea').innerHTML = '<div style="text-align:center;padding:20px;color:#999;">Tidak ada produk</div>';
+    
+        area.innerHTML = html;
+    
+        // Render Tombol Paginasi Pintar (Membatasi jumlah tombol jika halaman banyak)
+        let paginHtml = "";
+        let maxButton = 5;
+        let startPage = Math.max(1, currentRiwayatPage - Math.floor(maxButton / 2));
+        let endPage = Math.min(totalPages, startPage + maxButton - 1);
+        
+        if (endPage - startPage + 1 < maxButton) {
+            startPage = Math.max(1, endPage - maxButton + 1);
         }
-    } catch(e) {
-        document.getElementById('listProdukArea').innerHTML = '<div style="text-align:center;color:red;padding:20px;">Gagal memuat produk.</div>';
+    
+        if(startPage > 1) paginHtml += `<div class="page-num" onclick="window.keHalamanRiwayat(1)">1</div><span style='padding:5px; color:#999;'>...</span>`;
+        
+        for(let i=startPage; i<=endPage; i++) {
+            paginHtml += `<div class="page-num ${i === currentRiwayatPage ? 'active' : ''}" onclick="window.keHalamanRiwayat(${i})">${i}</div>`;
+        }
+    
+        if(endPage < totalPages) paginHtml += `<span style='padding:5px; color:#999;'>...</span><div class="page-num" onclick="window.keHalamanRiwayat(${totalPages})">${totalPages}</div>`;
+        
+        paginArea.innerHTML = paginHtml;
     }
-};
-
-function renderFilterButtons(kategori) {
-    const brands = [...new Set(window.produkData.map(p=>p.brand||p.operator||'Lainnya'))];
-    let html = brands.map(b => `<div class="filter-card" onclick="filterByBrand('${b}',this)"><span>${b}</span></div>`).join('');
-    document.getElementById('areaFilter').innerHTML = html;
-    if (brands.length>0) filterByBrand(brands[0], document.querySelector('.filter-card'));
-}
-
-window.filterByBrand = function(brand, el) {
-    document.querySelectorAll('.filter-card').forEach(e=>e.classList.remove('active'));
-    if (el) el.classList.add('active');
-    const filtered = window.produkData.filter(p=>(p.brand||p.operator||'Lainnya')===brand);
-    let html = filtered.map(p => `<div class="item-produk" onclick="siapkanInvoice('${p.kode||p.id}','${p.nama}',${parseInt(p.harga)})">
-        <div><div style="font-weight:700;font-size:13px;">${p.nama}</div><div style="font-size:10px;color:#999;">${p.kode||''}</div></div>
-        <div style="font-weight:700;color:var(--primary);font-size:14px;">Rp ${new Intl.NumberFormat('id-ID').format(parseInt(p.harga))}</div>
-    </div>`).join('');
-    document.getElementById('listProdukArea').innerHTML = html||'<div style="text-align:center;padding:20px;color:#999;">Kosong</div>';
-};
-
-window.siapkanInvoice = function(kode, nama, harga) {
-    window.currentInvoiceData = { kode, nama, baseHarga: parseInt(harga) };
-    document.getElementById('judulMenu').innerText = 'Konfirmasi';
-    document.getElementById('inputContainer').style.display='block';
-    document.getElementById('areaFilter').style.display='none';
-    document.getElementById('listProdukArea').style.display='none';
-    document.getElementById('btnKembali').style.display='flex';
-};
-
-// ===== PLACEHOLDER for remaining functions =====
-window.bukaDetailProduk = function(id) { alert('Detail produk: '+id); };
-window.bukaModalTopup = function() { document.getElementById('modalTopup').style.display='flex'; };
-window.tutupModalTopup = function() { document.getElementById('modalTopup').style.display='none'; };
-window.backTopupStep = function() {};
-window.bukaModalTransfer = function(t) {
-    document.getElementById('transferTitle').innerText = t==='kirim'?'Kirim Saldo':'Minta Saldo';
-    document.getElementById('modalTransfer').style.display='flex';
-};
-window.showMyQR = async function() {
-    const user = auth.currentUser;
-    if (!user) return alert('Login dulu!');
-    const snap = await getDoc(doc(db,"users",user.uid));
-    const data = snap.data();
-    const info = data.email||data.username;
-    document.getElementById('myQrImage').src = "https://quickchart.io/qr?text="+encodeURIComponent(info)+"&size=300";
-    document.getElementById('myQrInfo').innerText = data.username||data.nama||info;
-    document.getElementById('modalMyQR').style.display = 'flex';
-};
-window.openQRScanner = function() {
-    document.getElementById('modalQRScanner').style.display = 'flex';
-    if (!window.html5QrCode) window.html5QrCode = new Html5Qrcode("qr-reader");
-    if (!window.html5QrCode.isScanning) {
-        const cfg = { fps:10, qrbox:{width:250,height:250} };
-        window.html5QrCode.start({facingMode:"environment"}, cfg,
-            decodedText=>{ window.closeQRScanner(); window.bukaModalTransfer('kirim'); const inp=document.getElementById('transferTarget'); if(inp){inp.value=decodedText;inp.readOnly=true;inp.style.background='#dbeafe';} },
-            ()=>{}
-        ).catch(()=>{
-            window.html5QrCode.start({facingMode:"user"}, cfg, ()=>{}, ()=>{}).catch(()=>{
-                document.getElementById('qr-reader').innerHTML = "<div style='color:red;padding:20px;text-align:center;background:white;border-radius:10px;'>Gagal akses kamera.</div>";
-            });
-        });
-    }
-};
-window.closeQRScanner = function() {
-    document.getElementById('modalQRScanner').style.display = 'none';
-    if (window.html5QrCode?.isScanning) window.html5QrCode.stop().then(()=>window.html5QrCode.clear()).catch(()=>{});
-};
-window.navSwitch = function(page, el) {
-    document.querySelectorAll('.full-page').forEach(p=>p.style.display='none');
-    const targets = { home:['#shop-container','#liveHistoryHeader','#riwayat-container'], shop_full:['#pageAllProduk'], profil:['#pageProfil'], etalase:['#pageEtalase'], lapak:['#pageLapak'], pesanan_fisik:['#pagePesananFisik'] };
-    if (page==='home') {
-        document.getElementById('shop-container').style.display='grid';
-        document.getElementById('liveHistoryHeader').style.display='flex';
-        document.getElementById('riwayat-container').style.display='block';
-        document.querySelector('.menu-container').style.display='block';
-        document.querySelector('.saldo-box').style.display='flex';
-        document.querySelector('.header').style.display='block';
-    } else {
-        const t = targets[page];
-        if (t) t.forEach(id=>{ const e=document.querySelector(id); if(e) e.style.display='block'; });
-        document.querySelector('.menu-container').style.display='none';
-    }
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    if (el) el.classList.add('active');
-    else document.querySelector('.nav-item')?.classList.add('active');
-};
-window.bukaChatPublic = function() { document.getElementById('modalChatPublic').style.display='flex'; };
-window.tutupChatPublic = function() { document.getElementById('modalChatPublic').style.display='none'; };
-window.bukaPengaturanPrinter = function() { document.getElementById('modalPrinterSettings').style.display='flex'; };
-window.simpanPengaturanPrinter = function() { alert('Disimpan!'); document.getElementById('modalPrinterSettings').style.display='none'; };
-window.updateSettingsPreview = function() {};
-window.updatePrintButtonState = function() {};
-window.renderSinglePreview = function() {};
-window.checkBroadcast = function() {};
-
-// ===== REMAINING FUNCTIONS FOR AKRAB/KHFY/ICS/WZ =====
-window.khfyData = []; window.icsData = []; window.wzData = [];
-window.loadGabunganData = async function() {
-    const areaList = document.getElementById('listProdukArea');
-    const areaFilter = document.getElementById('areaFilter');
-    window.khfyData = []; window.icsData = []; window.wzData = [];
-    if (areaFilter) areaFilter.innerHTML = '';
-    if (areaList) areaList.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-circle-notch fa-spin"></i> Memuat paket...</div>';
-    try {
-        const [r1,r2,r3,r4] = await Promise.all([
-            fetch('khfy_proxy.php?action=list').catch(()=>null),
-            fetch('ics_proxy.php?action=list').catch(()=>null),
-            fetch('kaje_proxy.php?api_action=get_products',{method:'POST',body:'{}'}).catch(()=>null),
-            fetch('wz_proxy.php?action=products').catch(()=>null)
-        ]);
-        if (r1) { const j = await r1.json().catch(()=>({})); if (j.data) window.khfyData = j.data; }
-        if (r3) { const j = await r3.json().catch(()=>({})); if (j?.success && j.data?.products) j.data.products.forEach(p=>{ if(p.code&&(p.code.startsWith('XDA')||p.code.startsWith('KDA'))){ const k=p.code.startsWith('XDA')?p.code.replace(/^XDA/,'KDA'):p.code; window.khfyData.push({kode_produk:k,kode_order_kaje:p.code,kode_produk_asli:p.code,nama_produk:(p.name||'').replace(/XDA/g,'KDA'),harga_final:p.price,gangguan:p.status==='gangguan'?1:0,kosong:p.status==='kosong'?1:0,deskripsi:(Array.isArray(p.description)?p.description.join('\n'):String(p.description||'')).replace(/XDA/g,'KDA'),provider_kaje:true,stok:p.stock}); }); }
-        if (r2) { const j = await r2.json().catch(()=>({})); if (j.success && j.data) { j.data.forEach(i=>{ if(i.code==='CFMX') i.type='fmax'; }); window.icsData = j.data; } }
-        if (r4) { const j = await r4.json().catch(()=>({})); if (j.success && Array.isArray(j.data)) window.wzData = j.data; }
-        if (areaList) areaList.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;"><i class="fas fa-hand-pointer"></i><br>Pilih kategori paket</div>';
-        window.renderGabunganFilters();
-    } catch(e) { if (areaList) areaList.innerHTML = '<div style="text-align:center;color:red;padding:20px;">Gagal memuat produk.</div>'; }
-};
-
-window.getKhfyCategory = function(item) {
-    const k = (item.kode_produk||'').toUpperCase();
-    const p = (item.kode_provider||'').toUpperCase();
-    if (['FMX50','FMX65','FMX80','FMX150'].includes(k)) return 'XL Data Reguler';
-    if (k==='XLB75') return 'Akrab Fresh (XLA)';
-    if (k.startsWith('KDA')) return 'KDA (PROMO)';
-    if (k.startsWith('XDA')) return 'Akrab Fresh (XDA)';
-    if (k.startsWith('XLA')) return 'Akrab Fresh (XLA)';
-    if (k.startsWith('FMX')||k.startsWith('CFMX')) return 'FlexMax (FMX)';
-    if (k.startsWith('CEKPLN')||p.includes('PLN')) return 'PLN Pascabayar';
-    if (k.startsWith('XLB')||k.startsWith('XL')) return 'XL Data Reguler';
-    if (k.startsWith('BPA')||k.startsWith('BPAL')) return 'Bonus Akrab';
-    if (k.startsWith('TES')) return 'Tes System';
-    return 'LAINNYA';
-};
-
-window.renderGabunganFilters = function() {
-    const rawKhfy = Array.isArray(window.khfyData)?window.khfyData:[];
-    const rawIcs = Array.isArray(window.icsData)?window.icsData:[];
-    const brands = [...new Set(rawKhfy.map(i=>window.getKhfyCategory(i)))].filter(b=>b!=='Tes System'&&b!=='Akrab Fresh (XDA)'&&b!=='PLN Pascabayar'&&b!=='Bonus Akrab').sort();
-    const types = [...new Set(rawIcs.map(i=>(i.type||'Lainnya').toUpperCase()))].filter(t=>!t.includes('FMAX')&&!t.includes('FLEXMAX')&&t!=='PLN Pascabayar'&&t!=='Akrab Fresh (XDA)'&&t!=='XLA').sort();
-    let html = '<div class="akrab-section-title">Pilih Paket</div><div class="akrab-grid">';
-    brands.forEach(b => { html += `<div class="akrab-btn" onclick="window.filterKhfy('${b}',this,false)"><i class="fas fa-bolt" style="color:#f59e0b"></i><span>${b.replace('Akrab ','')}</span></div>`; });
-    types.forEach(t => { html += `<div class="akrab-btn" onclick="window.filterIcs('${t}',this,false)"><i class="fas fa-bolt" style="color:#3b82f6"></i><span>${t}</span></div>`; });
-    if (Array.isArray(window.wzData) && window.wzData.length>0) html += `<div class="akrab-btn" onclick="window.filterWz(this)"><i class="fas fa-tags" style="color:#10b981"></i><span>Cuan+(Promo)</span></div>`;
-    if (!window.hidePoAkrab) {
-        html += '</div><div class="akrab-section-title">Antrian (PO)</div><div class="akrab-grid">';
-        brands.forEach(b=>html+=`<div class="akrab-btn" onclick="window.filterKhfy('${b}',this,true)" style="border-style:dashed;"><i class="fas fa-clock" style="color:#94a3b8"></i><span>${b.replace('Akrab ','')}</span></div>`);
-        types.forEach(t=>html+=`<div class="akrab-btn" onclick="window.filterIcs('${t}',this,true)" style="border-style:dashed;"><i class="fas fa-clock" style="color:#94a3b8"></i><span>${t}</span></div>`);
-    }
-    html += '</div>';
-    const af = document.getElementById('areaFilter');
-    if (af) { af.innerHTML = html; af.style.display='block'; af.style.gridTemplateColumns='none'; }
-};
-
-window.filterKhfy = async function(brand, el, isPO) {
-    document.querySelectorAll('.filter-card,.akrab-btn').forEach(e=>e.classList.remove('active'));
-    if (el) el.classList.add('active');
-    const products = (window.khfyData||[]).filter(i=>window.getKhfyCategory(i)===brand && !['BPAL1','BPAXXL1','BPAXL3','XLB75'].includes(i.kode_produk));
-    products.sort((a,b)=>parseInt(a.harga_final)-parseInt(b.harga_final));
-    let stockMap = {};
-    if (brand==='Akrab Fresh (XLA)') {
-        try { const r = await (await fetch('khfy_xla_stock.php')).json(); if (r.ok&&r.data) r.data.forEach(st=>stockMap[st.type]=st.sisa_slot); } catch(_) {}
-    }
-    let markup = 0;
-    if (window.markupConfig) {
-        if (brand==='KDA (PROMO)' && window.markupConfig['KDA (PROMO)']!==undefined) markup = parseInt(window.markupConfig['KDA (PROMO)']);
-        else if (window.markupConfig['Paket Akrab']!==undefined) markup = parseInt(window.markupConfig['Paket Akrab']);
-        else if (window.markupConfig['General']) markup = parseInt(window.markupConfig['General']);
-    }
-    const isPOMode = isPO || document.getElementById('judulMenu')?.innerText==='PO Akrab';
-    let html = products.map(p => {
-        const pName = p.nama_produk||'Produk';
-        const pCode = p.kode_produk||'-';
-        const rawM = window.markupConfig?.[pCode] !== undefined ? window.markupConfig[pCode] : markup;
-        const configM = window.getMarkupValue(rawM, parseInt(p.harga_final));
-        const curM = (pCode==='CFMX'||pName.toLowerCase().includes('cek'))?0:configM;
-        const fp = parseInt(p.harga_final)+curM;
-        const desc = (p.deskripsi||'').replace(/\n/g,'<br>');
-        const ganggu = p.gangguan==1;
-        const kosong = p.kosong==1;
-        const na = !isPOMode && (ganggu||kosong);
-        let badge = '';
-        let clickable = true;
-        if (na) { clickable = false; if (ganggu) badge='<span style="font-size:9px;color:white;background:red;padding:2px 4px;border-radius:4px;margin-left:5px;">GANGGUAN</span>'; else badge='<span style="font-size:9px;color:white;background:orange;padding:2px 4px;border-radius:4px;margin-left:5px;">KOSONG</span>'; }
-        else if (isPOMode) badge='<span style="font-size:9px;background:#f39c12;color:white;padding:2px 4px;border-radius:4px;margin-left:5px;">PRE-ORDER</span>';
-        const kajeOrder = p.kode_order_kaje||p.kode_produk_asli||pCode;
-        const onClick = clickable ? (p.provider_kaje ? (isPOMode ? `window.siapkanInvoicePO('${pCode}','${pName}',${fp},'KAJE','${kajeOrder}')` : `window.siapkanInvoiceKaje('${pCode}','${pName}',${fp},'${kajeOrder}')`) : (isPOMode ? `window.siapkanInvoicePO('${pCode}','${pName}',${fp},'KHFY')` : `window.siapkanInvoiceKhfy('${pCode}','${pName}',${fp})`)) : `alert('Produk sedang gangguan/kosong.')`;
-        return `<div class="item-produk" onclick="${onClick}" style="${na?'opacity:0.6;background:#fff0f0;':''}flex-direction:column;align-items:flex-start;">
-            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;">
-                <div><div style="font-weight:700;font-size:12px;">${pName} ${badge}</div><div style="font-size:10px;color:#999;">${pCode}</div>
-                ${stockMap[pCode]!==undefined?'<div style="font-size:10px;color:#10ac84;font-weight:700;"><i class="fas fa-cubes"></i> Stok: '+stockMap[pCode]+'</div>':''}</div>
-                <div style="font-weight:700;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(fp)}</div>
-            </div>${desc?'<div style="font-size:10px;color:#666;margin-top:5px;border-top:1px dashed #eee;padding-top:4px;width:100%;">'+desc+'</div>':''}</div>`;
-    }).join('')||'<div style="text-align:center;padding:20px;color:#999;">Kosong</div>';
-    const judul = document.getElementById('judulMenu')?.innerText||'';
-    if (judul==='Paket Akrab All'||judul==='PO Akrab') {
-        document.getElementById('judulKategoriModal').innerText = brand;
-        document.getElementById('listProdukModalArea').innerHTML = html;
-        document.getElementById('modalProdukList').style.display='flex';
-    } else { document.getElementById('listProdukArea').innerHTML = html; }
-};
-
-window.filterIcs = function(type, el, isPO) { /* simplified — will be expanded in full version */ };
-window.filterWz = function(el) { /* simplified */ };
-window.filterAkrabSearch = function() {
-    const q = document.getElementById('akrabSearch')?.value.toLowerCase()||'';
-    document.querySelectorAll('#listProdukArea > div').forEach(d=>d.style.display=d.innerText.toLowerCase().includes(q)?'block':'none');
-};
-window.siapkanInvoiceKaje = function(k,n,h,ko) { alert('Kaje Invoice: '+n+' Rp '+h); };
-window.siapkanInvoiceKhfy = function(k,n,h) { alert('Khfy Invoice: '+n+' Rp '+h); };
-window.siapkanInvoicePO = function(k,n,h,prov,ko) { alert('PO: '+n+' Rp '+h); };
-window.monitorKhfyTrx = function(trxId, docId) {
-    let att = 0;
-    const iv = setInterval(async () => { att++; if (att>30) { clearInterval(iv); return; }
-        try {
-            const res = await (await fetch(`khfy_cekstatus.php?refid=${trxId}`)).json();
-            if (res.message?.includes("Action invalid")) { clearInterval(iv); return; }
-            let ti = null;
-            if (res.data && Array.isArray(res.data)) ti = res.data[0];
-            else if (res.data?.data && Array.isArray(res.data.data)) ti = res.data.data[0];
-            else if (res.data) ti = res.data;
-            else if (res.status && res.sn) ti = res;
-            if (!ti) return;
-            const st = (ti.status||ti.status_text||ti.message||'').toUpperCase();
-            const sc = parseInt(ti.status2||0);
-            let sa = 'PENDING';
-            if (st.includes('SUKSES')||st.includes('BERHASIL')||st.includes('SUCCESS')||sc===20) sa='BERHASIL';
-            else if (st.includes('GAGAL')||st.includes('BATAL')||st.includes('FAILED')||sc===72) sa='GAGAL';
-            else return;
-            clearInterval(iv);
-            const user = auth.currentUser; if (!user) return;
-            const rf = doc(db,"users",user.uid,"riwayat_transaksi",docId);
-            const cs = await getDoc(rf);
-            if (cs.exists()) { const cu = (cs.data().status||'').toUpperCase(); if (cu==='BERHASIL'||cu==='SUKSES') return; }
-            const sn = ti.sn||ti.keterangan||ti.message||'-';
-            await updateDoc(rf,{status:sa,sn,raw_json:JSON.stringify(res)});
-            if (sa==='GAGAL' && cs.exists() && !cs.data().isRefunded) {
-                const amt = parseInt(cs.data().harga||0);
-                const ur = doc(db,"users",user.uid);
-                const us = await getDoc(ur);
-                await updateDoc(ur,{saldo:(us.data().saldo||0)+amt});
-                await updateDoc(rf,{isRefunded:true,sn:sn+' (REFUND)'});
-                window.showNotice('error','Gagal','Saldo dikembalikan.');
-            } else if (sa==='BERHASIL') { window.showNotice('success','Sukses',sn); }
-        } catch(_) {}
-    }, 4000);
-};
-window.monitorKajeTrx = function(trxId, docId) { /* will be expanded */ };
-window.monitorWzTrx = function(trxId, docId) { /* will be expanded */ };
-
-window.onclick = function(e) {
-    if (e.target===document.getElementById('modalTopup')) window.tutupModalTopup();
-    if (e.target===document.getElementById('modalApp')) window.tutupModal();
-    if (e.target===document.getElementById('modalInvoice')) window.tutupInvoice();
-    if (e.target===document.getElementById('modalDetailRiwayat')) document.getElementById('modalDetailRiwayat').style.display='none';
-    if (e.target===document.getElementById('modalProdukList')) document.getElementById('modalProdukList').style.display='none';
-};
-
-console.log("Pandawa-Digital PPOB App v2.0 — All systems loaded.");
-</script>
-</head>
-<body>
-
-<!-- ===== AUTH OVERLAY ===== -->
-<div id="authOverlay">
-  <div class="auth-fx-bg"></div>
-  <div class="auth-card" id="loginForm">
-    <div class="auth-brand">
-      <img src="icons/pandawa.png" class="brand-logo-glow" alt="Logo">
-      <h1 class="auth-h1">Pandawa-Digital</h1>
-      <p class="auth-desc">Agen Resmi PPOB & AKRAB 2026 — cepat, mudah, dan stabil</p>
-    </div>
-    <div class="form-area">
-      <div class="inp-wrapper">
-        <input type="email" id="logEmail" class="inp-modern" placeholder="Email / Username">
-        <i class="fas fa-user-circle inp-icon"></i>
-      </div>
-      <div class="inp-wrapper">
-        <input type="password" id="logPass" class="inp-modern" placeholder="Kata Sandi">
-        <i class="fas fa-key inp-icon"></i>
-        <i class="fas fa-eye inp-eye" onclick="togglePassword('logPass', this)"></i>
-      </div>
-    </div>
-    <div class="reset-link"><span onclick="handleResetPassword()">Lupa kata sandi?</span></div>
-    <button id="btnLogin" class="btn-modern-auth" onclick="handleLogin()">Login <i class="fas fa-arrow-right"></i></button>
-    <button onclick="handleGoogleLogin()" style="width:100%;padding:14px;border-radius:14px;border:1px solid #cbd5e1;background:white;color:#333;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> MASUK DENGAN GOOGLE
-    </button>
-    <div class="auth-switcher">Belum punya akun? <span class="link-accent" onclick="toggleAuth('register')">Daftar Disini</span></div>
-  </div>
-  <div class="auth-card" id="registerForm" style="display:none;">
-    <div class="auth-brand">
-      <h1 class="auth-h1">Buat Akun</h1>
-      <p class="auth-desc">Bergabung sekarang dan nikmati kemudahan transaksi.</p>
-    </div>
-    <div class="form-area">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="inp-wrapper"><input type="text" id="regUsername" class="inp-modern" placeholder="Username"><i class="fas fa-at inp-icon"></i></div>
-        <div class="inp-wrapper"><input type="text" id="regNama" class="inp-modern" placeholder="Nama Lengkap"><i class="fas fa-id-card inp-icon"></i></div>
-      </div>
-      <div class="inp-wrapper"><input type="tel" id="regWA" class="inp-modern" placeholder="WhatsApp (08xx)"><i class="fab fa-whatsapp inp-icon"></i></div>
-      <div class="inp-wrapper"><input type="email" id="regEmail" class="inp-modern" placeholder="Alamat Email"><i class="fas fa-envelope inp-icon"></i></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="inp-wrapper"><input type="password" id="regPass" class="inp-modern" placeholder="Sandi"><i class="fas fa-lock inp-icon"></i></div>
-        <div class="inp-wrapper"><input type="password" id="regPassConfirm" class="inp-modern" placeholder="Ulangi"><i class="fas fa-check inp-icon"></i></div>
-      </div>
-    </div>
-    <button class="btn-modern-auth" style="background:linear-gradient(135deg,#10b981,#059669);margin-top:10px;" onclick="handleRegister()">DAFTAR GRATIS <i class="fas fa-paper-plane"></i></button>
-    <div class="auth-switcher">Sudah punya akun? <span class="link-accent" onclick="toggleAuth('login')">Masuk Akun</span></div>
-  </div>
-</div>
-
-<!-- ===== GLOBAL LOADER ===== -->
-<div id="globalLoader">
-  <div class="loader-logo-box"><img src="icons/pandawa.png" style="width:100%;height:100%;object-fit:contain;"></div>
-  <div class="custom-spinner"></div>
-  <p style="margin-top:20px;font-weight:700;color:#333;font-size:13px;">Memuat Data...</p>
-  <p style="margin-top:5px;font-size:10px;color:#888;">Sinkronisasi Produk & Akun</p>
-</div>
-
-<!-- ===== MAIN APP ===== -->
-<div id="mainAppContent">
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-top">
-      <div class="header-logo"><img src="icons/pandawa.png" alt="Logo"></div>
-      <div style="flex:1;">
-        <div class="header-greeting"><i class="fas fa-sun" style="color:#facc15;"></i> Selamat Datang,</div>
-        <div class="header-name" id="headerName">Pengguna</div>
-        <div class="header-version"><i class="fas fa-code-branch"></i> v2.0.0</div>
-      </div>
-      <div class="header-actions">
-        <div class="header-btn" onclick="bukaRiwayatArsip()"><i class="fas fa-bell"></i></div>
-        <div class="header-btn danger" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SALDO -->
-  <div class="saldo-box">
-    <div class="saldo-info">
-      <div>
-        <div class="saldo-label"><i class="fas fa-wallet" style="color:var(--primary)"></i> Saldo Kamu</div>
-        <div class="saldo-value" id="saldoValue">Rp 0</div>
-      </div>
-      <i class="fas fa-history" style="font-size:20px;color:#cbd5e1;cursor:pointer;" onclick="bukaRiwayatArsip()"></i>
-    </div>
-    <div class="action-grid">
-      <div class="action-item" onclick="bukaModalTopup()"><div class="action-icon"><i class="fas fa-plus"></i></div><span class="action-text">Topup</span></div>
-      <div class="action-item" onclick="bukaModalTransfer('kirim')"><div class="action-icon"><i class="fas fa-paper-plane"></i></div><span class="action-text">Kirim</span></div>
-      <div class="action-item" onclick="bukaModalTransfer('minta')"><div class="action-icon"><i class="fas fa-hand-holding-usd"></i></div><span class="action-text">Minta</span></div>
-      <div class="action-item" onclick="showMyQR()"><div class="action-icon"><i class="fas fa-id-badge"></i></div><span class="action-text">QR Saya</span></div>
-    </div>
-  </div>
-
-  <!-- MENU -->
-  <div class="menu-container">
-    <div class="cat-title">Menu Utama</div>
-    <div class="menu-grid">
-      <div class="menu-item" onclick="bukaMenu('Pulsa')"><div class="icon-box"><i class="fas fa-mobile-alt" style="font-size:26px;color:#3b82f6;"></i></div><span>Pulsa</span></div>
-      <div class="menu-item" onclick="bukaMenu('E-Wallet')"><div class="icon-box"><i class="fas fa-wallet" style="font-size:26px;color:#10b981;"></i></div><span>E-Wallet</span></div>
-      <div class="menu-item" onclick="bukaMenu('DIGITAL')"><div class="icon-box"><i class="fas fa-gamepad" style="font-size:26px;color:#8b5cf6;"></i></div><span>DIGITAL</span></div>
-      <div class="menu-item" onclick="bukaMenu('Token PLN')"><div class="icon-box"><i class="fas fa-bolt" style="font-size:26px;color:#f59e0b;"></i></div><span>Token PLN</span></div>
-      <div class="menu-item" onclick="bukaMenu('Telkomsel')"><div class="icon-box"><img src="icons/Telkomsel.png" style="width:70%;height:70%;object-fit:contain;"></div><span>Telkomsel</span></div>
-      <div class="menu-item" onclick="bukaMenu('By.U')"><div class="icon-box"><img src="icons/By.U.png" style="width:70%;height:70%;object-fit:contain;"></div><span>By.U</span></div>
-      <div class="menu-item" id="menuAkrabAll" onclick="bukaMenu('Paket Akrab All')"><div class="icon-box"><i class="fas fa-users" style="font-size:24px;color:#14b8a6;"></i></div><span>Paket Akrab</span></div>
-      <div class="menu-item" onclick="bukaMenu('PBB')"><div class="icon-box"><i class="fas fa-landmark" style="font-size:26px;color:#e11d48;"></i></div><span>PBB</span></div>
-    </div>
-    <div id="menuDrawer">
-      <div class="cat-title">Menu Lainnya</div>
-      <div class="menu-grid">
-        <div class="menu-item" onclick="bukaMenu('Indosat')"><div class="icon-box"><img src="icons/Indosat.png" style="width:70%;height:70%;object-fit:contain;"></div><span>Indosat</span></div>
-        <div class="menu-item" onclick="bukaMenu('XL')"><div class="icon-box"><img src="icons/XL.png" style="width:70%;height:70%;object-fit:contain;"></div><span>XL</span></div>
-        <div class="menu-item" onclick="bukaMenu('Pulsa Transfer')"><div class="icon-box"><i class="fas fa-exchange-alt" style="font-size:24px;color:#ec4899;"></i></div><span>Pulsa TF</span></div>
-        <div class="menu-item" onclick="bukaMenu('Tagihan')"><div class="icon-box"><i class="fas fa-file-invoice-dollar" style="font-size:24px;color:#64748b;"></i></div><span>Tagihan</span></div>
-        <div class="menu-item" onclick="bukaMenu('Pascabayar')"><div class="icon-box"><i class="fas fa-tv" style="font-size:24px;color:#6366f1;"></i></div><span>TV & Halo</span></div>
-        <div class="menu-item" onclick="bukaMenu('Axis')"><div class="icon-box"><i class="fas fa-broadcast-tower" style="font-size:24px;color:#a855f7;"></i></div><span>Axis</span></div>
-        <div class="menu-item" onclick="bukaMenu('Tri')"><div class="icon-box"><img src="icons/Tri.png" style="width:70%;height:70%;object-fit:contain;"></div><span>Tri</span></div>
-        <div class="menu-item" onclick="bukaMenu('Smartfren')"><div class="icon-box"><img src="icons/Smartfren.png" style="width:70%;height:70%;object-fit:contain;"></div><span>Smartfren</span></div>
-      </div>
-    </div>
-    <div id="btnMoreContainer"><div id="btnMore" onclick="toggleMenuLainnya()"><i class="fas fa-chevron-down"></i> Menu Lainnya</div></div>
-  </div>
-
-  <!-- BANNER -->
-  <div id="appBanner" style="display:none;background:linear-gradient(135deg,#0f172a,#1e3a8a);border-radius:20px;padding:16px;margin:0 15px 20px;display:none;align-items:center;justify-content:space-between;box-shadow:0 10px 25px rgba(30,58,138,0.3);position:relative;z-index:2;overflow:hidden;">
-    <div style="display:flex;align-items:center;gap:14px;flex:1;">
-      <div style="width:48px;height:48px;background:rgba(255,255,255,0.1);border-radius:14px;display:flex;justify-content:center;align-items:center;flex-shrink:0;"><i class="fab fa-android" style="font-size:26px;color:#a4c639;"></i></div>
-      <div><div style="font-weight:900;font-size:14px;color:#fff;">Pandawa Digital App</div><div style="font-size:10.5px;color:#94a3b8;">Install untuk transaksi lebih cepat!</div></div>
-    </div>
-    <a href="Pandawa.apk" style="background:#fff;color:#1e3a8a;padding:10px 18px;border-radius:20px;font-size:12px;font-weight:800;text-decoration:none;white-space:nowrap;">INSTALL</a>
-  </div>
-  <script>document.addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('appBanner');if(b)b.style.display=typeof AndroidShare!=='undefined'?'none':'flex';});</script>
-
-  <!-- H2H DASHBOARD -->
-  <div id="h2hDashboard" style="display:none;padding:20px;padding-top:40px;animation:fadeIn .3s;">
-    <div style="background:var(--grad-main);padding:25px 20px;border-radius:20px;color:white;margin-bottom:20px;">
-      <div style="font-size:12px;opacity:.9;"><i class="fas fa-server"></i> Akun Merchant H2H</div>
-      <div id="h2hName" style="font-size:24px;font-weight:900;">Loading...</div>
-      <div style="display:flex;justify-content:space-between;border-top:1px dashed rgba(255,255,255,.3);padding-top:12px;margin-top:5px;">
-        <div><div style="font-size:10px;opacity:.8;">Saldo</div><div id="h2hSaldo" style="font-size:18px;font-weight:700;">Rp 0</div></div>
-        <div><div style="font-size:10px;opacity:.8;">Terdaftar</div><div id="h2hJoin" style="font-size:12px;font-weight:700;">-</div></div>
-      </div>
-    </div>
-    <div style="background:white;padding:18px;border-radius:16px;margin-bottom:20px;">
-      <div style="font-size:13px;font-weight:800;margin-bottom:12px;"><i class="fas fa-id-card" style="color:var(--primary);margin-right:5px;"></i> Detail Profil</div>
-      <div><div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:8px;border-bottom:1px dashed #eee;"><span style="color:#7f8c8d;">Email</span><strong id="h2hEmail">-</strong></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;padding-top:8px;"><span style="color:#7f8c8d;">WhatsApp</span><strong id="h2hPhone">-</strong></div></div>
-    </div>
-    <div style="background:white;padding:18px;border-radius:16px;margin-bottom:20px;">
-      <div style="font-size:13px;font-weight:800;margin-bottom:12px;"><i class="fas fa-key" style="color:#e67e22;margin-right:5px;"></i> API Key</div>
-      <div style="background:#f8fafc;border:1px solid #edf2f7;padding:12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
-        <code id="h2hApiKey" style="font-size:12px;color:#d35400;font-weight:700;word-break:break-all;">-</code>
-        <div onclick="navigator.clipboard.writeText(document.getElementById('h2hApiKey').innerText);alert('Disalin!')" style="background:#dbeafe;color:var(--primary);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;"><i class="fas fa-copy"></i></div>
-      </div>
-    </div>
-    <button onclick="handleLogout()" style="width:100%;padding:15px;background:#fee;color:var(--danger);border:1px solid #fcc;border-radius:12px;font-weight:800;font-size:13px;cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-  </div>
-
-  <!-- HISTORY -->
-  <div id="liveHistoryHeader" style="display:flex;align-items:center;padding:15px 20px 5px;">
-    <div style="font-weight:700;font-size:14px;color:#555;flex:1;">Riwayat Live</div>
-    <div id="btnModeMasal" onclick="toggleModeMasal()" style="font-size:10px;font-weight:700;background:#dbeafe;color:#1e3a8a;padding:6px 12px;border-radius:15px;cursor:pointer;margin-right:10px;transition:.2s;"><i class="fas fa-print"></i> Cetak Masal</div>
-    <div style="font-size:10px;color:var(--primary);font-weight:700;cursor:pointer;" onclick="bukaRiwayatArsip()">Lihat Semua <i class="fas fa-chevron-right"></i></div>
-  </div>
-  <div id="riwayat-container" class="history-container"><p style="text-align:center;font-size:11px;color:#999;padding:10px;">Memuat riwayat...</p></div>
-
-  <!-- SHOP -->
-  <div id="shop-container" class="product-list"></div>
-</div>
-
-<!-- ===== NOTICE MODAL ===== -->
-<div id="modalNotice" class="modal modal-center">
-  <div class="notice-content">
-    <div id="noticeIcon" class="notice-icon"></div>
-    <div id="noticeTitle" style="font-weight:700;font-size:18px;margin-bottom:10px;"></div>
-    <div id="noticeMsg" style="font-size:13px;color:#666;line-height:1.4;"></div>
-    <button class="btn-konfirmasi" id="btnNoticeClose" style="display:none;margin-top:20px;" onclick="tutupNotice()">OKE</button>
-  </div>
-</div>
-
-<!-- ===== TRANSFER MODAL ===== -->
-<div id="modalTransfer" class="modal modal-center" style="z-index:22000;">
-  <div class="notice-content" style="text-align:left;width:90%;max-width:350px;padding:20px;">
-    <h3 id="transferTitle" style="margin-bottom:15px;text-align:center;">Kirim Saldo</h3>
-    <div class="input-group"><label style="font-size:12px;font-weight:700;">Email / Username</label><input type="text" id="transferTarget" class="form-input" placeholder="Email / Username"></div>
-    <div class="input-group"><label style="font-size:12px;font-weight:700;">Nominal (Rp)</label><input type="number" id="transferNominal" class="form-input" placeholder="50000"></div>
-    <button class="btn-konfirmasi" onclick="prosesTransfer()">PROSES</button>
-    <button class="btn-batal" onclick="document.getElementById('modalTransfer').style.display='none'">BATAL</button>
-  </div>
-</div>
-
-<!-- ===== APP MODAL ===== -->
-<div id="modalApp" class="modal" style="z-index:11000;">
-  <div class="modal-content">
-    <div id="akrabUI" style="display:none;">
-      <div class="akrab-header"><i class="fas fa-arrow-left" onclick="tutupModal()" style="font-size:20px;cursor:pointer;"></i><span style="font-weight:800;font-size:16px;">PAKET AKRAB</span></div>
-      <div class="akrab-search-container"><input type="text" id="akrabSearch" class="akrab-search-input" placeholder="Cari produk..." oninput="window.filterAkrabSearch()"></div>
-    </div>
-    <div id="defaultModalHeader" style="display:flex;align-items:center;margin-bottom:15px;">
-      <i class="fas fa-arrow-left" id="btnKembali" onclick="kembaliKeFilter()"></i>
-      <h3 id="judulMenu" style="margin:0;font-size:18px;">Pilih Produk</h3>
-      <div style="flex:1"></div>
-      <i class="fas fa-times" onclick="tutupModal()" style="font-size:20px;color:#999;cursor:pointer;"></i>
-    </div>
-    <div id="inputContainer">
-      <div class="input-group">
-        <input type="tel" inputmode="numeric" id="nomorHP" class="form-input" placeholder="Masukkan Nomor HP / ID" style="padding-right:150px;height:45px;border-radius:14px;">
-        <i class="fas fa-address-card" style="top:13px;"></i>
-        <div id="operatorBadge"></div>
-        <button type="button" onclick="pasteDariClipboard('nomorHP')" style="position:absolute;right:8px;top:8px;background:var(--primary);color:white;border:none;border-radius:10px;padding:0 12px;height:29px;font-size:10px;font-weight:700;cursor:pointer;z-index:10;">PASTE</button>
-      </div>
-      <div id="areaBebasNominal" style="display:none;margin-top:10px;background:rgba(0,102,178,0.03);padding:15px;border-radius:16px;border:1px dashed rgba(0,102,178,0.2);">
-        <label style="font-size:12px;font-weight:800;color:var(--primary);margin-bottom:8px;display:block;">NOMINAL</label>
-        <div class="input-group"><input type="tel" id="inputQty" class="form-input" placeholder="Contoh: 25000" oninput="this.value=this.value.replace(/[^0-9]/g,'')"><i class="fas fa-coins"></i></div>
-      </div>
-    </div>
-    <div id="areaFilter"></div>
-    <div id="statusLoading" style="text-align:center;font-size:13px;color:#666;display:none;padding:40px;">Memproses...</div>
-    <div id="listProdukArea"></div>
-  </div>
-</div>
-
-<!-- ===== PRODUCT LIST MODAL ===== -->
-<div id="modalProdukList" class="modal" style="z-index:11500;">
-  <div class="modal-content" style="height:85vh;display:flex;flex-direction:column;padding:0;overflow:hidden;">
-    <div style="display:flex;align-items:center;padding:15px;border-bottom:1px solid var(--border);background:white;z-index:10;border-radius:15px 15px 0 0;">
-      <h3 id="judulKategoriModal" style="margin:0;font-size:16px;flex:1;font-weight:800;">Produk</h3>
-      <i class="fas fa-times" onclick="document.getElementById('modalProdukList').style.display='none'" style="font-size:20px;color:#999;cursor:pointer;padding:5px;"></i>
-    </div>
-    <div id="listProdukModalArea" style="flex:1;overflow-y:auto;padding:15px;background:#fdfdfd;"></div>
-  </div>
-</div>
-
-<!-- ===== ARCHIVE MODAL ===== -->
-<div id="modalArsip" class="modal">
-  <div class="modal-content" style="max-height:90vh;display:flex;flex-direction:column;">
-    <div style="display:flex;align-items:center;margin-bottom:15px;">
-      <h3 style="margin:0;font-size:18px;">Semua Riwayat</h3>
-      <div style="flex:1"></div>
-      <i class="fas fa-sync-alt" onclick="refreshRiwayatArsip()" style="font-size:16px;color:var(--primary);cursor:pointer;margin-right:20px;background:#dbeafe;padding:8px;border-radius:50%;"></i>
-      <i class="fas fa-times" onclick="tutupRiwayatArsip()" style="font-size:20px;color:#999;cursor:pointer;"></i>
-    </div>
-    <div style="background:#f8fafc;padding:15px;border-radius:16px;margin-bottom:10px;border:1px solid var(--border);">
-      <div style="position:relative;margin-bottom:12px;">
-        <input type="text" id="searchRiwayat" placeholder="Cari..." style="width:100%;padding:12px 12px 12px 40px;border:1px solid #cbd5e1;border-radius:12px;font-size:13px;outline:none;box-sizing:border-box;">
-        <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;"></i>
-      </div>
-      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:10px;margin-bottom:12px;">
-        <div><label style="font-size:10px;font-weight:700;color:#64748b;display:block;text-transform:uppercase;margin-bottom:5px;">Tanggal</label>
-          <input type="date" id="filterTgl" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;font-size:12px;outline:none;box-sizing:border-box;"></div>
-        <div><label style="font-size:10px;font-weight:700;color:#64748b;display:block;text-transform:uppercase;margin-bottom:5px;">Status</label>
-          <select id="filterStatus" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;font-size:12px;outline:none;">
-            <option value="SEMUA">Semua</option><option value="BERHASIL">Berhasil</option><option value="GAGAL">Gagal</option><option value="PENDING">Pending</option>
-          </select></div>
-      </div>
-      <button onclick="terapkanFilterRiwayat()" style="width:100%;background:var(--grad-main);color:white;border:none;padding:12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;"><i class="fas fa-filter"></i> Terapkan Filter</button>
-    </div>
-    <div id="listArsipArea" style="flex:1;overflow-y:auto;padding:5px;"></div>
-    <div id="paginationRiwayat" class="pagination-container"></div>
-  </div>
-</div>
-
-<!-- ===== DETAIL RIWAYAT ===== -->
-<div id="modalDetailRiwayat" class="modal">
-  <div class="modal-content" style="max-height:85vh;overflow-y:auto;border-radius:25px 25px 0 0;padding:20px 25px;">
-    <div id="detailRiwayatContent"></div>
-  </div>
-</div>
-
-<!-- ===== INVOICE MODAL ===== -->
-<div id="modalInvoice" class="modal" style="z-index:12000;">
-  <div class="modal-content modal-invoice">
-    <h3 style="margin-bottom:20px;text-align:center;">Konfirmasi Pembayaran</h3>
-    <div id="statusCekNama" style="display:none;text-align:center;font-size:12px;color:var(--primary);margin:-10px 0 15px;"><i class="fas fa-circle-notch fa-spin"></i> Mengecek...</div>
-    <div id="invoiceContent"></div>
-    <div id="invoiceFooter">
-      <button id="btnKonfirmasiBayar" class="btn-konfirmasi" onclick="this.disabled=true;this.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Memproses...';window.prosesBayarFinal();">KONFIRMASI BAYAR</button>
-      <button class="btn-batal" onclick="tutupInvoice()">BATAL</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== TOPUP MODAL ===== -->
-<div id="modalTopup" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;min-height:400px;">
-    <div style="display:flex;align-items:center;margin-bottom:15px;">
-      <i class="fas fa-arrow-left" id="btnBackTopup" onclick="backTopupStep()" style="font-size:18px;color:#333;cursor:pointer;margin-right:15px;display:none;"></i>
-      <h3 id="titleTopup" style="margin:0;font-size:18px;">Isi Saldo</h3>
-      <div style="flex:1"></div>
-      <i class="fas fa-times" onclick="tutupModalTopup()" style="font-size:20px;color:#999;cursor:pointer;"></i>
-    </div>
-    <div id="areaTopupSteps" style="padding-bottom:20px;"><div style="text-align:center;padding:40px;color:#999;"><i class="fas fa-circle-notch fa-spin"></i> Memuat Metode...</div></div>
-  </div>
-</div>
-
-<!-- ===== OTHER MODALS ===== -->
-<div id="tagihanModal" class="modal"><div class="modal-content"><h3>Tagihan</h3></div></div>
-<div id="modalMyQR" class="modal modal-center" style="z-index:24000;">
-  <div class="notice-content" style="text-align:center;">
-    <h3 style="margin-bottom:10px;color:var(--primary);">QR Akun Saya</h3>
-    <p style="font-size:12px;color:#666;margin-bottom:15px;">Tunjukkan QR ini untuk menerima saldo</p>
-    <img id="myQrImage" src="" style="width:200px;height:200px;border-radius:10px;margin:0 auto;display:block;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-    <div id="myQrInfo" style="margin-top:15px;font-weight:700;font-size:14px;color:#333;"></div>
-    <button class="btn-konfirmasi" style="margin-top:20px;" onclick="document.getElementById('modalMyQR').style.display='none'">TUTUP</button>
-  </div>
-</div>
-
-<div id="modalQRScanner" style="display:none;position:fixed;inset:0;background:black;z-index:99999;flex-direction:column;">
-  <div style="padding:15px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.5);color:white;position:absolute;top:0;width:100%;z-index:2;box-sizing:border-box;">
-    <div style="font-weight:700;font-size:16px;">Scan QR</div>
-    <i class="fas fa-times" onclick="closeQRScanner()" style="font-size:24px;cursor:pointer;"></i>
-  </div>
-  <div id="qr-reader" style="width:100%;height:100vh;display:flex;align-items:center;justify-content:center;"></div>
-</div>
-
-<div id="qrisFullscreen" class="qris-overlay">
-  <div class="qris-close" onclick="document.getElementById('qrisFullscreen').style.display='none'"><i class="fas fa-times"></i></div>
-  <img id="qrisImageFull" src="icons/qris.jpg">
-</div>
-
-<!-- ===== FAB CETAK MASAL ===== -->
-<div id="fabCetakMasal" style="display:none;position:fixed;bottom:120px;left:50%;transform:translateX(-50%);width:90%;z-index:9999;">
-  <div style="display:flex;gap:10px;">
-    <button onclick="window.isShareMode=false;prosesPrintMasal()" class="btn-konfirmasi" style="flex:1;padding:12px;font-size:14px;box-shadow:0 5px 15px rgba(0,0,0,0.2);border:2px solid white;"><i class="fas fa-print"></i> Print (<span id="countMasal">0</span>)</button>
-    <button onclick="prosesShareMasal()" class="btn-konfirmasi" style="flex:1;padding:12px;font-size:14px;background:linear-gradient(135deg,#25D366,#128C7E);border:2px solid white;"><i class="fab fa-whatsapp"></i> Share (<span id="countMasalShare">0</span>)</button>
-  </div>
-</div>
-
-<!-- ===== PRINT MODAL ===== -->
-<div id="modalPrintPreview" class="modal" style="z-index:25000;">
-  <div class="modal-content">
-    <h3 style="margin-bottom:15px;">Cetak Struk</h3>
-    <div class="input-group" style="margin-bottom:15px;border-top:1px dashed var(--border);padding-top:10px;">
-      <label style="font-size:12px;font-weight:700;color:var(--primary);">Markup (Rp)</label>
-      <input type="number" id="inputLiveMarkup" class="form-input" placeholder="0" oninput="updateLivePreview(this.value)" style="font-weight:700;color:var(--primary);">
-    </div>
-    <div style="background:#f8f9fa;border:1px solid var(--border);padding:15px;font-family:'Courier New',monospace;font-size:12px;margin-bottom:15px;max-height:300px;overflow-y:auto;">
-      <div id="printPreviewArea">Preview...</div>
-    </div>
-    <button id="btnPrintNow" class="btn-konfirmasi" onclick="printStruk()" style="background:var(--success);">PRINT SEKARANG</button>
-    <button id="btnShareWA" class="btn-konfirmasi" style="display:none;background:linear-gradient(135deg,#25D366,#128C7E);margin-top:10px;" onclick="shareStrukToWA()">Kirim ke WA</button>
-    <button class="btn-batal" onclick="document.getElementById('modalPrintPreview').style.display='none'" style="margin-top:10px;">Tutup</button>
-  </div>
-</div>
-
-<!-- ===== BOTTOM NAV ===== -->
-<div class="bottom-nav">
-  <div class="nav-item active" onclick="navSwitch('home', this)"><i class="fas fa-store"></i>Etalase</div>
-  <div class="nav-item" onclick="bukaMenu('Paket Akrab All')"><i class="fas fa-shopping-bag"></i>Belanja</div>
-  <div class="nav-item" onclick="openQRScanner()"><div class="nav-fab"><i class="fas fa-qrcode"></i></div></div>
-  <div class="nav-item" onclick="bukaRiwayatArsip()"><i class="fas fa-history"></i>Riwayat</div>
-  <div class="nav-item" onclick="navSwitch('profil', this)"><i class="fas fa-user"></i>Profil</div>
-</div>
-
-<!-- ===== PRINT/PRINTER SCRIPT ===== -->
-<script>
-let printerSettings = { storeName:'Nama Toko', address:'Alamat Toko', footer:'Terima Kasih', paperSize:'58', markup:0 };
-let bluetoothDevice, printCharacteristic, currentReceiptData = '';
-window.activePrintData = null;
-window.activePrintType = '';
-window.isShareMode = false;
-
-document.addEventListener('DOMContentLoaded',()=>{ const s=localStorage.getItem('printerSettings_v1'); if(s) printerSettings=JSON.parse(s); });
-
-window.updateLivePreview = function(val) {
-    printerSettings.markup = parseInt(val)||0;
-    localStorage.setItem('printerSettings_v1', JSON.stringify(printerSettings));
-    if (window.activePrintType==='single'&&window.activePrintData) window.renderSinglePreview(window.activePrintData);
-    else if (window.activePrintType==='mass'&&window.activePrintData) generateStrukMasal(window.activePrintData);
-};
-
-window.siapkanPrint = function(str) {
-    const data = JSON.parse(decodeURIComponent(str));
-    window.activePrintData = data;
-    window.activePrintType = 'single';
-    document.getElementById('inputLiveMarkup').value = printerSettings.markup;
-    window.renderSinglePreview(data);
-    document.getElementById('modalPrintPreview').style.display = 'flex';
-    window.updatePrintButtonState();
-};
-
-window.renderSinglePreview = function(data) {
-    const markup = parseInt(printerSettings.markup)||0;
-    const fp = Math.ceil((parseInt(data.harga)+markup)/500)*500;
-    const d = new Date();
-    const ds = d.toLocaleDateString('id-ID');
-    const ts = d.toLocaleTimeString('id-ID').slice(0,5);
-    const w = printerSettings.paperSize==='58'?32:48;
-    const line = '-'.repeat(w);
-    const center = txt=>{ if(!txt) return ''; let o=''; for(const l of txt.split('\n')){ let r=l; while(r.length>0){ const c=r.slice(0,w); r=r.slice(w); o+=' '.repeat(Math.max(0,Math.floor((w-c.length)/2)))+c+'\n'; } } return o.replace(/\n$/,''); };
-    const lr = (l,r)=>{ l=String(l); r=String(r); let o=''; let rm=l; const ml=w-r.length-1; while(rm.length>0){ if(rm.length<=ml){ o+=rm+' '.repeat(w-rm.length-r.length)+r; rm=''; } else { o+=rm.slice(0,ml)+'\n'; rm=rm.slice(ml); } } return o; };
-    let rec = '';
-    rec += center(printerSettings.storeName.toUpperCase())+'\n';
-    if (printerSettings.address) rec += center(printerSettings.address)+'\n';
-    rec += line+'\n'+ds+' '+ts+'\nNo. Trx: '+(data.trx_id||'-')+'\n'+line+'\n';
-    rec += lr(data.produk||'Produk','Rp '+new Intl.NumberFormat('id-ID').format(fp))+'\n';
-    rec += 'Tujuan: '+(data.tujuan||'-')+'\n';
-    if (data.sn&&data.sn!=='-') {
-        let csn = data.sn.replace(/SN:|Ref:|Sukses|Berhasil/gi,'').trim();
-        rec += 'SN/Ref:\n'+center(csn)+'\n';
-    }
-    rec += line+'\n'+lr('TOTAL','Rp '+new Intl.NumberFormat('id-ID').format(fp))+'\n'+line+'\n';
-    if (printerSettings.footer) rec += center(printerSettings.footer)+'\n';
-    rec += '\n\n\n';
-    currentReceiptData = rec;
-    document.getElementById('printPreviewArea').innerText = rec;
-};
-
-window.updatePrintButtonState = function() {
-    const btn = document.getElementById('btnPrintNow');
-    const share = document.getElementById('btnShareWA');
-    if (window.isShareMode) {
-        btn.style.display='none';
-        share.style.display='block';
-    } else {
-        btn.style.display='block';
-        btn.innerText="PRINT (Via RawBT)";
-        share.style.display='none';
-    }
-};
-
-window.printStruk = function() {
-    const btn = document.getElementById('btnPrintNow');
-    btn.innerText = "Membuka RawBT..."; btn.disabled = true;
-    try {
-        const text = '\x1B\x45\x01'+currentReceiptData+'\x1B\x40';
-        const b64 = btoa(text);
-        const a = document.createElement('a');
-        a.href = 'rawbt:base64,'+b64;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        setTimeout(()=>{ document.getElementById('modalPrintPreview').style.display='none'; btn.innerText="PRINT SEKARANG"; btn.disabled=false; }, 1000);
-    } catch(e) { alert("Gagal: "+e.message); btn.innerText="PRINT SEKARANG"; btn.disabled=false; }
-};
-
-window.shareStrukToWA = async function() {
-    const btn = document.getElementById('btnShareWA');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memproses...'; btn.disabled = true;
-    try {
-        const el = document.getElementById('printPreviewArea');
-        const canvas = await html2canvas(el, { scale:2, backgroundColor:"#ffffff", logging:false });
-        if (window.AndroidShare) { window.AndroidShare.shareBase64(canvas.toDataURL("image/jpeg",0.9)); btn.innerHTML=orig; btn.disabled=false; return; }
-        canvas.toBlob(async (blob) => {
-            const file = new File([blob], 'Struk_'+Date.now()+'.jpg', {type:"image/jpeg"});
-            if (navigator.canShare && navigator.canShare({files:[file]})) { try { await navigator.share({files:[file], title:'Struk'}); } catch(e) { if (e.name!=='AbortError') alert(e.message); } }
-            else { const a=document.createElement('a'); a.download=file.name; a.href=canvas.toDataURL("image/jpeg"); a.click(); }
-            btn.innerHTML=orig; btn.disabled=false;
-        },'image/jpeg',0.9);
-    } catch(e) { alert("Gagal: "+e.message); btn.innerHTML=orig; btn.disabled=false; }
-};
-
-// ===== CACHE WARMER =====
-(function() {
-    ['icons/Pulsa.png','icons/E-Wallet.png','icons/Games.png','icons/Token%20PLN.png','icons/Telkomsel.png','icons/Indosat.png','icons/By.U.png'].forEach(s=>{const i=new Image(); i.src=s;});
-})();
-
-// ===== TEXT MASKING =====
-document.addEventListener("DOMContentLoaded",()=>{
-    const mask = t=>t.replace(/(ICS|KF|REF)-/g,'***-');
-    const walk = n=>{ if(n.nodeType===3){ if(/(ICS|KF|REF)-/.test(n.nodeValue)) n.nodeValue=mask(n.nodeValue); } else if(n.nodeType===1&&!['SCRIPT','STYLE','INPUT','TEXTAREA'].includes(n.nodeName)) n.childNodes.forEach(walk); };
-    walk(document.body);
-    new MutationObserver(muts=>{ muts.forEach(m=>{ if(m.type==='childList') m.addedNodes.forEach(n=>{ if(n.nodeType===1||n.nodeType===3) walk(n); }); else if(m.type==='characterData'&&/(ICS|KF|REF)-/.test(m.target.nodeValue)) m.target.nodeValue=mask(m.target.nodeValue); }); }).observe(document.body,{childList:true,subtree:true,characterData:true});
-});
-
-// ===== BACK BUTTON =====
-window.addEventListener('load',()=>{
-    history.pushState(null,null,location.href);
-    window.onpopstate=function(){
-        let closed=false;
-        document.querySelectorAll('.modal').forEach(m=>{ if(getComputedStyle(m).display!=='none'){ m.style.display='none'; closed=true; } });
-        const q=document.getElementById('qrisFullscreen');
-        if(q&&getComputedStyle(q).display!=='none'){ q.style.display='none'; closed=true; }
-        if(!closed){
-            let onOtherPage=false;
-            document.querySelectorAll('.full-page').forEach(p=>{ if(getComputedStyle(p).display!=='none') onOtherPage=true; });
-            if(onOtherPage&&window.navSwitch){ window.navSwitch('home',document.querySelectorAll('.nav-item')[0]); history.pushState(null,null,location.href); }
-            else history.back();
-        } else history.pushState(null,null,location.href);
+    
+    window.keHalamanRiwayat = (num) => {
+        currentRiwayatPage = num;
+        renderRiwayatPage();
+        document.getElementById('listArsipArea').scrollTop = 0;
     };
-});
-
-// ===== SERVICE WORKER KILLER =====
-if ('serviceWorker'in navigator) navigator.serviceWorker.getRegistrations().then(r=>r.forEach(r=>r.unregister()));
-if ('caches'in window) caches.keys().then(n=>n.forEach(name=>caches.delete(name)));
-
-console.log("Pandawa-Digital v2.0 — Ready.");
-</script>
-
-<!-- ===== PROFILE PAGE ===== -->
-<div id="pageProfil" class="full-page">
-  <div class="prof-header">
-    <div style="width:70px;height:70px;background:rgba(255,255,255,0.2);border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:30px;"><i class="fas fa-user"></i></div>
-    <div id="profNameDisplay" style="font-weight:700;font-size:18px;">Loading...</div>
-    <div id="profEmailDisplay" style="font-size:12px;opacity:0.8;">...</div>
-  </div>
-  <div class="prof-card">
-    <div class="prof-row"><span>Username</span><b id="pUser">-</b></div>
-    <div class="prof-row"><span>WhatsApp</span><b id="pWA">-</b></div>
-    <div class="prof-row"><span>Saldo</span><b id="pSaldo" style="color:var(--primary)">-</b></div>
-    <div class="prof-row"><span>Terdaftar</span><b id="pJoin">-</b></div>
-  </div>
-  <div style="padding:20px;">
-    <button class="btn-konfirmasi" onclick="bukaPengaturanPrinter()" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);margin-bottom:10px;"><i class="fas fa-print"></i> Pengaturan Printer</button>
-    <button class="btn-konfirmasi" onclick="navSwitch('pesanan_fisik')" style="background:linear-gradient(135deg,#3498db,#2980b9);margin-bottom:10px;"><i class="fas fa-box"></i> Pesanan Saya</button>
-    <button class="btn-batal" onclick="handleLogout()" style="color:var(--danger);background:#fee;"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-  </div>
-</div>
-
-<div id="pagePesananFisik" class="full-page">
-  <div class="header" style="padding-bottom:20px;margin-bottom:20px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-weight:700;font-size:20px;color:white;">Pesanan Saya</div>
-      <i class="fas fa-times" onclick="navSwitch('profil')" style="color:white;font-size:20px;cursor:pointer;"></i>
-    </div>
-  </div>
-  <div id="listPesananFisik" style="padding:0 20px;"></div>
-</div>
-
-<div id="modalPrinterSettings" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <h3 style="margin-bottom:10px;border-bottom:1px dashed var(--border);padding-bottom:10px;">Pengaturan Printer</h3>
-    <div class="input-group"><label style="font-size:11px;font-weight:700;">Nama Toko</label><textarea id="setStoreName" class="form-input" rows="2" placeholder="Konter Pulsa" oninput="updateSettingsPreview()"></textarea></div>
-    <div class="input-group"><label style="font-size:11px;font-weight:700;">Alamat</label><textarea id="setStoreAddress" class="form-input" rows="2" placeholder="Jl. Mawar No. 1" oninput="updateSettingsPreview()"></textarea></div>
-    <div class="input-group"><label style="font-size:11px;font-weight:700;">Footer</label><textarea id="setStoreFooter" class="form-input" rows="2" placeholder="Terima Kasih" oninput="updateSettingsPreview()"></textarea></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div class="input-group"><label style="font-size:11px;font-weight:700;">Ukuran</label><select id="setPaperSize" class="form-input" onchange="updateSettingsPreview()"><option value="58">58mm</option><option value="80">80mm</option></select></div>
-      <div class="input-group"><label style="font-size:11px;font-weight:700;">Markup</label><input type="number" id="setGlobalMarkup" class="form-input" placeholder="0" oninput="updateSettingsPreview()"></div>
-    </div>
-    <button class="btn-konfirmasi" onclick="simpanPengaturanPrinter()">SIMPAN</button>
-    <button class="btn-batal" onclick="document.getElementById('modalPrinterSettings').style.display='none'">BATAL</button>
-  </div>
-</div>
-
-<script>
-</html>
-
-//=== ORIGINAL BLOCK 4110-4210 ===
+    
+    window.simpanKeFirestore = async function(trx, status, pesan, trxId, uid, username, rawJson) {
+        try { 
+            const statClean = (status || "").toString().trim().toUpperCase();
+            const docData = {  
+                uid: uid || "", username: username || "-", tujuan: trx.tujuan, produk: trx.nama_produk, 
+                kode_produk: trx.kode_produk, harga: trx.harga, status: status, sn: pesan, 
+                trx_id: trxId || "", raw_json: rawJson || "-", timestamp: serverTimestamp() 
+            };
+            if (statClean === "PENDING") docData.status_awal = "PENDING";
+            if (statClean === "GAGAL") docData.isRefunded = true;
+            
+            const docRef = await addDoc(collection(db, "users", uid, "riwayat_transaksi"), docData); 
+            
+            // LOGIKA AUTO-ARSIP (Hot & Cold Storage)
+            const qCek = query(collection(db, "users", uid, "riwayat_transaksi"), orderBy("timestamp", "desc"));
+            const snap = await getDocs(qCek);
+            if (snap.size > 20) {
+                let toArchive = [];
+                let toDelete = [];
+                let count = 0;
+                snap.forEach(d => {
+                    count++;
+                    if(count > 20) {
+                        let data = d.data();
+                        data.idDoc = d.id;
+                        data.timestamp_str = data.timestamp ? data.timestamp.toDate().toISOString() : new Date().toISOString();
+                        delete data.timestamp;
+                        toArchive.push(data);
+                        toDelete.push(d.ref);
+                    }
+                });
+                
+                if (toArchive.length > 0) {
+                    fetch('api_riwayat.php?action=arsip_masal', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ uid: uid, data: toArchive })
+                    }).then(res => res.json()).then(resData => {
+                        if(resData.status === 'success') {
+                            toDelete.forEach(ref => deleteDoc(ref));
+                        }
+                    }).catch(e => console.error("Arsip Error:", e));
+                }                }
+            return docRef.id;
+        } catch (e) { console.error("Firestore Error:", e); return ""; }  
+    };
+    
+            
+    
+    // --- SYSTEM DONIGUARD HYBRID ---
+    
+            window.prosesKajeInternal = async (target, nominal, senderName, senderUid, idDoc) => {
+        if(!idDoc || !target) return;
+        try {
+            const trxRef = window.doc(window.db, "users", senderUid, "riwayat_transaksi", idDoc);
+            const trxSnap = await window.getDoc(trxRef);
+            if (trxSnap.exists() && trxSnap.data().kaje_credited === true) return;
+    
+            let q = window.query(window.collection(window.db, 'users'), window.where('username', '==', target));
+            let snap = await window.getDocs(q);
+            if(snap.empty) {
+                q = window.query(window.collection(window.db, 'users'), window.where('email', '==', target));
+                snap = await window.getDocs(q);
+            }
+    
+            if(!snap.empty) {
+                const tUid = snap.docs[0].id;
+                if (tUid === senderUid) return;
+                const tData = snap.docs[0].data();
+                const tRef = window.doc(window.db, 'users', tUid);
+                const tNewSaldo = (tData.saldo || 0) + parseInt(nominal);
+    
+                await window.updateDoc(tRef, { saldo: tNewSaldo });
+                await window.addDoc(window.collection(window.db, 'users', tUid, 'riwayat_transaksi'), {
+                    uid: tUid, username: tData.username || 'User', tujuan: senderName,
+                    produk: 'Terima Saldo (KAJE)', kode_produk: 'TRANSFER', harga: parseInt(nominal),
+                    status: 'BERHASIL', sn: 'Terima dari ' + senderName,
+                    trx_id: 'KJIN' + Date.now(), timestamp: window.serverTimestamp()
+                });
+                
+                await window.updateDoc(trxRef, { kaje_credited: true });
+                if (window.triggerDoniGuard) {
+                    window.triggerDoniGuard({
+                        uid: tUid, email: tData.email, action: 'topup', 
+                        produk: 'Terima Saldo KAJE dari ' + senderName,
+                        nominal: parseInt(nominal), trx_id: 'KJIN' + Date.now(), saldo_akhir_client: tNewSaldo
+                    });
+                }
+            }
+        } catch(e) { console.error("KAJE credit error:", e); }
+    };
+    /*
+        if(!idDoc || !target) return;
+        try {
+            const trxRef = window.doc(window.db, "users", senderUid, "riwayat_transaksi", idDoc);
+            const trxSnap = await window.getDoc(trxRef);
+            if (trxSnap.exists() && trxSnap.data().kaje_credited === true) return;
+    
+            let q = window.query(window.collection(window.db, 'users'), window.where('username', '==', target));
+            let snap = await window.getDocs(q);
+            if(snap.empty) {
+                q = window.query(window.collection(window.db, 'users'), window.where('email', '==', target));
+                snap = await window.getDocs(q);
+            }
+    
+            if(!snap.empty) {
+                const tUid = snap.docs[0].id;
+                if (tUid === senderUid) return;
+                const tData = snap.docs[0].data();
+                const tRef = window.doc(window.db, 'users', tUid);
+                const tNewSaldo = (tData.saldo || 0) + parseInt(nominal);
+    
+                await window.updateDoc(tRef, { saldo: tNewSaldo });
+                await window.addDoc(window.collection(window.db, 'users', tUid, 'riwayat_transaksi'), {
+                    uid: tUid, username: tData.username || 'User', tujuan: senderName,
+                    produk: 'Terima Saldo (KAJE)', kode_produk: 'TRANSFER', harga: parseInt(nominal),
+                    status: 'BERHASIL', sn: 'Terima dari ' + senderName,
+                    trx_id: 'KJIN' + Date.now(), timestamp: window.serverTimestamp()
+                });
+                
+                if(window.updateFirestoreStatus) {
+                    window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+                }
+                if(statusAkhir === 'GAGAL') {
+                    window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                } else {
+                    window.showNotice('success', 'Transaksi Sukses', sn);
+                }
+                return;
+                }
+                if(statusAkhir === 'GAGAL') {
+                    window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                } else {
+                    window.showNotice('success', 'Transaksi Sukses', sn);
+                }
+                return;
+                }
+            }
+        } catch(e) { console.error("KAJE credit error:", e); }
+    };
+    
+    
+    */
     window.triggerDoniGuard = async (data) => {
         try {
             const user = window.auth.currentUser;
@@ -2753,8 +4145,105 @@ console.log("Pandawa-Digital v2.0 — Ready.");
         try { 
             const trxRef = doc(db, "users", user.uid, "riwayat_transaksi", idDoc);
             const trxSnap = await getDoc(trxRef);
-
-//=== ORIGINAL BLOCK 4310-4455 ===
+            if (trxSnap.exists()) {
+                const data = trxSnap.data();
+                const sOld = (data.status || "").toString().trim().toUpperCase();
+                const sNew = (newStatus || "").toString().trim().toUpperCase();
+                
+                // FIX DONIGUARD: Strict Check + Anti-Double Refund
+                // Refund hanya diproses jika status (lama PENDING atau forceRefund) & status baru GAGAL dan belum pernah direfund
+                if ((sOld === "PENDING" || forceRefund) && (sNew === "GAGAL" || sNew === "EXPIRED" || sNew === "CANCELED") && data.isRefunded !== true) {
+                    const hrg = parseInt(data.harga) || 0;
+                    if (hrg > 0 && data.kode_produk !== "TOPUP") {
+                        const uRef = doc(db, "users", user.uid);
+                        const uSnap = await getDoc(uRef);
+                        if (uSnap.exists()) {
+                            let sld = (uSnap.data().saldo || 0) + hrg;
+                            if(window.runTransaction) {
+                                let successTx = false;
+                                await window.runTransaction(db, async (t) => {
+                                    const txDoc = await t.get(trxRef);
+                                    if(txDoc.data().isRefunded) throw new Error("Double Refund Prevented");
+                                    const txU = await t.get(uRef);
+                                    const curS = txU.exists() ? (txU.data().saldo || 0) : 0;
+                                    t.update(trxRef, { isRefunded: true, refund_guard_id: ((data.trx_id || idDoc) + '-REF'), refund_at: window.serverTimestamp() });
+                                    t.update(uRef, { saldo: curS + hrg });
+                                    sld = curS + hrg;
+                                }).then(() => successTx = true).catch(e => successTx = false);
+                                if(!successTx) return;
+                            } else {
+                            const refundGuardId = ((data.trx_id || idDoc) + '-REF');
+    
+                            // Tandai transaksi sebagai sudah direfund sebelum/bersamaan dengan laporan guard.
+                            await updateDoc(trxRef, {
+                                isRefunded: true,
+                                refund_guard_id: refundGuardId,
+                                refund_at: window.serverTimestamp ? window.serverTimestamp() : new Date()
+                            });
+    
+                            await updateDoc(uRef, { saldo: sld });
+                            }
+    
+                            // Kirim ID refund yang konsisten agar DoniGuard tidak mencatat refund ganda.
+                            if (window.triggerDoniGuard) {
+                                window.triggerDoniGuard({ 
+                                    action: 'topup', 
+                                    trx_id: refundGuardId, 
+                                    produk: 'REFUND: ' + (data.produk || 'Trx'), 
+                                    nominal: hrg, 
+                                    saldo_akhir_client: sld 
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+                            await updateDoc(trxRef, { status: newStatus, sn: newSN, raw_json: rawJson || '-' }); 
+            
+                            // LOGIKA AUTO INQUIRY (Tagihan Muncul saat Cek Sukses)
+            if (trxSnap.exists()) {
+                const d = trxSnap.data();
+                const sNewNotif = (newStatus || "").toUpperCase();
+                const sOldNotif = (d.status || "").toUpperCase();
+                if ((sNewNotif === 'BERHASIL' || sNewNotif === 'SUKSES') && sOldNotif !== 'BERHASIL' && sOldNotif !== 'SUKSES') {
+                    // --- LOGIKA KAJE: KREDIT PENERIMA ---
+                    if (d.provider === 'KAJE' || (d.kode_produk && d.kode_produk.startsWith('KAJE'))) {
+                        window.prosesKajeInternal(d.tujuan, d.harga, d.username || 'User', user.uid, idDoc);
+                    }
+    
+                    if (d.kode_produk === "TOPUP" || (d.produk && (d.produk.toUpperCase().includes("TOPUP") || d.produk.toUpperCase().includes("DEPOSIT") || d.produk.toUpperCase().includes("SALDO")))) {
+                        if(window.kirimNotifTelegram) window.kirimNotifTelegram('topup', { harga: d.harga || 0, username: d.username || 'Pengguna', trx_id: d.trx_id || idDoc });
+                    } else {
+                        if(window.kirimNotifTelegram) window.kirimNotifTelegram('transaksi', { produk: d.produk || '-', tujuan: d.tujuan || '-', harga: d.harga || 0, username: d.username || 'Pengguna', trx_id: d.trx_id || idDoc });
+                    }
+                }
+                // MODIFIKASI: Deteksi semua jenis Cek (PLN, BPJS, Multifinance, PDAM, dll)
+                // Mengecek kode berawalan: C (CPLA, CPAM), INQ (INQ...), atau CEK
+                if ((newStatus === 'BERHASIL' || newStatus === 'Sukses') && 
+                    d.kode_produk && 
+                    (d.kode_produk.startsWith('C') || d.kode_produk.startsWith('INQ') || d.kode_produk.startsWith('CEK'))) {
+                    
+                    console.log("Auto Inquiry Triggered for: " + d.kode_produk);
+                    setTimeout(() => window.tampilkanModalTagihan(newSN, d.kode_produk, d.tujuan), 1000);
+                }
+            } 
+        } catch (e) {}
+    }
+    
+    
+    // --- FITUR KIRIM & MINTA SALDO ---
+    window.transferType = 'kirim';
+    window.bukaModalTransfer = (tipe) => {
+        window.transferType = tipe;
+        document.getElementById('transferTitle').innerText = tipe === 'kirim' ? 'Kirim Saldo' : 'Minta Saldo';
+        let targetInput = document.getElementById('transferTarget');
+        targetInput.value = '';
+        targetInput.readOnly = false;
+        targetInput.style.backgroundColor = "";
+        document.getElementById('transferNominal').value = '';
+        document.getElementById('modalTransfer').style.display = 'flex';
+    };
+    
     window.prosesTransfer = async () => {
         const user = window.auth.currentUser;
         if(!user) return alert('Silakan login!');
@@ -2901,831 +4390,803 @@ console.log("Pandawa-Digital v2.0 — Ready.");
         if(!reqData) return;
         const user = window.auth.currentUser;
         if(!user) return;
-
-//=== ORIGINAL BLOCK 5383-5498 ===
-            window.cekSinkronisasiDoniGuard = async function(uid, currentSaldo) {
+        
+        document.getElementById('modalRequestSaldo').style.display = 'none';
+        window.showNotice('loading', 'Memproses', 'Mentransfer saldo...');
+        
         try {
-    const auditReq = await fetch('doniguard.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uid: uid, action: 'check', produk: 'AUDIT_PRA_TRX', nominal: 0, saldo_akhir_client: currentSaldo })
-    });
-    const auditRes = await auditReq.json();
-    if (auditRes.status === 'success' && auditRes.audit && auditRes.audit.force_sync === true) {
-        await window.updateDoc(window.doc(window.db, "users", uid), { saldo: parseInt(auditRes.audit.correct_balance) });
-        window.showNotice('error', 'Sinkronisasi', 'sedang memproses transaksi harap tunggu');
-        setTimeout(() => window.location.reload(true), 2000);
-        return false;
-    }
-    return true;
+            const myRef = window.doc(window.db, 'users', user.uid);
+            const mySnap = await window.getDoc(myRef);
+            const mySaldo = mySnap.data().saldo || 0;
+            const myName = mySnap.data().username || mySnap.data().nama || 'User';
+    
+            if(mySaldo < reqData.nominal) throw new Error('Saldo Anda tidak mencukupi untuk memenuhi permintaan ini!');
+    if (!(await window.cekSinkronisasiDoniGuard(user.uid, mySaldo))) throw new Error('sedang memproses transaksi harap tunggu');
+    
+            const myNewSaldo = mySaldo - reqData.nominal;
+            await window.updateDoc(myRef, { saldo: myNewSaldo });
+            await window.addDoc(window.collection(window.db, 'users', user.uid, 'riwayat_transaksi'), { uid: user.uid, username: myName, tujuan: reqData.dari_nama, produk: 'Kirim Saldo', kode_produk: 'TRANSFER', harga: reqData.nominal, status: 'BERHASIL', sn: 'Memenuhi permintaan ' + reqData.dari_nama, trx_id: 'REQOUT' + Date.now(), timestamp: window.serverTimestamp() });
+            if(window.triggerDoniGuard) {
+                window.triggerDoniGuard({
+                    action: 'transfer_out',
+                    produk: 'Memenuhi Permintaan Saldo ' + reqData.dari_nama,
+                    nominal: reqData.nominal,
+                    trx_id: 'REQOUT' + Date.now(),
+                    saldo_akhir_client: myNewSaldo
+                });
+            }
+    
+            const pemintaRef = window.doc(window.db, 'users', reqData.dari_uid);
+            const pemintaSnap = await window.getDoc(pemintaRef);
+            const pemintaNewSaldo = (pemintaSnap.data().saldo || 0) + reqData.nominal;
+            await window.updateDoc(pemintaRef, { saldo: pemintaNewSaldo });
+            await window.addDoc(window.collection(window.db, 'users', reqData.dari_uid, 'riwayat_transaksi'), { uid: reqData.dari_uid, username: pemintaSnap.data().username || 'User', tujuan: myName, produk: 'Terima Saldo', kode_produk: 'TRANSFER', harga: reqData.nominal, status: 'BERHASIL', sn: 'Permintaan dipenuhi ' + myName, trx_id: 'REQIN' + Date.now(), timestamp: window.serverTimestamp() });
+            
+            await window.addDoc(window.collection(window.db, 'users', reqData.dari_uid, 'notifikasi'), {
+                tipe: 'transfer_masuk',
+                dari_uid: user.uid,
+                dari_nama: myName,
+                nominal: reqData.nominal,
+                status: 'unread',
+                timestamp: window.serverTimestamp()
+            });
+    
+            await window.updateDoc(window.doc(window.db, 'users', user.uid, 'notifikasi', reqData.docId), { status: 'accepted' });
+            
+            window.showNotice('success', 'Berhasil', 'Permintaan saldo berhasil dipenuhi.');
         } catch(e) {
-    console.warn("DoniGuard Check Error:", e);
-    return true;
+            window.showNotice('error', 'Gagal', e.message);
+            await window.updateDoc(window.doc(window.db, 'users', user.uid, 'notifikasi', reqData.docId), { status: 'pending' });
         }
     };
     
+    window.tolakRequestSaldo = async () => {
+        const reqData = window.currentRequestData;
+        if(!reqData) return;
+        const user = window.auth.currentUser;
+        if(!user) return;
+        
+        document.getElementById('modalRequestSaldo').style.display = 'none';
+        try {
+            await window.updateDoc(window.doc(window.db, 'users', user.uid, 'notifikasi', reqData.docId), { status: 'rejected' });
+        } catch(e) { console.error(e); }
+    };
     
-    window.prosesBayarFinal = async function() {
-                const user = window.auth.currentUser;
-                if(!user) return window.showNotice('error', 'Akses Ditolak', 'Silakan login kembali!');
+  </script>
+
+  <script>
+    const KLIKRESI_PROXY = "https://www.pandawa-digital.com/klikresi_proxy.php";
+                let ORIGIN_ID = "32.15.01"; // Ganti dengan ID Kecamatan Toko Anda
+            const modal = document.getElementById('modalApp');
+            const modalInvoice = document.getElementById('modalInvoice');
+            const listArea = document.getElementById('listProdukArea');
+            const areaFilter = document.getElementById('areaFilter');
+            const inputNomor = document.getElementById('nomorHP');
+            const badgeOperator = document.getElementById('operatorBadge');
+            const loading = document.getElementById('statusLoading');
+            const loaderAwal = document.getElementById('globalLoader');
+            let markupConfig = { General: 0 };  
+            let whatsappAdmin = "628xxx";
     
-                const data = window.currentInvoiceData;
-                const inputHP = document.getElementById('invoiceNomorHP').value;
-                if(!inputHP) return alert("Nomor Tujuan wajib diisi!");
+            // Deklarasi fetchConfig yang redundan dihapus untuk memperbaiki bug Markup.
     
-                let hargaFinal = data.baseHarga;
-                let qtyCustom = null;
+                    let masterData = []; 
+            // EXPOSE KE GLOBAL AGAR BISA DIBACA FUNGSI LAIN
+            window.masterData = masterData;
+            let dataMentah = [];  
+            let transaksiPending = {};
+            let intervalCek = {}; 
     
-        if(data.isBebas) {
-                    const elQty = document.getElementById('invoiceQty');
-                    if(!elQty) return alert("Input Nominal tidak ditemukan");
-                    qtyCustom = elQty.value;
-                    if(!qtyCustom || qtyCustom < 1000) return alert("Nominal tidak valid!");
-                    // Perbaikan: nominal manual + (harga asli + markup) 
-                    // data.baseHarga sudah berisi (harga asli + markup)
-                    hargaFinal = parseInt(qtyCustom) + parseInt(data.baseHarga);
+                    // 1. DOWNLOAD DATA MASSAL (SINGLE FETCH)
+            window.showNotice = function(type, title, msg) {
+                // AUTO-FILTER: Cegah pesan saldo bocor di SEMUA notifikasi (Sukses/Gagal)
+                if (typeof msg === 'string' && window.bersihkanPesan) {
+                    msg = window.bersihkanPesan(msg);
                 }
     
-                transaksiPending = { 
-                    tujuan: inputHP, 
-                    kode_produk: data.kode, 
-                    nama_produk: data.nama, 
-                    harga: hargaFinal,
-                    qty: qtyCustom
+                const modal = document.getElementById('modalNotice');
+                const icon = document.getElementById('noticeIcon');
+                const t = document.getElementById('noticeTitle');
+                const m = document.getElementById('noticeMsg');
+                const btn = document.getElementById('btnNoticeClose');
+    
+                modal.style.display = "flex";
+                t.innerText = title; m.innerText = msg;
+                btn.style.display = type === 'loading' ? 'none' : 'block';
+    
+                if(type === 'success') icon.innerHTML = '<i class="fas fa-check-circle icon-success"></i>';
+                else if(type === 'error') icon.innerHTML = '<i class="fas fa-times-circle icon-error"></i>';
+                else icon.innerHTML = '<i class="fas fa-circle-notch fa-spin icon-loading"></i>';
+            };
+            window.tutupNotice = () => document.getElementById('modalNotice').style.display = "none";
+    // 1. DOWNLOAD DATA MASSAL (SINGLE FETCH)
+            async function sinkronisasiData() {
+                try {
+                    const res = await fetch('data_pusat.php?jenis=semua');
+                    masterData = await res.json();
+                    console.log("Sinkronisasi Berhasil:", masterData.length, "produk dimuat.");
+                    loaderAwal.style.display = "none";
+                } catch (err) {
+                    alert("Sinkronisasi Gagal. Silakan periksa koneksi atau file cache server.");
+                    console.error(err);
+                }
+            }
+            window.addEventListener('DOMContentLoaded', sinkronisasiData);
+    
+            // CLEANER PESAN
+            window.bersihkanPesan = function(txt) {
+        if (!txt) return "";
+        // PENGECUALIAN: Jika ini adalah pesan pengecekan saldo user (lokal), jangan diubah
+        if (txt === "Saldo tidak cukup!" || txt === "Saldo tidak mencukupi." || txt === "Saldo Anda tidak mencukupi!") return txt;
+    
+        let m = txt; try { m = JSON.parse(txt).body_respon || txt; } catch (e) {}
+        
+        const lower = m.toLowerCase();
+        // Filter khusus: Hanya ubah jika pesan datang dari server PROVIDER yang menandakan saldo reseller (admin) habis
+        const technicalBalanceErrors = [
+            "not enough balance", 
+            "insufficient balance", 
+            "saldo reseller tidak cukup", 
+            "reseller balance",
+            "saldo anda tidak cukup untuk melakukan transaksi ini",
+            "sisa saldo kamu kurang"
+        ];
+    
+        if (technicalBalanceErrors.some(err => lower.includes(err))) {
+            return "Pesanan GAGAL Admin belum Restock Segera Hubungi admin Untuk Merestok";
+        }
+        
+        // SENSOR KEAMANAN KHFY: Hapus URL API dan kredensial reseller
+        if (m.includes("kodereseller=") || m.includes("password=")) {
+            if (m.includes("#")) {
+                m = m.substring(m.indexOf("#") + 1).trim();
+            } else {
+                m = "Transaksi Gagal dari Provider";
+            }
+        }
+        
+        // Pembersihan teks umum (angka saldo, harga, dll)
+        m = m.replace(/\.?\s*Saldo\s+[\d\.,\s\-\=]+(@\d{2}:\d{2})?/gi, "").replace(/Hrg\s+[\d\.,]+/gi, "").replace(/\.?\s*Trx ke-\d+\s+gunakan format yang benar/gi, "");
+        return m.trim();
+    };
+    
+            // 2. LOGIKA FILTERING MENU (SESUAI POLA JSON OKE CONNECT)
+                    function bukaMenu(kategori) {
+                document.getElementById('judulMenu').innerText = kategori;
+    
+                const modalEl = document.getElementById('modalApp');
+                const akrabUI = document.getElementById('akrabUI');
+                const defaultHead = document.getElementById('defaultModalHeader');
+                const searchInput = document.getElementById('akrabSearch');
+                if(searchInput) searchInput.value = '';
+    
+                if (kategori === 'Paket Akrab All' || kategori === 'PO Akrab') {
+                    modalEl.classList.add('modal-fullscreen');
+                    if(akrabUI) akrabUI.style.display = 'block';
+                    if(defaultHead) defaultHead.style.display = 'none';
+                } else {
+                    modalEl.classList.remove('modal-fullscreen');
+                    if(akrabUI) akrabUI.style.display = 'none';
+                    if(defaultHead) defaultHead.style.display = 'flex';
+                }
+                
+                modal.style.display = "flex"; listArea.innerHTML = ""; areaFilter.innerHTML = ""; 
+                inputNomor.value = ""; badgeOperator.style.display = "none";
+                document.getElementById('inputContainer').style.display = "none";
+                document.getElementById('areaFilter').style.display = "grid";
+                document.getElementById('btnKembali').style.display = "none";
+                
+                let filtered = [];
+                
+                // Helper pencarian kata kunci (case-insensitive)
+                const match = (item, keys) => {
+                    const p = (item.produk || "").toLowerCase();
+                    const k = (item.keterangan || "").toLowerCase();
+                    const c = (item.kategori || "").toLowerCase();
+                    const list = Array.isArray(keys) ? keys : [keys];
+                    return list.some(key => p.includes(key.toLowerCase()) || k.includes(key.toLowerCase()) || c.includes(key.toLowerCase()));
                 };
     
-                window.tutupInvoice();
-                window.tutupModal(); 
-                window.kembaliKeFilter();
-                window.showNotice('loading', 'Memproses', 'Sedang memvalidasi saldo dan transaksi...');
-    
-                try {
-                    const userDoc = await window.getDoc(window.doc(window.db, "users", user.uid));
-                    const currentSaldo = parseInt(userDoc.data().saldo) || 0;
-                    const hargaTrx = parseInt(transaksiPending.harga) || 0;
-    
-                    if (!(await window.cekSinkronisasiDoniGuard(user.uid, currentSaldo))) return;
-    
-                    const isCekProduk = (transaksiPending.kode_produk || "").startsWith("C") || (transaksiPending.kode_produk || "").startsWith("INQ") || (transaksiPending.kode_produk || "").startsWith("CEK");
-                    if (hargaTrx <= 0 && !isCekProduk) {
-    window.showNotice('error', 'Gagal', 'Nominal transaksi tidak valid (harus lebih dari 0).');
-    return;
-                    }
-    
-                    if (currentSaldo < hargaTrx) {
-    window.showNotice('error', 'Saldo Gagal', 'Saldo Anda tidak mencukupi. Sisa saldo: Rp ' + new Intl.NumberFormat('id-ID').format(currentSaldo));
-    return;
-                    }
-                    
-                    transaksiPending.harga = hargaTrx;
-    
-                    const newSaldo = currentSaldo - transaksiPending.harga;
-                    await window.updateDoc(window.doc(window.db, "users", user.uid), { saldo: newSaldo });
-    
-                    const req = await fetch('api.php', { method: 'POST', body: JSON.stringify(transaksiPending), headers: {'Content-Type': 'application/json'} });
-                    const res = await req.json();
-                    let clean = window.bersihkanPesan(res.message);
-    
-                    if (res.status === "PENDING" || res.status === "BERHASIL") {
-    window.showNotice('success', 'Berhasil', clean);
-    // Pemicu DoniGuard saat Transaksi PPOB Berhasil
-    window.triggerDoniGuard({
-        action: 'transaksi',
-        produk: transaksiPending.nama_produk,
-        nominal: transaksiPending.harga,
-        saldo_akhir_client: newSaldo
-    });
-                } else {
-    window.showNotice('error', 'Gagal', clean);
-    const currentSnap = await window.getDoc(window.doc(window.db, "users", user.uid));
-    const latestSaldo = currentSnap.exists() ? (currentSnap.data().saldo || 0) : 0;
-    await window.updateDoc(window.doc(window.db, "users", user.uid), { saldo: latestSaldo + transaksiPending.harga });
-                    }                    let idDocNew = "";
-    if(window.simpanKeFirestore) idDocNew = await window.simpanKeFirestore(transaksiPending, res.status, clean, res.refID, user.uid, userDoc.data().username, JSON.stringify(res));
-    
-    if ((res.provider === 'KAJE' || transaksiPending.kode_produk.startsWith('KAJE')) && (res.status === 'BERHASIL' || res.status === 'Sukses')) {
-        window.prosesKajeInternal(transaksiPending.tujuan, transaksiPending.harga, userDoc.data().username, user.uid, idDocNew);
-    }
-    
-                } catch (e) {
-                    try {
-                        const userRef = window.doc(window.db, "users", window.auth.currentUser.uid);
-                        const freshSnap = await window.getDoc(userRef);
-                        const curBal = freshSnap.exists() ? (freshSnap.data().saldo || 0) : 0;
-                        await window.updateDoc(userRef, { saldo: curBal + transaksiPending.harga });
-                    } catch(ex){}
-                    window.showNotice('error', 'Sistem Error', 'Gagal menghubungkan ke server.');
+                if (kategori === 'Pulsa') {
+                    filtered = masterData.filter(i => 
+    i.kategori === "PULSA" && 
+    !i.keterangan.toLowerCase().includes("transfer") &&
+    !i.produk.toLowerCase().includes("aktif")
+                    );
+                } 
+                else if (kategori === 'Pulsa Transfer') {
+                    filtered = masterData.filter(i => 
+    i.kategori === "PULSA" && 
+    i.keterangan.toLowerCase().includes("transfer")
+                    );
                 }
+                else if (kategori === 'By.U') {
+                    filtered = masterData.filter(i => match(i, ["by u", "by.u", "byu"]));
+                }
+                // --- LOGIKA FILTER PROVIDER & CETAK VOUCHER BARU ---
+                else if (kategori === 'Telkomsel') {
+                    filtered = masterData.filter(i => 
+    match(i, ["telkomsel", "cetak perdana telkomsel", "tsel cetak voucher", "voucher tsel"])
+                    );
+                }
+                else if (kategori === 'Indosat') {
+                    filtered = masterData.filter(i => 
+    match(i, ["indosat", "cetak perdana indosat", "isat cetak", "voucher freedom", "voucher data jumbo", "voucher data unlimited"])
+                    );
+                }
+                else if (kategori === 'XL') {
+                    filtered = masterData.filter(i => 
+    match(i, ["xl", "cetak perdana xl", "xl cetak voucher", "xl voucher"])
+                    );
+                }
+                else if (kategori === 'Axis') {
+                    filtered = masterData.filter(i => 
+    match(i, ["axis", "aigo voucher", "voucher combo attack", "voucher combo non attack", "voucher mini data"])
+                    );
+                }
+                else if (kategori === 'Tri') {
+                    filtered = masterData.filter(i => 
+    match(i, ["tri", "three", "cetak perdana tri", "tri cetak vcr", "tri voucher", "tri kuota voucher"])
+                    );
+                }
+                    else if (kategori === 'Paket Akrab v2') {
+                    document.getElementById('inputContainer').style.display = "none";
+                    document.getElementById('areaFilter').style.display = "grid";
+                    window.loadIcsData();
+                }
+    
+                else if (kategori === 'Paket Akrab v2') {
+                    document.getElementById('inputContainer').style.display = 'none';
+                    document.getElementById('areaFilter').style.display = 'grid';
+                    window.loadIcsData();
+                }
+        else if (kategori === 'Paket Akrab All') {
+                    document.getElementById('inputContainer').style.display = "none";
+                    document.getElementById('areaFilter').style.display = "grid";
+                    window.loadGabunganData();
+                }
+                else if (kategori === 'Akrab Spesial') {
+                    if (window.maintenanceAkrabSpesial) {
+    const user = window.auth.currentUser;
+    if (!user || user.email !== 'doni888855519@gmail.com') {
+        return window.showNotice('error', 'Maintenance', 'Mohon maaf, menu Akrab Spesial sedang dalam perbaikan / maintenance.');
+    }
+                    }
+                    tutupModal();
+                    window.navSwitch('akrab_spesial');
+                }
+    
+                else if (kategori === 'PO Akrab') {
+                    document.getElementById('inputContainer').style.display = "none";
+                    document.getElementById('areaFilter').style.display = "grid";
+                    window.loadGabunganData();
+                }
+    else if (kategori === 'Paket Akrab') {
+                    document.getElementById('inputContainer').style.display = "none";
+                    document.getElementById('areaFilter').style.display = "grid";
+                    window.loadKhfyData();
+                }
+                else if (kategori === 'PBB') {
+                    filtered = masterData.filter(i => 
+                        (i.kategori && i.kategori.toUpperCase().includes('PBB')) || 
+                        (i.produk && i.produk.toUpperCase().includes('PBB'))
+                    );
+                    dataMentah = filtered;
+                    document.getElementById('inputContainer').style.display = "block";
+                    document.getElementById('areaFilter').style.display = "none";
+                    document.getElementById('listProdukArea').style.display = "block";
+                    document.getElementById('btnKembali').style.display = "none";
+                    let html = "";
+                    const config = window.markupConfig || {};
+                    filtered.forEach(item => {
+                        if (item.status !== "1") return;
+                        const k = item.kode;
+                        const hiddenPrefixes = ['BPAM','BPBB','BHOME','BKPR','BKK','BFNC','BYR','PAY','BSAM','BPLA','BNTPLA','BTEL','BBPJS','BCOMET','BCENTRIN','BMST','BTV'];
+                        if(k === 'CPLN' || k === 'FLAZZ2200' || (item.produk||'').toUpperCase().includes('CEK NAMA') || hiddenPrefixes.some(p => k.startsWith(p))) return;
+                        let rawM = config[item.kode] !== undefined ? config[item.kode] : (config[item.produk] !== undefined ? config[item.produk] : config['General']);
+                        let markupFinal = window.getMarkupValue(rawM, parseInt(item.harga));
+                        let hargaFinal = parseInt(item.harga) + markupFinal;
+                        const checkPrefixes = ['CPAM','CPBB','CEK','INQ','CHOME','CKPR','CKK','CFNC','CSAM','CPLA','CNTPLA','CTEL','CBPJS','CCOMET','CCENTRIN','CMST'];
+                        if (checkPrefixes.some(p => k.startsWith(p))) hargaFinal = 0;
+                        let namaProduk = item.keterangan.replace(/H2H/gi, "").trim();
+                        if (namaProduk.match(/^(Cek|CEK|Inquiry|INQUIRY)\s/)) {
+                            namaProduk = namaProduk.replace(/^(Cek|CEK|Inquiry|INQUIRY)\s+/i, "Cek & Bayar ");
+                        }
+                        let aksiKlik = `siapkanInvoice('${item.kode}','${namaProduk}',${hargaFinal})`;
+                        html += `<div class="item-produk" onclick="${aksiKlik}">
+                            <div style="flex:1;">
+                                <div style="font-weight:bold;font-size:12px;">${namaProduk}</div>
+                                <div style="font-size:10px; color:#999;">${item.kode}</div>
+                            </div>
+                            <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(hargaFinal)}</div>
+                        </div>`;
+                    });
+                    document.getElementById('listProdukArea').innerHTML = html || "<div style='padding:20px; text-align:center; color:#999;'>Produk Tidak Tersedia</div>";
+                    return;
+                }
+                else if (kategori === 'VA Bank') {
+                    const codes = ['BBSVABNI', 'BBSVABCA', 'BBSVABRI', 'BBSVAMDR', 'BBSVAPMT', 'BBSVACIM'];
+                    filtered = masterData.filter(i => codes.includes(i.kode));
+                }
+    else if (kategori === 'Smartfren') {
+                    filtered = masterData.filter(i => 
+    match(i, ["smartfren", "cetak perdana smart", "smart cetak voucher", "voucher kuota nonstop"])
+                    );
+                }
+                /*
+                if(window.updateFirestoreStatus) {
+                    window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+                }
+                if(statusAkhir === 'GAGAL') {
+                    window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                } else {
+                    window.showNotice('success', 'Transaksi Sukses', sn);
+                }
+                */
+                else if (kategori === 'E-Wallet') {
+                    const walletKeywords = ["dana", "ovo", "gopay", "shopee", "maxim", "linkaja", "doku", "isaku", "indriver", "grab", "astra", "kaspro"];
+                    const walletBlacklist = ["cek kuota & perdana", "cek produk digital", "cicilan multi finance", "tagihan kartu kredit", "tagihan online kredit"];
+                    filtered = masterData.filter(i => {
+    let k = i.keterangan.toLowerCase();
+    let p = i.produk.toLowerCase();
+    let isBlacklisted = walletBlacklist.some(kw => p.includes(kw) || k.includes(kw));
+    if(isBlacklisted) return false;
+    
+    let isWallet = walletKeywords.some(key => k.includes(key) || p.includes(key));
+    // Pastikan GRAB Voucher masuk, dan produk cetak selain Grab dibuang
+    let isGrabVoucher = p.includes("grab voucher");
+    let isNotPerdana = !k.includes("perdana") && !k.includes("cetak");
+    return (isWallet && isNotPerdana) || isGrabVoucher;
+                    });
+                }
+        else if (kategori === 'DIGITAL') {
+                    const gameKeywords = [
+    'mobile legend','free fire','pubg','higgs','domino','genshin','roblox','valorant','point blank','call of duty','cod','wild rift','aov','arena breakout','ragnarok','blood strike','chaos','clash royale','clash of clans','delta force','speed drifter','hago','lita','eggy','fc mobile','okegaming','garena','gemscool','razer','steam','unipin','super sus','google play','honor of kings','indo play','life after','lokapala','lord mobile','magic chess','marvel','one punch','new state','stumble','undawn','werewolf','zepeto','spotify','genflix','vidio','wetv','wifi'
+                    ];
+                    filtered = masterData.filter(i => {
+    let kat = (i.kategori || '').toLowerCase();
+    let p = (i.produk || '').toLowerCase();
+    let k = (i.keterangan || '').toLowerCase();
+    
+    let isGameKategori = kat === 'games' || kat === 'digital';
+    let isGameNama = gameKeywords.some(g => p.includes(g) || k.includes(g));
+    let isTPG = p.startsWith('tpg');
+    
+    let isPulsaOrPaket = p.includes('pulsa') || p.includes('paket') || p.includes('telkomsel') || p.includes('indosat') || p.includes('xl') || p.includes('axis') || p.includes('tri') || p.includes('smartfren');
+    let isEwallet = ['dana','ovo','gopay','shopee','linkaja','isaku','doku','maxim','indriver'].some(w => p.includes(w) || k.includes(w));
+    
+    return ((isGameKategori && isGameNama) || isTPG) && !isPulsaOrPaket && !isEwallet;
+                    });
+                }            else if (kategori === "Topup E'Tol") {
+                    const etolKeys = ["brizzi", "flazz", "tapcash", "mandiri"];
+                    filtered = masterData.filter(i => {
+    let p = i.produk.toLowerCase();
+    return etolKeys.some(k => p.includes(k));
+                    });
+                }
+                else if (kategori === 'Token PLN') {
+                    filtered = masterData.filter(i => {
+    let p = i.produk.toLowerCase();
+    let cat = (i.kategori || "").toLowerCase();
+    let isPln = p.includes("pln") || cat.includes("pln");
+    let isEtol = ["brizzi", "flazz", "tapcash", "mandiri"].some(k => p.includes(k));
+    return isPln && !isEtol;
+                    });
+                }
+                else if (kategori === 'Tagihan') {
+                    const blacklist = ["TOKEN", "PULSA", "DATA", "VOUCHER", "TELKOMSEL", "INDOSAT", "ISAT", "TRI", "AXIS", "XL", "SMARTFREN", "FREEDOM", "COMBO", "PERDANA", "UNLIMITED", "YELLOW", "OMNI", "PRABAYAR", "GAME", "TOP UP", "SALDO"];
+                    const whitelistTagihan = ["CICILAN MULTI FINANCE", "TAGIHAN KARTU KREDIT", "TAGIHAN ONLINE KREDIT"];
+                    filtered = masterData.filter(i => {
+    let p = (i.produk || "").toUpperCase();
+    let c = (i.kategori || "").toUpperCase();
+    
+    // Jalur Khusus untuk Whitelist
+    if (whitelistTagihan.some(kw => p.includes(kw))) return true;
+    
+    // Tahap 1: Buang yang ada di Blacklist
+    if (blacklist.some(kw => p.includes(kw))) return false;
+    
+    // Tahap 2: Ambil yang sesuai kriteria Tagihan
+    return c === 'TAGIHAN' || c === 'FINANCE' || 
+           p.includes('BPJS') || 
+           (p.includes('PLN') && !p.includes('TOKEN')) || 
+           p.includes('PDAM') ||
+           p.includes('GAS') ||
+           p.includes('PGN') ||
+           p.includes('PERTAGAS') ||
+           p.includes('INDIHOME') ||
+           p.includes('BIZNET') ||
+           p.includes('FIRST MEDIA') ||
+           p.includes('MY REPUBLIC') ||
+           p.includes('CBN') ||
+           p.includes('ICONNET') ||
+           p.includes('BALI FIBER') ||
+           p.includes('CENTRIN') ||
+           p.includes('COMET') ||
+           p.includes('TIKET') ||
+           p.includes('TELKOM');
+                    });
+                }
+                else if (kategori === 'Telkomsel') {
+                    filtered = masterData.filter(i => 
+    i.produk.toLowerCase().includes("telkomsel") || 
+    i.keterangan.toLowerCase().includes("telkomsel")
+                    );
+                }
+                else {
+                    // Default: Filter kategori atau produk lainnya (PLN, Tagihan, Indosat, dll)
+                    filtered = masterData.filter(i => 
+    (i.kategori && i.kategori.toUpperCase().includes(kategori.toUpperCase())) || 
+    (i.produk && i.produk.toUpperCase().includes(kategori.toUpperCase()))
+                    );
+                }
+    
+                dataMentah = filtered;
+                buatTombolFilter(filtered);
             }
     
-            window.cekStatusBerkala = function(idDoc, trxId, tujuan, kode) {
-
-//=== ORIGINAL BLOCK 5940-5970 ===
-    window.loadProfileData = async () => {
-                 const user = window.auth.currentUser;
-                 if(!user) return;
-                 const d = await window.getDoc(window.doc(window.db, "users", user.uid));
-                 if(d.exists()) {
-                     const data = d.data();
-                     document.getElementById('profNameDisplay').innerText = data.nama || "User";
-                     document.getElementById('profEmailDisplay').innerText = user.email;
-                     document.getElementById('pUser').innerText = data.username || "-";
-                     document.getElementById('pWA').innerText = data.whatsapp || "-";
-                     document.getElementById('pSaldo').innerText = "Rp " + new Intl.NumberFormat('id-ID').format(data.saldo || 0);
-                     document.getElementById('pJoin').innerText = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() : "-";
-                     if(data.role === 'pelapak') {
-     document.getElementById('btnLapak').style.display = 'block';
-                     } else {
-     document.getElementById('btnLapak').style.display = 'none';
-                     }
-                 }
-            };
+            window.currentProvidersData = [];
+        window.isListModeContext = false;
+        window.currentMenuContext = '';
     
+        function buatTombolFilter(data) {
+            let providers = [...new Set(data.map(item => item.produk))].sort();
+            window.currentMenuContext = document.getElementById('judulMenu').innerText;
+            const listModeMenus = ["Telkomsel", "Indosat", "XL", "Axis", "Tri", "Smartfren", "By.U", "Token PLN"];
+            window.isListModeContext = listModeMenus.includes(window.currentMenuContext);
             
-    window.bukaDetailRiwayat = function(str) {
-                const d = JSON.parse(decodeURIComponent(str));
-                
-                // Override Topup Pending langsung ke Instruksi Pembayaran
-                if (d.kode_produk === 'TOPUP' && (d.status === 'PENDING' || d.status === 'Pending')) {
-                    let mCode = d.metode || 'QRIS';
-                    let fallbackBank = (window.bankManualData || []).find(b => b.code === mCode);
-                    window.selectedTopupMethod = d.metode_lengkap || fallbackBank || { code: mCode, name: mCode === 'SEABANK' ? 'Transfer Seabank' : 'Scan QRIS All Payment', type: mCode === 'SEABANK' ? 'BANK_MANUAL' : 'MANUAL', img: mCode === 'SEABANK' ? 'icons/seabank.png' : 'icons/qris.jpg', desc: '' };
-                    window.currentPendingDocId = d.idDoc;
-                    
-
-//=== ORIGINAL BLOCK 6164-6270 ===
-            window.startIndopayChecker = function(idDoc, nominalFinal) {
-                if(window.intervalCek[idDoc]) return;
-                console.log('Memulai pemantauan Indopay untuk nominal:', nominalFinal);
-                window.intervalCek[idDoc] = setInterval(async () => {
-                    try {
-    let res = await fetch(`indopay_api.php?action=check&nominal=${nominalFinal}`);
-    let data = await res.json();
-    
-    if (data.status === 'success') {
-        clearInterval(window.intervalCek[idDoc]);
-        delete window.intervalCek[idDoc];
-        
-        const user = window.auth.currentUser;
-        if(user) {
-            const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc);
-            const trxSnap = await window.getDoc(trxRef);
-            if(trxSnap.exists() && (trxSnap.data().status === 'BERHASIL' || trxSnap.data().status === 'Sukses')) return; // Anti-Double
-            
-            const userRef = window.doc(window.db, "users", user.uid);
-            const userSnap = await window.getDoc(userRef);
-            const newSaldo = (userSnap.exists() ? parseInt(userSnap.data().saldo) || 0 : 0) + parseInt(nominalFinal);
-            
-            // FIX: Eksekusi penambahan saldo langsung ke Firestore agar tidak menunggu koreksi DoniGuard
-            await window.updateDoc(userRef, { saldo: newSaldo });
-            
-            if(window.updateFirestoreStatus) window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup Indopay Otomatis", JSON.stringify(res));
-            
-            if(window.triggerDoniGuard) {
-                window.triggerDoniGuard({
-                    trx_id: 'INDOPAY-' + idDoc, action: 'topup', produk: 'TOPUP GOPAY (INDOPAY)', nominal: parseInt(nominalFinal), saldo_akhir_client: newSaldo
+            if(window.currentMenuContext === 'Token PLN') {
+                const prioritas = ['Token PLN Prabayar', 'Token PLN Full Reply', 'Token PLN Promo', 'Token PLN Terbaik'];
+                providers.sort((a, b) => {
+                    let idxA = prioritas.indexOf(a); let idxB = prioritas.indexOf(b);
+                    if(idxA === -1) idxA = 999;
+                    if(idxB === -1) idxB = 999;
+                    return idxA - idxB || a.localeCompare(b);
                 });
             }
-            window.showNotice('success', 'Berhasil', 'Topup Indopay Rp ' + new Intl.NumberFormat('id-ID').format(nominalFinal) + ' masuk!');
-            if(document.getElementById('statusIndopayAuto')) {
-                document.getElementById('statusIndopayAuto').innerHTML = '<i class="fas fa-check-circle"></i> Pembayaran Diterima!';
-                document.getElementById('statusIndopayAuto').style.color = 'var(--success)';
-            }
-            setTimeout(() => {
-                localStorage.removeItem('pending_topup');
-                if(window.tutupModalTopup) window.tutupModalTopup();
-                if(window.bukaRiwayatArsip) window.bukaRiwayatArsip();
-            }, 2000);
-        }
-    }
-                    } catch(e) {
-    console.error('Error Indopay Checker:', e);
-                    }
-                }, 5000);
-            };
-            window.bankManualData = [];
             
-            // Listener Bank Manual dari Firestore
-            window.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    if(window.db && window.onSnapshot && window.collection) {
-    window.onSnapshot(window.collection(window.db, "metode_topup"), (snap) => {
-        window.bankManualData = [];
-        snap.forEach(d => {
-            let data = d.data();
-            data.idDoc = d.id;
-            data.type = 'BANK_MANUAL';
-            data.code = data.nama_bank || 'BANK';
-            data.name = 'Transfer ' + (data.nama_bank || 'Bank');
-            data.fee = parseInt(data.fee) || 0;
-            data.img = data.logo || 'icons/bank.png';
-            data.desc = 'No. Rek: ' + data.no_rek + ' a/n ' + data.atas_nama;
-            window.bankManualData.push(data);
-        });
-    });
-                    }
-                }, 2000);
-            });
-                    setTimeout(() => {
-                    let pendingSesi = localStorage.getItem('pending_topup');
-                    if(pendingSesi) {
-    let pData = JSON.parse(pendingSesi);
-    let now = new Date().getTime();
-    let expiry = 3 * 60 * 60 * 1000; // 3 Jam
-    if(now - pData.timestamp > expiry) {
-        localStorage.removeItem('pending_topup');
-        if(pData.docId && window.auth && window.auth.currentUser) {
-            window.updateDoc(window.doc(window.db, "users", window.auth.currentUser.uid, "riwayat_transaksi", pData.docId), { status: 'GAGAL', sn: 'Kedaluwarsa (Lewat 3 Jam)' }).catch(e=>console.log(e));
-            if(window.batalkanTopupTelegram) window.batalkanTopupTelegram(window.auth.currentUser.uid, pData.docId, "Kedaluwarsa");
+            window.currentProvidersData = providers;
+            window.renderFilterGroups();
         }
-        window.currentTopupStep = 1;
-        if(typeof window.renderTopupStep === 'function') window.renderTopupStep(1);
-    } else {
-        window.selectedTopupMethod = pData.method;
-        window.currentPendingDocId = pData.docId;
-        if(typeof window.renderTopupStep === 'function') window.renderTopupStep(4, pData.nominal);
-    }
-                    } else {
-    window.currentTopupStep = 1;
-    if(typeof window.renderTopupStep === 'function') window.renderTopupStep(1);
-                    }
-                }, 500);
     
-                    window.bukaModalTopup = () => {
-                document.getElementById('modalTopup').style.display = 'flex';
-                if(typeof window.renderTopupStep === 'function') window.renderTopupStep(1);
-            };
-    
-            
-    window.showFullscreenQR = (src) => {
-                document.getElementById('qrisImageFull').src = src;
-                document.getElementById('qrisFullscreen').style.display = 'flex';
-            };
-
-//=== ORIGINAL BLOCK 6523-6550 ===
-            window.buatQrisDinamis = function(qris, nominal) {
-                let q = qris.slice(0, -4);
-                q = q.replace("010211", "010212");
-                let step1 = q.split("5802ID");
-                let nom = nominal.toString();
-                let tag54 = "54" + nom.length.toString().padStart(2, '0') + nom;
-                q = step1[0] + tag54 + "5802ID" + step1[1];
-                
-                let crc = 0xFFFF;
-                for (let i = 0; i < q.length; i++) {
-                    crc ^= q.charCodeAt(i) << 8;
-                    for (let j = 0; j < 8; j++) {
-    if ((crc & 0x8000) !== 0) {
-        crc = (crc << 1) ^ 0x1021;
-    } else {
-        crc = crc << 1;
-    }
-                    }
-                }
-                let hex = (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
-                return q + hex;
-            };
-    
-    
-    window.prosesTopupNew = async () => {
-                const user = window.auth.currentUser;
-                if(!user) return alert("Silakan login!");
-                
-
-//=== ORIGINAL BLOCK 8003-8060 ===
-            window.monitorKajeTrx = async function(trxId, docId) {
-                if(window.intervalCek[docId]) return;
-                console.log("Monitoring Kaje TrxID:", trxId);
-                
-                // Bersihkan simbol '#' agar API Kaje membaca ID dengan benar
-                const cleanTrxId = (trxId || '').replace('#', '').trim();
-                if(!cleanTrxId) return;
-    
-                window.intervalCek[docId] = setInterval(async () => {
-                    try {
-    const req = await fetch('kaje_proxy.php?api_action=check_status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ trx_id: cleanTrxId })
-    });
-    const res = await req.json();
-    
-    if(res.success && res.data) {
-        const statusRaw = (res.data.status || '').toLowerCase();
-        let statusAkhir = 'PENDING';
-        let sn = res.data.serial_number || res.data.message || res.message || '-';
-        
-        if(statusRaw === 'success' || statusRaw === 'berhasil' || statusRaw === 'sukses') {
-            if (res.data.deeplink || (res.data.message && res.data.message.toLowerCase().includes('pembayaran'))) {
-                statusAkhir = 'PENDING';
-                sn = res.data.deeplink ? res.data.deeplink : res.data.message;
+        window.renderFilterGroups = function() {
+            let area = document.getElementById('areaFilter');
+            if(window.isListModeContext) {
+                area.style.display = "block"; area.style.gridTemplateColumns = "none";
             } else {
-                statusAkhir = 'BERHASIL';
+                area.style.display = "grid"; area.style.gridTemplateColumns = "repeat(3, 1fr)";
             }
-        }
-        else if(statusRaw === 'failed' || statusRaw === 'error' || statusRaw === 'gagal' || statusRaw === 'canceled') statusAkhir = 'GAGAL';
-        
-        if(statusAkhir !== 'PENDING') {
-            clearInterval(window.intervalCek[docId]);
-            delete window.intervalCek[docId];
-            
-            if(window.updateFirestoreStatus) {
-                window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
-            }
-        } else if (res.data && res.data.deeplink && window.auth && window.auth.currentUser) {
-            try { window.updateDoc(window.doc(window.db, 'users', window.auth.currentUser.uid, 'riwayat_transaksi', docId), { sn: sn }); } catch(e){}
-        }
-    }
-                    } catch(e) { console.log("Err Mon Kaje", e); }
-                }, 6000);
-            };
     
-            window.loadKhfyData = async function() {
-                const areaList = document.getElementById('listProdukArea');
-                if(areaList) areaList.innerHTML = "<div style='padding:20px; text-align:center;'>Sistem KHFY sedang dalam perbaikan / migrasi ke sistem baru. Silakan gunakan menu lain.</div>";
-            };
-            window.monitorKhfyTrx = async function(trxId, docId) {};
-
-            // --- INTEGRASI ICS STORE (PAKET AKRAB V2) ---
-            window.icsData = [];
+            const specialIcons = { 'Telkomsel': 'icons/Telkomsel.png', 'Indosat': 'icons/Indosat.png', 'By.U': 'icons/By.U.png', 'XL': 'icons/XL.png', 'PBB': 'icons/PBB.png', 'Pascabayar': 'icons/TV & Halo.png', 'Axis': 'icons/Axis.png', 'Tri': 'icons/Tri.png', 'Smartfren': 'icons/Smartfren.png', 'Cetak Voucher': 'icons/Voucher.png', 'Token PLN': 'icons/Token PLN.png' };
     
-            window.loadIcsData = async function() {
-                const areaList = document.getElementById('listProdukArea');
-
-//=== ORIGINAL BLOCK 8113-8210 ===
-            window.filterIcs = function(type, el) {
-                document.querySelectorAll('.filter-card').forEach(e => e.classList.remove('active'));
-                if(el) el.classList.add('active');
+            let cleanProviders = [];
+            window.currentProvidersData.forEach(p => {
+                if(p === 'BAYAR PLN DIRECT' || p === 'PLN PRODUK DIRECT' || p === 'Byu Promo Menarik' || p === '+Masa Aktif Indosat') return;
+                let clean = p.replace(/H2H/gi, "").replace(/Top\s*Up\s*Saldo\s*/gi, "").replace(/Saldo\s*/gi, "").replace("Customer", "").replace("Driver", "").replace("Penumpang", "").replace(/Admin\s*/gi, "").replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").trim();
+                cleanProviders.push({ original: p, clean: clean });
+            });
     
-                const products = window.icsData.filter(i => (i.type || 'Lainnya').toUpperCase() === type);
-                products.sort((a,b) => parseInt(a.price) - parseInt(b.price));
+            let groups = {};
+            cleanProviders.forEach(p => {
+                let words = p.clean.split(" ");
+                let groupKey = words[0]; 
+                if ((words[0].toUpperCase() === "CETAK" || words[0].toUpperCase() === "PAKET") && words.length > 1) groupKey = words[0] + " " + words[1];
+                if (!groups[groupKey]) groups[groupKey] = [];
+                groups[groupKey].push(p);
+            });
     
-                let html = '';
-                let markup = 0;
-                if(window.markupConfig) {
-                     if(window.markupConfig['Paket Akrab v2'] !== undefined) markup = parseInt(window.markupConfig['Paket Akrab v2']);
-                     else if(window.markupConfig['General']) markup = parseInt(window.markupConfig['General']);
-                }
-    
-        products.forEach(p => {
-                    let pName = p.name || 'Produk';
-                    let pCode = p.code || '-';
-                    let rawM = (window.markupConfig && window.markupConfig[pCode] !== undefined) ? window.markupConfig[pCode] : markup;
-                    let configMarkup = window.getMarkupValue(rawM, parseInt(p.price));
-                    let currentMarkup = (pCode === 'CFMX' || pName.toLowerCase().includes('cek')) ? 0 : configMarkup;
-                    let finalPrice = parseInt(p.price) + currentMarkup;
-                    let desc = (p.description || '').replace(/\n/g, '<br>');
-                    
-                    const isPO = (arguments.length > 2 ? arguments[2] : false) || document.getElementById('judulMenu').innerText === 'PO Akrab';
-                    let isAvailable = isPO || (p.status === 'available' && p.stock > 0);
-                    let divStyle = isAvailable ? '' : "opacity:0.6; background:#fff0f0;";
-                    let clickEvent = isPO ? `onclick="window.siapkanInvoicePO('${pCode}', '${pName}', ${finalPrice}, 'ICS')"` : (isAvailable ? `onclick="window.siapkanInvoiceIcs('${pCode}', '${pName}', ${finalPrice}, '${p.type}')"` : `onclick="alert('Stok Habis')"`);
-                    let statusBadge = isPO ? `<span style="font-size:9px; background:#f39c12; color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">PRE-ORDER</span>` : (isAvailable ? '' : `<span style="font-size:9px; background:red; color:white; padding:2px 4px; border-radius:4px;">GANGGUAN</span>`);
-    
-                    html += `<div class="item-produk" ${clickEvent} style="${divStyle}; flex-direction:column; align-items:flex-start;">
-    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-            <div style="font-weight:bold;font-size:12px;">${pName} ${statusBadge}</div>
-            <div style="font-size:10px; color:#999;">${pCode} • ${p.category || ''}</div>
-                    <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${p.stock}</div>
-            <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${p.stock}</div>
-        </div>
-        <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(finalPrice)}</div>
-    </div>
-    ${desc ? `<div style="font-size:10px; color:#666; margin-top:5px; border-top:1px dashed #eee; padding-top:4px; width:100%; line-height:1.4;" class="desc-box">${desc}</div>` : ''}
-                    </div>`;
-                });
+            let html = "";
+            for (let key in groups) {
+                let items = groups[key];
+                let isGroup = items.length > 1;
                 
-                const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
-                if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
-                    const modalProduk = document.getElementById('modalProdukList');
-                    const areaListModal = document.getElementById('listProdukModalArea');
-                    const judulKategori = document.getElementById('judulKategoriModal');
-                    if(judulKategori) judulKategori.innerText = arguments[0]; 
-                    if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
-                    if(modalProduk) modalProduk.style.display = 'flex';
-                } else {
-                    const areaList = document.getElementById('listProdukArea');
-                    if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
-                }
-            };
+                let displayName = isGroup ? key : items[0].clean;
+                let logoUrl = specialIcons[window.currentMenuContext] ? specialIcons[window.currentMenuContext] : 'icons/' + displayName + '.png';
+                let imgTag = '<img src="' + logoUrl + '" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/50?text=' + displayName.charAt(0) + '\';">';
     
-            window.siapkanInvoiceIcs = function(kode, nama, harga, type) {
-                window.currentInvoiceData = { kode, nama, baseHarga: harga, isIcs: true };
-                
-                let placeholder = "Masukkan Nomor HP";
-                if((type || '').toUpperCase().includes('URL') || (type || '').toUpperCase().includes('LINK')) placeholder = "Tempel Link di sini";
-    
-                const html = `
-                    <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
-                    <div style="background: #f8fafc; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px;">
-    <div style="text-align: center; margin-bottom: 15px;">
-        <div style="font-size: 11px; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px;">Konfirmasi Pesanan</div>
-        <div style="font-size: 15px; font-weight: 800; color: #2c3e50; margin-top: 5px;">${nama}</div>
-    </div>
-    <div class="invoice-row" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 15px;">
-        <span>Kode Produk</span><b style="color: #666;">${kode}</b>
-    </div>
-    <div style="margin-bottom: 15px;">
-        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Tujuan / Nomor HP</label>
-        <div class="input-group" style="margin-bottom: 0;">
-            <input type="tel" inputmode="numeric" id="inputIcsTujuan" class="form-input" placeholder="${placeholder}" style="background: white; border: 2px solid #e1effe; color:#333; font-weight:bold; padding-right: 70px;">
-            <i class="fas fa-pen" style="top: 15px;"></i>
-            <button type="button" onclick="window.pasteDariClipboard('inputIcsTujuan')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
-        </div>
-    </div>
-    <div class="invoice-row invoice-total" style="padding-top: 15px; margin-top: 5px;">
-        <span>TOTAL BAYAR</span>
-        <b style="color: var(--primary); font-size: 18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
-    </div>
-                    </div>
-                    <div id="icsCustomFooter">
-    <button class="btn-konfirmasi" onclick="window.prosesBayarIcs()">BAYAR SEKARANG</button>
-    <button class="btn-batal" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
-                    </div>`;
-                
-                document.getElementById('invoiceContent').innerHTML = html;
-                document.getElementById('statusCekNama').style.display = 'none';
-                document.getElementById('modalInvoice').style.display = 'flex';
-                setTimeout(() => { const inp = document.getElementById('inputIcsTujuan'); if(inp) inp.focus(); }, 300);
-            };
-    
-            window.prosesBayarIcs = async function() {
-
-//=== ORIGINAL BLOCK 8348-8450 ===
-            window.filterIcs = function(type, el) {
-                document.querySelectorAll('.filter-card').forEach(e => e.classList.remove('active'));
-                if(el) el.classList.add('active');
-    
-                const products = window.icsData.filter(i => (i.type || 'Lainnya').toUpperCase() === type);
-                products.sort((a,b) => parseInt(a.price) - parseInt(b.price));
-    
-                let html = '';
-        let markup = 0;
-                if(window.markupConfig) {
-                     if(window.markupConfig['Paket Akrab v2'] !== undefined) markup = parseInt(window.markupConfig['Paket Akrab v2']);
-                     else if(window.markupConfig['General']) markup = parseInt(window.markupConfig['General']);
-                }
-    
-        products.forEach(p => {
-                    let pName = p.name || 'Produk';
-                    let pCode = p.code || '-';
-                    let rawM = (window.markupConfig && window.markupConfig[pCode] !== undefined) ? window.markupConfig[pCode] : markup;
-                    let configMarkup = window.getMarkupValue(rawM, parseInt(p.harga_final));
-                    let currentMarkup = (pCode === 'CFMX' || pName.toLowerCase().includes('cek')) ? 0 : configMarkup;
-                    let finalPrice = parseInt(p.price) + currentMarkup;
-                    let desc = (p.description || '').replace(/\n/g, '<br>');
-                    
-                    const isPO = (arguments.length > 2 ? arguments[2] : false) || document.getElementById('judulMenu').innerText === 'PO Akrab';
-                    let isAvailable = isPO || (p.status === 'available' && p.stock > 0);
-                    let divStyle = isAvailable ? '' : "opacity:0.6; background:#fff0f0;";
-                    let clickEvent = isPO ? `onclick="window.siapkanInvoicePO('${pCode}', '${pName}', ${finalPrice}, 'ICS')"` : (isAvailable ? `onclick="window.siapkanInvoiceIcs('${pCode}', '${pName}', ${finalPrice}, '${p.type}')"` : `onclick="alert('Stok Habis')"`);
-                    let statusBadge = isPO ? `<span style="font-size:9px; background:#f39c12; color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">PRE-ORDER</span>` : (isAvailable ? '' : `<span style="font-size:9px; background:red; color:white; padding:2px 4px; border-radius:4px;">GANGGUAN</span>`);
-    
-                    html += `<div class="item-produk" ${clickEvent} style="${divStyle}; flex-direction:column; align-items:flex-start;">
-    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-            <div style="font-weight:bold;font-size:12px;">${pName} ${statusBadge}</div>
-            <div style="font-size:10px; color:#999;">${pCode} • ${p.category || ''}</div>
-                    <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${p.stock}</div>
-        </div>
-        <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(finalPrice)}</div>
-    </div>
-    ${desc ? `<div style="font-size:10px; color:#666; margin-top:5px; border-top:1px dashed #eee; padding-top:4px; width:100%; line-height:1.4;" class="desc-box">${desc}</div>` : ''}
-                    </div>`;
-                });
-                
-                const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
-                if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
-                    const modalProduk = document.getElementById('modalProdukList');
-                    const areaListModal = document.getElementById('listProdukModalArea');
-                    const judulKategori = document.getElementById('judulKategoriModal');
-                    if(judulKategori) judulKategori.innerText = arguments[0]; 
-                    if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
-                    if(modalProduk) modalProduk.style.display = 'flex';
-                } else {
-                    const areaList = document.getElementById('listProdukArea');
-                    if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
-                }
-            };
-    
-            window.siapkanInvoiceIcs = function(kode, nama, harga, type) {
-                window.currentInvoiceData = { kode, nama, baseHarga: harga, isIcs: true };
-                
-                let placeholder = "Masukkan Nomor HP";
-                if((type || '').toUpperCase().includes('URL') || (type || '').toUpperCase().includes('LINK')) placeholder = "Tempel Link di sini";
-    
-                const html = `
-                    <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
-                    <div style="background: #f8fafc; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px;">
-    <div style="text-align: center; margin-bottom: 15px;">
-        <div style="font-size: 11px; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px;">Konfirmasi Pesanan</div>
-        <div style="font-size: 15px; font-weight: 800; color: #2c3e50; margin-top: 5px;">${nama}</div>
-    </div>
-    <div class="invoice-row" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 15px;">
-        <span>Kode Produk</span><b style="color: #666;">${kode}</b>
-    </div>
-    <div style="margin-bottom: 15px;">
-        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Tujuan / Nomor HP</label>
-        <div class="input-group" style="margin-bottom: 0;">
-            <input type="text" id="inputIcsTujuan" class="form-input" placeholder="${placeholder}" style="background: white; border: 2px solid #e1effe; color:#333; font-weight:bold;">
-            <i class="fas fa-pen" style="top: 15px;"></i>
-        </div>
-    </div>
-    <div class="invoice-row invoice-total" style="padding-top: 15px; margin-top: 5px;">
-        <span>TOTAL BAYAR</span>
-        <b style="color: var(--primary); font-size: 18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
-    </div>
-                    </div>
-                    <div id="icsCustomFooter">
-    <button class="btn-konfirmasi" onclick="window.prosesBayarIcs()">BAYAR SEKARANG</button>
-    <button class="btn-batal" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
-                    </div>`;
-                
-                document.getElementById('invoiceContent').innerHTML = html;
-                document.getElementById('statusCekNama').style.display = 'none';
-                document.getElementById('modalInvoice').style.display = 'flex';
-                setTimeout(() => { const inp = document.getElementById('inputIcsTujuan'); if(inp) inp.focus(); }, 300);
-            };
-    
-            window.prosesBayarIcs = async function() {
-                const user = window.auth.currentUser;
-                if(!user) return;
-                
-                const data = window.currentInvoiceData;
-                const hp = document.getElementById('inputIcsTujuan').value;
-                if(!hp) return alert("Mohon isi Tujuan!");
-    
-
-//=== ORIGINAL BLOCK 8555-8600 ===
-            window.loadKhfyData = async function() {
-                const areaList = document.getElementById('listProdukArea');
-                const areaFilter = document.getElementById('areaFilter');
-                
-                if(areaFilter) areaFilter.innerHTML = "";
-                if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin'></i> Memuat Produk...</div>";
-    
-                try {
-                    const req = await fetch('khfy_proxy.php?action=list');
-                    const res = await req.json();
-                    
-                    if(res.data) {
-    window.khfyData = res.data;
-    window.renderKhfyBrands();
+                if (isGroup) {
+                    let onClickAction = "window.renderSubFilter('" + key + "')";
+                    if (window.isListModeContext) {
+    html += '<div class="filter-card-list" onclick="' + onClickAction + '">';
+    html += imgTag;
+    html += '<span style="font-weight:800; color:var(--primary);">' + displayName + ' <span style="font-size:10px; background:#e2e8f0; color:#475569; padding:2px 6px; border-radius:10px; margin-left:5px;">' + items.length + ' Item</span></span>';
+    html += '<i class="fas fa-folder" style="color:#f59e0b; font-size:16px;"></i>';
+    html += '</div>';
                     } else {
-    if(areaList) areaList.innerHTML = `<div style='text-align:center; padding:20px;'>Gagal: ${res.message || 'Data Kosong'}</div>`;
+    html += '<div class="filter-card" onclick="' + onClickAction + '" style="background:#fffbeb; border-color:#fde68a;">';
+    html += '<i class="fas fa-folder" style="font-size:28px; color:#f59e0b; margin-bottom:6px;"></i>';
+    html += '<span style="color:#d97706; font-weight:800;">' + displayName + '</span>';
+    html += '</div>';
                     }
-                } catch(e) {
-                    console.error(e);
-                    if(areaList) areaList.innerHTML = "<div style='text-align:center; color:red; padding:20px;'>Gagal koneksi ke server.</div>";
+                } else {
+                    let providerStr = items[0].original;
+                    let onClickAction = "window.filterTampilan('" + providerStr + "', this)";
+                    if (window.isListModeContext) {
+    html += '<div class="filter-card-list" onclick="' + onClickAction + '">';
+    html += imgTag;
+    html += '<span>' + displayName + '</span>';
+    html += '<i class="fas fa-chevron-right"></i>';
+    html += '</div>';
+                    } else {
+    html += '<div class="filter-card" data-provider="' + providerStr + '" onclick="' + onClickAction + '">';
+    html += imgTag;
+    html += '<span>' + displayName + '</span>';
+    html += '</div>';
+                    }
                 }
-            };
+            }
+            area.innerHTML = html;
+        };
     
-            // LOGIKA KATEGORI SESUAI PERMINTAAN
-            window.getKhfyCategory = function(item) {
-                const kode = (item.kode_produk || "").toUpperCase();
-                const provider = (item.kode_provider || "").toUpperCase();
+        window.renderSubFilter = function(groupKey) {
+            let area = document.getElementById('areaFilter');
+            const specialIcons = { 'Telkomsel': 'icons/Telkomsel.png', 'Indosat': 'icons/Indosat.png', 'By.U': 'icons/By.U.png', 'XL': 'icons/XL.png', 'PBB': 'icons/PBB.png', 'Pascabayar': 'icons/TV & Halo.png', 'Axis': 'icons/Axis.png', 'Tri': 'icons/Tri.png', 'Smartfren': 'icons/Smartfren.png', 'Cetak Voucher': 'icons/Voucher.png', 'Token PLN': 'icons/Token PLN.png' };
+    
+            let cleanProviders = [];
+            window.currentProvidersData.forEach(p => {
+                if(p === 'BAYAR PLN DIRECT' || p === 'PLN PRODUK DIRECT' || p === 'Byu Promo Menarik' || p === '+Masa Aktif Indosat') return;
+                let clean = p.replace(/H2H/gi, "").replace(/Top\s*Up\s*Saldo\s*/gi, "").replace(/Saldo\s*/gi, "").replace("Customer", "").replace("Driver", "").replace("Penumpang", "").replace(/Admin\s*/gi, "").replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").trim();
+                let words = clean.split(" ");
+                let gKey = words[0];
+                if ((words[0].toUpperCase() === "CETAK" || words[0].toUpperCase() === "PAKET") && words.length > 1) gKey = words[0] + " " + words[1];
+                if (gKey === groupKey) cleanProviders.push({ original: p, clean: clean });
+            });
+    
+            let html = '<div onclick="window.renderFilterGroups()" style="grid-column: 1 / -1; background:#f1f5f9; padding:10px 15px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:10px; margin-bottom:10px; font-weight:bold; color:var(--primary); border:1px solid #cbd5e1;">';
+            html += '<i class="fas fa-arrow-left"></i> Kembali (Kategori ' + groupKey + ')';
+            html += '</div>';
+    
+            cleanProviders.forEach((item, index) => {
+                let displayName = item.clean;
+                let providerStr = item.original;
+                let logoUrl = specialIcons[window.currentMenuContext] ? specialIcons[window.currentMenuContext] : 'icons/' + displayName + '.png';
+                let imgTag = '<img src="' + logoUrl + '" onerror="this.onerror=null; this.src=\'https://via.placeholder.com/50?text=' + displayName.charAt(0) + '\';">';
+    
+                let onClickAction = "window.filterTampilan('" + providerStr + "', this)";
+                if (window.isListModeContext) {
+                    html += '<div class="filter-card-list" onclick="' + onClickAction + '">';
+                    html += imgTag;
+                    html += '<span>' + displayName + '</span>';
+                    html += '<i class="fas fa-chevron-right"></i>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="filter-card" id="filter-sub-' + index + '" data-provider="' + providerStr + '" onclick="' + onClickAction + '">';
+                    html += imgTag;
+                    html += '<span>' + displayName + '</span>';
+                    html += '</div>';
+                }
+            });
+            
+            area.innerHTML = html;
+            const listArea = document.getElementById('listProdukArea');
+            const inputCont = document.getElementById('inputContainer');
+            if(listArea) { listArea.innerHTML = ""; listArea.style.display = "none"; }
+            if(inputCont) inputCont.style.display = "none";
+        };
+    
+                window.filterTampilan = function(namaProvider, tombol) {
+                document.querySelectorAll('.filter-card').forEach(b => b.classList.remove('active'));
+                if(tombol) tombol.classList.add('active');
                 
-                if (['FMX50', 'FMX65', 'FMX80', 'FMX150'].includes(kode)) return "XL Data Reguler";
-                if (kode === 'XLB75') return "Akrab Fresh (XLA)";
+                const areaBebas = document.getElementById('areaBebasNominal');
+                const areaList = document.getElementById('listProdukArea');
+                const inputQ = document.getElementById('inputQty');
+                const btnKembali = document.getElementById('btnKembali');
+                const areaFilter = document.getElementById('areaFilter');
+                const inputContainer = document.getElementById('inputContainer');
+                const judulMenu = document.getElementById('judulMenu').innerText;
+    
+                if(areaFilter) areaFilter.style.display = "none";
+                if(btnKembali) btnKembali.style.display = "block";
                 
-                if (kode.startsWith("KDA")) return "KDA (PROMO)";
-                if (kode.startsWith("XDA")) return "Akrab Fresh (XDA)";
-                if (kode.startsWith("XLA")) return "Akrab Fresh (XLA)";
-                if (kode.startsWith("FMX") || kode.startsWith("CFMX")) return "FlexMax (FMX)";
-                if (kode.startsWith("CEKPLN") || provider.includes("PLN")) return "PLN Pascabayar";
-                if (kode.startsWith("XLB") || kode.startsWith("XL")) return "XL Data Reguler";
-                if (kode.startsWith("BPA") || kode.startsWith("BPAL")) return "Bonus Akrab";
-                if (kode.startsWith("TES")) return "Tes System";
+                    if (judulMenu === "E-Wallet" || judulMenu === "Bebas Nominal Uang Elektronik" || judulMenu === "Token PLN") {
+                    if(inputContainer) inputContainer.style.display = "none";
+                } else {
+                    if(inputContainer) inputContainer.style.display = "block";
+                }
+    
+                if(areaList) areaList.style.display = "block";
+                if(inputQ) inputQ.value = "";
+    
+                let isBebasNominal = (namaProvider.toLowerCase().includes('bebas nominal') || namaProvider === 'BBSDN');
                 
-                return "LAINNYA";
-            };
+                let res = dataMentah.filter(i => i.produk === namaProvider && i.status === "1");
+                res.sort((a,b)=>parseInt(a.harga)-parseInt(b.harga));
+                
+                let markupTambahan = 0;
+                const config = window.markupConfig || {};
+                if (config[namaProvider] !== undefined) {
+                    markupTambahan = parseInt(config[namaProvider]);
+                } else if (config['General'] !== undefined) {
+                    markupTambahan = parseInt(config['General']);
+                }
     
-            window.renderKhfyBrands = function() {
-                const rawBrands = window.khfyData.map(i => window.getKhfyCategory(i));
-                // Filter Tes System & Sort
-
-//=== ORIGINAL BLOCK 9225-9330 ===
-            window.filterWz = function(el) {
-                document.querySelectorAll('.akrab-btn, .filter-card').forEach(e => e.classList.remove('active'));
-                if(el) el.classList.add('active');
+                let html = "";
+                    res.forEach(item => {
+                    // 1. FILTER: Sembunyikan Kode Bayar & Cek Nama (Agar tidak dobel di menu)
+                    const k = item.kode;
+                    const hiddenPrefixes = ['BPAM','BPBB','BHOME','BKPR','BKK','BFNC','BYR','PAY','BSAM','BPLA','BNTPLA','BTEL','BBPJS','BCOMET','BCENTRIN','BMST','BTV'];
+                    if(k === 'CPLN' || k === 'FLAZZ2200' || (item.produk||'').toUpperCase().includes('CEK NAMA') || hiddenPrefixes.some(p => k.startsWith(p))) return;
     
-                const products = Array.isArray(window.wzData) ? window.wzData.slice() : [];
+                    let rawM = config[item.kode] !== undefined ? config[item.kode] : (config[namaProvider] !== undefined ? config[namaProvider] : config['General']);
+                    let markupFinal = window.getMarkupValue(rawM, parseInt(item.harga));
+                    let hargaFinal = parseInt(item.harga) + markupFinal;
+                    
+                    // 2. Set Harga 0 untuk Menu Cek (Agar user tahu ini Cek Tagihan)
+                    const checkPrefixes = ['CPAM','CPBB','CEK','INQ','CHOME','CKPR','CKK','CFNC','CSAM','CPLA','CNTPLA','CTEL','CBPJS','CCOMET','CCENTRIN','CMST'];
+                    if (checkPrefixes.some(p => k.startsWith(p))) hargaFinal = 0;
     
-                let html = '';
-                products.forEach(p => {
-                    const pName = p.nama_produk || p.nama || p.name || p.product_name || 'Produk WZ';
-                    const pCode = String(p.kode_produk || p.kode || p.code || p.product_code || p.markup_key || '-').toUpperCase();
-                    const basePrice = parseInt(p.harga_modal || p.harga_asli || p.modal || p.harga || p.price || 0) || 0;
-                    let rawM = 0;
-                    if(window.markupConfig) {
-                        if(window.markupConfig[pCode] !== undefined) rawM = window.markupConfig[pCode];
-                        else if(window.markupConfig[String(pCode).toUpperCase()] !== undefined) rawM = window.markupConfig[String(pCode).toUpperCase()];
-                        else if(window.markupConfig[pName] !== undefined) rawM = window.markupConfig[pName];
-                        else if(window.markupConfig['Cuan+(Promo)'] !== undefined) rawM = window.markupConfig['Cuan+(Promo)'];
-                        else if(window.markupConfig['KDA (PROMO)'] !== undefined) rawM = window.markupConfig['KDA (PROMO)'];
-                        else if(window.markupConfig['Paket Akrab'] !== undefined) rawM = window.markupConfig['Paket Akrab'];
-                        else if(window.markupConfig['General'] !== undefined) rawM = window.markupConfig['General'];
+                    let rawDesc = item.keterangan.replace(/H2H/gi, "").trim();
+                    let group = (item.produk || "").toLowerCase();
+                    let prefix = "";
+                    if(!rawDesc.toLowerCase().includes("telkomsel") && (group.includes("telkomsel") || group.includes("tsel"))) prefix = "Tsel ";
+                    else if(!rawDesc.toLowerCase().includes("indosat") && (group.includes("indosat") || group.includes("isat"))) prefix = "Isat ";
+                    else if(!rawDesc.toLowerCase().includes("xl") && group.includes("xl")) prefix = "XL ";
+                    else if(!rawDesc.toLowerCase().includes("axis") && group.includes("axis")) prefix = "Axis ";
+                    else if(!rawDesc.toLowerCase().includes("tri") && (group.includes("tri") || group.includes("three"))) prefix = "Tri ";
+                    else if(!rawDesc.toLowerCase().includes("smart") && group.includes("smart")) prefix = "Smart ";
+                    else if(!rawDesc.toLowerCase().includes("by") && group.includes("by")) prefix = "By.U ";
+                    
+                let namaProduk = prefix + rawDesc;
+                    
+                    // 3. UBAH NAMA TAMPILAN: "Cek..." -> "Cek & Bayar..."
+                    if (namaProduk.match(/^(Cek|CEK|Inquiry|INQUIRY)\s/)) {
+    namaProduk = namaProduk.replace(/^(Cek|CEK|Inquiry|INQUIRY)\s+/i, "Cek & Bayar ");
                     }
-                    const markup = window.getMarkupValue ? window.getMarkupValue(rawM, basePrice) : parseInt(rawM || 0);
-                    const finalPrice = basePrice + markup;
-                    const stok = parseInt(p.stok ?? p.stock ?? 0) || 0;
-                    const ready = (p.ready === true || p.available === true || String(p.status || '').toUpperCase() === 'READY') && stok > 0;
-                    const desc = String(p.deskripsi || p.description || '').replace(/\n/g, '<br>');
-                    const safeName = String(pName).replace(/'/g, "\\'");
-                    const safeCode = String(pCode).replace(/'/g, "\\'");
-                    const statusBadge = ready
-                        ? `<span style="font-size:9px; color:white; background:#10ac84; padding:2px 4px; border-radius:4px; margin-left:5px;">READY</span>`
-                        : `<span style="font-size:9px; color:white; background:orange; padding:2px 4px; border-radius:4px; margin-left:5px;">KOSONG</span>`;
+                    
+                    let aksiKlik = `siapkanInvoice('${item.kode}','${namaProduk}',${hargaFinal})`;
     
-                    let divStyle = "flex-direction:column; align-items:flex-start;";
-                    let clickEvent = `onclick="window.siapkanInvoiceWz('${safeCode}', '${safeName}', ${finalPrice})"`;
-                    if(!ready) {
-                        divStyle += " opacity:0.6; background:#fff8e1;";
-                        clickEvent = `onclick="alert('Maaf, stok produk Cuan+(Promo) ini kosong.')"`;
-                    }
-    
-                    html += `<div class="item-produk" ${clickEvent} style="${divStyle}">
-                        <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <div style="font-weight:bold;font-size:12px;">${pName} ${statusBadge}</div>
-                                <div style="font-size:10px; color:#999;">${pCode} • Cuan+(Promo)</div>
-                                <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${stok}</div>
-                            </div>
-                            <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(finalPrice)}</div>
-                        </div>
-                        ${desc ? `<div style="font-size:10px; color:#666; margin-top:5px; border-top:1px dashed #eee; padding-top:4px; width:100%; line-height:1.4;" class="desc-box">${desc}</div>` : ''}
+                    html += `<div class="item-produk" onclick="${aksiKlik}">
+    <div style="flex:1;">
+        <div style="font-weight:bold;font-size:12px;">${namaProduk}</div>
+        <div style="font-size:10px; color:#999;">${item.kode}</div>
+    </div>
+    <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(hargaFinal)}</div>
                     </div>`;
                 });
+                if(listArea) listArea.innerHTML = html || "<div style='padding:20px; text-align:center; color:#999;'>Produk Tidak Tersedia</div>";
+            }
     
-                const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
-                if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
-                    const modalProduk = document.getElementById('modalProdukList');
-                    const areaListModal = document.getElementById('listProdukModalArea');
-                    const judulKategori = document.getElementById('judulKategoriModal');
-                    if(judulKategori) judulKategori.innerText = 'Cuan+(Promo)';
-                    if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk Cuan+(Promo) kosong</div>";
-                    if(modalProduk) modalProduk.style.display = 'flex';
-                } else {
-                    const areaList = document.getElementById('listProdukArea');
-                    if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk Cuan+(Promo) kosong</div>";
+            // SMART PREFIX DETECTION (Hanya untuk menu Pulsa/Data)
+            inputNomor.addEventListener('input', function() {
+                let num = this.value;
+                let menuSekarang = document.getElementById('judulMenu').innerText;
+                
+                // Batasan Menu yang menggunakan Prefix Detection
+                const menuButuhPrefix = ["Pulsa"];
+                if (!menuButuhPrefix.includes(menuSekarang)) return;
+    
+                let op = ""; let allowed = [];
+                if (num.length >= 4) {
+                    let p = num.substring(0, 4);
+                    if (/^0851/.test(p)) { op = "By.U / Tsel"; allowed = ["By U", "By.U", "Telkomsel"]; }
+                    else if (/^08(11|12|13|21|22|23|52|53)/.test(p)) { op = "Telkomsel"; allowed = ["Telkomsel"]; }
+                    else if (/^08(14|15|16|55|56|57|58)/.test(p)) { op = "Indosat"; allowed = ["Indosat"]; }
+                    else if (/^08(95|96|97|98|99)/.test(p)) { op = "Tri"; allowed = ["Three", "Tri"]; }
+                    else if (/^08(17|18|19|59|77|78)/.test(p)) { op = "XL"; allowed = ["XL"]; }
+                    else if (/^08(31|32|33|38)/.test(p)) { op = "Axis"; allowed = ["Axis", "XL - Axis"]; }
+                    else if (/^08(81|82|83|84|85|86|87|88|89)/.test(p)) { op = "Smartfren"; allowed = ["Smartfren"]; }
                 }
+    
+                const btns = document.querySelectorAll('.filter-card');
+                if (op && allowed.length > 0) {
+                    badgeOperator.innerText = op; badgeOperator.style.display = "block";
+                    let clicked = false;
+                    btns.forEach(btn => {
+    let prov = btn.getAttribute('data-provider').toLowerCase();
+    let isMatch = allowed.some(key => prov.includes(key.toLowerCase()));
+    if (isMatch) {
+        btn.style.display = 'inline-block';
+        if(!clicked) { btn.click(); clicked = true; }
+    } else { btn.style.display = 'none'; }
+                    });
+                } else {
+                    badgeOperator.style.display = "none";
+                    btns.forEach(btn => btn.style.display = 'inline-block');
+                    if(num.length === 0 && btns.length > 0) btns[0].click();
+                }
+            });
+    
+        // FUNGSI PROSES BEBAS NOMINAL (PENTING: Logika Open Denom)
+                    window.prosesBebasNominal = function() {
+                const qty = document.getElementById('inputQty').value;
+                const hp = document.getElementById('nomorHP').value;
+                
+                if(!hp) return window.showNotice('error', 'Gagal', 'Nomor Tujuan wajib diisi!');
+                if(!qty) return window.showNotice('error', 'Gagal', 'Nominal (QTY) wajib diisi!');
+                if(parseInt(qty) < 1000) return window.showNotice('error', 'Gagal', 'Nominal tidak valid');
+    
+                // Ambil Markup General sebagai fallback
+                const margin = (markupConfig['General'] || 0);
+                const hargaJual = parseInt(qty) + parseInt(margin);
+                
+                siapkanInvoice('BBSDN', 'Topup Bebas Nominal', hargaJual, qty);
             };
     
-            window.siapkanInvoiceWz = function(kode, nama, harga) {
-                window.currentInvoiceData = { kode, nama, baseHarga: harga, isWz: true, provider: 'WZ' };
-                const modalProduk = document.getElementById('modalProdukList');
-                if(modalProduk) modalProduk.style.display = 'none';
     
-                const html = `
-                    <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
-                    <div style="background:#f8fafc; border-radius:15px; padding:20px; border:1px solid #edf2f7; margin-bottom:20px;">
-                        <div style="text-align:center; margin-bottom:15px;">
-                            <div style="font-size:11px; color:#95a5a6; text-transform:uppercase; letter-spacing:1px;">Konfirmasi Cuan+(Promo)</div>
-                            <div style="font-size:15px; font-weight:800; color:#2c3e50; margin-top:5px;">${nama}</div>
-                        </div>
-                        <div class="invoice-row" style="border-bottom:1px dashed #eee; padding-bottom:10px; margin-bottom:15px;">
-                            <span>Kode Produk</span><b style="color:#666;">${kode}</b>
-                        </div>
-                        <div style="margin-bottom:15px;">
-                            <label style="font-size:10px; font-weight:700; color:var(--primary); display:block; margin-bottom:8px; text-transform:uppercase;">Nomor Tujuan</label>
-                            <div class="input-group" style="margin-bottom:0;">
-                                <input type="tel" inputmode="numeric" id="inputWzTujuan" class="form-input" placeholder="Masukkan Nomor Tujuan" style="background:white; border:2px solid #e1effe; color:#333; font-weight:bold; padding-right:70px;">
-                                <i class="fas fa-edit" style="top:15px;"></i>
-                                <button type="button" onclick="window.pasteDariClipboard('inputWzTujuan')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
-                            </div>
-                        </div>
-                        <div class="invoice-row invoice-total" style="padding-top:15px; margin-top:5px;">
-                            <span>TOTAL BAYAR</span>
-                            <b style="color:var(--primary); font-size:18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
-                        </div>
-                    </div>
-                    <div id="wzCustomFooter">
-                        <button class="btn-konfirmasi" onclick="window.prosesBayarWz()">BAYAR SEKARANG</button>
-                        <button class="btn-batal" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
+                    window.siapkanInvoice = function(kode, nama, harga) {
+                const judulMenu = document.getElementById('judulMenu').innerText;
+        if (judulMenu !== "E-Wallet" && judulMenu !== "Bebas Nominal Uang Elektronik" && judulMenu !== "Token PLN") {
+                    const hp = document.getElementById('nomorHP').value;
+                    if(!hp) return window.showNotice('error', 'Gagal', 'Nomor HP/ID Pelanggan wajib diisi!');
+                }
+    
+                let isBebasNominal = (nama.toLowerCase().includes('bebas nominal') || kode === 'BBSDN');
+                
+        let providerKey = "";
+                const n = nama.toUpperCase();
+                if(n.includes("DANA")) providerKey = "DANA";
+                else if(n.includes("OVO")) providerKey = "OVO";
+                else if(n.includes("GOPAY DRIVER")) providerKey = "GOPAY_DRIVER";
+                else if(n.includes("GOPAY") || n.includes("GO-JEK")) providerKey = "GOPAY";
+                else if(n.includes("GRAB DRIVER")) providerKey = "GRAB_DRIVER";
+                else if(n.includes("GRAB")) providerKey = "GRAB";
+                else if(n.includes("SHOPEE")) providerKey = "SHOPEE";
+                else if(n.includes("ISAKU")) providerKey = "ISAKU";
+                else if(n.includes("DOKU")) providerKey = "DOKU";
+                else if(n.includes("KASPRO") || n.includes("KAI PAY")) providerKey = "KASPRO";
+        else if(n.includes("ASTRAPAY")) providerKey = "ASTRAPAY";
+                else if(n.includes("PLN")) providerKey = "PLN"; // Aktifkan Mode Cek Nama untuk PLN
+    
+                let htmlInvoice = `
+                    <div style="background: #f8fafc; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 11px; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px;">Konfirmasi Pesanan</div>
+        <div style="font-size: 15px; font-weight: 800; color: #2c3e50; margin-top: 5px;">${nama}</div>
+    </div>
+    
+    <div id="areaNamaTujuan" style="display:none; background: #e6f9ed; color: #27ae60; padding: 12px; border-radius: 10px; margin-bottom: 15px; text-align: center; border: 1px solid #c3e6cb;">
+        <div style="font-size: 10px; font-weight: bold; opacity: 0.8;">NAMA TUJUAN:</div>
+        <div id="valNamaTujuan" style="font-size: 14px; font-weight: 800;">-</div>
+    </div>
+    
+    <div class="invoice-row" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 15px;">
+        <span>ID Produk</span>
+        <b style="color: #666;">${kode}</b>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Nomor Tujuan / ID Pelanggan</label>
+        <div class="input-group" style="margin-bottom: 0;">
+            <input type="tel" inputmode="numeric" id="invoiceNomorHP" class="form-input" placeholder="Contoh: 0812xxxx" oninput="window.debounceCekNama('${providerKey}')" style="background: white; border: 2px solid #e1effe; padding-right: 70px;">
+            <i class="fas fa-address-card" style="top: 15px;"></i>
+            <button type="button" onclick="window.pasteDariClipboard('invoiceNomorHP')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
+        </div>
+    </div>`;
+    
+                if (isBebasNominal) {
+                    htmlInvoice += `
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 10px; font-weight: 700; color: var(--success); display: block; margin-bottom: 8px; text-transform: uppercase;">Nominal Top Up</label>
+        <div class="input-group" style="margin-bottom: 0;">
+            <input type="tel" id="invoiceQty" class="form-input" placeholder="Masukkan Jumlah" oninput="window.hitungHargaBebas(this.value)" style="background: white; border: 2px solid #e6f9ed;">
+            <i class="fas fa-coins" style="top: 15px;"></i>
+        </div>
+    </div>`;
+                }
+    
+                htmlInvoice += `
+    <div class="invoice-row invoice-total" style="padding-top: 15px; margin-top: 5px;">
+        <span>TOTAL BAYAR</span>
+        <b id="displayTotalInvoice" style="color: var(--primary); font-size: 18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
+    </div>
                     </div>`;
     
-                document.getElementById('invoiceContent').innerHTML = html;
-                document.getElementById('statusCekNama').style.display = 'none';
-                document.getElementById('modalInvoice').style.display = 'flex';
-            };
+                window.currentInvoiceData = { kode, nama, baseHarga: harga, isBebas: isBebasNominal };
+                document.getElementById('invoiceContent').innerHTML = htmlInvoice;
+                document.getElementById('statusCekNama').style.display = "none";
+                
+                if (document.getElementById('btnKonfirmasiBayar')) {
+                    document.getElementById('btnKonfirmasiBayar').disabled = false;
+                    document.getElementById('btnKonfirmasiBayar').innerHTML = 'KONFIRMASI BAYAR';
+                }
+                
+        if(judulMenu !== "E-Wallet" && judulMenu !== "Token PLN") {
+                    document.getElementById('invoiceNomorHP').value = document.getElementById('nomorHP').value;
+                    setTimeout(() => window.debounceCekNama(providerKey), 500);
+                }
+                modalInvoice.style.display = "flex";
+            }
     
-            window.prosesBayarWz = async function() {
-                const user = window.auth.currentUser;
-
-//=== ORIGINAL BLOCK 9418-9525 ===
-            window.monitorWzTrx = async function(trxId, docId) {
-                let attempts = 0;
-                const maxAttempts = 45;
-                const interval = setInterval(async () => {
-                    attempts++;
-                    if(attempts > maxAttempts) {
-                        clearInterval(interval);
-                        return;
-                    }
-    
-                    try {
-                        const req = await fetch('wz_proxy.php?action=status', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ order_id: trxId })
-                        });
-                        const res = await req.json();
-                        const dataRes = (res && typeof res.data === 'object' && res.data !== null) ? res.data : res;
-                        const st = String(dataRes.status || res.status || '').toLowerCase();
-                        const msgRaw = String(dataRes.message || res.message || '').toLowerCase();
-                        const httpCode = Number(dataRes._http_code || res._http_code || (res.raw && res.raw._http_code) || 0);
-    
-                        let statusAkhir = 'PENDING';
-    
-                        if(st.includes('success') || st.includes('sukses') || st.includes('berhasil')) {
-                            statusAkhir = 'BERHASIL';
-                        } else if(st.includes('failed') || st.includes('fail') || st.includes('gagal') || st.includes('cancel') || st.includes('refund')) {
-                            statusAkhir = 'GAGAL';
-                        } else if(st.includes('error')) {
-                            if(httpCode === 404 || msgRaw.includes('tidak ditemukan') || msgRaw.includes('not found')) {
-                                statusAkhir = attempts >= 3 ? 'GAGAL' : 'PENDING';
-                            } else {
-                                statusAkhir = 'GAGAL';
-                            }
-                        }
-    
-                        if(statusAkhir === 'PENDING') return;
-    
-                        clearInterval(interval);
-                        const user = window.auth.currentUser;
-                        if(!user) return;
-    
-                        const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", docId);
-                        const curSnap = await window.getDoc(trxRef);
-                        if(curSnap.exists()) {
-                            const curSt = String(curSnap.data().status || '').toUpperCase();
-                            if(curSt === 'BERHASIL' || curSt === 'SUKSES') return;
-                            if(curSt === 'GAGAL' && curSnap.data().isRefunded) return;
-                        }
-    
-                        let sn = dataRes.sn || dataRes.serial_number || dataRes.message || res.message || '-';
-                        if(statusAkhir === 'GAGAL' && (httpCode === 404 || msgRaw.includes('tidak ditemukan') || msgRaw.includes('not found'))) {
-                            sn = 'Order WZ tidak ditemukan di server. Saldo dikembalikan otomatis.';
-                        }
-                        if(window.updateFirestoreStatus) {
-                            window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
-                        }
-                        if(statusAkhir === 'GAGAL') {
-                            window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                        } else {
-                            window.showNotice('success', 'Transaksi Sukses', sn);
-                        }
-                        return;
-                        if(statusAkhir === 'GAGAL' && (httpCode === 404 || msgRaw.includes('tidak ditemukan') || msgRaw.includes('not found'))) {
-                            sn = 'Order WZ tidak ditemukan di server. Saldo dikembalikan otomatis.';
-                        }
-                        await window.updateDoc(trxRef, {
-                            status: statusAkhir,
-                            sn: sn,
-                            raw_json: JSON.stringify(res)
-                        });
-    
-                        if(statusAkhir === 'GAGAL') {
-                            const trxSnap = await window.getDoc(trxRef);
-                            if(trxSnap.exists() && !trxSnap.data().isRefunded) {
-                                const amount = parseInt(trxSnap.data().harga || 0);
-                                const userRef = window.doc(window.db, "users", user.uid);
-                                const uSnap = await window.getDoc(userRef);
-                                const saldoAkhir = (uSnap.data().saldo || 0) + amount;
-    
-                                await window.updateDoc(userRef, { saldo: saldoAkhir });
-                                await window.updateDoc(trxRef, { isRefunded: true, sn: sn + ' (REFUND OTOMATIS)' });
-    
-                                if(window.triggerDoniGuard) {
-                                    window.triggerDoniGuard({
-                                        action: 'topup',
-                                        produk: 'REFUND: ' + (trxSnap.data().produk || 'Cuan+(Promo)'),
-                                        nominal: amount,
-                                        trx_id: (trxSnap.data().trx_id || trxId) + '-REF',
-                                        saldo_akhir_client: saldoAkhir
-                                    });
-                                }
-    
-                                window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                            }
-                        } else {
-                            window.showNotice('success', 'Transaksi Sukses', sn);
-                        }
-                    } catch(e) {
-                        console.log("Monitoring WZ Skip:", e);
-                    }
-                }, 4000);
-            };
-    
-    
-            window.loadGabunganData = async function() {
-                const areaList = document.getElementById('listProdukArea');
-                const areaFilter = document.getElementById('areaFilter');
-</script>
-<script>
-
-//=== ADDITIONAL BLOCK 5253-5400 ===
             window.hitungHargaBebas = function(val) {
                 const data = window.currentInvoiceData;
                 const baseFee = parseInt(data.baseHarga) || 0;
@@ -3874,8 +5335,317 @@ console.log("Pandawa-Digital v2.0 — Ready.");
         } catch(e) {
     console.warn("DoniGuard Check Error:", e);
     return true;
-
-//=== ADDITIONAL BLOCK 5712-5770 ===
+        }
+    };
+    
+    
+    window.prosesBayarFinal = async function() {
+                const user = window.auth.currentUser;
+                if(!user) return window.showNotice('error', 'Akses Ditolak', 'Silakan login kembali!');
+    
+                const data = window.currentInvoiceData;
+                const inputHP = document.getElementById('invoiceNomorHP').value;
+                if(!inputHP) return alert("Nomor Tujuan wajib diisi!");
+    
+                let hargaFinal = data.baseHarga;
+                let qtyCustom = null;
+    
+        if(data.isBebas) {
+                    const elQty = document.getElementById('invoiceQty');
+                    if(!elQty) return alert("Input Nominal tidak ditemukan");
+                    qtyCustom = elQty.value;
+                    if(!qtyCustom || qtyCustom < 1000) return alert("Nominal tidak valid!");
+                    // Perbaikan: nominal manual + (harga asli + markup) 
+                    // data.baseHarga sudah berisi (harga asli + markup)
+                    hargaFinal = parseInt(qtyCustom) + parseInt(data.baseHarga);
+                }
+    
+                transaksiPending = { 
+                    tujuan: inputHP, 
+                    kode_produk: data.kode, 
+                    nama_produk: data.nama, 
+                    harga: hargaFinal,
+                    qty: qtyCustom
+                };
+    
+                window.tutupInvoice();
+                window.tutupModal(); 
+                window.kembaliKeFilter();
+                window.showNotice('loading', 'Memproses', 'Sedang memvalidasi saldo dan transaksi...');
+    
+                try {
+                    const userDoc = await window.getDoc(window.doc(window.db, "users", user.uid));
+                    const currentSaldo = parseInt(userDoc.data().saldo) || 0;
+                    const hargaTrx = parseInt(transaksiPending.harga) || 0;
+    
+                    if (!(await window.cekSinkronisasiDoniGuard(user.uid, currentSaldo))) return;
+    
+                    const isCekProduk = (transaksiPending.kode_produk || "").startsWith("C") || (transaksiPending.kode_produk || "").startsWith("INQ") || (transaksiPending.kode_produk || "").startsWith("CEK");
+                    if (hargaTrx <= 0 && !isCekProduk) {
+    window.showNotice('error', 'Gagal', 'Nominal transaksi tidak valid (harus lebih dari 0).');
+    return;
+                    }
+    
+                    if (currentSaldo < hargaTrx) {
+    window.showNotice('error', 'Saldo Gagal', 'Saldo Anda tidak mencukupi. Sisa saldo: Rp ' + new Intl.NumberFormat('id-ID').format(currentSaldo));
+    return;
+                    }
+                    
+                    transaksiPending.harga = hargaTrx;
+    
+                    const newSaldo = currentSaldo - transaksiPending.harga;
+                    await window.updateDoc(window.doc(window.db, "users", user.uid), { saldo: newSaldo });
+    
+                    const req = await fetch('api.php', { method: 'POST', body: JSON.stringify(transaksiPending), headers: {'Content-Type': 'application/json'} });
+                    const res = await req.json();
+                    let clean = window.bersihkanPesan(res.message);
+    
+                    if (res.status === "PENDING" || res.status === "BERHASIL") {
+    window.showNotice('success', 'Berhasil', clean);
+    // Pemicu DoniGuard saat Transaksi PPOB Berhasil
+    window.triggerDoniGuard({
+        action: 'transaksi',
+        produk: transaksiPending.nama_produk,
+        nominal: transaksiPending.harga,
+        saldo_akhir_client: newSaldo
+    });
+                } else {
+    window.showNotice('error', 'Gagal', clean);
+    const currentSnap = await window.getDoc(window.doc(window.db, "users", user.uid));
+    const latestSaldo = currentSnap.exists() ? (currentSnap.data().saldo || 0) : 0;
+    await window.updateDoc(window.doc(window.db, "users", user.uid), { saldo: latestSaldo + transaksiPending.harga });
+                    }                    let idDocNew = "";
+    if(window.simpanKeFirestore) idDocNew = await window.simpanKeFirestore(transaksiPending, res.status, clean, res.refID, user.uid, userDoc.data().username, JSON.stringify(res));
+    
+    if ((res.provider === 'KAJE' || transaksiPending.kode_produk.startsWith('KAJE')) && (res.status === 'BERHASIL' || res.status === 'Sukses')) {
+        window.prosesKajeInternal(transaksiPending.tujuan, transaksiPending.harga, userDoc.data().username, user.uid, idDocNew);
+    }
+    
+                } catch (e) {
+                    try {
+                        const userRef = window.doc(window.db, "users", window.auth.currentUser.uid);
+                        const freshSnap = await window.getDoc(userRef);
+                        const curBal = freshSnap.exists() ? (freshSnap.data().saldo || 0) : 0;
+                        await window.updateDoc(userRef, { saldo: curBal + transaksiPending.harga });
+                    } catch(ex){}
+                    window.showNotice('error', 'Sistem Error', 'Gagal menghubungkan ke server.');
+                }
+            }
+    
+            window.cekStatusBerkala = function(idDoc, trxId, tujuan, kode) {
+                if(intervalCek[idDoc]) return;
+                intervalCek[idDoc] = setInterval(async () => {
+                    try {
+    const res = await fetch('cek_status.php', { method: 'POST', body: JSON.stringify({ refID: trxId, tujuan: tujuan, kode_produk: kode }) });
+    const json = await res.json();
+    if(json.status !== "PENDING") { clearInterval(intervalCek[idDoc]); window.updateFirestoreStatus(idDoc, json.status, window.bersihkanPesan(json.sn), JSON.stringify(json)); }
+                    } catch(e) {}
+                }, 10000); 
+            }
+    
+    
+        window.cekStatusQiospayBerkala = function(idDoc, nominal) {
+                if(window.intervalCek[idDoc]) return;
+                window.intervalCek[idDoc] = setInterval(async () => {
+                    try {
+    const req = await fetch('cek_topup.php', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nominal: nominal, docId: idDoc })
+    });
+    const res = await req.json();
+    if(res.status === 'success') {
+        clearInterval(window.intervalCek[idDoc]);
+        delete window.intervalCek[idDoc];
+        
+        const user = window.auth.currentUser;
+        if(user) {
+            const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc);
+            const trxSnap = await window.getDoc(trxRef);
+            if(trxSnap.exists() && (trxSnap.data().status === 'BERHASIL' || trxSnap.data().status === 'Sukses')) return; // Anti-Double
+            
+            const userRef = window.doc(window.db, "users", user.uid);
+            const userSnap = await window.getDoc(userRef);
+            const newSaldo = (userSnap.exists() ? parseInt(userSnap.data().saldo) || 0 : 0) + parseInt(nominal);
+            
+            /* await window.updateDoc(userRef, { saldo: newSaldo }); // DIHAPUS DEMI KEAMANAN */
+            console.log('Pembayaran valid, menunggu cronjob/backend server memproses saldo...');
+            if(window.kirimNotifTelegram) window.kirimNotifTelegram('topup', { harga: nominal, username: userSnap.exists() ? (userSnap.data().username || 'User') : 'User', trx_id: 'QRIS-' + idDoc });
+            if(window.updateFirestoreStatus) window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup QRIS Otomatis", JSON.stringify(res));
+            
+            if(window.triggerDoniGuard) {
+                window.triggerDoniGuard({
+                    trx_id: 'QRIS-' + idDoc, action: 'topup', produk: 'TOPUP QRIS GOPAY (QIOSPAY)', nominal: parseInt(nominal), saldo_akhir_client: newSaldo
+                });
+            }
+            window.showNotice('success', 'Berhasil', 'Topup QRIS Rp ' + new Intl.NumberFormat('id-ID').format(nominal) + ' masuk!');
+            if(document.getElementById('statusQrisAuto')) {
+                document.getElementById('statusQrisAuto').innerHTML = '<i class="fas fa-check-circle"></i> Pembayaran Diterima!';
+                document.getElementById('statusQrisAuto').style.color = 'var(--success)';
+            }
+            setTimeout(() => {
+                localStorage.removeItem('pending_topup');
+                if(window.tutupModalTopup) window.tutupModalTopup();
+                if(window.bukaRiwayatArsip) window.bukaRiwayatArsip();
+            }, 2000);
+        }
+    }
+                    } catch(e) {}
+                }, 10000);
+            };
+    
+    
+            window.cekStatusTopupBerkala = function(idDoc, uniqueCode) {
+                if(!window.isTopupAuto) return; // Mode manual tidak mengecek API otomatis
+    
+                if(intervalCek[idDoc]) return;
+                intervalCek[idDoc] = setInterval(async () => {
+                    try {
+    const req = await fetch('paydisini_cek.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ unique_code: uniqueCode })
+    });
+    const res = await req.json();
+    
+    if(res.success && res.data.status === "Success") {
+        clearInterval(intervalCek[idDoc]); 
+        delete intervalCek[idDoc];
+    
+        // FIX DONIGUARD: Pastikan User Ada
+        const user = window.auth.currentUser;
+        if(user) {
+            // 1. Ambil Saldo Terakhir dari Firestore (Realtime)
+            const userRef = window.doc(window.db, "users", user.uid);
+            const userSnap = await window.getDoc(userRef);
+            const oldSaldo = userSnap.exists() ? (parseInt(userSnap.data().saldo) || 0) : 0;
+            const nominal = parseInt(res.data.balance); // FIX: Ambil dari balance (Net Settlement)
+            const newSaldo = oldSaldo + nominal;
+    
+            // 2. Update Firestore (Client Side) DULUAN
+            // Kita update saldo di client agar sinkron saat DoniGuard mengecek
+            /* await window.updateDoc(userRef, { saldo: newSaldo }); // DIHAPUS DEMI KEAMANAN */
+            console.log('Pembayaran valid, menunggu cronjob/backend server memproses saldo...');
+            if(window.kirimNotifTelegram) window.kirimNotifTelegram('topup', { harga: nominal, username: userSnap.exists() ? (userSnap.data().username || 'User') : 'User', trx_id: uniqueCode });
+            window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup Berhasil");
+    
+            // 3. Lapor ke DoniGuard (Server Side)
+            // Kirim 'saldo_akhir_client' yang SUDAH DITAMBAH agar validasi server sukses
+            if(window.triggerDoniGuard) {
+                                                window.triggerDoniGuard({
+                    trx_id: uniqueCode,
+                    action: 'topup',
+                    produk: 'TOPUP PAYDISINI',
+                    nominal: nominal,
+                    saldo_akhir_client: newSaldo
+                });
+            }
+                                                                                                                                                        try {
+                const uName = userSnap.exists() ? (userSnap.data().username || 'User') : 'User';
+                const tgNow = new Date();
+                const tgDateStr = `${tgNow.getDate()}/${tgNow.getMonth()+1}/${tgNow.getFullYear()} ${tgNow.getHours().toString().padStart(2,'0')}:${tgNow.getMinutes().toString().padStart(2,'0')}`;
+                const tgMsg = `✅ *TOPUP SALDO BERHASIL*\n━━━━━━━━━━━━━━━━━━\n👤 User: ${uName}\n📧 Email: ${user.email}\n💰 Jumlah: Rp ${new Intl.NumberFormat('id-ID').format(nominal)}\n🆔 Trx ID: ${uniqueCode}\n🕒 Waktu: ${tgDateStr}\n━━━━━━━━━━━━━━━━━━\n🏢 Pandawa-Digital\n🌐 https://www.pandawa-digital.com`;
+                
+                fetch("https://api.telegram.org/bot8659828786:AAGvN2hYGOBVvytFULdb7_v_hOCFDGOO7VA/sendMessage", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        chat_id: "-1003897469545",
+                        text: tgMsg,
+                        parse_mode: "Markdown"
+                    })
+                });
+            } catch(etg) { console.log('TeleErr', etg); }
+            window.showNotice('success', 'Topup Berhasil', 'Saldo Rp '+new Intl.NumberFormat('id-ID').format(nominal)+' Masuk.');
+        }
+    } else if(res.success && (res.data.status === "Canceled" || res.data.status === "Expired")) {
+        clearInterval(intervalCek[idDoc]);
+        delete intervalCek[idDoc];
+        window.updateFirestoreStatus(idDoc, "GAGAL", "Pembayaran Expired/Batal");
+    }
+                    } catch(e) {} 
+                }, 10000); 
+            }
+    
+                    window.kembaliKeFilter = function() {
+                let area = document.getElementById('areaFilter');
+                if(window.isListModeContext) {
+                    area.style.display = "block";
+                } else {
+                    area.style.display = "grid";
+                }
+                const inputContainer = document.getElementById('inputContainer');
+                if (inputContainer) inputContainer.style.display = "none";
+                const listArea = document.getElementById('listProdukArea');
+                if (listArea) { listArea.innerHTML = ""; listArea.style.display = "none"; }
+                const btn = document.getElementById('btnKembali');
+                if (btn) btn.style.display = "none";
+                document.querySelectorAll('.filter-card, .filter-card-list').forEach(b => b.classList.remove('active'));
+            }
+    
+            
+            window.toggleMenuLainnya = function() {
+                const drawer = document.getElementById('menuDrawer');
+                const btn = document.getElementById('btnMore');
+                
+                if (drawer.classList.contains('expanded')) {
+                    drawer.classList.remove('expanded');
+                    btn.innerHTML = '<i class="fas fa-chevron-down"></i> Menu Lainnya';
+                } else {
+                    drawer.classList.add('expanded');
+                    btn.innerHTML = '<i class="fas fa-chevron-up"></i> Tutup';
+                }
+            }
+    
+    window.keranjang = [];
+    
+            window.navSwitch = (menu, el) => {
+                // Reset Style Nav
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                if(el) el.classList.add('active');
+    
+                // Sembunyikan Semua Halaman & Elemen Home
+                document.getElementById('globalLoader').style.display = 'none';
+                document.querySelector('.header').style.display = 'none';
+                document.querySelector('.saldo-box').style.display = 'none';
+                document.querySelector('.menu-container').style.display = 'none';
+                document.getElementById('riwayat-container').style.display = 'none';
+                document.getElementById('shop-container').style.display = 'none';
+                document.getElementById('btnMoreContainer').style.display = 'none';
+                document.querySelector('.history-container').style.display = 'none';
+                document.getElementById('liveHistoryHeader').style.display = 'none'; // Fix: Sembunyikan Header Riwayat
+                document.querySelectorAll('.full-page').forEach(p => p.style.display = 'none');
+    
+                // Tampilkan Judul Header Menu Utama Khusus di Home
+                const mainHeaderElements = [document.querySelector('.header'), document.querySelector('.saldo-box'), document.querySelector('.menu-container'), document.getElementById('shop-container'), document.getElementById('btnMoreContainer'), document.querySelector('.history-container')];
+    
+                if(menu === 'home') {
+                    mainHeaderElements.forEach(e => { if(e) e.style.display = 'block'; });
+                    document.querySelector('.saldo-box').style.display = 'flex'; 
+                    document.getElementById('shop-container').style.display = 'grid';
+                    document.getElementById('liveHistoryHeader').style.display = 'flex'; // Fix: Tampilkan kembali di Home
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                } else if(menu === 'shop_full') {
+                    document.getElementById('pageAllProduk').style.display = 'block';
+                    renderFullShop();
+                } else if(menu === 'etalase') {
+                    document.getElementById('pageEtalase').style.display = 'block';
+                    renderKeranjang();
+        } else if(menu === 'akrab_spesial') {
+                    document.getElementById('pageAkrabSpesial').style.display = 'block';
+                    window.renderAkrabSystem();
+    
+                } else if(menu === 'lapak') {
+                    document.getElementById('pageLapak').style.display = 'block';
+                    switchLapakTab('barang');
+                } else if(menu === 'pesanan_fisik') {
+                    document.getElementById('pagePesananFisik').style.display = 'block';
+                    loadPesananFisik();
+                } else if(menu === 'profil') {
+                    document.getElementById('pageProfil').style.display = 'block';
+                    loadProfileData();
+                }
+            };
+    
             window.tambahKeKeranjang = (id, nama, harga, img) => {
                 window.keranjang.push({id, nama, harga, img});
                 updateBadgeCart();
@@ -3935,8 +5705,1086 @@ console.log("Pandawa-Digital v2.0 — Ready.");
                     return;
                 }
                 
-
-//=== ADDITIONAL BLOCK 6851-7120 ===
+                area.innerHTML = "<p style='text-align:center;color:#999'>Memuat produk Anda...</p>";
+    
+                // Query Produk berdasarkan UID Seller
+                const q = window.query(window.collection(window.db, "produk"), window.where("seller_uid", "==", user.uid));
+                
+                window.onSnapshot(q, (snap) => {
+                    let html = "";
+                    if (snap.empty) {
+    area.innerHTML = "<div style='text-align:center; padding:20px; color:#999; border:1px dashed #ccc; border-radius:10px;'>Belum ada barang jualan.<br>Silakan tambah produk di atas.</div>";
+    return;
+                    }
+    
+                    snap.forEach(d => {
+    const p = d.data();
+    html += `<div class="cart-item">
+        <img src="${p.img||'https://via.placeholder.com/60'}" class="cart-img" onerror="this.src='https://via.placeholder.com/60'">
+        <div class="cart-desc">
+            <b style="font-size:13px;">${p.nama}</b>
+            <span style="font-size:12px; color:var(--primary); font-weight:bold;">Rp ${new Intl.NumberFormat('id-ID').format(p.harga)}</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <i class="fas fa-edit" style="color:#f39c12; cursor:pointer;" onclick="editProdukLapak('${d.id}', '${p.nama}', ${p.harga}, '${p.img||''}')"></i>
+            <i class="fas fa-trash-alt" style="color:#e74c3c; cursor:pointer;" onclick="hapusProdukLapak('${d.id}')"></i>
+        </div>
+    </div>`;
+                    });
+                    area.innerHTML = html;
+                }, (error) => {
+                    console.error("Error load lapak:", error);
+                    area.innerHTML = "<p style='color:red; text-align:center;'>Gagal memuat data.</p>";
+                });
+            };
+    
+    
+            window.tambahProdukLapak = async () => {
+                const user = window.auth.currentUser;
+                const nama = document.getElementById('lapakNama').value;
+                const harga = document.getElementById('lapakHarga').value;
+                const fileInput = document.getElementById('fileUserLapak');
+                const urlInput = document.getElementById('lapakImg');
+                const btn = event.currentTarget;
+                const oriHtml = btn.innerHTML;
+                
+                if(!nama || !harga) return alert("Nama dan Harga wajib diisi!");
+    
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memposting...';
+                btn.disabled = true;
+    
+                let finalUrl = urlInput.value;
+    
+                try {
+                    // 1. Upload Otomatis
+                    if(fileInput.files.length > 0) {
+     const file = fileInput.files[0];
+     if(file.size > 2 * 1024 * 1024) throw new Error("File maks 2MB!");
+    
+     const formData = new FormData();
+     formData.append('file_etalase', file);
+    
+     const req = await fetch('upload_etalase.php', { method: 'POST', body: formData });
+     const raw = await req.text();
+     let res;
+     try { res = JSON.parse(raw); } catch(e) { throw new Error("Respon server error"); }
+    
+     if(res.status === 'success') finalUrl = res.url;
+     else throw new Error(res.message || "Gagal upload");
+                    }
+    
+                // 2. Simpan Firestore
+                    await window.addDoc(window.collection(window.db, "produk"), {
+    nama: nama,
+    harga: parseInt(harga),
+    berat: parseInt(document.getElementById('lapakBerat').value) || 1000,
+    img: finalUrl,
+    seller_uid: user.uid,
+    kategori: "FISIK_USER",
+    tipe: "fisik"
+                    });
+                    alert("Barang berhasil diposting!");
+                    document.getElementById('lapakNama').value = "";
+                    document.getElementById('lapakHarga').value = "";
+                    document.getElementById('lapakBerat').value = "";
+                    document.getElementById('lapakImg').value = "";
+                    fileInput.value = "";
+    
+                } catch(e) { 
+                    alert("Gagal: " + e.message); 
+                } finally {
+                    btn.innerHTML = oriHtml;
+                    btn.disabled = false;
+                }
+            };
+    
+            window.hapusProdukLapak = async (id) => {
+                if(confirm("Hapus barang ini?")) await window.deleteDoc(window.doc(window.db, "produk", id));
+            };
+    
+            window.editProdukLapak = (id, nama, harga, img) => {
+                document.getElementById('editLapakId').value = id;
+                document.getElementById('editLapakNama').value = nama;
+                document.getElementById('editLapakHarga').value = harga;
+                document.getElementById('editLapakImg').value = img;
+                document.getElementById('modalEditLapak').style.display = 'flex';
+            };
+    
+            
+                    window.uploadGambarEtalaseUser = async (inputId, outputId) => {
+                const fileInput = document.getElementById(inputId);
+                const output = document.getElementById(outputId);
+                
+                if(fileInput.files.length === 0) return alert("Pilih file gambar dulu!");
+                
+                // Validasi Ukuran: Maksimal 2MB
+                const file = fileInput.files[0];
+                if(file.size > 2 * 1024 * 1024) {
+                    return alert("Gagal: Ukuran gambar terlalu besar (Maks 2MB)!");
+                }
+                
+                const formData = new FormData();
+                formData.append('file_etalase', file);
+                
+                const btn = event.currentTarget;
+                const oriText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+    
+                try {
+                    const req = await fetch('upload_etalase.php', {
+    method: 'POST',
+    body: formData
+                    });
+                    
+                    // Membaca sebagai teks untuk menangani error HTML dari server
+                    const rawText = await req.text();
+                    let res;
+                    try {
+    res = JSON.parse(rawText);
+                    } catch (e) {
+    console.error("Respon mentah server:", rawText);
+    throw new Error("Format respon server tidak valid (Bukan JSON).");
+                    }
+                    
+                    if(res.status === 'success') {
+    output.value = res.url;
+    alert("Upload Sukses!");
+                    } else {
+    alert("Gagal: " + (res.message || 'Error'));
+                    }
+                } catch(e) {
+                    alert("Terjadi Kesalahan: " + e.message);
+                } finally {
+                    btn.innerHTML = oriText;
+                    btn.disabled = false;
+                }
+            };
+    
+    window.simpanEditLapak = async () => {
+                const id = document.getElementById('editLapakId').value;
+                try {
+                    await window.updateDoc(window.doc(window.db, "produk", id), {
+    nama: document.getElementById('editLapakNama').value,
+    harga: parseInt(document.getElementById('editLapakHarga').value),
+    img: document.getElementById('editLapakImg').value
+                    });
+                    alert("Berhasil diupdate!");
+                    document.getElementById('modalEditLapak').style.display = 'none';
+                } catch(e) { alert("Gagal: " + e.message); }
+            };
+    
+    window.loadProfileData = async () => {
+                 const user = window.auth.currentUser;
+                 if(!user) return;
+                 const d = await window.getDoc(window.doc(window.db, "users", user.uid));
+                 if(d.exists()) {
+                     const data = d.data();
+                     document.getElementById('profNameDisplay').innerText = data.nama || "User";
+                     document.getElementById('profEmailDisplay').innerText = user.email;
+                     document.getElementById('pUser').innerText = data.username || "-";
+                     document.getElementById('pWA').innerText = data.whatsapp || "-";
+                     document.getElementById('pSaldo').innerText = "Rp " + new Intl.NumberFormat('id-ID').format(data.saldo || 0);
+                     document.getElementById('pJoin').innerText = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() : "-";
+                     if(data.role === 'pelapak') {
+     document.getElementById('btnLapak').style.display = 'block';
+                     } else {
+     document.getElementById('btnLapak').style.display = 'none';
+                     }
+                 }
+            };
+    
+            
+    window.bukaDetailRiwayat = function(str) {
+                const d = JSON.parse(decodeURIComponent(str));
+                
+                // Override Topup Pending langsung ke Instruksi Pembayaran
+                if (d.kode_produk === 'TOPUP' && (d.status === 'PENDING' || d.status === 'Pending')) {
+                    let mCode = d.metode || 'QRIS';
+                    let fallbackBank = (window.bankManualData || []).find(b => b.code === mCode);
+                    window.selectedTopupMethod = d.metode_lengkap || fallbackBank || { code: mCode, name: mCode === 'SEABANK' ? 'Transfer Seabank' : 'Scan QRIS All Payment', type: mCode === 'SEABANK' ? 'BANK_MANUAL' : 'MANUAL', img: mCode === 'SEABANK' ? 'icons/seabank.png' : 'icons/qris.jpg', desc: '' };
+                    window.currentPendingDocId = d.idDoc;
+                    
+                    // Sinkronisasi Sesi LocalStorage jika ditekan dari riwayat
+                    localStorage.setItem('pending_topup', JSON.stringify({
+    docId: d.idDoc, nominal: d.harga, method: window.selectedTopupMethod, timestamp: new Date().getTime()
+                    }));
+                    
+                    document.getElementById('modalTopup').style.display = "flex";
+                    window.renderTopupStep(4, d.harga);
+                    return;
+                }
+    
+                const modal = document.getElementById('modalDetailRiwayat');
+                
+                // Config Icon & Color
+                let icon = "fa-check"; let color = "var(--success)"; let statusText = "Transaksi Berhasil";
+                if(d.status === "PENDING") { icon = "fa-clock"; color = "var(--warning)"; statusText = "Menunggu Pembayaran"; }
+                else if(d.status === "GAGAL") { icon = "fa-times"; color = "var(--danger)"; statusText = "Transaksi Gagal"; }
+                
+                // 1. Parsing SN
+                let snContent = window.bersihkanPesan(d.sn);
+                if(!snContent || snContent === 'undefined') snContent = "-";
+    
+                let isPaymentLink = snContent.startsWith('http');
+                let displaySnContent = isPaymentLink ? 'Menunggu Pembayaran...' : snContent;
+    
+                // 2. Ekstraksi Kode Voucher (Cari angka 12-25 digit dalam SN)
+                let matchVoucher = snContent.match(/(\d{12,25})/);
+                let kodeVoucher = matchVoucher ? matchVoucher[0] : null;
+                let htmlKodeVoucher = "";
+                let htmlInfoPLN = "";
+    
+                // MODIFIKASI: Tampilan Khusus Token PLN (Parser SN)
+                let isPLN = (d.produk.toUpperCase().includes('PLN') || d.produk.toUpperCase().includes('TOKEN') || (d.sn && d.sn.toUpperCase().includes('KWH')));
+                if ((d.status === 'BERHASIL' || d.status === 'Sukses') && isPLN) {
+                    let cleanSN = window.bersihkanPesan(d.sn).replace(/SN\s*\/\s*Ref[\s\:]*/gi, '').trim();
+                    // Format: TOKEN/NAMA/TARIF/DAYA/KWH
+                    let parts = cleanSN.split('/');
+                    let matchToken = cleanSN.match(/(?:\d[\s-]*){20}/);
+                    if (matchToken || parts.length >= 2) {
+    // matchToken moved to outer scope
+    let token = matchToken ? matchToken[0].trim() : parts[0].trim();
+    let nama = parts[1] ? parts[1].trim() : '-';
+    // Ambil sisa bagian (Tarif/Daya) dan bersihkan pesan error/warning setelah tanda titik
+    let volt = parts.slice(2).join('/').split(' . ')[0].trim();
+    
+    htmlInfoPLN = `<div style="background:#f0f9ff; border:1px solid #b3e5fc; padding:8px; border-radius:10px; margin-bottom:10px; margin-top:5px;">
+        <div style="font-size:10px; font-weight:bold; color:#0099ff; margin-bottom:4px; border-bottom:1px dashed #b3e5fc; padding-bottom:2px;"><i class="fas fa-bolt"></i> INFO TOKEN PLN</div>
+        <div style="display:grid; grid-template-columns: 60px 1fr; gap:2px; font-size:10px; margin-bottom:2px;">
+            <span style="color:#666;">Nama:</span><b style="color:#333;">${nama}</b>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr; gap:2px; font-size:10px; margin-bottom:4px;">
+            <span style="color:#666;">Volt:</span><b style="color:#333;">${volt}</b>
+        </div>
+        <div style="background:white; border:1px solid #e1effe; padding:5px; border-radius:6px; text-align:center;">
+            <div style="font-size:9px; color:#888;">TOKEN</div>
+            <div style="font-size:16px; font-weight:900; color:#333; letter-spacing:1.5px; user-select:all;">${token}</div>
+        </div>
+    </div>`;
+                    }
+                }
+                let htmlTutorial = "";
+    
+                    // --- LOGIKA DETEKSI VOUCHER (MODE KETAT) ---
+                const namaP = (d.produk || "").toLowerCase();
+                
+                // MODIF: Matikan tutorial cara pakai khusus Paket Akrab/KHFY
+                const isPaketAkrab = (d.provider === 'KHFY') || namaP.includes('akrab') || namaP.includes('fmx') || namaP.includes('xla') || namaP.includes('xda');
+    
+                if((d.status === 'BERHASIL' || d.status === 'Sukses') && !isPaketAkrab) {
+                    let prefix = "";
+                    let isVoucher = false;
+    
+                    // 1. Deteksi Provider (Hanya set prefix, jangan set isVoucher dulu)
+                    if(namaP.includes('telkomsel') || namaP.includes('tsel') || namaP.includes('by.u') || namaP.includes('simpati') || namaP.includes('loop') || namaP.includes('omn') || namaP.includes('kartu as')) prefix = "*133*";
+                    else if(namaP.includes('indosat') || namaP.includes('isat') || namaP.includes('freedom') || namaP.includes('yellow') || namaP.includes('unli') || namaP.includes('data jumbo') || namaP.includes('mini') || namaP.includes('im3')) prefix = "*556*";
+                    else if(namaP.includes('xl') || namaP.includes('hotrod') || namaP.includes('flex') || namaP.includes('bebas puas') || namaP.includes('harian') || namaP.includes('mingguan') || namaP.includes('akrab') || namaP.includes('xtra') || (namaP.includes('act vocer') && namaP.includes(','))) prefix = "*817*";
+                    else if(namaP.includes('axis') || namaP.includes('aigo') || namaP.includes('bronet') || namaP.includes('combo') || namaP.includes('mini data') || namaP.includes('owl') || namaP.includes('warnet')) prefix = "*838*";
+                    else if(namaP.includes('tri') || namaP.includes('three') || namaP.includes('aon') || namaP.includes('happy') || namaP.includes('kuota voucher') || namaP.includes('janet') || namaP.includes('cinta') || namaP.includes('pamax')) prefix = "*111*";
+                    else if(namaP.includes('smart') || namaP.includes('smf') || namaP.includes('nonstop') || namaP.includes('super kuota') || namaP.includes('gokil') || namaP.includes('volume')) prefix = "*999*";
+    
+                    // 2. VALIDASI KETAT: isVoucher hanya TRUE jika ada kata kunci ini
+                    if (prefix) {
+    const kwWajib = ["voucher", "vcr", "voc", "fisik", "gesek", "cetak", "aigo", "perdana", "kpk", "scratch"];
+    if (kwWajib.some(k => namaP.includes(k))) {
+        isVoucher = true;
+    }
+                    }
+    
+                    // Jika terdeteksi sebagai voucher
+                    if(isVoucher) {
+    // A. Jika Kode Voucher DITEMUKAN di SN
+    if(kodeVoucher) {
+        // Tampilkan Kode Voucher di bawah ID
+        htmlKodeVoucher = `<div class="detail-item" style="background:#f0f9ff; padding:8px 10px; border-radius:8px; border:1px dashed #0066b2; margin-bottom:10px;"><span style="font-weight:bold; color:#0066b2;">Kode Voucher</span><span class="detail-val" style="font-family:monospace; font-size:15px; font-weight:800; color:#333; letter-spacing:1px;">${kodeVoucher}</span></div>`;
+        
+        // Tutorial Spesifik (Kode Lengkap + Tombol Salin)
+        let fullDial = `${prefix}${kodeVoucher}#`;
+        htmlTutorial = `
+        <div style="background:#fff8e1; color:#d35400; padding:12px; border-radius:12px; font-size:12px; margin-top:15px; border:1px solid #f39c12;">
+            <div style="margin-bottom:8px; font-weight:bold; font-size:13px;"><i class="fas fa-lightbulb"></i> Cara Pakai Voucher</div>
+            <div style="font-family:monospace; font-size:14px; font-weight:bold; color:#333; margin-bottom:10px; background:white; padding:8px; border-radius:6px; border:1px solid #ddd; text-align:center;">Ketik ${fullDial}</div>
+            <button onclick="navigator.clipboard.writeText('${fullDial}'); alert('Kode Dial Disalin!')" style="width:100%; background:#d35400; border:none; color:white; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">
+                <i class="far fa-copy"></i> Salin Kode Dial
+            </button>
+        </div>`;
+    } 
+    // B. Jika Kode TIDAK DITEMUKAN (Fallback ke tutorial umum)
+    else {
+        htmlTutorial = `<div style="background:#fff8e1; color:#d35400; padding:10px; border-radius:8px; font-size:12px; margin-top:10px; text-align:center; border:1px dashed #f39c12; line-height:1.4;">
+            <i class="fas fa-info-circle"></i> Cara Pakai: Ketik <b>${prefix}KodeSN#</b> lalu Panggil
+        </div>`;
+    }
+                    }
+                }
+    
+                let html = `
+                    <div class="receipt-header">
+    <div class="receipt-icon" style="background:${color}"><i class="fas ${icon}"></i></div>
+    <div class="receipt-status" style="color:${color}">${statusText}</div>
+    <div style="font-size:12px; color:#999; margin-top:5px;">${d.waktu}</div>
+                    </div>
+                    
+                    <div style="text-align:center;">
+    <div style="font-size:12px; color:#777; font-weight:500;">Total Pembayaran</div>
+    <div class="receipt-amount">Rp ${new Intl.NumberFormat('id-ID').format(d.harga)}</div>
+                    </div>
+                    
+                    <div class="receipt-divider"></div>
+                    
+                    <div class="detail-item"><span>Produk</span><span class="detail-val">${d.produk}</span></div>
+                    <div class="detail-item"><span>Tujuan</span><span class="detail-val">${d.tujuan}</span></div>
+                    <div class="detail-item"><span>ID Transaksi</span><span class="detail-val">#${d.trx_id || '-'}</span></div>
+                    
+                    ${htmlInfoPLN}
+                    ${htmlKodeVoucher}
+                    
+                    <div style="margin-top:20px; font-size:12px; font-weight:bold; color:#555;">SN / Keterangan:</div>
+                    <div class="sn-container">
+    <span class="sn-text" id="snText">${displaySnContent}</span>
+    ${!isPaymentLink ? `<button class="btn-copy" onclick="navigator.clipboard.writeText('${displaySnContent}'); alert('SN Disalin!')"><i class="far fa-copy"></i></button>` : ''}
+                    </div>
+                    ${htmlTutorial}
+                `;
+    
+                if (isPaymentLink && d.status === 'PENDING') {
+                    html += `<button class="btn-konfirmasi" style="background:#0ea5e9; margin-top:20px; width:100%; display:flex; justify-content:center; align-items:center; gap:8px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);" onclick="window.open('${snContent}', '_blank')"><i class="fas fa-external-link-alt"></i> Lanjutkan Pembayaran (DANA)</button>`;
+                }
+    
+        if((d.status === "PENDING" || d.status === "Pending") && d.checkout_url) {
+                    html += `
+                    <button class="btn-konfirmasi" style="background:var(--primary); margin-top:20px; width:100%;" onclick="window.open('${d.checkout_url.replace('/v1/', '/v3/')}', '_blank')">Bayar Sekarang</button>
+                    <button class="btn-batal" style="margin-top:10px; background:#fff5f5; color:var(--danger); border:1px solid #ffcccc;" onclick="batalkanTopup('${d.idDoc}', '${d.unique_code || d.trx_id}')">Batalkan Topup</button>`;
+                }
+    
+                if((d.status === "PENDING" || d.status === "Pending") && d.is_po) {
+                     html += `<button class="btn-batal" style="margin-top:15px; background:#fff5f5; color:var(--danger); border:1px solid #ffcccc; width:100%; font-weight:bold; padding:12px; border-radius:8px;" onclick="window.batalkanPO('${d.idDoc}', '${d.trx_id}', ${d.harga})"><i class="fas fa-times-circle"></i> Batalkan Pre-Order</button>`;
+                }
+    
+        html += `
+                <button class="btn-konfirmasi" style="margin-top:20px; background:#00b894; color:white; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);" onclick="window.isShareMode=false; window.siapkanPrint('${str}')"><i class="fas fa-print"></i> Cetak Struk</button>
+                    <button class="btn-konfirmasi" style="margin-top:10px; background:linear-gradient(135deg, #25D366, #128C7E); color:white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);" onclick="window.siapkanShare('${str}')"><i class="fab fa-whatsapp"></i> Bagikan</button>
+                    <button class="btn-konfirmasi" style="margin-top:10px; background:var(--bg); color:#555; border:1px solid #ddd;" onclick="document.getElementById('modalDetailRiwayat').style.display='none'">Tutup</button>
+                `;
+                
+                document.getElementById('detailRiwayatContent').innerHTML = html;
+                modal.style.display = "flex";
+            }
+            
+            let selectedService = "";
+                    
+            // --- LOGIKA TOPUP BARU (STEPPED UI) ---
+            window.topupData = [
+                { id: 'qris_auto', code: 'QRIS_AUTO', name: 'QRIS Otomatis (Cepat)', type: 'MANUAL', fee: 0, img: 'icons/qris.jpg', desc: 'Topup otomatis masuk tanpa konfirmasi (1-3 Menit)' },
+                { id: 'qris_gopay', code: 'QRIS_GOPAY', name: 'QRIS GoPay (Otomatis)', type: 'INDOPAY', fee: 0, img: 'icons/Gopay.png', desc: 'Otomatis dicek sistem. Bayar SESUAI nominal unik.' },
+                { id: 'gopay_tf', code: 'GOPAY_TF', name: 'Transfer GoPay (Otomatis)', type: 'INDOPAY', fee: 0, img: 'icons/Gopay.png', desc: 'Otomatis dicek sistem. Bayar SESUAI nominal unik.' }
+            ];
+    
+            // --- SISTEM INDOPAY HELPERS ---
+            window.INDOPAY_GOPAY_NUMBER = '087875705707';
+            window.INDOPAY_GOPAY_NAME = 'Siti lestari';
+            window.INDOPAY_STATIC_QRIS = '00020101021126610014COM.GO-JEK.WWW01189360091438792752840210G8792752840303UMI51440014ID.CO.QRIS.WWW0215ID10254475936700303UMI5204549953033605802ID5921Juragan Akrab, Grosir6011KARANGANYAR61055711162070703A016304A32F';
+    
+            window.getNominalIndopay = async function(baseNominal) {
+                try {
+                    let res = await fetch(`indopay_api.php?action=generate&base_nominal=${baseNominal}`);
+                    let data = await res.json();
+                    if (data.success) return data.unik_nominal;
+                    return baseNominal;
+                } catch(e) {
+                    console.error('Error Indopay Generate:', e);
+                    return baseNominal;
+                }
+            };
+    
+            window.startIndopayChecker = function(idDoc, nominalFinal) {
+                if(window.intervalCek[idDoc]) return;
+                console.log('Memulai pemantauan Indopay untuk nominal:', nominalFinal);
+                window.intervalCek[idDoc] = setInterval(async () => {
+                    try {
+    let res = await fetch(`indopay_api.php?action=check&nominal=${nominalFinal}`);
+    let data = await res.json();
+    
+    if (data.status === 'success') {
+        clearInterval(window.intervalCek[idDoc]);
+        delete window.intervalCek[idDoc];
+        
+        const user = window.auth.currentUser;
+        if(user) {
+            const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc);
+            const trxSnap = await window.getDoc(trxRef);
+            if(trxSnap.exists() && (trxSnap.data().status === 'BERHASIL' || trxSnap.data().status === 'Sukses')) return; // Anti-Double
+            
+            const userRef = window.doc(window.db, "users", user.uid);
+            const userSnap = await window.getDoc(userRef);
+            const newSaldo = (userSnap.exists() ? parseInt(userSnap.data().saldo) || 0 : 0) + parseInt(nominalFinal);
+            
+            // FIX: Eksekusi penambahan saldo langsung ke Firestore agar tidak menunggu koreksi DoniGuard
+            await window.updateDoc(userRef, { saldo: newSaldo });
+            
+            if(window.updateFirestoreStatus) window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup Indopay Otomatis", JSON.stringify(res));
+            
+            if(window.triggerDoniGuard) {
+                window.triggerDoniGuard({
+                    trx_id: 'INDOPAY-' + idDoc, action: 'topup', produk: 'TOPUP GOPAY (INDOPAY)', nominal: parseInt(nominalFinal), saldo_akhir_client: newSaldo
+                });
+            }
+            window.showNotice('success', 'Berhasil', 'Topup Indopay Rp ' + new Intl.NumberFormat('id-ID').format(nominalFinal) + ' masuk!');
+            if(document.getElementById('statusIndopayAuto')) {
+                document.getElementById('statusIndopayAuto').innerHTML = '<i class="fas fa-check-circle"></i> Pembayaran Diterima!';
+                document.getElementById('statusIndopayAuto').style.color = 'var(--success)';
+            }
+            setTimeout(() => {
+                localStorage.removeItem('pending_topup');
+                if(window.tutupModalTopup) window.tutupModalTopup();
+                if(window.bukaRiwayatArsip) window.bukaRiwayatArsip();
+            }, 2000);
+        }
+    }
+                    } catch(e) {
+    console.error('Error Indopay Checker:', e);
+                    }
+                }, 5000);
+            };
+            window.bankManualData = [];
+            
+            // Listener Bank Manual dari Firestore
+            window.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    if(window.db && window.onSnapshot && window.collection) {
+    window.onSnapshot(window.collection(window.db, "metode_topup"), (snap) => {
+        window.bankManualData = [];
+        snap.forEach(d => {
+            let data = d.data();
+            data.idDoc = d.id;
+            data.type = 'BANK_MANUAL';
+            data.code = data.nama_bank || 'BANK';
+            data.name = 'Transfer ' + (data.nama_bank || 'Bank');
+            data.fee = parseInt(data.fee) || 0;
+            data.img = data.logo || 'icons/bank.png';
+            data.desc = 'No. Rek: ' + data.no_rek + ' a/n ' + data.atas_nama;
+            window.bankManualData.push(data);
+        });
+    });
+                    }
+                }, 2000);
+            });
+                    setTimeout(() => {
+                    let pendingSesi = localStorage.getItem('pending_topup');
+                    if(pendingSesi) {
+    let pData = JSON.parse(pendingSesi);
+    let now = new Date().getTime();
+    let expiry = 3 * 60 * 60 * 1000; // 3 Jam
+    if(now - pData.timestamp > expiry) {
+        localStorage.removeItem('pending_topup');
+        if(pData.docId && window.auth && window.auth.currentUser) {
+            window.updateDoc(window.doc(window.db, "users", window.auth.currentUser.uid, "riwayat_transaksi", pData.docId), { status: 'GAGAL', sn: 'Kedaluwarsa (Lewat 3 Jam)' }).catch(e=>console.log(e));
+            if(window.batalkanTopupTelegram) window.batalkanTopupTelegram(window.auth.currentUser.uid, pData.docId, "Kedaluwarsa");
+        }
+        window.currentTopupStep = 1;
+        if(typeof window.renderTopupStep === 'function') window.renderTopupStep(1);
+    } else {
+        window.selectedTopupMethod = pData.method;
+        window.currentPendingDocId = pData.docId;
+        if(typeof window.renderTopupStep === 'function') window.renderTopupStep(4, pData.nominal);
+    }
+                    } else {
+    window.currentTopupStep = 1;
+    if(typeof window.renderTopupStep === 'function') window.renderTopupStep(1);
+                    }
+                }, 500);
+    
+                    window.bukaModalTopup = () => {
+                document.getElementById('modalTopup').style.display = 'flex';
+                if(typeof window.renderTopupStep === 'function') window.renderTopupStep(1);
+            };
+    
+            
+    window.showFullscreenQR = (src) => {
+                document.getElementById('qrisImageFull').src = src;
+                document.getElementById('qrisFullscreen').style.display = 'flex';
+            };
+    
+                    window.batalkanTopupSesi = async (isTimeout = false) => {
+                if(window.topupTimerInterval) clearInterval(window.topupTimerInterval);
+                if(isTimeout !== true && !confirm("Yakin ingin membatalkan topup ini?")) return;
+                window.showNotice('loading', 'Memproses', 'Membatalkan transaksi...');
+                try {
+                    const user = window.auth.currentUser;
+                    let pendingSesi = localStorage.getItem('pending_topup');
+                    let docId = window.currentPendingDocId;
+                    if(pendingSesi) {
+    let pData = JSON.parse(pendingSesi);
+    docId = docId || pData.docId;
+                    }
+                    if(user && docId) {
+    const snap = await window.getDoc(window.doc(window.db, "users", user.uid, "riwayat_transaksi", docId));
+    if (snap.exists() && (snap.data().status === 'BERHASIL' || snap.data().status === 'Sukses')) {
+        localStorage.removeItem('pending_topup');
+        window.showNotice('success', 'Sukses', 'Saldo sudah dikonfirmasi oleh admin.');
+        window.tutupModalTopup(); return;
+    }
+    await window.updateDoc(window.doc(window.db, "users", user.uid, "riwayat_transaksi", docId), {
+        status: "GAGAL", sn: "Dibatalkan oleh Pengguna"
+    });
+    if (window.batalkanTopupTelegram) window.batalkanTopupTelegram(user.uid, docId, "Oleh Pengguna");
+                    }
+                    localStorage.removeItem('pending_topup');
+                    window.showNotice('success', 'Berhasil', 'Transaksi telah dibatalkan.');
+                    window.tutupModalTopup();
+                } catch(e) { window.showNotice('error', 'Gagal', e.message); }
+            };
+    
+            window.tutupModalTopup = () => {
+                document.getElementById('modalTopup').style.display = "none";
+                window.currentTopupStep = 0;
+                if(window.intervalQrisAuto) { clearInterval(window.intervalQrisAuto); window.intervalQrisAuto = null; }
+            };
+    
+            window.backTopupStep = () => {
+                if(window.currentTopupStep > 1) {
+                    window.renderTopupStep(window.currentTopupStep - 1);
+                }
+            };
+    
+            window.renderTopupStep = (step, param = null) => {
+                window.currentTopupStep = step;
+                const area = document.getElementById('areaTopupSteps');
+                const btnBack = document.getElementById('btnBackTopup');
+                const title = document.getElementById('titleTopup');
+    
+                if(step === 1) {
+                    btnBack.style.display = 'none';
+                    title.innerText = "Pilih Metode";
+                    if(window.isTopupAuto) {
+    area.innerHTML = `
+        <div class="tu-cat" onclick="window.renderTopupStep(2, 'QRIS')"><div style="display:flex; align-items:center;"><div class="tu-icon"><i class="fas fa-qrcode"></i></div><div><div style="font-weight:bold; font-size:14px; color:#333;">QRIS (Scan Code)</div><div style="font-size:11px; color:#999;">OVO, DANA, GoPay, ShopeePay</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+        <div class="tu-cat" onclick="window.renderTopupStep(2, 'VA')"><div style="display:flex; align-items:center;"><div class="tu-icon"><i class="fas fa-university"></i></div><div><div style="font-weight:bold; font-size:14px; color:#333;">Virtual Account</div><div style="font-size:11px; color:#999;">BCA, BRI, BNI, Mandiri, dll</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+        <div class="tu-cat" onclick="window.renderTopupStep(2, 'EWALLET')"><div style="display:flex; align-items:center;"><div class="tu-icon"><i class="fas fa-wallet"></i></div><div><div style="font-weight:bold; font-size:14px; color:#333;">E-Wallet</div><div style="font-size:11px; color:#999;">OVO, DANA, ShopeePay, LinkAja</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+        <div class="tu-cat" onclick="window.renderTopupStep(2, 'RETAIL')"><div style="display:flex; align-items:center;"><div class="tu-icon"><i class="fas fa-store"></i></div><div><div style="font-weight:bold; font-size:14px; color:#333;">Alfamart & Retail</div><div style="font-size:11px; color:#999;">Alfamart, Indomaret</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+    `;
+                } else {
+    const user = window.auth.currentUser;
+    const isAdmin = user && (user.email === 'doni888855519@gmail.com' || user.email === 'suwarno8797@gmail.com');
+    const qrisItem = window.topupData.find(x => x.code === 'QRIS_AUTO') || { id: 'qris_auto', code: 'QRIS_AUTO', name: 'QRIS Otomatis (Cepat)', type: 'MANUAL', fee: 0, img: 'icons/qris.jpg', desc: 'Topup otomatis masuk tanpa konfirmasi (1-3 Menit)' };
+    const qrisStr = encodeURIComponent(JSON.stringify(qrisItem));
+    const qrisClickNew = (window.maintenanceQris && !isAdmin) ? "window.showNotice('error', 'Maintenance', 'Mohon maaf, sistem Topup QRIS sedang dalam pemeliharaan (Maintenance). Silakan gunakan Transfer Bank.')" : "window.renderTopupStep(3, '" + qrisStr + "')";
+    
+    const qrisGopayItem = window.topupData.find(x => x.code === 'QRIS_GOPAY') || { id: 'qris_gopay', code: 'QRIS_GOPAY', name: 'QRIS GoPay (Otomatis)', type: 'INDOPAY', fee: 0, img: 'icons/Gopay.png', desc: 'Otomatis dicek sistem. Bayar SESUAI nominal unik.' };
+    const qrisGopayStr = encodeURIComponent(JSON.stringify(qrisGopayItem));
+    const qrisGopayClickNew = "if(window.blockMaintenanceTopupMethod && window.blockMaintenanceTopupMethod({code:'QRIS_GOPAY', name:'QRIS GoPay Otomatis'}, window.auth.currentUser)) return false; window.renderTopupStep(3, '" + qrisGopayStr + "')";
+    const qrisGopayBadge = window.isMaintenanceOn(window.maintenanceQrisGopay) ? '<span style="font-size:9px; background:var(--danger); color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">MT</span>' : '<span style="font-size:9px; background:var(--success); color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">AUTO</span>';
+    
+    const gopayTfItem = window.topupData.find(x => x.code === 'GOPAY_TF') || { id: 'gopay_tf', code: 'GOPAY_TF', name: 'Transfer GoPay (Otomatis)', type: 'INDOPAY', fee: 0, img: 'icons/Gopay.png', desc: 'Otomatis dicek sistem. Bayar SESUAI nominal unik.' };
+    const gopayTfStr = encodeURIComponent(JSON.stringify(gopayTfItem));
+    const gopayTfClickNew = "if(window.blockMaintenanceTopupMethod && window.blockMaintenanceTopupMethod({code:'GOPAY_TF', name:'Transfer GoPay Otomatis'}, window.auth.currentUser)) return false; window.renderTopupStep(3, '" + gopayTfStr + "')";
+    const gopayTfBadge = window.isMaintenanceOn(window.maintenanceGopayTf) ? '<span style="font-size:9px; background:var(--danger); color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">MT</span>' : '<span style="font-size:9px; background:var(--success); color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">AUTO</span>';
+    
+    area.innerHTML = `
+        <div class="tu-cat" onclick="window.renderTopupStep(2, 'BANK_MANUAL')"><div style="display:flex; align-items:center;"><div class="tu-icon"><i class="fas fa-university"></i></div><div><div style="font-weight:bold; font-size:14px; color:#333;">Transfer Bank Manual</div><div style="font-size:11px; color:#999;">Pilihan Transfer Bank & E-Wallet Lengkap</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+        <div class="tu-cat" onclick="${qrisClickNew}"><div style="display:flex; align-items:center;"><div class="tu-icon" style="background: linear-gradient(135deg, #e6f9ed, #a8e6cf); color: var(--success);"><i class="fas fa-qrcode"></i></div><div><div style="font-weight:bold; font-size:14px; color:#333;">QRIS (Otomatis) ${window.maintenanceQris ? '<span style="font-size:9px; background:var(--danger); color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">MT</span>' : '<span style="font-size:9px; background:var(--success); color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">AUTO</span>'}</div><div style="font-size:11px; color:#999;">Saldo masuk otomatis (1-3 Menit)</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+        <div class="tu-cat" onclick="${qrisGopayClickNew}"><div style="display:flex; align-items:center;"><div class="tu-icon" style="background: #fff; border:1px solid #eee;"><img src="icons/Gopay.png" style="width:24px; height:24px; object-fit:contain;"></div><div><div style="font-weight:bold; font-size:14px; color:#333;">QRIS GoPay ${qrisGopayBadge}</div><div style="font-size:11px; color:#999;">Dicek otomatis. Bayar SESUAI nominal unik.</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+        <div class="tu-cat" onclick="${gopayTfClickNew}"><div style="display:flex; align-items:center;"><div class="tu-icon" style="background: #fff; border:1px solid #eee;"><img src="icons/Gopay.png" style="width:24px; height:24px; object-fit:contain;"></div><div><div style="font-weight:bold; font-size:14px; color:#333;">Transfer GoPay ${gopayTfBadge}</div><div style="font-size:11px; color:#999;">Dicek otomatis. Bayar SESUAI nominal unik.</div></div></div><i class="fas fa-chevron-right" style="color:#ccc"></i></div>
+    `;
+                    }
+                }
+                else if (step === 2) {
+                    btnBack.style.display = 'block';
+                    title.innerText = param === 'RETAIL' ? 'Pilih Gerai' : (param === 'BANK_MANUAL' ? 'Pilih Bank' : param);
+                    let filtered = [];
+                    if (param === 'BANK_MANUAL') {
+    let localManual = window.topupData.filter(x => x.type === 'BANK_MANUAL');
+    let fbManual = window.bankManualData || [];
+    filtered = localManual.concat(fbManual);
+                    } else if (param === 'RETAIL') {
+    filtered = window.topupData.filter(x => x.type === 'RETAIL' || x.type === 'OTC');
+                    } else {
+    filtered = window.topupData.filter(x => x.type === param);
+                    }
+                    if(filtered.length === 0) return area.innerHTML = "<div style='text-align:center; padding:20px; color:#999;'>Metode tidak tersedia.</div>";
+                    let html = '<div style="background:white; border-radius:15px; border:1px solid #eee; overflow:hidden;">';
+                    filtered.forEach(item => {
+    let fee = item.fee.toString().includes('%') ? item.fee : 'Rp '+new Intl.NumberFormat('id-ID').format(item.fee);
+    const itemParam = encodeURIComponent(JSON.stringify(item));
+    html += `<div class="tu-method" onclick="if(window.blockMaintenanceTopupMethod && window.blockMaintenanceTopupMethod(JSON.parse(decodeURIComponent('${itemParam}')), window.auth.currentUser)) return false; window.renderTopupStep(3, '${itemParam}')"><img src="${item.img}" style="width:40px; height:25px; object-fit:contain; margin-right:15px;"><div style="flex:1;"><div style="font-weight:bold; font-size:13px; color:#333;">${item.name}</div><div style="font-size:10px; color:#f39c12;">Biaya Admin: ${fee}</div></div><i class="fas fa-chevron-right" style="color:#eee"></i></div>`;
+                    });
+                    html += '</div>';
+                    area.innerHTML = html;
+                }
+                else if (step === 3) {
+                    btnBack.style.display = 'block';
+                    title.innerText = "Masukan Nominal";
+                    const item = JSON.parse(decodeURIComponent(param));
+                    const user = window.auth.currentUser;
+                    if (window.blockMaintenanceTopupMethod && window.blockMaintenanceTopupMethod(item, user)) {
+                        window.currentTopupStep = 1;
+                        window.selectedTopupMethod = null;
+                        window.renderTopupStep(1);
+                        return;
+                    }
+                    window.selectedTopupMethod = item;
+                    area.innerHTML = `
+    <div class="tu-invoice-box">
+        <img src="${item.img}" style="height:35px; margin-bottom:10px; border-radius:4px;">
+        <div style="font-weight:bold; font-size:16px; color:#333;">${item.name}</div>
+        <div style="font-size:12px; color:#999; margin-bottom:20px;">${item.code}</div>
+        <div style="text-align:left;">
+            <label style="font-size:11px; font-weight:bold; color:#555; display:block; margin-bottom:5px;">Nominal Top Up (Rp)</label>
+            <div class="input-group">
+                <input type="tel" id="newTopupNominal" class="form-input" placeholder="Min. 10.000" style="font-size:16px; font-weight:bold; color:var(--primary);">
+                <i class="fas fa-coins"></i>
+            </div>
+            ${item.type === 'EWALLET' ? `<label style="font-size:11px; font-weight:bold; color:#e67e22; display:block; margin-bottom:5px; margin-top:10px;">Nomor HP E-Wallet (Wajib)</label><div class="input-group"><input type="tel" id="newTopupPhone" class="form-input" placeholder="08xxxx"><i class="fas fa-mobile-alt"></i></div>` : ''}
+            <div style="background:#e1effe; color:#0066b2; padding:10px; border-radius:10px; font-size:10px; margin-bottom:15px; border:1px solid rgba(0,102,178,0.2);">
+                <i class="fas fa-info-circle"></i> ${item.desc || 'Biaya admin akan ditambahkan otomatis pada total pembayaran.'}
+            </div>
+            <button class="btn-konfirmasi" onclick="window.prosesTopupNew()">BUAT INVOICE <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+                    `;
+                }
+                else if (step === 4) {
+                    btnBack.style.display = 'none';
+                    title.innerText = "Instruksi Pembayaran";
+                    const item = window.selectedTopupMethod;
+                    const nominal = param;
+                    let paymentInfo = '';
+                    if((item.type === 'BANK_MANUAL' && item.code !== 'QRIS_GOPAY' && item.code !== 'GOPAY_TF') || item.code === 'SEABANK') {
+    const bankName = item.nama_bank || item.name || 'Bank';
+    const noRek = item.no_rek || '901338749488';
+    const aNama = item.atas_nama || 'Denissa Ermadianis Tarisna Dewi';
+    
+    paymentInfo = `<div style="background:#f8fafc; border:1px dashed #cbd5e1; padding:15px; border-radius:12px; margin-bottom:15px;"><div style="font-size:11px; color:#64748b; margin-bottom:5px;">Transfer ke Rekening ${bankName}:</div><div style="font-size:24px; font-weight:900; color:var(--primary); letter-spacing:1px; margin-bottom:5px; user-select:all;">${noRek}</div><div style="font-size:12px; font-weight:bold; color:#333;">a/n ${aNama}</div><button onclick="navigator.clipboard.writeText('${noRek}'); window.showNotice('success', 'Disalin', 'No Rekening ${bankName} berhasil disalin!')" style="margin-top:10px; background:#e1effe; color:var(--primary); border:none; padding:5px 10px; border-radius:5px; font-size:11px; cursor:pointer;"><i class="fas fa-copy"></i> Salin Rekening</button></div>`;
+                    } else if (item.code === 'QRIS_GOPAY') {
+    let dinamisQris = window.buatQrisDinamis(window.INDOPAY_STATIC_QRIS, nominal);
+    let qrUrl = "https://quickchart.io/qr?text=" + encodeURIComponent(dinamisQris) + "&size=300&ecLevel=M&margin=2";
+    paymentInfo = `<div style="background:#f8fafc; border:1px dashed #cbd5e1; padding:15px; border-radius:12px; margin-bottom:15px; text-align:center;">
+        <div style="font-size:14px; font-weight:900; color:#333; margin-bottom:10px; text-transform:uppercase;">Juragan AKRAB, Grosir</div>
+        <img src="${qrUrl}" onclick="window.showFullscreenQR('${qrUrl}')" style="width:100%; max-width:250px; border-radius:10px; margin-bottom:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer;">
+        <div style="font-size:12px; font-weight:bold; color:#333;">Scan QRIS ini untuk membayar</div>
+        <div style="font-size:11px; color:#555; margin-top:5px;">a/n ${window.INDOPAY_GOPAY_NAME}</div>
+        <div style="margin-top:12px; padding:10px; background:#e6f9ed; border-radius:8px; border:1px solid #c3e6cb;">
+            <div style="font-size:10px; color:#27ae60; font-weight:bold; margin-bottom:3px;">SALDO DITERIMA:</div>
+            <div style="font-size:16px; font-weight:900; color:#27ae60;">Rp ${new Intl.NumberFormat('id-ID').format(nominal)}</div>
+        </div>
+        <div id="statusIndopayAuto" style="margin-top:10px; color:var(--primary); font-size:11px; font-weight:bold;"><i class="fas fa-spinner fa-spin"></i> Menunggu pembayaran (Indopay)...</div>
+    </div>`;
+    if(!window.intervalCek[window.currentPendingDocId]) {
+        window.startIndopayChecker(window.currentPendingDocId, nominal);
+    }
+                    } else if (item.code === 'GOPAY_TF') {
+    paymentInfo = `<div style="background:#f8fafc; border:1px dashed #cbd5e1; padding:15px; border-radius:12px; margin-bottom:15px; text-align:center;">
+        <div style="font-size:11px; color:#64748b; margin-bottom:5px;">Transfer GoPay ke Nomor:</div>
+        <div style="font-size:24px; font-weight:900; color:var(--primary); letter-spacing:1px; margin-bottom:5px; user-select:all;">${window.INDOPAY_GOPAY_NUMBER}</div>
+        <div style="font-size:12px; font-weight:bold; color:#333;">a/n ${window.INDOPAY_GOPAY_NAME}</div>
+        <button onclick="navigator.clipboard.writeText('${window.INDOPAY_GOPAY_NUMBER}'); window.showNotice('success', 'Disalin', 'Nomor GoPay disalin!')" style="margin-top:10px; background:#e1effe; color:var(--primary); border:none; padding:5px 10px; border-radius:5px; font-size:11px; cursor:pointer;"><i class="fas fa-copy"></i> Salin Nomor</button>
+        <div style="margin-top:15px; padding:10px; background:#e6f9ed; border-radius:8px; border:1px solid #c3e6cb;">
+            <div style="font-size:10px; color:#27ae60; font-weight:bold; margin-bottom:3px;">SALDO DITERIMA:</div>
+            <div style="font-size:16px; font-weight:900; color:#27ae60;">Rp ${new Intl.NumberFormat('id-ID').format(nominal)}</div>
+        </div>
+        <div id="statusIndopayAuto" style="margin-top:15px; color:var(--primary); font-size:11px; font-weight:bold;"><i class="fas fa-spinner fa-spin"></i> Menunggu pembayaran (Indopay)...</div>
+    </div>`;
+    if(!window.intervalCek[window.currentPendingDocId]) {
+        window.startIndopayChecker(window.currentPendingDocId, nominal);
+    }
+    
+                    } else if (item.code === 'QRIS_AUTO' && !window.isTopupAuto) {
+    let staticQris = "00020101021126670016COM.NOBUBANK.WWW01189360050300000907180214600239684104160303UMI51440014ID.CO.QRIS.WWW0215ID20254442075210303UMI5204541153033605802ID5919Mini Market Pandawa6011KARANGANYAR61055711162070703A016304DA77";
+    let dinamisQris = window.buatQrisDinamis(staticQris, nominal);
+    let qrUrl = "https://quickchart.io/qr?text=" + encodeURIComponent(dinamisQris) + "&size=300&ecLevel=M&margin=2";
+    paymentInfo = `<div style="background:#f8fafc; border:1px dashed #cbd5e1; padding:15px; border-radius:12px; margin-bottom:15px; text-align:center;">
+        <img src="${qrUrl}" onclick="window.showFullscreenQR('${qrUrl}')" style="width:100%; max-width:250px; border-radius:10px; margin-bottom:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer;">
+        <div style="font-size:12px; font-weight:bold; color:#333;">Scan QRIS ini untuk membayar</div>
+        <div id="statusQrisAuto" style="margin-top:10px; color:var(--primary); font-size:11px; font-weight:bold;"><i class="fas fa-spinner fa-spin"></i> Menunggu pembayaran masuk (1-3 Menit)...</div>
+    </div>`;
+    
+    if(!window.intervalQrisAuto) {
+        window.intervalQrisAuto = setInterval(() => window.cekStatusQiospayBerkala(window.currentPendingDocId, nominal), 10000);
+    }
+                    }
+                    let globalInfoHTML = `
+    <div style="margin-bottom:15px; padding:12px; background:#e6f9ed; border-radius:10px; border:1px solid #c3e6cb; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:11px; color:#27ae60; font-weight:bold;">SALDO DITERIMA:</div>
+        <div style="font-size:18px; font-weight:900; color:#27ae60;">Rp ${new Intl.NumberFormat('id-ID').format(nominal)}</div>
+    </div>
+    <div style="margin-bottom:15px; padding:12px; background:#fff5f5; border-radius:10px; border:1px solid #ffcccc; text-align:center;">
+        <div style="font-size:11px; color:#e74c3c; font-weight:bold; margin-bottom:5px;">SISA WAKTU PEMBAYARAN:</div>
+        <div id="topupCountdownTimer" style="font-size:22px; font-weight:900; color:#e74c3c; letter-spacing:2px;">03:00:00</div>
+    </div>
+                    `;
+    
+                    area.innerHTML = `
+    <div class="tu-invoice-box">
+        <div style="font-weight:bold; font-size:16px; color:#333; margin-bottom:5px;">Total Pembayaran</div>
+        <div style="font-size:24px; font-weight:900; color:var(--danger); margin-bottom:20px;">Rp ${new Intl.NumberFormat('id-ID').format(nominal)}</div>
+        ${paymentInfo}
+        ${globalInfoHTML}
+        <div style="background:#fff8e1; color:#d35400; padding:10px; border-radius:10px; font-size:10.5px; margin-bottom:15px; text-align:left; line-height:1.4;"><i class="fas fa-info-circle"></i> <b>PENTING:</b> Pastikan transfer dengan jumlah yang <b>SAMA PERSIS</b>.</div>
+        <button class="btn-konfirmasi" onclick="localStorage.removeItem('pending_topup'); window.tutupModalTopup(); window.bukaRiwayatArsip();">SAYA SUDAH BAYAR</button>
+        <button class="btn-batal" onclick="window.batalkanTopupSesi()" style="background:#fff5f5; color:var(--danger); border:1px solid #ffcccc; margin-top:10px;">Batalkan Transaksi</button>
+    </div>
+                    `;
+    
+                    if(window.topupTimerInterval) clearInterval(window.topupTimerInterval);
+                    let pendingData = JSON.parse(localStorage.getItem('pending_topup') || '{}');
+                    let startTime = pendingData.timestamp || new Date().getTime();
+                    let expiryTime = startTime + (3 * 60 * 60 * 1000);
+    
+                    window.topupTimerInterval = setInterval(() => {
+    let now = new Date().getTime();
+    let diff = expiryTime - now;
+    
+    if (diff <= 0) {
+        clearInterval(window.topupTimerInterval);
+        let tEl = document.getElementById('topupCountdownTimer');
+        if(tEl) tEl.innerText = "00:00:00";
+        window.showNotice('error', 'Waktu Habis', 'Waktu pembayaran telah habis. Transaksi dibatalkan.');
+        window.batalkanTopupSesi(true);
+    } else {
+        let h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        let s = Math.floor((diff % (1000 * 60)) / 1000);
+        let tEl = document.getElementById('topupCountdownTimer');
+        if(tEl) {
+            tEl.innerText = (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        } else {
+            clearInterval(window.topupTimerInterval);
+        }
+    }
+                    }, 1000);
+                }
+            };
+    
+            
+            window.buatQrisDinamis = function(qris, nominal) {
+                let q = qris.slice(0, -4);
+                q = q.replace("010211", "010212");
+                let step1 = q.split("5802ID");
+                let nom = nominal.toString();
+                let tag54 = "54" + nom.length.toString().padStart(2, '0') + nom;
+                q = step1[0] + tag54 + "5802ID" + step1[1];
+                
+                let crc = 0xFFFF;
+                for (let i = 0; i < q.length; i++) {
+                    crc ^= q.charCodeAt(i) << 8;
+                    for (let j = 0; j < 8; j++) {
+    if ((crc & 0x8000) !== 0) {
+        crc = (crc << 1) ^ 0x1021;
+    } else {
+        crc = crc << 1;
+    }
+                    }
+                }
+                let hex = (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+                return q + hex;
+            };
+    
+    
+    window.prosesTopupNew = async () => {
+                const user = window.auth.currentUser;
+                if(!user) return alert("Silakan login!");
+                
+                const inputNominal = document.getElementById('newTopupNominal').value.replace(/[^0-9]/g, '');
+                const method = window.selectedTopupMethod;
+                if (window.blockMaintenanceTopupMethod && window.blockMaintenanceTopupMethod(method, user)) {
+                    return;
+                }
+                
+                if(!inputNominal) return alert("Masukkan nominal topup!");
+                let baseNominal = parseInt(inputNominal);
+    
+                if (method.code === 'QRIS_AUTO') {
+                    if (baseNominal < 1000) return alert("Minimal topup QRIS Rp 1.000");
+                    if (baseNominal > 495000) return alert("Maksimal topup QRIS Rp 495.000");
+                }
+                else if (method.code === 'SEABANK' && baseNominal < 10000) return alert("Minimal topup Seabank Rp 10.000");
+                else if (baseNominal < 1000) return alert("Minimal topup Rp 1.000");
+    
+                if(window.isTopupAuto) {
+                    let phone = '';
+                    if(method.type === 'EWALLET') {
+    const phoneInput = document.getElementById('newTopupPhone');
+    phone = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+    if(phone.length < 9) return alert("Nomor HP E-Wallet tidak valid!");
+                    }
+    
+                    window.showNotice('loading', 'Memproses', 'Sedang membuat invoice...');
+    
+                    try {
+    const req = await fetch('paydisini_request.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            uid: user.uid, amount: baseNominal, service: method.id, email: user.email, ewallet_phone: phone
+        })
+    });
+    const res = await req.json();
+    
+    if(res.success) {
+        const uSnap = await window.getDoc(window.doc(window.db, "users", user.uid));
+        const uName = uSnap.exists() ? uSnap.data().username : "-";
+        await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
+            uid: user.uid, username: uName, tujuan: "Topup Saldo", produk: res.data.service_name || "Topup",
+            kode_produk: "TOPUP", harga: baseNominal, status: "PENDING", sn: "Menunggu Pembayaran",
+            trx_id: res.data.unique_code, unique_code: res.data.unique_code,
+            checkout_url: res.data.checkout_url.replace('/v1/', '/v3/'), timestamp: window.serverTimestamp()
+        });
+        window.tutupNotice();
+        window.tutupModalTopup();
+        window.open(res.data.checkout_url.replace('/v1/', '/v3/'), '_blank');
+    } else {
+        window.showNotice('error', 'Gagal', res.msg || 'Error sistem');
+    }
+                    } catch(e) {
+    window.showNotice('error', 'Error', e.message);
+                    }
+                } else {
+                    let nominalUnik = baseNominal;
+                    let kodeUnik = 0;
+    
+                    if (method.code === 'QRIS_GOPAY' || method.code === 'GOPAY_TF') {
+    window.showNotice('loading', 'Memproses', 'Mencari nominal unik Indopay...');
+    nominalUnik = await window.getNominalIndopay(baseNominal);
+    if (nominalUnik === baseNominal) {
+        window.showNotice('error', 'Gagal', 'Server sibuk atau gagal mendapat nominal unik.');
+        return;
+    }
+                    } else {
+    window.showNotice('loading', 'Memproses', 'Sedang membuat nominal unik...');
+    const reqUnik = await fetch('generate_nominal_qris.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nominal: baseNominal })
+    });
+    const resUnik = await reqUnik.json();
+    if (resUnik.status !== 'success') {
+        window.showNotice('error', 'Gagal', resUnik.message);
+        return;
+    }
+    kodeUnik = resUnik.kode_unik;
+    nominalUnik = resUnik.nominal_unik;
+    console.log("Generate nominal berhasil, nominal unik: " + resUnik.nominal_unik);
+                    }
+    
+                    window.showNotice('loading', 'Memproses', 'Sedang membuat tagihan...');
+    
+                    try {
+    const uSnap = await window.getDoc(window.doc(window.db, "users", user.uid));
+    const uName = uSnap.exists() ? uSnap.data().username : "-";
+    const uniqueCode = "TU" + Math.floor(Date.now() / 1000);
+    
+    const docRef = await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
+        uid: user.uid, username: uName, tujuan: "Topup Saldo", produk: "Topup via " + method.name,
+        kode_produk: "TOPUP", harga: nominalUnik, status: "PENDING", sn: "Menunggu Transfer Manual",
+        trx_id: uniqueCode, unique_code: uniqueCode, metode: method.code, metode_lengkap: method, timestamp: window.serverTimestamp()
+    });
+    
+    const tgMsg = `🔔 *REQUEST TOPUP BARU* 🔔\n\n👤 *User:* ${uName}\n📧 *Email:* ${user.email}\n💳 *Metode:* ${method.name}\n💰 *Nominal:* Rp ${new Intl.NumberFormat('id-ID').format(nominalUnik)}\n🆔 *Trx ID:* ${uniqueCode}\n\nMohon cek mutasi rekening/QRIS Anda.`;
+    const tgBody = { chat_id: "-1003897469545", text: tgMsg, parse_mode: "Markdown", reply_markup: { inline_keyboard: [ [ { text: "✅ Terima", callback_data: `A_${docRef.id}_${user.uid}` }, { text: "❌ Tolak", callback_data: `R_${docRef.id}_${user.uid}` } ] ] } };
+    
+    fetch(`https://api.telegram.org/bot8659828786:AAGvN2hYGOBVvytFULdb7_v_hOCFDGOO7VA/sendMessage`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(tgBody)
+    }).then(r=>r.json()).then(data => {
+        if(data.ok && data.result) window.updateDoc(window.doc(window.db, "users", user.uid, "riwayat_transaksi", docRef.id), { tg_message_id: data.result.message_id, tg_text_ori: tgMsg });
+    }).catch(e=>console.log(e));
+    
+    localStorage.setItem('pending_topup', JSON.stringify({ docId: docRef.id, nominal: nominalUnik, method: method, timestamp: new Date().getTime() }));
+    window.currentPendingDocId = docRef.id;
+    window.tutupNotice();
+    window.renderTopupStep(4, nominalUnik);
+                    } catch(e) {
+    window.showNotice('error', 'Error', e.message);
+                    }
+                }
+            };
+    
+            window.tutupModalTopup = () => { 
+                document.getElementById('modalTopup').style.display = "none"; 
+                if(window.intervalQrisAuto) { clearInterval(window.intervalQrisAuto); window.intervalQrisAuto = null; }
+            };
+            window.tutupRiwayatArsip = () => { document.getElementById('modalArsip').style.display = "none"; };
+            window.setNominal = (val) => { document.getElementById('topupAmount').value = val; };
+                    window.pilihMetode = (id, type, el) => {
+                selectedService = id;
+                document.querySelectorAll('.topup-card').forEach(c => c.classList.remove('active'));
+                el.classList.add('active');
+                
+                // Logika Tampilkan Input HP E-Wallet
+                const group = document.getElementById('groupEwalletPhone');
+                if(type === 'EWALLET') {
+                    group.style.display = 'block';
+                    document.getElementById('ewalletPhone').focus();
+                } else {
+                    group.style.display = 'none';
+                    document.getElementById('ewalletPhone').value = '';
+                }
+            };
+    
+        
+            window.batalkanPO = async (idDoc, trxId, harga) => {
+                const currentHour = new Date().getHours();
+                if(currentHour >= 6 && currentHour < 12) {
+                    return window.showNotice('error', 'Gagal', 'Pembatalan Pre-Order tidak dapat dilakukan antara jam 06:00 pagi hingga 12:00 siang.');
+                }
+    
+                if(!confirm("Yakin ingin membatalkan Pre-Order ini? Saldo akan dikembalikan ke akun Anda.")) return;
+                window.showNotice('loading', 'Memproses', 'Membatalkan Pre-Order dan mengembalikan saldo...');
+                
+                try {
+                    const user = window.auth.currentUser;
+                    if(!user) return;
+                    
+                    const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc);
+                    const snap = await window.getDoc(trxRef);
+                    
+                    if(snap.exists() && snap.data().status === 'PENDING') {
+    const userRef = window.doc(window.db, "users", user.uid);
+    const userSnap = await window.getDoc(userRef);
+    const newSaldo = (userSnap.data().saldo || 0) + parseInt(harga);
+    
+    // 1. Kembalikan saldo
+    await window.updateDoc(userRef, { saldo: newSaldo });
+    
+    // 2. Ubah status riwayat
+    await window.updateDoc(trxRef, { status: "GAGAL", isRefunded: true, sn: "Dibatalkan oleh Pengguna (Refund Saldo)" });
+    
+    // 3. Lapor ke DoniGuard
+    if(window.triggerDoniGuard) {
+        window.triggerDoniGuard({
+            action: 'topup',
+            produk: 'REFUND PO: ' + (snap.data().produk || 'Pre-Order'),
+            nominal: parseInt(harga),
+                            trx_id: ((snap.data().trx_id || trxId) + '-REF'),
+            saldo_akhir_client: newSaldo
+        });
+    }
+    
+    // 4. Update status di collection preorders (Ditambah filter UID agar lolos Security Rules)
+    const qPreorder = window.query(window.collection(window.db, "preorders"), 
+        window.where("trx_id", "==", trxId),
+        window.where("uid", "==", user.uid)
+    );
+    const preordersSnap = await window.getDocs(qPreorder);
+    preordersSnap.forEach(async (docSnap) => {
+        await window.updateDoc(docSnap.ref, {
+            status: "DIBATALKAN USER",
+            cancel_at: window.serverTimestamp()
+        });
+    });
+    
+    window.showNotice('success', 'Berhasil', 'Pre-Order dibatalkan dan saldo telah dikembalikan.');
+    document.getElementById('modalDetailRiwayat').style.display='none';
+                    } else {
+    window.showNotice('error', 'Gagal', 'Pre-Order sudah diproses atau dibatalkan.');
+    document.getElementById('modalDetailRiwayat').style.display='none';
+                    }
+                } catch(e) {
+                    window.showNotice('error', 'Gagal', e.message);
+                }
+            };
+    
+    
+        window.batalkanTopup = async (idDoc, uniqueCode) => {
+                if(!confirm("Yakin ingin membatalkan transaksi ini?")) return;
+                window.showNotice('loading', 'Memproses', 'Membatalkan...');
+                try {
+                    if(window.isTopupAuto && uniqueCode && !uniqueCode.startsWith('TU')) {
+    const req = await fetch('paydisini_cancel.php', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ unique_code: uniqueCode })
+    });
+    const res = await req.json();
+    if(!res.success) throw new Error(res.msg || "Gagal membatalkan di server pusat.");
+                    }
+                    const user = window.auth.currentUser;
+                    if(user) {
+    const snap = await window.getDoc(window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc));
+    if (snap.exists() && (snap.data().status === 'BERHASIL' || snap.data().status === 'Sukses')) {
+        localStorage.removeItem('pending_topup');
+        window.showNotice('success', 'Sukses', 'Saldo sudah dikonfirmasi oleh admin.');
+        document.getElementById('modalDetailRiwayat').style.display='none'; return;
+    }
+    await window.updateDoc(window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc), {
+        status: "GAGAL", sn: "Dibatalkan oleh Pengguna"
+    });
+    if(!window.isTopupAuto && window.batalkanTopupTelegram) window.batalkanTopupTelegram(user.uid, idDoc, "Oleh Pengguna");
+                    }
+                    window.showNotice('success', 'Berhasil', 'Transaksi telah dibatalkan.');
+                    document.getElementById('modalDetailRiwayat').style.display='none';
+                } catch(e) { window.showNotice('error', 'Gagal', e.message); }
+            };
+    
+            window.cekStatusTopupManual = async (uniqueCode) => {
+                window.showNotice('loading', 'Mengecek', 'Sedang memverifikasi pembayaran Anda...');
+                try {
+                    const req = await fetch('paydisini_cek.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ unique_code: uniqueCode })
+                    });
+                    const res = await req.json();
+                    if(res.success && res.data.status === "Success") {
+    window.showNotice('success', 'Berhasil', 'Pembayaran terdeteksi! Saldo akan segera bertambah.');
+    setTimeout(() => location.reload(), 2000);
+                    } else {
+    window.showNotice('error', 'Belum Terdeteksi', 'Pembayaran belum masuk. Mohon selesaikan pembayaran atau tunggu 1-3 menit.');
+                    }
+                } catch(e) {
+                    window.showNotice('error', 'Error', 'Gagal menghubungi server.');
+                }
+            };
+    
+    
+            // LOGIKA DETAIL PRODUK
+                window.bukaDetailProduk = async (id) => {
+                const p = window.allProductsData.find(x => x.id === id);
+                if(!p) return;
+                window.currentProduct = p;
+                
+                let asalToko = "Pusat";
+                if(p.seller_uid && p.seller_uid !== 'ADMIN') {
+                    const sDoc = await window.getDoc(window.doc(window.db, "users", p.seller_uid));
+                    if(sDoc.exists()) asalToko = sDoc.data().origin_name || "Lokasi Belum Diset";
+                }
+    
+                const html = `
+                    <img src="${p.img}" style="width:100%; height:160px; object-fit:cover; border-radius:0 0 10px 10px;">
+                    <div style="padding:8px;">
+    <div style="font-size:15px; color:var(--primary); font-weight:800;">Rp ${new Intl.NumberFormat('id-ID').format(p.harga)}</div>
+    <div style="font-size:12px; font-weight:700; margin:2px 0;">${p.nama}</div>
+    <div style="font-size:8.5px; color:#777; margin-bottom:6px;"><i class="fas fa-store"></i> Penjual: <b>${p.seller_uid ? 'Pelapak' : 'Official'}</b></div>
+    
+    <div style="background:#f9f9f9; padding:6px; border-radius:8px; margin-bottom:8px; border:1px solid #f0f0f0;">
+        <b style="font-size:9px; display:block; margin-bottom:4px; color:#555;">Informasi Pengiriman</b>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; font-size:9px; color:#666;">
+            <span><i class="fas fa-shipping-fast"></i> Dari: <b>${asalToko}</b></span>
+            <span><i class="fas fa-weight-hanging"></i> Berat: <b>${p.berat || 1000}gr</b></span>
+        </div>
+        
+        <div style="margin-top:6px; padding-top:6px; border-top:1px dashed #ddd;">
+            <b style="font-size:9px; display:block; margin-bottom:4px; color:var(--primary);"><i class="fas fa-calculator"></i> Cek Ongkir Mandiri</b>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px;">
+                <select id="checkProv" class="form-input" onchange="window.loadCities(this.value, 'checkCity')" style="padding:4px; font-size:9px; height:26px;"><option value="">Provinsi</option></select>
+                <select id="checkCity" class="form-input" onchange="window.loadDistricts(this.value, 'checkDist')" style="padding:4px; font-size:9px; height:26px;"><option value="">Kota/Kab</option></select>
+                <select id="checkDist" class="form-input" style="padding:4px; font-size:9px; height:26px;"><option value="">Kecamatan</option></select>
+                <select id="checkKurirCode" class="form-input" style="padding:4px; font-size:9px; height:26px;">
+                    <option value="jne">JNE</option><option value="jnt">J&T</option><option value="sicepat">SiCepat</option><option value="spx">Shopee</option><option value="ninja">Ninja</option>
+                </select>
+            </div>
+            <button onclick="window.cekOngkirDetail()" style="width:100%; margin-top:5px; padding:5px; background:var(--primary); color:white; border:none; border-radius:5px; font-weight:bold; font-size:9px;">CEK HARGA</button>
+            <div id="hasilOngkirDetail" style="margin-top:4px; font-size:9px; font-weight:bold; color:var(--success); text-align:center;"></div>
+        </div>
+    </div>
+    
+    <b style="font-size:9px; color:#555;">Deskripsi</b>
+    <div style="font-size:9px; color:#666; line-height:1.3; margin-top:2px;">${p.deskripsi || p.nama}</div>
+                    </div>
+                `;
+                document.getElementById('pdpContent').innerHTML = html;
+                document.getElementById('modalProductDetail').style.display = 'block';
+                window.loadProvinces('checkProv');
+            };
+    
                                 window.cekOngkirDetail = async () => {
                 window.debugLog("--- CEK ONGKIR (MULTI-LAYER) ---", 'warn');
                 const destId = document.getElementById('checkDist').value;
@@ -4207,8 +7055,239 @@ console.log("Pandawa-Digital v2.0 — Ready.");
                 const area = document.getElementById('listPesananFisik');
                 area.innerHTML = "<p style='text-align:center; margin-top:50px; color:#999;'>Memuat pesanan...</p>";
                 
-
-//=== ADDITIONAL BLOCK 7354-7650 ===
+                const q = window.query(
+                    window.collection(window.db, "pesanan_fisik"), 
+                    window.where("uid", "==", user.uid), 
+                    window.orderBy("timestamp", "desc")
+                );
+                
+                window.onSnapshot(q, (snap) => {
+                    if(snap.empty) {
+    area.innerHTML = "<div style='text-align:center; margin-top:50px; color:#ccc;'><i class='fas fa-box-open' style='font-size:50px; margin-bottom:10px;'></i><p>Belum ada pesanan fisik.</p></div>";
+    return;
+                    }
+                    
+                    let html = "";
+                    snap.forEach(d => {
+    const data = d.data();
+    const idDoc = d.id;
+    let statusColor = "#f39c12"; 
+    if(data.status === 'DIKIRIM') statusColor = "#3498db";
+    if(data.status === 'SELESAI') statusColor = "#2ecc71";
+    
+    const encodedData = encodeURIComponent(JSON.stringify({...data, id: idDoc, timestamp: data.timestamp ? data.timestamp.seconds : 0}));
+    
+    html += `<div style="background:white; padding:12px; border-radius:15px; margin-bottom:12px; box-shadow:0 2px 5px rgba(0,0,0,0.05); border:1px solid #eee; display:flex; gap:12px; align-items:center; cursor:pointer;" onclick="bukaDetailPesananFisik('${encodedData}')">
+        <img src="${data.produk_img || data.img || 'https://via.placeholder.com/150'}" style="width:65px; height:65px; border-radius:10px; object-fit:cover; background:#f9f9f9;">
+        <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="font-size:10px; font-weight:bold; color:${statusColor}; text-transform:uppercase;">${data.status}</span>
+                <span style="font-size:9px; color:#999;">${data.timestamp ? new Date(data.timestamp.seconds*1000).toLocaleDateString() : '-'}</span>
+            </div>
+            <div style="font-weight:700; font-size:13px; color:#333; margin-bottom:2px; line-height:1.3;">${data.produk}</div>
+            <div style="font-size:12px; font-weight:800; color:var(--primary);">Rp ${new Intl.NumberFormat('id-ID').format(data.total)}</div>
+        </div>
+        <i class="fas fa-chevron-right" style="color:#ccc; font-size:12px;"></i>
+    </div>`;
+                    });
+                    area.innerHTML = html;
+                }, (error) => {
+                    console.error("Error Load Pesanan:", error);
+                    if (error.message.toLowerCase().includes("index")) {
+    area.innerHTML = `<div style='text-align:center; padding:20px; color:red; font-size:12px;'>\n                        <b>Database Error: Index Belum Dibuat</b><br>\n                        Buka Console Browser (F12), cari link error berwarna merah, dan klik untuk membuat Index otomatis di Firebase.\n                    </div>`;
+                    } else {
+    area.innerHTML = `<p style='text-align:center;color:red'>Gagal memuat data: ${error.message}</p>`;
+                    }
+                });
+            };
+    
+                window.switchLapakTab = (tab) => {
+                document.querySelectorAll('.lapak-tab').forEach(t => t.classList.remove('active'));
+                document.getElementById('containerLapakSaya').style.display = 'none';
+                document.getElementById('containerPenjualanSaya').style.display = 'none';
+                document.getElementById('containerAlamatSaya').style.display = 'none';
+    
+                if(tab === 'barang') {
+                    document.getElementById('tabBarang').classList.add('active');
+                    document.getElementById('containerLapakSaya').style.display = 'block';
+                    loadProdukLapak();
+                } else if(tab === 'penjualan') {
+                    document.getElementById('tabPenjualan').classList.add('active');
+                    document.getElementById('containerPenjualanSaya').style.display = 'block';
+                    loadPenjualanSaya();
+        } else {
+                    document.getElementById('tabAlamat').classList.add('active');
+                    document.getElementById('containerAlamatSaya').style.display = 'block';
+                    window.loadProvinces('sellerProv');
+                    
+                    // Ambil data alamat tersimpan dari Firestore
+                    const user = window.auth.currentUser;
+                    const txtLabel = document.getElementById('txtAlamatTersimpan');
+                    if(user) {
+    window.getDoc(window.doc(window.db, "users", user.uid)).then(d => {
+        if(d.exists() && d.data().origin_name) {
+            txtLabel.innerText = d.data().origin_name;
+        } else {
+            txtLabel.innerText = "Belum diset";
+        }
+    });
+                    }
+                }
+            };
+    
+            window.loadPenjualanSaya = () => {
+                const user = window.auth.currentUser;
+                if(!user) return;
+                const area = document.getElementById('listPenjualanSaya');
+                area.innerHTML = "<p style='text-align:center; color:#999; margin-top:30px;'>Memuat pesanan masuk...</p>";
+    
+                const q = window.query(
+                    window.collection(window.db, "pesanan_fisik"),
+                    window.where("seller_uid", "==", user.uid),
+                    window.orderBy("timestamp", "desc")
+                );
+    
+                window.onSnapshot(q, (snap) => {
+                    if(snap.empty) {
+    area.innerHTML = "<div style='text-align:center; margin-top:30px; color:#ccc;'><p>Belum ada pesanan masuk.</p></div>";
+    return;
+                    }
+                    let html = "";
+                    snap.forEach(d => {
+    const data = d.data();
+    const id = d.id;
+    let statusColor = "#f39c12"; 
+    if(data.status === 'DIKIRIM') statusColor = "#3498db";
+    if(data.status === 'SELESAI') statusColor = "#2ecc71";
+    
+    html += `<div class="seller-order-card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px dashed #eee; padding-bottom:8px;">
+            <span style="font-weight:bold; color:${statusColor}; font-size:11px;">${data.status}</span>
+            <span style="color:#999; font-size:10px;">${data.timestamp ? new Date(data.timestamp.seconds*1000).toLocaleDateString() : '-'}</span>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; margin-bottom:10px;">
+            <img src="${data.produk_img || data.img || 'https://via.placeholder.com/150'}" style="width:55px; height:55px; border-radius:8px; object-fit:cover;">
+            <div style="flex:1;">
+                <div style="font-weight:bold; font-size:13px; line-height:1.2;">${data.produk}</div>
+                <div style="font-size:11px; color:#666; margin-top:2px;">Pembeli: <b>${data.username}</b></div>
+            </div>
+        </div>
+        <div style="background:#f9f9f9; padding:10px; border-radius:8px; font-size:11px; color:#555; margin-bottom:12px;">
+            <div style="margin-bottom:4px;"><b>Alamat:</b> ${data.alamat_lengkap}</div>
+            <div><b>Kurir:</b> ${data.kurir}</div>
+        </div>
+        ${data.status === 'DIKEMAS' ? `<button onclick="prosesInputResi('${id}')" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Kirim Barang & Input Resi</button>` : `<div style="font-size:11px; background:#e1effe; color:var(--primary); padding:10px; border-radius:8px; border:1px solid rgba(0,153,255,0.1);"><b>Nomor Resi:</b> ${data.resi}</div>`}
+    </div>`;
+                    });
+                    area.innerHTML = html;
+                }, (err) => {
+                    if(err.message.toLowerCase().includes('index')) {
+                       area.innerHTML = "<p style='color:red; font-size:11px; text-align:center; padding:20px;'>Database butuh Index. Buka Console Browser (F12) & klik link Firebase yang muncul di error merah.</p>";
+                    } else {
+                       area.innerHTML = "<p style='color:red; text-align:center;'>Gagal memuat: "+err.message+"</p>";
+                    }
+                });
+            };
+    
+            window.prosesInputResi = async (id) => {
+                const resi = prompt("Masukkan Nomor Resi Pengiriman untuk Pesanan ini:");
+                if(!resi) return;
+                try {
+                    await window.updateDoc(window.doc(window.db, "pesanan_fisik", id), {
+    resi: resi,
+    status: "DIKIRIM"
+                    });
+                    alert("Nomor Resi berhasil disimpan! Status pesanan kini DIKIRIM.");
+                } catch(e) { alert("Gagal update: "+e.message); }
+            };
+    
+            window.konfirmasiTerimaBarang = async (id) => {
+                if(confirm("Apakah barang benar-benar sudah diterima? Status akan menjadi SELESAI.")) {
+                    try {
+    await window.updateDoc(window.doc(window.db, "pesanan_fisik", id), { status: "SELESAI" });
+                    } catch(e) { alert("Gagal update: " + e.message); }
+                }
+            };
+    
+                    window.bukaDetailPesananFisik = (str) => {
+                const data = JSON.parse(decodeURIComponent(str));
+                const modalDetail = document.getElementById('modalDetailRiwayat');
+                
+                let icon = "fa-box-open"; let color = "#f39c12";
+                if(data.status === 'DIKIRIM') { icon = "fa-shipping-fast"; color = "#3498db"; }
+                if(data.status === 'SELESAI') { icon = "fa-check-circle"; color = "#2ecc71"; }
+                
+                let html = `
+                    <div class="receipt-header">
+    <div class="receipt-icon" style="background:${color}"><i class="fas ${icon}"></i></div>
+    <div class="receipt-status" style="color:${color}">PESANAN ${data.status}</div>
+    <div style="font-size:12px; color:#999; margin-top:5px;">ID Pesanan: #${data.id.slice(0,8).toUpperCase()}</div>
+                    </div>
+    
+                    <div style="background:#f9f9f9; padding:15px; border-radius:15px; display:flex; gap:12px; align-items:center; margin-bottom:20px;">
+    <img src="${data.produk_img || 'https://via.placeholder.com/60'}" style="width:60px; height:60px; border-radius:8px; object-fit:cover;">
+    <div style="flex:1;">
+        <div style="font-weight:700; font-size:13px; line-height:1.2;">${data.produk}</div>
+        <div style="font-size:11px; color:#777; margin-top:4px;">Rp ${new Intl.NumberFormat('id-ID').format(data.harga_barang)} x 1</div>
+    </div>
+                    </div>
+    
+                    <div style="font-size:13px; font-weight:bold; color:#333; margin-bottom:10px;">Informasi Pengiriman</div>
+                    <div class="detail-item"><span>Kurir</span><span class="detail-val">${data.kurir}</span></div>
+                    <div class="detail-item"><span>No. Resi</span><span class="detail-val">${data.resi || 'Belum tersedia'}</span></div>
+                    <div class="detail-item"><span>Alamat</span><span class="detail-val" style="max-width:70%; text-align:right;">${data.alamat_lengkap}</span></div>
+                    
+                    <div class="receipt-divider"></div>
+                    
+                    <div class="detail-item"><span>Subtotal Barang</span><span class="detail-val">Rp ${new Intl.NumberFormat('id-ID').format(data.harga_barang)}</span></div>
+                    <div class="detail-item"><span>Ongkos Kirim</span><span class="detail-val">Rp ${new Intl.NumberFormat('id-ID').format(data.ongkir)}</span></div>
+                    <div class="detail-item" style="margin-top:10px; font-weight:800; color:#333; font-size:15px;"><span>Total Bayar</span><span>Rp ${new Intl.NumberFormat('id-ID').format(data.total)}</span></div>
+                `;
+    
+                if(data.status === 'DIKIRIM') {
+                    html += `<button class="btn-konfirmasi" style="margin-top:20px; background:#2ecc71;" onclick="konfirmasiTerimaBarang('${data.id}'); document.getElementById('modalDetailRiwayat').style.display='none';">Pesanan Diterima</button>`;
+                    if(data.resi) {
+    html += `<button class="btn-konfirmasi" style="margin-top:10px; background:white; color:var(--primary); border:1px solid var(--primary);" onclick="window.lacakResiLive('${data.resi}', '${data.kurir}')"><i class="fas fa-search-location"></i> Lacak Posisi Paket</button>`;
+                    }
+                }
+                
+                html += `<button class="btn-konfirmasi" style="margin-top:10px; background:#f0f0f0; color:#555;" onclick="document.getElementById('modalDetailRiwayat').style.display='none'">Tutup</button>`;
+                
+                document.getElementById('detailRiwayatContent').innerHTML = html;
+                modalDetail.style.display = "flex";
+            };
+    
+                    window.lacakResiLive = async (resi, kurir) => {
+                if (!resi || !kurir) return alert("Resi atau kurir tidak valid");
+                const courierCode = kurir.toLowerCase().replace(/\s/g, '');
+                window.showNotice('loading', 'Melacak', 'Mengambil data kurir...');
+                try {
+                    const response = await fetch(`${KLIKRESI_PROXY}?action=tracking&resi=${resi}&courier=${courierCode}`);
+                    const res = await response.json();
+                    if (res.data) {
+    let historyHtml = `<div style="text-align:left; max-height:300px; overflow-y:auto; font-size:11px; margin-top:15px; border-top:1px dashed #ddd; padding-top:15px;">`;
+    res.data.histories.forEach(h => {
+        historyHtml += `<div style="border-left:2px solid var(--primary); padding-left:15px; margin-bottom:15px; position:relative;">
+            <div style="width:8px; height:8px; background:var(--primary); border-radius:50%; position:absolute; left:-5px; top:0;"></div>
+            <div style="font-weight:bold; color:#333;">${h.status}</div>
+            <div style="color:#666; margin:2px 0;">${h.message}</div>
+            <div style="font-size:9px; color:#999;">${new Date(h.date).toLocaleString('id-ID')}</div>
+        </div>`;
+    });
+    historyHtml += `</div>`;
+    document.getElementById('noticeTitle').innerText = "Status Pengiriman";
+    document.getElementById('noticeMsg').innerHTML = `<div style="background:#f0f7ff; padding:10px; border-radius:10px; margin-bottom:10px; text-align:left; font-size:12px;"><b>Resi:</b> ${resi}<br><b>Status:</b> ${res.data.status}</div>${historyHtml}`;
+    document.getElementById('btnNoticeClose').style.display = 'block';
+                    } else { window.showNotice('error', 'Gagal', 'Resi tidak ditemukan atau belum terupdate.'); }
+                } catch (e) { window.showNotice('error', 'Error', 'Gagal menghubungkan ke server kurir.'); }
+            };
+    
+                    // --- SISTEM TAGIHAN & PEMBAYARAN OTOMATIS ---
+        // --- SISTEM TAGIHAN & PEMBAYARAN OTOMATIS (LOGIKA BARU DENGAN CACHE JSON) ---
+                                // --- FUNGSI PARSING TAGIHAN CERDAS & AKURAT ---
+                    // --- FUNGSI PARSING TAGIHAN (PERBAIKAN AKURASI NAMA) ---
+                    // --- FUNGSI PARSING & KALKULASI TAGIHAN (DIPERBAIKI) ---
+                    // --- FUNGSI PARSING & KALKULASI TAGIHAN (FIXED: ERROR FIND) ---
             window.tampilkanModalTagihan = async function(sn, kodeCek, tujuan) {
                 // 1. Parsing SN
                 let cleanSN = (sn || "").replace(/SUKSES\.?/gi, '')
@@ -4506,8 +7585,38 @@ console.log("Pandawa-Digital v2.0 — Ready.");
         const response = await fetch(originalSrc);
         const blob = await response.blob();
         const reader = new FileReader();
-
-//=== ADDITIONAL BLOCK 7683-8003 ===
+        reader.onloadend = function() {
+            const base64data = reader.result;
+            try {
+                localStorage.setItem(cacheKey, base64data);
+                // Update src setelah berhasil didownload
+                img.src = base64data;
+            } catch (e) {
+                console.warn('Penyimpanan Penuh, gagal cache gambar:', e);
+            }
+        }
+        reader.readAsDataURL(blob);
+    } catch (e) {
+        console.error('Gagal fetch gambar untuk cache:', e);
+    }
+                    }
+                });
+            };
+            // Jalankan caching saat halaman selesai dimuat
+            window.addEventListener('load', window.setupMenuImageCaching);
+    
+    
+    
+    
+                    
+    
+            // --- CANGKOK SYSTEM AKRAB SPESIAL (TEMBAK XL) ---
+            window.currentXlNumber = '';
+            window.allAkrabProducts = [];
+            window.selectedType = '';
+            window.selectedCategory = '';
+            window.pendingAkrabOrder = null;
+    
             window.renderAkrabSystem = function() {
                 const listArea = document.getElementById('akrabSpesialContent');
                 if(!listArea) return;
@@ -4829,8 +7938,769 @@ console.log("Pandawa-Digital v2.0 — Ready.");
             };
     
             window.monitorKajeTrx = async function(trxId, docId) {
+                if(window.intervalCek[docId]) return;
+                console.log("Monitoring Kaje TrxID:", trxId);
+                
+                // Bersihkan simbol '#' agar API Kaje membaca ID dengan benar
+                const cleanTrxId = (trxId || '').replace('#', '').trim();
+                if(!cleanTrxId) return;
+    
+                window.intervalCek[docId] = setInterval(async () => {
+                    try {
+    const req = await fetch('kaje_proxy.php?api_action=check_status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trx_id: cleanTrxId })
+    });
+    const res = await req.json();
+    
+    if(res.success && res.data) {
+        const statusRaw = (res.data.status || '').toLowerCase();
+        let statusAkhir = 'PENDING';
+        let sn = res.data.serial_number || res.data.message || res.message || '-';
+        
+        if(statusRaw === 'success' || statusRaw === 'berhasil' || statusRaw === 'sukses') {
+            if (res.data.deeplink || (res.data.message && res.data.message.toLowerCase().includes('pembayaran'))) {
+                statusAkhir = 'PENDING';
+                sn = res.data.deeplink ? res.data.deeplink : res.data.message;
+            } else {
+                statusAkhir = 'BERHASIL';
+            }
+        }
+        else if(statusRaw === 'failed' || statusRaw === 'error' || statusRaw === 'gagal' || statusRaw === 'canceled') statusAkhir = 'GAGAL';
+        
+        if(statusAkhir !== 'PENDING') {
+            clearInterval(window.intervalCek[docId]);
+            delete window.intervalCek[docId];
+            
+            if(window.updateFirestoreStatus) {
+                window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+            }
+        } else if (res.data && res.data.deeplink && window.auth && window.auth.currentUser) {
+            try { window.updateDoc(window.doc(window.db, 'users', window.auth.currentUser.uid, 'riwayat_transaksi', docId), { sn: sn }); } catch(e){}
+        }
+    }
+                    } catch(e) { console.log("Err Mon Kaje", e); }
+                }, 6000);
+            };
+    
+            window.loadKhfyData = async function() {
+                const areaList = document.getElementById('listProdukArea');
+                if(areaList) areaList.innerHTML = "<div style='padding:20px; text-align:center;'>Sistem KHFY sedang dalam perbaikan / migrasi ke sistem baru. Silakan gunakan menu lain.</div>";
+            };
+            window.monitorKhfyTrx = async function(trxId, docId) {};
 
-//=== ADDITIONAL BLOCK 8767-8890 ===
+            // --- INTEGRASI ICS STORE (PAKET AKRAB V2) ---
+            window.icsData = [];
+    
+            window.loadIcsData = async function() {
+                const areaList = document.getElementById('listProdukArea');
+                const areaFilter = document.getElementById('areaFilter');
+                
+                if(areaFilter) areaFilter.innerHTML = "";
+                if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin'></i> Memuat Produk...</div>";
+    
+                try {
+                    const req = await fetch('ics_proxy.php?action=list');
+                    const res = await req.json();
+                    
+                if(res.success && res.data) {
+    res.data.forEach(item => {
+        if (item.code === 'CFMX') {
+            item.type = 'fmax';
+            item.price = 0;
+        }
+    });
+    window.icsData = res.data;
+    window.renderIcsFilters();
+                    } else {
+    if(areaList) areaList.innerHTML = `<div style='text-align:center; padding:20px;'>Gagal: ${res.message || 'Data Kosong'}</div>`;
+                    }
+                } catch(e) {
+                    console.error(e);
+                    if(areaList) areaList.innerHTML = "<div style='text-align:center; color:red; padding:20px;'>Gagal koneksi ke server.</div>";
+                }
+            };
+    
+            window.renderIcsFilters = function() {
+                const rawTypes = window.icsData.map(i => (i.type || 'Lainnya').toUpperCase());
+                const types = [...new Set(rawTypes)].sort();
+                
+                let html = '';
+                types.forEach(t => {
+                    html += `<div class="filter-card" onclick="window.filterIcs('${t}', this)" style="min-width:auto; padding:8px 12px; margin:0; display:inline-flex; align-items:center; justify-content:center; height:auto; border-radius:8px; background:white; border:1px solid #eee; white-space:nowrap; flex-shrink:0;">
+    <span style="font-size:11px; font-weight:bold; color:#555;">${t}</span>
+                    </div>`;
+                });
+                
+                const areaFilter = document.getElementById('areaFilter');
+                
+                if(areaFilter) {
+                    areaFilter.innerHTML = html;
+                    areaFilter.style.display = "flex";
+                    areaFilter.style.overflowX = "auto";
+                    areaFilter.style.gap = "8px";
+                    areaFilter.style.padding = "10px 5px";
+                    areaFilter.style.gridTemplateColumns = "none";
+                    areaFilter.style.scrollbarWidth = "none"; 
+                }
+                if(types.length > 0) window.filterIcs(types[0], document.querySelector('#areaFilter .filter-card'));
+            };
+    
+            window.filterIcs = function(type, el) {
+                document.querySelectorAll('.filter-card').forEach(e => e.classList.remove('active'));
+                if(el) el.classList.add('active');
+    
+                const products = window.icsData.filter(i => (i.type || 'Lainnya').toUpperCase() === type);
+                products.sort((a,b) => parseInt(a.price) - parseInt(b.price));
+    
+                let html = '';
+                let markup = 0;
+                if(window.markupConfig) {
+                     if(window.markupConfig['Paket Akrab v2'] !== undefined) markup = parseInt(window.markupConfig['Paket Akrab v2']);
+                     else if(window.markupConfig['General']) markup = parseInt(window.markupConfig['General']);
+                }
+    
+        products.forEach(p => {
+                    let pName = p.name || 'Produk';
+                    let pCode = p.code || '-';
+                    let rawM = (window.markupConfig && window.markupConfig[pCode] !== undefined) ? window.markupConfig[pCode] : markup;
+                    let configMarkup = window.getMarkupValue(rawM, parseInt(p.price));
+                    let currentMarkup = (pCode === 'CFMX' || pName.toLowerCase().includes('cek')) ? 0 : configMarkup;
+                    let finalPrice = parseInt(p.price) + currentMarkup;
+                    let desc = (p.description || '').replace(/\n/g, '<br>');
+                    
+                    const isPO = (arguments.length > 2 ? arguments[2] : false) || document.getElementById('judulMenu').innerText === 'PO Akrab';
+                    let isAvailable = isPO || (p.status === 'available' && p.stock > 0);
+                    let divStyle = isAvailable ? '' : "opacity:0.6; background:#fff0f0;";
+                    let clickEvent = isPO ? `onclick="window.siapkanInvoicePO('${pCode}', '${pName}', ${finalPrice}, 'ICS')"` : (isAvailable ? `onclick="window.siapkanInvoiceIcs('${pCode}', '${pName}', ${finalPrice}, '${p.type}')"` : `onclick="alert('Stok Habis')"`);
+                    let statusBadge = isPO ? `<span style="font-size:9px; background:#f39c12; color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">PRE-ORDER</span>` : (isAvailable ? '' : `<span style="font-size:9px; background:red; color:white; padding:2px 4px; border-radius:4px;">GANGGUAN</span>`);
+    
+                    html += `<div class="item-produk" ${clickEvent} style="${divStyle}; flex-direction:column; align-items:flex-start;">
+    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div style="font-weight:bold;font-size:12px;">${pName} ${statusBadge}</div>
+            <div style="font-size:10px; color:#999;">${pCode} • ${p.category || ''}</div>
+                    <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${p.stock}</div>
+            <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${p.stock}</div>
+        </div>
+        <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(finalPrice)}</div>
+    </div>
+    ${desc ? `<div style="font-size:10px; color:#666; margin-top:5px; border-top:1px dashed #eee; padding-top:4px; width:100%; line-height:1.4;" class="desc-box">${desc}</div>` : ''}
+                    </div>`;
+                });
+                
+                const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
+                if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
+                    const modalProduk = document.getElementById('modalProdukList');
+                    const areaListModal = document.getElementById('listProdukModalArea');
+                    const judulKategori = document.getElementById('judulKategoriModal');
+                    if(judulKategori) judulKategori.innerText = arguments[0]; 
+                    if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
+                    if(modalProduk) modalProduk.style.display = 'flex';
+                } else {
+                    const areaList = document.getElementById('listProdukArea');
+                    if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
+                }
+            };
+    
+            window.siapkanInvoiceIcs = function(kode, nama, harga, type) {
+                window.currentInvoiceData = { kode, nama, baseHarga: harga, isIcs: true };
+                
+                let placeholder = "Masukkan Nomor HP";
+                if((type || '').toUpperCase().includes('URL') || (type || '').toUpperCase().includes('LINK')) placeholder = "Tempel Link di sini";
+    
+                const html = `
+                    <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
+                    <div style="background: #f8fafc; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 11px; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px;">Konfirmasi Pesanan</div>
+        <div style="font-size: 15px; font-weight: 800; color: #2c3e50; margin-top: 5px;">${nama}</div>
+    </div>
+    <div class="invoice-row" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 15px;">
+        <span>Kode Produk</span><b style="color: #666;">${kode}</b>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Tujuan / Nomor HP</label>
+        <div class="input-group" style="margin-bottom: 0;">
+            <input type="tel" inputmode="numeric" id="inputIcsTujuan" class="form-input" placeholder="${placeholder}" style="background: white; border: 2px solid #e1effe; color:#333; font-weight:bold; padding-right: 70px;">
+            <i class="fas fa-pen" style="top: 15px;"></i>
+            <button type="button" onclick="window.pasteDariClipboard('inputIcsTujuan')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
+        </div>
+    </div>
+    <div class="invoice-row invoice-total" style="padding-top: 15px; margin-top: 5px;">
+        <span>TOTAL BAYAR</span>
+        <b style="color: var(--primary); font-size: 18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
+    </div>
+                    </div>
+                    <div id="icsCustomFooter">
+    <button class="btn-konfirmasi" onclick="window.prosesBayarIcs()">BAYAR SEKARANG</button>
+    <button class="btn-batal" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
+                    </div>`;
+                
+                document.getElementById('invoiceContent').innerHTML = html;
+                document.getElementById('statusCekNama').style.display = 'none';
+                document.getElementById('modalInvoice').style.display = 'flex';
+                setTimeout(() => { const inp = document.getElementById('inputIcsTujuan'); if(inp) inp.focus(); }, 300);
+            };
+    
+            window.prosesBayarIcs = async function() {
+                const user = window.auth.currentUser;
+                if(!user) return;
+                
+                const data = window.currentInvoiceData;
+                const hp = document.getElementById('inputIcsTujuan').value;
+                if(!hp) return alert("Mohon isi Tujuan!");
+    
+                document.getElementById('modalInvoice').style.display = 'none';
+                window.showNotice('loading', 'Memproses', 'Sedang memproses transaksi...');
+    
+                try {
+                    const userRef = window.doc(window.db, "users", user.uid);
+                    const userSnap = await window.getDoc(userRef);
+                    const curSaldo = userSnap.data().saldo || 0;
+    
+                    if(curSaldo < data.baseHarga) return window.showNotice('error', 'Gagal', 'Saldo tidak mencukupi!');
+    if (!(await window.cekSinkronisasiDoniGuard(user.uid, curSaldo))) return;
+                    await window.updateDoc(userRef, { saldo: curSaldo - data.baseHarga });
+    
+                    const req = await fetch(`ics_proxy.php?action=trx`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        code: (data.kodeOrder || data.kode), 
+        dest: hp, 
+        refid: 'IS-' + hp + '-' + Math.floor(10000000 + Math.random() * 90000000).toString() 
+    })
+                    });
+                    const res = await req.json();
+    
+                    if(res.success && res.data) {
+    const trxId = res.data.refid;
+    const msg = res.data.message || "Transaksi diproses";
+    
+    window.showNotice('success', 'Berhasil', msg);
+    
+    // --- INTEGRASI DONIGUARD (FIX: Catat Transaksi ICS/Akrab v2) ---
+    // Menyamakan saldo buku besar dengan saldo firestore setelah pembelian
+    if(window.triggerDoniGuard) {
+        window.triggerDoniGuard({
+            action: 'transaksi',
+            produk: data.nama,
+            nominal: data.baseHarga,
+            trx_id: trxId,
+            saldo_akhir_client: curSaldo - data.baseHarga
+        });
+    }
+    // --------------------------------------------------
+    
+    await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
+        uid: user.uid,
+        username: userSnap.data().username,
+        tujuan: hp,
+        produk: data.nama,
+        kode_produk: data.kode,
+        harga: data.baseHarga,
+        status: 'PENDING',
+        status_awal: 'PENDING',
+        sn: msg,
+        trx_id: trxId,
+        provider: 'ICS',
+        timestamp: window.serverTimestamp()
+    });
+                    } else {
+    const freshUserSnap = await window.getDoc(userRef);
+    const latestCurSaldo = freshUserSnap.exists() ? (freshUserSnap.data().saldo || 0) : 0;
+    await window.updateDoc(userRef, { saldo: latestCurSaldo + data.baseHarga }); 
+    window.showNotice('error', 'Gagal', window.bersihkanPesan((res.data ? res.data.message : res.message) || 'Gagal dari server pusat'));
+                    }
+                } catch(e) {
+                    try {
+     const userRef = window.doc(window.db, "users", user.uid);
+     const freshUserSnapCatch = await window.getDoc(userRef);
+     const latestCurSaldoCatch = freshUserSnapCatch.exists() ? (freshUserSnapCatch.data().saldo || 0) : 0;
+     await window.updateDoc(userRef, { saldo: latestCurSaldoCatch + data.baseHarga });
+                    } catch(ex){}
+                    window.showNotice('error', 'Error', 'Terjadi kesalahan sistem: ' + e.message);
+                }
+            };
+    
+    
+            // --- INTEGRASI ICS STORE (PAKET AKRAB V2) ---
+            window.icsData = [];
+    
+            window.loadIcsData = async function() {
+                const areaList = document.getElementById('listProdukArea');
+                const areaFilter = document.getElementById('areaFilter');
+                
+                if(areaFilter) areaFilter.innerHTML = "";
+                if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin'></i> Memuat Produk...</div>";
+    
+                try {
+                    const req = await fetch('ics_proxy.php?action=list');
+                    const res = await req.json();
+                    
+                if(res.success && res.data) {
+    res.data.forEach(item => {
+        if (item.code === 'CFMX') {
+            item.type = 'fmax';
+            item.price = 0;
+        }
+    });
+    window.icsData = res.data;
+    window.renderIcsFilters();
+                    } else {
+    if(areaList) areaList.innerHTML = `<div style='text-align:center; padding:20px;'>Gagal: ${res.message || 'Data Kosong'}</div>`;
+                    }
+                } catch(e) {
+                    console.error(e);
+                    if(areaList) areaList.innerHTML = "<div style='text-align:center; color:red; padding:20px;'>Gagal koneksi ke server.</div>";
+                }
+            };
+    
+            window.renderIcsFilters = function() {
+                const rawTypes = window.icsData.map(i => (i.type || 'Lainnya').toUpperCase());
+                const types = [...new Set(rawTypes)].sort();
+                
+                let html = '';
+                types.forEach(t => {
+                    html += `<div class="filter-card" onclick="window.filterIcs('${t}', this)" style="min-width:auto; padding:8px 12px; margin:0; display:inline-flex; align-items:center; justify-content:center; height:auto; border-radius:8px; background:white; border:1px solid #eee; white-space:nowrap; flex-shrink:0;">
+    <span style="font-size:11px; font-weight:bold; color:#555;">${t}</span>
+                    </div>`;
+                });
+                
+                const areaFilter = document.getElementById('areaFilter');
+                if(areaFilter) {
+                    areaFilter.innerHTML = html;
+                    areaFilter.style.display = "flex";
+                    areaFilter.style.overflowX = "auto";
+                    areaFilter.style.gap = "8px";
+                    areaFilter.style.padding = "10px 5px";
+                    areaFilter.style.gridTemplateColumns = "none";
+                    areaFilter.style.scrollbarWidth = "none"; 
+                }
+                if(types.length > 0) window.filterIcs(types[0], document.querySelector('#areaFilter .filter-card'));
+            };
+    
+            window.filterIcs = function(type, el) {
+                document.querySelectorAll('.filter-card').forEach(e => e.classList.remove('active'));
+                if(el) el.classList.add('active');
+    
+                const products = window.icsData.filter(i => (i.type || 'Lainnya').toUpperCase() === type);
+                products.sort((a,b) => parseInt(a.price) - parseInt(b.price));
+    
+                let html = '';
+        let markup = 0;
+                if(window.markupConfig) {
+                     if(window.markupConfig['Paket Akrab v2'] !== undefined) markup = parseInt(window.markupConfig['Paket Akrab v2']);
+                     else if(window.markupConfig['General']) markup = parseInt(window.markupConfig['General']);
+                }
+    
+        products.forEach(p => {
+                    let pName = p.name || 'Produk';
+                    let pCode = p.code || '-';
+                    let rawM = (window.markupConfig && window.markupConfig[pCode] !== undefined) ? window.markupConfig[pCode] : markup;
+                    let configMarkup = window.getMarkupValue(rawM, parseInt(p.harga_final));
+                    let currentMarkup = (pCode === 'CFMX' || pName.toLowerCase().includes('cek')) ? 0 : configMarkup;
+                    let finalPrice = parseInt(p.price) + currentMarkup;
+                    let desc = (p.description || '').replace(/\n/g, '<br>');
+                    
+                    const isPO = (arguments.length > 2 ? arguments[2] : false) || document.getElementById('judulMenu').innerText === 'PO Akrab';
+                    let isAvailable = isPO || (p.status === 'available' && p.stock > 0);
+                    let divStyle = isAvailable ? '' : "opacity:0.6; background:#fff0f0;";
+                    let clickEvent = isPO ? `onclick="window.siapkanInvoicePO('${pCode}', '${pName}', ${finalPrice}, 'ICS')"` : (isAvailable ? `onclick="window.siapkanInvoiceIcs('${pCode}', '${pName}', ${finalPrice}, '${p.type}')"` : `onclick="alert('Stok Habis')"`);
+                    let statusBadge = isPO ? `<span style="font-size:9px; background:#f39c12; color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">PRE-ORDER</span>` : (isAvailable ? '' : `<span style="font-size:9px; background:red; color:white; padding:2px 4px; border-radius:4px;">GANGGUAN</span>`);
+    
+                    html += `<div class="item-produk" ${clickEvent} style="${divStyle}; flex-direction:column; align-items:flex-start;">
+    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div style="font-weight:bold;font-size:12px;">${pName} ${statusBadge}</div>
+            <div style="font-size:10px; color:#999;">${pCode} • ${p.category || ''}</div>
+                    <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${p.stock}</div>
+        </div>
+        <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(finalPrice)}</div>
+    </div>
+    ${desc ? `<div style="font-size:10px; color:#666; margin-top:5px; border-top:1px dashed #eee; padding-top:4px; width:100%; line-height:1.4;" class="desc-box">${desc}</div>` : ''}
+                    </div>`;
+                });
+                
+                const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
+                if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
+                    const modalProduk = document.getElementById('modalProdukList');
+                    const areaListModal = document.getElementById('listProdukModalArea');
+                    const judulKategori = document.getElementById('judulKategoriModal');
+                    if(judulKategori) judulKategori.innerText = arguments[0]; 
+                    if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
+                    if(modalProduk) modalProduk.style.display = 'flex';
+                } else {
+                    const areaList = document.getElementById('listProdukArea');
+                    if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
+                }
+            };
+    
+            window.siapkanInvoiceIcs = function(kode, nama, harga, type) {
+                window.currentInvoiceData = { kode, nama, baseHarga: harga, isIcs: true };
+                
+                let placeholder = "Masukkan Nomor HP";
+                if((type || '').toUpperCase().includes('URL') || (type || '').toUpperCase().includes('LINK')) placeholder = "Tempel Link di sini";
+    
+                const html = `
+                    <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
+                    <div style="background: #f8fafc; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 11px; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px;">Konfirmasi Pesanan</div>
+        <div style="font-size: 15px; font-weight: 800; color: #2c3e50; margin-top: 5px;">${nama}</div>
+    </div>
+    <div class="invoice-row" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 15px;">
+        <span>Kode Produk</span><b style="color: #666;">${kode}</b>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Tujuan / Nomor HP</label>
+        <div class="input-group" style="margin-bottom: 0;">
+            <input type="text" id="inputIcsTujuan" class="form-input" placeholder="${placeholder}" style="background: white; border: 2px solid #e1effe; color:#333; font-weight:bold;">
+            <i class="fas fa-pen" style="top: 15px;"></i>
+        </div>
+    </div>
+    <div class="invoice-row invoice-total" style="padding-top: 15px; margin-top: 5px;">
+        <span>TOTAL BAYAR</span>
+        <b style="color: var(--primary); font-size: 18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
+    </div>
+                    </div>
+                    <div id="icsCustomFooter">
+    <button class="btn-konfirmasi" onclick="window.prosesBayarIcs()">BAYAR SEKARANG</button>
+    <button class="btn-batal" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
+                    </div>`;
+                
+                document.getElementById('invoiceContent').innerHTML = html;
+                document.getElementById('statusCekNama').style.display = 'none';
+                document.getElementById('modalInvoice').style.display = 'flex';
+                setTimeout(() => { const inp = document.getElementById('inputIcsTujuan'); if(inp) inp.focus(); }, 300);
+            };
+    
+            window.prosesBayarIcs = async function() {
+                const user = window.auth.currentUser;
+                if(!user) return;
+                
+                const data = window.currentInvoiceData;
+                const hp = document.getElementById('inputIcsTujuan').value;
+                if(!hp) return alert("Mohon isi Tujuan!");
+    
+                document.getElementById('modalInvoice').style.display = 'none';
+                window.showNotice('loading', 'Memproses', 'Sedang memproses transaksi...');
+    
+                try {
+                    const userRef = window.doc(window.db, "users", user.uid);
+                    const userSnap = await window.getDoc(userRef);
+                    const curSaldo = userSnap.data().saldo || 0;
+    
+                    if(curSaldo < data.baseHarga) return window.showNotice('error', 'Gagal', 'Saldo tidak mencukupi!');
+    if (!(await window.cekSinkronisasiDoniGuard(user.uid, curSaldo))) return;
+                    await window.updateDoc(userRef, { saldo: curSaldo - data.baseHarga });
+    
+                    const req = await fetch(`ics_proxy.php?action=trx`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        code: String(data.kodeOrder || data.kode || ''), 
+        dest: hp, 
+        refid: 'TRX' + Math.floor(Date.now() + Math.random()) 
+    })
+                    });
+                    const res = await req.json();
+    
+                    if(res.success && res.data) {
+    const trxId = res.data.refid;
+    const msg = res.data.message || "Transaksi diproses";
+    
+    window.showNotice('success', 'Berhasil', msg);
+    
+    // --- INTEGRASI DONIGUARD (FIX: Catat Transaksi ICS/Akrab v2) ---
+    if(window.triggerDoniGuard) {
+        window.triggerDoniGuard({
+            action: 'transaksi',
+            produk: data.nama,
+            nominal: data.baseHarga,
+            trx_id: trxId,
+            saldo_akhir_client: curSaldo - data.baseHarga
+        });
+    }
+    // --------------------------------------------------
+    
+    const docRef = await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
+        uid: user.uid,
+        username: userSnap.data().username,
+        tujuan: hp,
+        produk: data.nama,
+        kode_produk: data.kode,
+        harga: data.baseHarga,
+        status: 'PENDING',
+        sn: msg,
+        trx_id: trxId,
+        provider: 'ICS',
+        timestamp: window.serverTimestamp()
+    });
+    
+    window.monitorIcsTrx(trxId, docRef.id);
+    
+                    } else {
+    await window.updateDoc(userRef, { saldo: curSaldo }); 
+    window.showNotice('error', 'Gagal', (res.data ? res.data.message : res.message) || 'Gagal dari server pusat');
+                    }
+                } catch(e) {
+                    try {
+     const userRef = window.doc(window.db, "users", user.uid);
+     const userSnap = await window.getDoc(userRef);
+     await window.updateDoc(userRef, { saldo: (userSnap.data().saldo || 0) + data.baseHarga });
+                    } catch(ex){}
+                    window.showNotice('error', 'Error', 'Terjadi kesalahan sistem: ' + e.message);
+                }
+            };
+    
+            window.monitorIcsTrx = async function(trxId, docId) {
+                if(window.intervalCek[docId]) return;
+                console.log("Monitoring RefID:", trxId);
+                
+                window.intervalCek[docId] = setInterval(async () => {
+                    try {
+    const req = await fetch(`ics_proxy.php?action=status&refid=${trxId}`);
+    const res = await req.json();
+    
+    if(res.success && res.data) {
+        const statusRaw = (res.data.status || '').toLowerCase();
+        let statusAkhir = 'PENDING';
+        let sn = res.data.sn || res.data.message || '-';
+        
+        if(statusRaw === 'success') statusAkhir = 'BERHASIL';
+        else if(statusRaw === 'failed') statusAkhir = 'GAGAL';
+        
+        if(statusAkhir !== 'PENDING') {
+            clearInterval(window.intervalCek[docId]);
+            delete window.intervalCek[docId];
+            
+            if(window.updateFirestoreStatus) {
+                window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+            }
+        }
+    }
+                    } catch(e) { console.log("Err Mon ICS", e); }
+                }, 5000);
+            };
+    
+    // --- INTEGRASI KHFY STORE (PAKET AKRAB) - SMART SYSTEM v2 ---
+            window.khfyData = [];
+    
+            window.loadKhfyData = async function() {
+                const areaList = document.getElementById('listProdukArea');
+                const areaFilter = document.getElementById('areaFilter');
+                
+                if(areaFilter) areaFilter.innerHTML = "";
+                if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin'></i> Memuat Produk...</div>";
+    
+                try {
+                    const req = await fetch('khfy_proxy.php?action=list');
+                    const res = await req.json();
+                    
+                    if(res.data) {
+    window.khfyData = res.data;
+    window.renderKhfyBrands();
+                    } else {
+    if(areaList) areaList.innerHTML = `<div style='text-align:center; padding:20px;'>Gagal: ${res.message || 'Data Kosong'}</div>`;
+                    }
+                } catch(e) {
+                    console.error(e);
+                    if(areaList) areaList.innerHTML = "<div style='text-align:center; color:red; padding:20px;'>Gagal koneksi ke server.</div>";
+                }
+            };
+    
+            // LOGIKA KATEGORI SESUAI PERMINTAAN
+            window.getKhfyCategory = function(item) {
+                const kode = (item.kode_produk || "").toUpperCase();
+                const provider = (item.kode_provider || "").toUpperCase();
+                
+                if (['FMX50', 'FMX65', 'FMX80', 'FMX150'].includes(kode)) return "XL Data Reguler";
+                if (kode === 'XLB75') return "Akrab Fresh (XLA)";
+                
+                if (kode.startsWith("KDA")) return "KDA (PROMO)";
+                if (kode.startsWith("XDA")) return "Akrab Fresh (XDA)";
+                if (kode.startsWith("XLA")) return "Akrab Fresh (XLA)";
+                if (kode.startsWith("FMX") || kode.startsWith("CFMX")) return "FlexMax (FMX)";
+                if (kode.startsWith("CEKPLN") || provider.includes("PLN")) return "PLN Pascabayar";
+                if (kode.startsWith("XLB") || kode.startsWith("XL")) return "XL Data Reguler";
+                if (kode.startsWith("BPA") || kode.startsWith("BPAL")) return "Bonus Akrab";
+                if (kode.startsWith("TES")) return "Tes System";
+                
+                return "LAINNYA";
+            };
+    
+            window.renderKhfyBrands = function() {
+                const rawBrands = window.khfyData.map(i => window.getKhfyCategory(i));
+                // Filter Tes System & Sort
+                const brands = [...new Set(rawBrands)].filter(b => b !== 'Tes System' && b !== 'PLN Pascabayar').sort();
+                
+                let html = '';
+                brands.forEach(b => {
+                    // Tampilan Chip Simpel (Tanpa Icon Bulat)
+                    html += `<div class="filter-card" onclick="window.filterKhfy('${b}', this)" style="min-width:auto; padding:8px 12px; margin:0; display:inline-flex; align-items:center; justify-content:center; height:auto; border-radius:8px; background:white; border:1px solid #eee; white-space:nowrap; flex-shrink:0;">
+    <span style="font-size:11px; font-weight:bold; color:#555;">${b}</span>
+                    </div>`;
+                });
+                const areaFilter = document.getElementById('areaFilter');
+                const areaList = document.getElementById('listProdukArea');
+                
+                if(areaFilter) {
+                    areaFilter.innerHTML = html;
+                    // Style 1 Baris (Horizontal Scroll)
+                    areaFilter.style.display = "flex";
+                    areaFilter.style.overflowX = "auto";
+                    areaFilter.style.gap = "8px";
+                    areaFilter.style.padding = "10px 5px";
+                    areaFilter.style.gridTemplateColumns = "none";
+                    areaFilter.style.scrollbarWidth = "none"; 
+                }
+        // AUTO SELECT: Prioritaskan XDA, jika tidak ada ambil yang pertama
+                const targetName = "Akrab Fresh (XDA)";
+                const selectedBrand = brands.includes(targetName) ? targetName : (brands.length > 0 ? brands[0] : null);
+    
+                if(selectedBrand) {
+                    setTimeout(() => {
+    const cards = document.querySelectorAll('#areaFilter .filter-card');
+    let clicked = false;
+    cards.forEach(c => {
+        if(!clicked && c.innerText.trim() === selectedBrand) { c.click(); clicked = true; }
+    });
+    if(!clicked && cards.length > 0) cards[0].click();
+                    }, 50);
+                } else {
+                    if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:20px; color:#999;'>Silakan pilih kategori di atas</div>";
+                }
+            };
+    
+            window.filterKhfy = async function(brand, el) {
+                document.querySelectorAll('.filter-card').forEach(e => e.classList.remove('active'));
+                if(el) el.classList.add('active');
+    
+                const products = window.khfyData.filter(i => window.getKhfyCategory(i) === brand && !['BPAL1', 'BPAXXL1', 'BPAXL3', 'XLB75'].includes(i.kode_produk));
+                products.sort((a,b) => parseInt(a.harga_final) - parseInt(b.harga_final));
+    
+                let stockMap = {};
+                if (brand === 'Akrab Fresh (XLA)') {
+                    const isModal = document.getElementById('judulMenu') && (document.getElementById('judulMenu').innerText === 'Paket Akrab All' || document.getElementById('judulMenu').innerText === 'PO Akrab');
+                    const targetArea = isModal ? document.getElementById('listProdukModalArea') : document.getElementById('listProdukArea');
+                    if (targetArea) targetArea.innerHTML = "<div style='text-align:center; padding:20px; color:#666;'><i class='fas fa-circle-notch fa-spin'></i> Mengecek stok terbaru...</div>";
+                try {
+    const reqStock = await fetch('khfy_xla_stock.php');
+    const resStock = await reqStock.json();
+    if(resStock.ok && resStock.data) {
+        resStock.data.forEach(st => {
+            stockMap[st.type] = st.sisa_slot;
+        });
+    }
+                    } catch(e) { console.error("Gagal cek stok XLA", e); }
+                }
+    
+        let html = '';
+                let markup = 0;
+                if(window.markupConfig) {
+                    if(brand === 'KDA (PROMO)' && window.markupConfig['KDA (PROMO)'] !== undefined) markup = parseInt(window.markupConfig['KDA (PROMO)']);
+                    else if(window.markupConfig['Paket Akrab'] !== undefined) markup = parseInt(window.markupConfig['Paket Akrab']);
+                    else if(window.markupConfig['General']) markup = parseInt(window.markupConfig['General']);
+                }
+    
+        products.forEach(p => {
+                    let pName = p.nama_produk || 'Produk';
+                    let pCode = p.kode_produk || '-';
+                    let rawM = (window.markupConfig && window.markupConfig[pCode] !== undefined) ? window.markupConfig[pCode] : markup;
+                    let configMarkup = window.getMarkupValue(rawM, parseInt(p.harga_final));
+                    let currentMarkup = (pCode === 'CFMX' || pName.toLowerCase().includes('cek')) ? 0 : configMarkup;
+                    let finalPrice = parseInt(p.harga_final) + currentMarkup;
+                    let desc = (p.deskripsi || '').replace(/\n/g, '<br>');
+                    
+                    // Cek Status dari JSON (1 = Masalah)
+                    const isPO = (arguments.length > 2 ? arguments[2] : false) || document.getElementById('judulMenu').innerText === 'PO Akrab';
+                    const isGangguan = (p.gangguan == 1);
+                    const isKosong = (p.kosong == 1);
+                    const isNotAvailable = !isPO && (isGangguan || isKosong);
+                    
+                    let statusBadge = "";
+                    let divStyle = "flex-direction:column; align-items:flex-start;";
+                    let clickEvent = '';
+                    if (p.provider_kaje) {
+    let pOrderCode = p.kode_order_kaje || p.kode_produk_asli || pCode;
+    clickEvent = isPO ? `onclick="window.siapkanInvoicePO('${pCode}', '${pName}', ${finalPrice}, 'KAJE', '${pOrderCode}')"` : `onclick="window.siapkanInvoiceKaje('${pCode}', '${pName}', ${finalPrice}, '${pOrderCode}')"`;
+                    } else {
+    clickEvent = isPO ? `onclick="window.siapkanInvoicePO('${pCode}', '${pName}', ${finalPrice}, 'KHFY')"` : `onclick="window.siapkanInvoiceKhfy('${pCode}', '${pName}', ${finalPrice})"`;
+                    }
+                    
+                    if (isNotAvailable) {
+    divStyle += " opacity:0.6; background:#fff0f0;";
+    clickEvent = `onclick="alert('Maaf, produk ini sedang gangguan atau stok kosong.')"`;
+    if(isGangguan) statusBadge = `<span style="font-size:9px; color:white; background:red; padding:2px 4px; border-radius:4px; margin-left:5px;">GANGGUAN</span>`;
+    else if(isKosong) statusBadge = `<span style="font-size:9px; color:white; background:orange; padding:2px 4px; border-radius:4px; margin-left:5px;">KOSONG</span>`;
+                    } else if (isPO) {
+    statusBadge = `<span style="font-size:9px; background:#f39c12; color:white; padding:2px 4px; border-radius:4px; margin-left:5px;">PRE-ORDER</span>`;
+                    }
+    
+                    html += `<div class="item-produk" ${clickEvent} style="${divStyle}">
+    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <div style="font-weight:bold;font-size:12px;">${pName} ${statusBadge}</div>
+            <div style="font-size:10px; color:#999;">${pCode}</div>
+            ${(p.stok !== undefined || (typeof stockMap !== 'undefined' && stockMap[pCode] !== undefined)) ? `<div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${p.stok !== undefined ? p.stok : stockMap[pCode]}</div>` : ''}
+        </div>
+        <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(finalPrice)}</div>
+    </div>
+    ${desc ? `<div style="font-size:10px; color:#666; margin-top:5px; border-top:1px dashed #eee; padding-top:4px; width:100%; line-height:1.4;" class="desc-box">${desc}</div>` : ''}
+                    </div>`;
+                });
+                const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
+                if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
+                    const modalProduk = document.getElementById('modalProdukList');
+                    const areaListModal = document.getElementById('listProdukModalArea');
+                    const judulKategori = document.getElementById('judulKategoriModal');
+                    if(judulKategori) judulKategori.innerText = arguments[0]; 
+                    if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
+                    if(modalProduk) modalProduk.style.display = 'flex';
+                } else {
+                    const areaList = document.getElementById('listProdukArea');
+                    if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk kosong</div>";
+                }
+            };
+    
+            window.siapkanInvoiceKaje = function(kode, nama, harga, kodeOrder) {
+                window.currentInvoiceData = { kode, kodeOrder: (kodeOrder || kode), nama, baseHarga: harga, isKaje: true };
+                const html = `
+                    <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
+                    <div style="background: #f8fafc; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 11px; color: #95a5a6; text-transform: uppercase; letter-spacing: 1px;">Konfirmasi Pesanan</div>
+        <div style="font-size: 15px; font-weight: 800; color: #2c3e50; margin-top: 5px;">${nama}</div>
+    </div>
+    <div class="invoice-row" style="border-bottom: 1px dashed #eee; padding-bottom: 10px; margin-bottom: 15px;">
+        <span>Kode Produk</span><b style="color: #666;">${kode}</b>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 10px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 8px; text-transform: uppercase;">Nomor Tujuan / Target</label>
+        <div class="input-group" style="margin-bottom: 0;">
+            <input type="tel" inputmode="numeric" id="inputKajeTujuan" class="form-input" placeholder="Masukkan Nomor Target" style="background: white; border: 2px solid #e1effe; color:#333; font-weight:bold; padding-right: 70px;">
+            <i class="fas fa-edit" style="top: 15px;"></i>
+            <button type="button" onclick="window.pasteDariClipboard('inputKajeTujuan')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
+        </div>
+    </div>
+    <div class="invoice-row invoice-total" style="padding-top: 15px; margin-top: 5px;">
+        <span>TOTAL BAYAR</span>
+        <b style="color: var(--primary); font-size: 18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
+    </div>
+                    </div>
+                    <div id="kajeCustomFooter" style="display:flex; gap:10px; margin-top:15px;">
+    <button class="btn-konfirmasi" style="flex:1;" onclick="window.prosesBayarKaje()">BAYAR SEKARANG</button>
+    <button class="btn-batal" style="flex:1; background:#fff5f5; color:var(--danger); border:1px solid #ffcccc;" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
+                    </div>`;
+                document.getElementById('invoiceContent').innerHTML = html;
+                document.getElementById('statusCekNama').style.display = 'none';
+                document.getElementById('modalInvoice').style.display = 'flex';
+                setTimeout(() => { const inp = document.getElementById('inputKajeTujuan'); if(inp) inp.focus(); }, 300);
+            };
+    
             window.prosesBayarKaje = async function() {
                 const user = window.auth.currentUser;
                 if(!user) return;
@@ -4955,8 +8825,109 @@ console.log("Pandawa-Digital v2.0 — Ready.");
                         window.prosesBayarKhfy = async function() {
                 const user = window.auth.currentUser;
                 if(!user) return;
-
-//=== ADDITIONAL BLOCK 8994-9040 ===
+                
+                const data = window.currentInvoiceData;
+                // MODIFIKASI: Ambil tujuan dari input dalam invoice
+                const elTujuan = document.getElementById('inputKhfyTujuan');
+                const hp = elTujuan ? elTujuan.value : '';
+                
+                if(!hp) return alert("Mohon isi Nomor Tujuan / Link Zona!");
+    
+                document.getElementById('modalInvoice').style.display = 'none';
+                window.showNotice('loading', 'Memproses', 'Sedang memproses transaksi...');
+    
+                try {
+                    // 1. Cek Saldo & Kurangi Dulu
+                    const userRef = window.doc(window.db, "users", user.uid);
+                    const userSnap = await window.getDoc(userRef);
+                    const curSaldo = userSnap.data().saldo || 0;
+    
+                    if(curSaldo < data.baseHarga) {
+    return window.showNotice('error', 'Gagal', 'Saldo tidak mencukupi!');
+                    }
+    
+                    if (!(await window.cekSinkronisasiDoniGuard(user.uid, curSaldo))) return;
+    // Potong Saldo Sementara
+                    await window.updateDoc(userRef, { saldo: curSaldo - data.baseHarga });
+    
+                    // --- GENERATE TRX ID (8 DIGIT ANGKA RANDOM) SESUAI REQUEST ---
+                    const clientRefId = "KF-" + hp + "-" + Math.floor(1000000 + Math.random() * 9000000).toString();
+    
+                    // 2. Tembak API Khfy via Proxy (Kirim reff_id buatan sendiri)
+                    const req = await fetch(`khfy_proxy.php?action=trx&produk=${data.kode}&tujuan=${hp}&reff_id=${clientRefId}`);
+                    const res = await req.json();
+    
+                    // 3. LOGIKA DETEKSI SUKSES SUPER TOLERAN
+                    let isSuccess = false;
+                    const fullResString = JSON.stringify(res).toLowerCase();
+                    
+                    if (res.success === true || res.status === true || fullResString.includes('true')) isSuccess = true;
+                    if (fullResString.includes('proses') || fullResString.includes('pending') || fullResString.includes('berhasil') || fullResString.includes('sukses')) isSuccess = true;
+                    
+                    const d = res.data || res;
+                    // Cek indikator lain
+                    if (d.trxid || d.refid || (d.data && d.data.trxid)) isSuccess = true;
+    
+                    const msg = d.message || d.msg || (d.data ? d.data.message : '') || res.message || 'Transaksi diproses server';
+                    
+                    // GUNAKAN 8 DIGIT KITA SEBAGAI ID UTAMA UNTUK TRACKING
+                    const trxId = clientRefId;
+    
+                    if(isSuccess) {
+                        window.showNotice('success', 'Berhasil', msg);
+    
+    // --- INTEGRASI DONIGUARD (CATAT TRANSAKSI KHFY) ---
+    if(window.triggerDoniGuard) {
+        window.triggerDoniGuard({
+            action: 'transaksi',
+            produk: data.nama,
+            nominal: data.baseHarga,
+            trx_id: trxId,
+            saldo_akhir_client: curSaldo - data.baseHarga
+        });
+    }
+    // --------------------------------------------------
+    
+    // Simpan Riwayat
+    const docRef = await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
+        uid: user.uid,
+        username: userSnap.data().username,
+        tujuan: hp,
+        produk: data.nama,
+        kode_produk: data.kode,
+        harga: data.baseHarga,
+        status: 'PENDING',
+        status_awal: 'PENDING',
+        sn: msg,
+        trx_id: trxId,
+        provider: 'KHFY',
+        timestamp: window.serverTimestamp()
+    });
+    
+    // JALANKAN MONITORING MENGGUNAKAN ID 8 DIGIT (clientRefId)
+    window.monitorKhfyTrx(trxId, docRef.id);
+    
+                    } else {
+    // GAGAL MURNI -> REFUND SALDO
+    await window.updateDoc(userRef, { saldo: curSaldo }); 
+    window.showNotice('error', 'Gagal', window.bersihkanPesan(msg || 'Gagal dari server pusat'));
+                    }
+                } catch(e) {
+                    console.error(e);
+                    // Safety Refund
+                    try {
+     const userRef = window.doc(window.db, "users", user.uid);
+     const userSnap = await window.getDoc(userRef);
+     await window.updateDoc(userRef, { saldo: (userSnap.data().saldo || 0) + data.baseHarga });
+                    } catch(ex){}
+                    window.showNotice('error', 'Error', 'Terjadi kesalahan sistem: ' + e.message);
+                }
+            };
+    
+            // --- FUNGSI MONITORING STATUS (BY REFID 8 DIGIT) ---
+                    // --- FUNGSI MONITORING STATUS KHFY (PARSING SEMPURNA v3) ---
+                    // --- FUNGSI MONITORING STATUS KHFY (ANTI-FLIP SUKSES->GAGAL) ---
+            
             window.siapkanInvoicePO = function(kode, nama, harga, provider, kodeOrder) {
                 window.currentInvoiceData = { kode, kodeOrder: (kodeOrder || kode), nama, baseHarga: harga, provider: provider, isPO: true };
                 const html = `
@@ -5004,49 +8975,2147 @@ console.log("Pandawa-Digital v2.0 — Ready.");
         try {
             const userRef = window.doc(window.db, "users", user.uid);
             const userSnap = await window.getDoc(userRef);
-
-//=== ADDITIONAL BLOCK 8522-8560 ===
-            window.monitorIcsTrx = async function(trxId, docId) {
-                if(window.intervalCek[docId]) return;
+            const curSaldo = userSnap.data().saldo || 0;
+            const username = userSnap.data().username || "User";
+    
+            if(curSaldo < data.baseHarga) return window.showNotice('error', 'Gagal', 'Saldo tidak cukup!');
+            
+            if (!(await window.cekSinkronisasiDoniGuard(user.uid, curSaldo))) return;
+    // 1. Potong Saldo
+            const newSaldo = curSaldo - data.baseHarga;
+            await window.updateDoc(userRef, { saldo: newSaldo });
+    
+            const trxId = 'PO-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            const msg = "Masuk Antrian Pre-Order Admin";
+    
+            if(window.triggerDoniGuard) {
+                window.triggerDoniGuard({
+                    action: 'transaksi',
+                    produk: '(PO) ' + data.nama,
+                    nominal: data.baseHarga,
+                    trx_id: trxId,
+                    saldo_akhir_client: newSaldo
+                });
+            }
+    
+            // 2. Simpan Riwayat User
+            await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
+                uid: user.uid,
+                username: username,
+                tujuan: hp,
+                produk: data.nama,
+                kode_produk: data.kode,
+                kode_order_kaje: (data.provider === 'KAJE' ? String(data.kodeOrder || data.kode || '').replace(/^KDA/, 'XDA') : (data.kodeOrder || data.kode)),
+                harga: data.baseHarga,
+                status: 'PENDING',
+                status_awal: 'PENDING',
+                sn: msg,
+                trx_id: trxId,
+                provider: data.provider || 'KHFY',
+                is_po: true,
+                timestamp: window.serverTimestamp()
+            });
+    
+            if(window.kirimNotifTelegram) window.kirimNotifTelegram('preorder', { produk: data.nama, tujuan: hp, harga: data.baseHarga, username: username, trx_id: trxId });
+    
+            // 3. SINKRONISASI KE ADMIN (PERBAIKAN: Menambahkan field produk & username agar tampil di panel)
+            try {
+                const poPayload = {
+                    uid: user.uid,
+                    username: username, 
+                    tujuan: hp,
+                    produk: data.nama, 
+                    kode_produk: data.kode,
+                    kode_order_kaje: (data.provider === 'KAJE' ? String(data.kodeOrder || data.kode || '').replace(/^KDA/, 'XDA') : (data.kodeOrder || data.kode)),
+                    provider: data.provider || 'KHFY',
+                    trx_id: trxId,
+                    harga: data.baseHarga,
+                    timestamp: window.serverTimestamp(),
+                    status: 'PENDING' 
+                };
+                await window.addDoc(window.collection(window.db, "preorders"), poPayload);
+                console.log("Sinkronisasi Pre-Order ke Admin sukses.");
+            } catch(err) {
+                console.error("Gagal simpan preorders:", err);
+            }
+    
+            window.showNotice('success', 'Berhasil', 'Pesanan berhasil masuk antrian PO!');
+        } catch(e) {
+            console.error(e);
+            window.showNotice('error', 'Error', 'Terjadi kesalahan sistem: ' + e.message);
+        }
+    };
+    
+    window.monitorKhfyTrx = async function(trxId, docId) {
                 console.log("Monitoring RefID:", trxId);
-                
-                window.intervalCek[docId] = setInterval(async () => {
+                let attempts = 0;
+                const interval = setInterval(async () => {
+                    attempts++;
+                    if(attempts > 30) clearInterval(interval);
+    
                     try {
-    const req = await fetch(`ics_proxy.php?action=status&refid=${trxId}`);
+    const req = await fetch(`khfy_cekstatus.php?refid=${trxId}`);
     const res = await req.json();
     
-    if(res.success && res.data) {
-        const statusRaw = (res.data.status || '').toLowerCase();
+    if(res.message && res.message.includes("Action invalid")) {
+        clearInterval(interval);
+        return;
+    }
+    
+    // Parsing Status
+    let targetItem = null;
+    if (res.data && Array.isArray(res.data)) targetItem = res.data[0];
+    else if (res.data && res.data.data && Array.isArray(res.data.data)) targetItem = res.data.data[0];
+    else if (res.data) targetItem = res.data;
+    else if (res.status && res.sn) targetItem = res;
+    
+    if(targetItem) {
         let statusAkhir = 'PENDING';
-        let sn = res.data.sn || res.data.message || '-';
+        // Cek Status (Support status_text & status2)
+        const st = (targetItem.status || targetItem.status_text || targetItem.message || '').toUpperCase();
+        const stCode = parseInt(targetItem.status2 || 0);
         
-        if(statusRaw === 'success') statusAkhir = 'BERHASIL';
-        else if(statusRaw === 'failed') statusAkhir = 'GAGAL';
+        // Logika Penentuan Status
+        if(st.includes('SUKSES') || st.includes('BERHASIL') || st.includes('SUCCESS') || stCode === 20) statusAkhir = 'BERHASIL';
+        else if(st.includes('GAGAL') || st.includes('BATAL') || st.includes('REFUND') || st.includes('FAILED') || stCode === 72) statusAkhir = 'GAGAL';
         
+        // Ambil SN/Ket
+        const sn = targetItem.sn || targetItem.keterangan || targetItem.note || targetItem.message || '-';
+    
         if(statusAkhir !== 'PENDING') {
-            clearInterval(window.intervalCek[docId]);
-            delete window.intervalCek[docId];
-            
-            if(window.updateFirestoreStatus) {
-                window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+            clearInterval(interval);
+            const user = window.auth.currentUser;
+            if(user) {
+                const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", docId);
+                
+                // --- FITUR PENGAMAN (LOCK STATUS) ---
+                // Cek dulu status di database sekarang. 
+                // Jika SUDAH BERHASIL, JANGAN UBAH JADI GAGAL (abaikan glitch server)
+                const curSnap = await window.getDoc(trxRef);
+                if(curSnap.exists()) {
+                    const curSt = (curSnap.data().status || '').toUpperCase();
+                    if(curSt === 'BERHASIL' || curSt === 'SUKSES') {
+                        console.log("🛡️ Status dikunci (Sudah Berhasil). Mengabaikan update selanjutnya.");
+                        return;
+                    }
+                }
+                // ------------------------------------
+    
+                await window.updateDoc(trxRef, {
+                    status: statusAkhir,
+                    sn: sn,
+                    raw_json: JSON.stringify(res)
+                });
+                
+                if(statusAkhir === 'GAGAL') {
+                    const trxSnap = await window.getDoc(trxRef);
+                    if (!trxSnap.data().isRefunded) {
+                        const amount = parseInt(trxSnap.data().harga || 0);
+                        const userRef = window.doc(window.db, "users", user.uid);
+                        const uSnap = await window.getDoc(userRef);
+                        
+                        await window.updateDoc(userRef, { saldo: (uSnap.data().saldo || 0) + amount });
+                        if(window.updateFirestoreStatus) {
+                            window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+                        }
+                        if(statusAkhir === 'GAGAL') {
+                            window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                        } else {
+                            window.showNotice('success', 'Transaksi Sukses', sn);
+                        }
+                        return;
+                        if(window.updateFirestoreStatus) {
+                            window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+                        }
+                        if(statusAkhir === 'GAGAL') {
+                            window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                        } else {
+                            window.showNotice('success', 'Transaksi Sukses', sn);
+                        }
+                        return;
+                        await window.updateDoc(trxRef, { isRefunded: true, sn: sn + ' (REFUND OTOMATIS)' });
+                        
+                        // Lapor Doniguard (Refund)
+                        if(window.triggerDoniGuard) {
+                            window.triggerDoniGuard({
+                                action: 'topup',
+                                produk: 'REFUND: ' + (trxSnap.data().produk || 'Paket Akrab'),
+                                nominal: amount,
+                                                                    trx_id: ((trxSnap.data().trx_id || trxId) + '-REF'),
+                                saldo_akhir_client: (uSnap.data().saldo || 0) + amount
+                            });
+                        }
+                        
+                        window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                    }
+                } else {
+                    window.showNotice('success', 'Transaksi Sukses', sn);
+                }
             }
         }
     }
-                    } catch(e) { console.log("Err Mon ICS", e); }
-                }, 5000);
+                    } catch(e) { console.log("Monitoring Skip:", e); }
+                }, 4000);
+            };
+            
+    
+            window.filterWz = function(el) {
+                document.querySelectorAll('.akrab-btn, .filter-card').forEach(e => e.classList.remove('active'));
+                if(el) el.classList.add('active');
+    
+                const products = Array.isArray(window.wzData) ? window.wzData.slice() : [];
+    
+                let html = '';
+                products.forEach(p => {
+                    const pName = p.nama_produk || p.nama || p.name || p.product_name || 'Produk WZ';
+                    const pCode = String(p.kode_produk || p.kode || p.code || p.product_code || p.markup_key || '-').toUpperCase();
+                    const basePrice = parseInt(p.harga_modal || p.harga_asli || p.modal || p.harga || p.price || 0) || 0;
+                    let rawM = 0;
+                    if(window.markupConfig) {
+                        if(window.markupConfig[pCode] !== undefined) rawM = window.markupConfig[pCode];
+                        else if(window.markupConfig[String(pCode).toUpperCase()] !== undefined) rawM = window.markupConfig[String(pCode).toUpperCase()];
+                        else if(window.markupConfig[pName] !== undefined) rawM = window.markupConfig[pName];
+                        else if(window.markupConfig['Cuan+(Promo)'] !== undefined) rawM = window.markupConfig['Cuan+(Promo)'];
+                        else if(window.markupConfig['KDA (PROMO)'] !== undefined) rawM = window.markupConfig['KDA (PROMO)'];
+                        else if(window.markupConfig['Paket Akrab'] !== undefined) rawM = window.markupConfig['Paket Akrab'];
+                        else if(window.markupConfig['General'] !== undefined) rawM = window.markupConfig['General'];
+                    }
+                    const markup = window.getMarkupValue ? window.getMarkupValue(rawM, basePrice) : parseInt(rawM || 0);
+                    const finalPrice = basePrice + markup;
+                    const stok = parseInt(p.stok ?? p.stock ?? 0) || 0;
+                    const ready = (p.ready === true || p.available === true || String(p.status || '').toUpperCase() === 'READY') && stok > 0;
+                    const desc = String(p.deskripsi || p.description || '').replace(/\n/g, '<br>');
+                    const safeName = String(pName).replace(/'/g, "\\'");
+                    const safeCode = String(pCode).replace(/'/g, "\\'");
+                    const statusBadge = ready
+                        ? `<span style="font-size:9px; color:white; background:#10ac84; padding:2px 4px; border-radius:4px; margin-left:5px;">READY</span>`
+                        : `<span style="font-size:9px; color:white; background:orange; padding:2px 4px; border-radius:4px; margin-left:5px;">KOSONG</span>`;
+    
+                    let divStyle = "flex-direction:column; align-items:flex-start;";
+                    let clickEvent = `onclick="window.siapkanInvoiceWz('${safeCode}', '${safeName}', ${finalPrice})"`;
+                    if(!ready) {
+                        divStyle += " opacity:0.6; background:#fff8e1;";
+                        clickEvent = `onclick="alert('Maaf, stok produk Cuan+(Promo) ini kosong.')"`;
+                    }
+    
+                    html += `<div class="item-produk" ${clickEvent} style="${divStyle}">
+                        <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <div style="font-weight:bold;font-size:12px;">${pName} ${statusBadge}</div>
+                                <div style="font-size:10px; color:#999;">${pCode} • Cuan+(Promo)</div>
+                                <div style="font-size:10px; color:#10ac84; margin-top:2px; font-weight:bold;"><i class="fas fa-cubes"></i> Stok: ${stok}</div>
+                            </div>
+                            <div style="font-weight:bold;color:var(--primary);font-size:13px;">Rp ${new Intl.NumberFormat('id-ID').format(finalPrice)}</div>
+                        </div>
+                        ${desc ? `<div style="font-size:10px; color:#666; margin-top:5px; border-top:1px dashed #eee; padding-top:4px; width:100%; line-height:1.4;" class="desc-box">${desc}</div>` : ''}
+                    </div>`;
+                });
+    
+                const judulMenuText = document.getElementById('judulMenu') ? document.getElementById('judulMenu').innerText : '';
+                if (judulMenuText === 'Paket Akrab All' || judulMenuText === 'PO Akrab') {
+                    const modalProduk = document.getElementById('modalProdukList');
+                    const areaListModal = document.getElementById('listProdukModalArea');
+                    const judulKategori = document.getElementById('judulKategoriModal');
+                    if(judulKategori) judulKategori.innerText = 'Cuan+(Promo)';
+                    if(areaListModal) areaListModal.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk Cuan+(Promo) kosong</div>";
+                    if(modalProduk) modalProduk.style.display = 'flex';
+                } else {
+                    const areaList = document.getElementById('listProdukArea');
+                    if(areaList) areaList.innerHTML = html || "<div style='padding:20px; text-align:center;'>Produk Cuan+(Promo) kosong</div>";
+                }
             };
     
-    // --- INTEGRASI KHFY STORE (PAKET AKRAB) - SMART SYSTEM v2 ---
-            window.khfyData = [];
+            window.siapkanInvoiceWz = function(kode, nama, harga) {
+                window.currentInvoiceData = { kode, nama, baseHarga: harga, isWz: true, provider: 'WZ' };
+                const modalProduk = document.getElementById('modalProdukList');
+                if(modalProduk) modalProduk.style.display = 'none';
     
-            window.loadKhfyData = async function() {
+                const html = `
+                    <style>#modalInvoice #invoiceFooter { display: none !important; }</style>
+                    <div style="background:#f8fafc; border-radius:15px; padding:20px; border:1px solid #edf2f7; margin-bottom:20px;">
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <div style="font-size:11px; color:#95a5a6; text-transform:uppercase; letter-spacing:1px;">Konfirmasi Cuan+(Promo)</div>
+                            <div style="font-size:15px; font-weight:800; color:#2c3e50; margin-top:5px;">${nama}</div>
+                        </div>
+                        <div class="invoice-row" style="border-bottom:1px dashed #eee; padding-bottom:10px; margin-bottom:15px;">
+                            <span>Kode Produk</span><b style="color:#666;">${kode}</b>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <label style="font-size:10px; font-weight:700; color:var(--primary); display:block; margin-bottom:8px; text-transform:uppercase;">Nomor Tujuan</label>
+                            <div class="input-group" style="margin-bottom:0;">
+                                <input type="tel" inputmode="numeric" id="inputWzTujuan" class="form-input" placeholder="Masukkan Nomor Tujuan" style="background:white; border:2px solid #e1effe; color:#333; font-weight:bold; padding-right:70px;">
+                                <i class="fas fa-edit" style="top:15px;"></i>
+                                <button type="button" onclick="window.pasteDariClipboard('inputWzTujuan')" style="position:absolute; right:10px; top:12px; background:var(--primary); color:white; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:bold; cursor:pointer; z-index:10;">PASTE</button>
+                            </div>
+                        </div>
+                        <div class="invoice-row invoice-total" style="padding-top:15px; margin-top:5px;">
+                            <span>TOTAL BAYAR</span>
+                            <b style="color:var(--primary); font-size:18px;">Rp ${new Intl.NumberFormat('id-ID').format(harga)}</b>
+                        </div>
+                    </div>
+                    <div id="wzCustomFooter">
+                        <button class="btn-konfirmasi" onclick="window.prosesBayarWz()">BAYAR SEKARANG</button>
+                        <button class="btn-batal" onclick="document.getElementById('modalInvoice').style.display='none'">BATAL</button>
+                    </div>`;
+    
+                document.getElementById('invoiceContent').innerHTML = html;
+                document.getElementById('statusCekNama').style.display = 'none';
+                document.getElementById('modalInvoice').style.display = 'flex';
+            };
+    
+            window.prosesBayarWz = async function() {
+                const user = window.auth.currentUser;
+                if(!user) return;
+    
+                const data = window.currentInvoiceData;
+                const hp = (document.getElementById('inputWzTujuan') || {}).value || '';
+                if(!hp) return alert("Mohon isi Nomor Tujuan!");
+    
+                document.getElementById('modalInvoice').style.display = 'none';
+                window.showNotice('loading', 'Memproses', 'Sedang memproses transaksi WZ...');
+    
+                try {
+                    const userRef = window.doc(window.db, "users", user.uid);
+                    const userSnap = await window.getDoc(userRef);
+                    const curSaldo = userSnap.data().saldo || 0;
+                    const username = userSnap.data().username || "User";
+    
+                    if(curSaldo < data.baseHarga) return window.showNotice('error', 'Gagal', 'Saldo tidak mencukupi!');
+                    if (!(await window.cekSinkronisasiDoniGuard(user.uid, curSaldo))) return;
+    
+                    await window.updateDoc(userRef, { saldo: curSaldo - data.baseHarga });
+    
+                    const clientRefId = "wz" + Date.now() + Math.floor(1000 + Math.random() * 9000);
+                    const req = await fetch('wz_proxy.php?action=order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            code: data.kode,
+                            destination: hp,
+                            order_id: clientRefId
+                        })
+                    });
+                    const res = await req.json();
+    
+                    const resText = JSON.stringify(res).toLowerCase();
+                    const wzData = (res && typeof res.data === 'object' && res.data !== null) ? res.data : {};
+                    const wzStatus = String(res.status || wzData.status || '').toLowerCase();
+                    const wzMsg = String(res.message || wzData.message || '').toLowerCase();
+                    const trxId = wzData.order_id || res.order_id || res.refid || res.reffid || clientRefId;
+                    const msg = res.message || wzData.message || 'Transaksi WZ diproses';
+                    const isOrderRejected = res.success === false || wzStatus.includes('error') || wzStatus.includes('failed') || wzStatus.includes('gagal') || wzMsg.includes('tidak ditemukan') || wzMsg.includes('not found');
+                    const isSuccess = !isOrderRejected && res.success === true && ['pending','process','processing','success','sukses','berhasil'].some(k => (wzStatus || resText).includes(k));
+    
+                    if(isSuccess) {
+                        window.showNotice('success', 'Berhasil', msg);
+    
+                        if(window.triggerDoniGuard) {
+                            window.triggerDoniGuard({
+                                action: 'transaksi',
+                                produk: data.nama,
+                                nominal: data.baseHarga,
+                                trx_id: trxId,
+                                saldo_akhir_client: curSaldo - data.baseHarga
+                            });
+                        }
+    
+                        const docRef = await window.addDoc(window.collection(window.db, "users", user.uid, "riwayat_transaksi"), {
+                            uid: user.uid,
+                            username: username,
+                            tujuan: hp,
+                            produk: data.nama,
+                            kode_produk: data.kode,
+                            harga: data.baseHarga,
+                            status: 'PENDING',
+                            status_awal: 'PENDING',
+                            sn: msg,
+                            trx_id: trxId,
+                            provider: 'WZ',
+                            raw_json: JSON.stringify(res),
+                            timestamp: window.serverTimestamp()
+                        });
+    
+                        if(window.kirimNotifTelegram) window.kirimNotifTelegram('transaksi', { produk: data.nama, tujuan: hp, harga: data.baseHarga, username: username, trx_id: trxId });
+                        window.monitorWzTrx(trxId, docRef.id);
+                    } else {
+                        await window.updateDoc(userRef, { saldo: curSaldo });
+                        window.showNotice('error', 'Gagal', window.bersihkanPesan ? window.bersihkanPesan(msg || 'Order WZ gagal') : (msg || 'Order WZ gagal'));
+                    }
+                } catch(e) {
+                    console.error(e);
+                    try {
+                        const userRef = window.doc(window.db, "users", user.uid);
+                        const userSnap = await window.getDoc(userRef);
+                        await window.updateDoc(userRef, { saldo: (userSnap.data().saldo || 0) + data.baseHarga });
+                    } catch(ex){}
+                    window.showNotice('error', 'Error', 'Terjadi kesalahan WZ: ' + e.message);
+                }
+            };
+    
+            window.monitorWzTrx = async function(trxId, docId) {
+                let attempts = 0;
+                const maxAttempts = 45;
+                const interval = setInterval(async () => {
+                    attempts++;
+                    if(attempts > maxAttempts) {
+                        clearInterval(interval);
+                        return;
+                    }
+    
+                    try {
+                        const req = await fetch('wz_proxy.php?action=status', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ order_id: trxId })
+                        });
+                        const res = await req.json();
+                        const dataRes = (res && typeof res.data === 'object' && res.data !== null) ? res.data : res;
+                        const st = String(dataRes.status || res.status || '').toLowerCase();
+                        const msgRaw = String(dataRes.message || res.message || '').toLowerCase();
+                        const httpCode = Number(dataRes._http_code || res._http_code || (res.raw && res.raw._http_code) || 0);
+    
+                        let statusAkhir = 'PENDING';
+    
+                        if(st.includes('success') || st.includes('sukses') || st.includes('berhasil')) {
+                            statusAkhir = 'BERHASIL';
+                        } else if(st.includes('failed') || st.includes('fail') || st.includes('gagal') || st.includes('cancel') || st.includes('refund')) {
+                            statusAkhir = 'GAGAL';
+                        } else if(st.includes('error')) {
+                            if(httpCode === 404 || msgRaw.includes('tidak ditemukan') || msgRaw.includes('not found')) {
+                                statusAkhir = attempts >= 3 ? 'GAGAL' : 'PENDING';
+                            } else {
+                                statusAkhir = 'GAGAL';
+                            }
+                        }
+    
+                        if(statusAkhir === 'PENDING') return;
+    
+                        clearInterval(interval);
+                        const user = window.auth.currentUser;
+                        if(!user) return;
+    
+                        const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", docId);
+                        const curSnap = await window.getDoc(trxRef);
+                        if(curSnap.exists()) {
+                            const curSt = String(curSnap.data().status || '').toUpperCase();
+                            if(curSt === 'BERHASIL' || curSt === 'SUKSES') return;
+                            if(curSt === 'GAGAL' && curSnap.data().isRefunded) return;
+                        }
+    
+                        let sn = dataRes.sn || dataRes.serial_number || dataRes.message || res.message || '-';
+                        if(statusAkhir === 'GAGAL' && (httpCode === 404 || msgRaw.includes('tidak ditemukan') || msgRaw.includes('not found'))) {
+                            sn = 'Order WZ tidak ditemukan di server. Saldo dikembalikan otomatis.';
+                        }
+                        if(window.updateFirestoreStatus) {
+                            window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
+                        }
+                        if(statusAkhir === 'GAGAL') {
+                            window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                        } else {
+                            window.showNotice('success', 'Transaksi Sukses', sn);
+                        }
+                        return;
+                        if(statusAkhir === 'GAGAL' && (httpCode === 404 || msgRaw.includes('tidak ditemukan') || msgRaw.includes('not found'))) {
+                            sn = 'Order WZ tidak ditemukan di server. Saldo dikembalikan otomatis.';
+                        }
+                        await window.updateDoc(trxRef, {
+                            status: statusAkhir,
+                            sn: sn,
+                            raw_json: JSON.stringify(res)
+                        });
+    
+                        if(statusAkhir === 'GAGAL') {
+                            const trxSnap = await window.getDoc(trxRef);
+                            if(trxSnap.exists() && !trxSnap.data().isRefunded) {
+                                const amount = parseInt(trxSnap.data().harga || 0);
+                                const userRef = window.doc(window.db, "users", user.uid);
+                                const uSnap = await window.getDoc(userRef);
+                                const saldoAkhir = (uSnap.data().saldo || 0) + amount;
+    
+                                await window.updateDoc(userRef, { saldo: saldoAkhir });
+                                await window.updateDoc(trxRef, { isRefunded: true, sn: sn + ' (REFUND OTOMATIS)' });
+    
+                                if(window.triggerDoniGuard) {
+                                    window.triggerDoniGuard({
+                                        action: 'topup',
+                                        produk: 'REFUND: ' + (trxSnap.data().produk || 'Cuan+(Promo)'),
+                                        nominal: amount,
+                                        trx_id: (trxSnap.data().trx_id || trxId) + '-REF',
+                                        saldo_akhir_client: saldoAkhir
+                                    });
+                                }
+    
+                                window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
+                            }
+                        } else {
+                            window.showNotice('success', 'Transaksi Sukses', sn);
+                        }
+                    } catch(e) {
+                        console.log("Monitoring WZ Skip:", e);
+                    }
+                }, 4000);
+            };
+    
+    
+            window.loadGabunganData = async function() {
                 const areaList = document.getElementById('listProdukArea');
                 const areaFilter = document.getElementById('areaFilter');
                 
+                // FIX: Inisialisasi awal agar tidak crash saat .push()
+                window.khfyData = [];
+                window.icsData = [];
+                window.wzData = [];
+                
                 if(areaFilter) areaFilter.innerHTML = "";
-                if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin'></i> Memuat Produk...</div>";
+                if(areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin'></i> Memuat Semua Paket...</div>";
+    
+                try {
+                    // Ambil Data Paralel (KHFY, ICS & KAJE) dengan catch individual agar jika 1 mati, yang lain tetap jalan
+                    const [reqKhfy, reqIcs, reqKaje, reqWz] = await Promise.all([
+    fetch('khfy_proxy.php?action=list').catch(() => null),
+    fetch('ics_proxy.php?action=list').catch(() => null),
+    fetch('kaje_proxy.php?api_action=get_products', {method: 'POST', body: '{}'}).catch(() => null),
+    fetch('wz_proxy.php?action=products').catch(() => null)
+                    ]);
+                    
+                    if (reqKhfy) {
+    const resKhfy = await reqKhfy.json().catch(() => ({}));
+    if (resKhfy.data) window.khfyData = resKhfy.data;
+                    }
+    
+                    if (reqKaje) {
+    const resKaje = await reqKaje.json().catch(() => ({}));
+    if(resKaje && resKaje.success && resKaje.data && resKaje.data.products) {
+        resKaje.data.products.forEach(p => {
+            if(p.code && (p.code.startsWith('XDA') || p.code.startsWith('KDA'))) {
+                const kodeAsliKaje = p.code;
+                const kodeTampilKda = kodeAsliKaje.startsWith('XDA') ? kodeAsliKaje.replace(/^XDA/, 'KDA') : kodeAsliKaje;
+                window.khfyData.push({
+                    kode_produk: kodeTampilKda,
+                    kode_order_kaje: kodeAsliKaje,
+                    kode_produk_asli: kodeAsliKaje,
+                    nama_produk: (p.name || '').replace(/XDA/g, 'KDA'),
+                    harga_final: p.price,
+                    gangguan: p.status === 'gangguan' ? 1 : 0,
+                    kosong: p.status === 'kosong' ? 1 : 0,
+                    deskripsi: Array.isArray(p.description) ? p.description.join('\n').replace(/XDA/g, 'KDA') : String(p.description || '').replace(/XDA/g, 'KDA'),
+                    provider_kaje: true,
+                    stok: p.stock
+                });
+            }
+        });
+    }
+                    }
+                    
+                    if (reqIcs) {
+    const resIcs = await reqIcs.json().catch(() => ({}));
+    if(resIcs.success && resIcs.data) {
+        resIcs.data.forEach(item => {
+            if (item.code === 'CFMX') { item.type = 'fmax'; item.price = 0; }
+        });
+        window.icsData = resIcs.data;
+    }
+                    }
+    
+                    if (reqWz) {
+    const resWz = await reqWz.json().catch(() => ({}));
+    if(resWz.success && Array.isArray(resWz.data)) {
+        window.wzData = resWz.data;
+    }
+                    }
+    
+    
+                    // FIX: Bersihkan pesan loading segera setelah data siap
+                    if (areaList) areaList.innerHTML = "<div style='text-align:center; padding:40px; color:#94a3b8;'><i class='fas fa-hand-pointer'></i><br>Silakan pilih kategori paket di atas</div>";
+                    window.renderGabunganFilters();
+    
+                } catch(e) {
+                    console.error("Bug Load Gabungan:", e);
+                    if(areaList) areaList.innerHTML = "<div style='text-align:center; color:red; padding:20px;'>Gagal memproses data produk.</div>";
+                }
+            };
+            
+    
+            
+            window.filterAkrabSearch = function() {
+                const q = document.getElementById('akrabSearch').value.toLowerCase();
+                const items = document.querySelectorAll('#listProdukArea > div');
+                items.forEach(item => {
+                    const text = item.innerText.toLowerCase();
+                    item.style.display = text.includes(q) ? 'block' : 'none';
+                });
+            };
+    
+            
+            window.renderGabunganFilters = function() {
+                // FIX: Pastikan data adalah array agar tidak error .map()
+                const rawKhfy = Array.isArray(window.khfyData) ? window.khfyData : [];
+                const rawIcs = Array.isArray(window.icsData) ? window.icsData : [];
+    
+                const brands = [...new Set(rawKhfy.map(i => window.getKhfyCategory(i)))].filter(b => b !== 'Tes System' && b !== 'Akrab Fresh (XDA)' && b !== 'PLN Pascabayar' && b !== 'Bonus Akrab').sort();
+                const types = [...new Set(rawIcs.map(i => (i.type || 'Lainnya').toUpperCase()))].filter(t => !t.includes('FMAX') && !t.includes('FLEXMAX') && t !== 'PLN Pascabayar' && t !== 'Akrab Fresh (XDA)' && t !== 'XLA').sort();
+    
+                let html = '<div class="akrab-section-title">Pilih Paket</div><div class="akrab-grid">';
+                
+                brands.forEach(b => {
+                    html += `<div class="akrab-btn" onclick="window.filterKhfy('${b}', this, false)">
+    <i class="fas fa-bolt" style="color:#f59e0b"></i>
+    <span>${b.replace('Akrab ', '')}</span>
+                    </div>`;
+                });
+    
+                types.forEach(t => {
+                    html += `<div class="akrab-btn" onclick="window.filterIcs('${t}', this, false)">
+    <i class="fas fa-bolt" style="color:#3b82f6"></i>
+    <span>${t}</span>
+                    </div>`;
+                });
+    
+                if(Array.isArray(window.wzData) && window.wzData.length > 0) {
+                    html += `<div class="akrab-btn" onclick="window.filterWz(this)">
+    <i class="fas fa-tags" style="color:#10b981"></i>
+    <span>Cuan+(Promo)</span>
+                    </div>`;
+                }
+    
+    
+                if(!window.hidePoAkrab) {
+                    html += '</div><div class="akrab-section-title">Antrian (PO)</div><div class="akrab-grid">';
+                    brands.forEach(b => {
+    html += `<div class="akrab-btn" onclick="window.filterKhfy('${b}', this, true)" style="border-style:dashed;">
+        <i class="fas fa-clock" style="color:#94a3b8"></i>
+        <span>${b.replace('Akrab ', '')}</span>
+    </div>`;
+                    });
+    
+                    types.forEach(t => {
+    html += `<div class="akrab-btn" onclick="window.filterIcs('${t}', this, true)" style="border-style:dashed;">
+        <i class="fas fa-clock" style="color:#94a3b8"></i>
+        <span>${t}</span>
+    </div>`;
+                    });
+                }
+                
+                html += '</div>';
+                const areaFilter = document.getElementById('areaFilter');
+                if(areaFilter) {
+                    areaFilter.innerHTML = html;
+                    areaFilter.style.display = 'block';
+                    areaFilter.style.gridTemplateColumns = 'none';
+                }
+            };
+            
+            
+    
+    
+    window.onclick = function(e) {
+    if(e.target==document.getElementById('modalTopup')) tutupModalTopup();  if(e.target==modal) tutupModal(); if(e.target==modalInvoice) tutupInvoice(); if(e.target==modalDetailRiwayat) modalDetailRiwayat.style.display='none'; if(e.target==document.getElementById('modalProdukList')) document.getElementById('modalProdukList').style.display='none'; }
+  </script>
+  </div>
 
-</script>
+
+  <div id="pageAkrabSpesial" class="full-page">
+    <div class="header" style="padding-bottom:20px; margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-weight:bold; font-size:20px; color:white;"><i class="fas fa-fire" style="color:#ff9f43; margin-right:10px;"></i>Akrab Spesial</div>
+        <div onclick="window.navSwitch('home', document.querySelectorAll('.nav-item')[0])" style="background:rgba(255,255,255,0.2); width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+          <i class="fas fa-arrow-left" style="color:white; font-size:16px;"></i>
+        </div>
+      </div>
+    </div>
+    <div id="akrabSpesialContent" style="padding: 0 10px;"></div>
+  </div>
+
+
+  <div id="pageAllProduk" class="full-page">
+    <div class="header" style="padding: 25px 25px 60px; border-radius: 0 0 30px 30px; margin-bottom: -30px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <div style="font-weight:bold; font-size:22px; color:white;">Belanja Produk</div>
+        <div onclick="navSwitch('etalase')" style="position:relative; cursor:pointer; background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+          <i class="fas fa-shopping-basket" style="color:white; font-size:18px;"></i>
+          <div id="badgeCart2" class="cart-badge" style="display:none; top:-5px; right:-5px; background:var(--danger); border:2px solid var(--primary);">0</div>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <input type="text" placeholder="Cari nama produk..." oninput="handleShopSearch(this.value)" style="width:100%; padding:15px 15px 15px 45px; border-radius:15px; border:none; outline:none; font-size:14px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <i class="fas fa-search" style="position:absolute; left:18px; top:16px; color:var(--primary);"></i>
+      </div>
+    </div>
+    <div id="fullShopContainer" class="product-list" style="padding-top:40px;"></div>
+  </div>
+  </div>
+
+  <div id="pageEtalase" class="full-page">
+    <div class="header" style="padding-bottom:20px; margin-bottom:20px;">
+      <div style="font-weight:bold; font-size:20px; color:white;">Keranjang Belanja</div>
+    </div>
+    <div id="cartList" style="padding: 0 20px;"></div>
+    <div style="padding: 20px;">
+      <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:15px;"><span>Total:</span><span id="cartTotal">Rp 0</span></div>
+      <button class="btn-konfirmasi" onclick="checkoutWA()">Checkout via WhatsApp</button>
+    </div>
+  </div>
+
+
+  <div id="pageLapak" class="full-page">
+    <div class="header" style="padding-bottom:40px; margin-bottom:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-weight:bold; font-size:20px; color:white;">Manajemen Lapak</div>
+        <i class="fas fa-times" onclick="navSwitch('profil')" style="color:white; font-size:20px; cursor:pointer;"></i>
+      </div>
+    </div>
+
+    <div class="lapak-tabs">
+      <div class="lapak-tab active" id="tabBarang" onclick="switchLapakTab('barang')">Lapak Saya</div>
+      <div class="lapak-tab" id="tabPenjualan" onclick="switchLapakTab('penjualan')">Penjualan Saya</div>
+      <div class="lapak-tab" id="tabAlamat" onclick="switchLapakTab('alamat')">Alamat Saya</div>
+    </div>
+
+
+    <div id="containerLapakSaya" style="padding:20px;">
+      <div style="background:white; padding:15px; border-radius:15px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+        <h4 style="margin:0 0 10px 0;">Tambah Produk Fisik</h4>
+        <input type="text" id="lapakNama" class="form-input" placeholder="Nama Barang" style="margin-bottom:10px; padding:10px;">
+        <input type="number" id="lapakHarga" class="form-input" placeholder="Harga (Rp)" style="margin-bottom:10px; padding:10px;">
+        <input type="number" id="lapakBerat" class="form-input" placeholder="Berat Barang (Gram). Contoh: 1000" style="margin-bottom:10px; padding:10px;">
+
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
+          <input type="file" id="fileUserLapak" accept="image/*" style="padding:10px; border:2px solid #edf2f7; border-radius:16px; width:100%; background:#f8fafc;">
+        </div>
+        <input type="text" id="lapakImg" class="form-input" placeholder="URL Gambar (Upload dulu)" readonly style="margin-bottom:10px; padding:10px; background:#eee;">
+        <button class="btn-konfirmasi" onclick="tambahProdukLapak()">Posting Barang</button>
+      </div>
+      <h4 style="margin-bottom:10px;">Barang Jualan Saya</h4>
+      <div id="listProdukLapak"></div>
+    </div>
+
+
+    <div id="containerPenjualanSaya" style="padding:20px; display:none;">
+      <h4 style="margin-bottom:10px;">Pesanan Masuk</h4>
+      <div id="listPenjualanSaya"></div>
+    </div>
+
+    <div id="containerAlamatSaya" style="padding:20px; display:none;">
+      <div style="background:white; padding:15px; border-radius:15px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+        <h4 style="margin:0 0 15px 0;">Pengaturan Alamat Toko</h4>
+        <div id="statusAlamatSekarang" style="background:#e1effe; padding:10px; border-radius:10px; margin-bottom:15px; font-size:11px; color:var(--primary); border:1px solid rgba(0,153,255,0.1);">
+          <i class="fas fa-map-marker-alt"></i> Alamat Tersimpan: <b id="txtAlamatTersimpan">Memuat...</b>
+        </div>
+        <p style="font-size:11px; color:#666; margin-bottom:15px;">Atur alamat asal pengiriman agar sistem dapat menghitung ongkos kirim secara akurat.</p>
+        <div class="input-group">
+          <label style="font-size:12px; font-weight:bold;">Provinsi Asal</label>
+          <select id="sellerProv" class="form-input" onchange="window.loadCities(this.value, 'sellerCity')" style="padding-left:15px;">
+            <option value="">Pilih Provinsi</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label style="font-size:12px; font-weight:bold;">Kota / Kabupaten Asal</label>
+          <select id="sellerCity" class="form-input" onchange="window.loadDistricts(this.value, 'sellerDist')" style="padding-left:15px;">
+            <option value="">Pilih Kota</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label style="font-size:12px; font-weight:bold;">Kecamatan Asal</label>
+          <select id="sellerDist" class="form-input" style="padding-left:15px;">
+            <option value="">Pilih Kecamatan</option>
+          </select>
+        </div>
+        <button class="btn-konfirmasi" onclick="window.simpanAlamatSeller()">Simpan Alamat Toko</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div id="modalEditLapak" class="modal">
+    <div class="modal-content">
+      <h3>Edit Barang</h3>
+      <input type="hidden" id="editLapakId">
+      <div class="input-group"><input type="text" id="editLapakNama" class="form-input" placeholder="Nama"></div>
+      <div class="input-group"><input type="number" id="editLapakHarga" class="form-input" placeholder="Harga"></div>
+      <div class="input-group"><input type="text" id="editLapakImg" class="form-input" placeholder="URL Gambar" readonly style="background:#eee;"></div>
+      <div style="margin-bottom:15px; text-align:center;">
+        <input type="file" id="fileEditLapak" accept="image/*" style="font-size:12px;">
+        <button onclick="uploadGambarEtalaseUser('fileEditLapak', 'editLapakImg')" style="padding:5px 10px; background:var(--primary); color:white; border:none; border-radius:5px;">Upload Baru</button>
+      </div>
+      <button class="btn-konfirmasi" onclick="simpanEditLapak()">Simpan Perubahan</button>
+      <button class="btn-batal" onclick="document.getElementById('modalEditLapak').style.display='none'">Batal</button>
+    </div>
+  </div>
+
+  <div id="pageProfil" class="full-page">
+    <div class="prof-header">
+      <div style="width:70px; height:70px; background:rgba(255,255,255,0.2); border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:30px;"><i class="fas fa-user"></i></div>
+      <div id="profNameDisplay" style="font-weight:bold; font-size:18px;">Loading...</div>
+      <div id="profEmailDisplay" style="font-size:12px; opacity:0.8;">...</div>
+    </div>
+    <div class="prof-card">
+      <div class="prof-row"><span>Username</span><b id="pUser">-</b></div>
+      <div class="prof-row"><span>Nomor WhatsApp</span><b id="pWA">-</b></div>
+      <div class="prof-row"><span>Sisa Saldo</span><b id="pSaldo" style="color:var(--primary)">-</b></div>
+      <div class="prof-row"><span>Terdaftar Sejak</span><b id="pJoin">-</b></div>
+    </div>
+    <div style="padding:20px;">
+      <button class="btn-konfirmasi" onclick="bukaPengaturanPrinter()" style="background:linear-gradient(135deg, #6c5ce7, #a29bfe); margin-bottom:10px; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);"><i class="fas fa-print"></i> Pengaturan Printer</button>
+      <button id="btnLapak" class="btn-konfirmasi" onclick="navSwitch('lapak')" style="display:none; background: linear-gradient(135deg, #f39c12, #d35400); margin-bottom:15px;"><i class="fas fa-store"></i> Buka Lapak Saya</button>
+      <button class="btn-konfirmasi" onclick="navSwitch('pesanan_fisik')" style="background:linear-gradient(135deg, #3498db, #2980b9); margin-bottom:10px;"><i class="fas fa-box"></i> Pesanan Saya</button>
+      <button class="btn-batal" onclick="handleLogout()" style="color:var(--danger); background:#fee;"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
+    </div>
+  </div>
+
+  <div id="pagePesananFisik" class="full-page">
+    <div class="header" style="padding-bottom:20px; margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-weight:bold; font-size:20px; color:white;">Pesanan Saya</div>
+        <i class="fas fa-times" onclick="navSwitch('profil')" style="color:white; font-size:20px; cursor:pointer;"></i>
+      </div>
+    </div>
+    <div id="listPesananFisik" style="padding:0 20px;"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="navSwitch('home', this)">
+      <i class="fas fa-store"></i>Etalase
+    </div>
+    <div class="nav-item" onclick="bukaMenu('Paket Akrab All')">
+      <i class="fas fa-shopping-bag"></i>Belanja
+    </div>
+    <div class="nav-item" onclick="openQRScanner()">
+      <div class="nav-fab"><i class="fas fa-qrcode"></i></div>
+    </div>
+    <div class="nav-item" onclick="bukaRiwayatArsip()">
+      <i class="fas fa-history"></i>Riwayat
+    </div>
+    <div class="nav-item" onclick="navSwitch('profil', this)">
+      <i class="fas fa-user"></i>Profil
+    </div>
+  </div>
+
+
+
+
+
+  <div id="modalPrinterSettings" class="modal">
+    <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+      <h3 style="margin-bottom:10px; border-bottom:1px dashed #eee; padding-bottom:10px;">Pengaturan Printer</h3>
+
+
+      <div style="background:#f0f0f0; padding:15px; border-radius:10px; border:1px solid #ccc; margin-bottom:15px; text-align:center;">
+        <div style="font-size:10px; color:#666; margin-bottom:5px; font-weight:bold;"><i class="fas fa-eye"></i> Pratinjau Struk (Live)</div>
+        <div style="background:white; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); display:inline-block; text-align:left; border:1px solid #eee;">
+          <pre id="settingsPreviewArea" style="margin:0; font-family:'Courier New', monospace; font-size:10px; color:black; white-space:pre;">Memuat Preview...</pre>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label style="font-size:11px; font-weight:bold;">Nama Toko (Header)</label>
+        <textarea id="setStoreName" class="form-input" placeholder="Contoh: Konter Pulsa" oninput="updateSettingsPreview()" rows="2"></textarea>
+      </div>
+      <div class="input-group">
+        <label style="font-size:11px; font-weight:bold;">Alamat / Info (Sub-Header)</label>
+        <textarea id="setStoreAddress" class="form-input" placeholder="Contoh: Jl. Mawar No. 1" oninput="updateSettingsPreview()" rows="2"></textarea>
+      </div>
+      <div class="input-group">
+        <label style="font-size:11px; font-weight:bold;">Pesan Penutup (Footer)</label>
+        <textarea id="setStoreFooter" class="form-input" placeholder="Contoh: Terima Kasih" oninput="updateSettingsPreview()" rows="2"></textarea>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="input-group">
+          <label style="font-size:11px; font-weight:bold;">Ukuran Kertas</label>
+          <select id="setPaperSize" class="form-input" onchange="updateSettingsPreview()">
+            <option value="58">58mm</option>
+            <option value="80">80mm</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label style="font-size:11px; font-weight:bold;">Markup Default (Rp)</label>
+          <input type="number" id="setGlobalMarkup" class="form-input" placeholder="0" oninput="updateSettingsPreview()">
+        </div>
+      </div>
+
+      <button class="btn-konfirmasi" onclick="simpanPengaturanPrinter()">SIMPAN PENGATURAN</button>
+      <button class="btn-batal" onclick="document.getElementById('modalPrinterSettings').style.display='none'">BATAL</button>
+    </div>
+  </div>
+
+
+  <style>
+    .chat-fab {
+      background: #25D366;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    #modalChatPublic {
+      display: none;
+      position: fixed;
+      bottom: 85px;
+      right: 20px;
+      width: 340px;
+      max-width: 90vw;
+      height: 500px;
+      max-height: 75vh;
+      z-index: 12000;
+      background: #efeae2;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      flex-direction: column;
+      overflow: hidden;
+      animation: zoomInWA 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      align-items: stretch;
+      justify-content: flex-start;
+    }
+
+    @keyframes zoomInWA {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+        transform-origin: bottom right;
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        transform-origin: bottom right;
+      }
+    }
+
+    .wa-header {
+      background: #00a884;
+      color: white;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .wa-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wa-header-icon {
+      width: 35px;
+      height: 35px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .wa-header-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wa-header-title b {
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .wa-header-title span {
+      font-size: 10px;
+      opacity: 0.9;
+    }
+
+    .wa-tabs {
+      display: flex;
+      background: #00a884;
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .wa-tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      opacity: 0.7;
+      border-bottom: 3px solid transparent;
+    }
+
+    .wa-tab.active {
+      opacity: 1;
+      border-bottom: 3px solid white;
+    }
+
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 0;
+      background-color: #efeae2;
+      background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+      background-size: cover;
+      border-radius: 0;
+      border: none;
+    }
+
+    .chat-bubble {
+      max-width: 80%;
+      padding: 6px 10px 15px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      position: relative;
+      word-wrap: break-word;
+      line-height: 1.4;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-bubble.me {
+      align-self: flex-end;
+      background: #d9fdd3;
+      color: #111;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 12px;
+    }
+
+    .chat-bubble.admin {
+      align-self: flex-start;
+      background: #ffffff;
+      color: #111;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 12px;
+    }
+
+    .chat-name {
+      font-size: 10px;
+      font-weight: bold;
+      margin-bottom: 2px;
+      color: #075e54;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .chat-time {
+      font-size: 9px;
+      color: #667781;
+      position: absolute;
+      bottom: 4px;
+      right: 8px;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      background: #f0f2f5;
+      padding: 10px;
+      position: relative;
+      z-index: 20;
+      border-top: none;
+      flex-shrink: 0;
+    }
+
+    .chat-textarea {
+      resize: none;
+      overflow-y: hidden;
+      min-height: 40px;
+      max-height: 120px;
+      padding: 12px 15px;
+      border-radius: 20px;
+      background: white;
+      border: none;
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.4;
+      font-family: inherit;
+      transition: height 0.1s;
+      outline: none;
+      box-sizing: border-box;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .chat-textarea:focus {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-send-chat {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #00a884;
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(0, 168, 132, 0.3);
+      transition: 0.2s;
+      margin-bottom: 0px;
+    }
+
+    .btn-send-chat:active {
+      transform: scale(0.9);
+    }
+  </style>
+  <div class="chat-fab" onclick="bukaChatPublic()"> <i class="fab fa-whatsapp" style="font-size: 24px;"></i>
+    <div id="badgeChat" style="position: absolute; top: -2px; right: -2px; background: #ff7675; color: white; border-radius: 50%; font-size: 9px; width: 16px; height: 16px; display: none; align-items: center; justify-content: center; border: 2px solid white; font-weight:bold;">!</div>
+  </div>
+  <div id="modalChatPublic">
+    <div class="wa-header">
+      <div class="wa-header-left">
+        <div class="wa-header-icon"><i class="fas fa-headset"></i></div>
+        <div class="wa-header-title">
+          <b>Cs-Pandawa</b>
+          <span><span style="display:inline-block; width:6px; height:6px; background:#2ecc71; border-radius:50%; margin-right:4px; animation:blink 1s infinite;"></span>Online</span>
+        </div>
+      </div>
+      <i class="fas fa-times" onclick="tutupChatPublic()" style="font-size:18px; color:white; cursor:pointer;"></i>
+    </div>
+
+    <div id="areaChatBox" class="chat-box" style="display:flex;">
+      <div style="text-align:center; padding:40px; color:#999; background:white; border-radius:10px;"><i class="fas fa-circle-notch fa-spin"></i> Memuat percakapan...</div>
+    </div>
+
+    <div id="chatControlsContainer" style="background:#f0f2f5;">
+      <div id="chatReplyPreview" class="chat-reply-bar" style="display:none; background:#e2e8f0; border-left:4px solid #00a884; margin:0 10px; margin-top:5px; border-radius:8px;">
+        <div class="reply-content">
+          <div class="reply-name" id="replyName" style="color:#00a884;">User</div>
+          <div class="reply-text" id="replyText">Pesan...</div>
+        </div>
+        <i class="fas fa-times" onclick="cancelReply()" style="color:#999; cursor:pointer; padding:5px;"></i>
+      </div>
+      <div class="chat-input-bar">
+        <textarea id="inputPesanChat" class="chat-textarea" placeholder="Ketik pesan..." rows="1" oninput="autoResizeChat(this)"></textarea>
+        <button type="button" onclick="kirimPesanChat()" class="btn-send-chat">
+          <i class="fas fa-paper-plane" style="font-size:16px; margin-left:-2px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <style>
+    @keyframes blink {
+      50% {
+        opacity: 0.5;
+      }
+    }
+  </style>
+  <div id="modalPrintPreview" class="modal" style="z-index: 25000;">
+    <div class="modal-content">
+      <h3 style="margin-bottom:15px;">Cetak Struk</h3>
+
+
+      <button id="btnConnectPrinter" class="btn-konfirmasi" onclick="connectPrinter()" style="background:#0984e3; margin-bottom:15px;">
+        <i class="fab fa-bluetooth"></i> Hubungkan ke Printer
+      </button>
+      <div id="statusPrinter" style="text-align:center; font-size:11px; color:#999; margin-bottom:10px;">Status: Belum Terhubung</div>
+      <div class="input-group" style="margin-bottom:15px; border-top:1px dashed #eee; padding-top:10px;">
+        <label style="font-size:12px; font-weight:bold; color:var(--primary);">Markup / Admin (Rp)</label>
+        <input type="number" id="inputLiveMarkup" class="form-input" placeholder="0" oninput="updateLivePreview(this.value)" style="font-weight:bold; color:var(--primary);">
+      </div>
+
+
+      <div style="background:#f8f9fa; border:1px solid #ccc; padding:15px; font-family:'Courier New', monospace; font-size:12px; margin-bottom:15px; max-height:300px; overflow-y:auto; box-shadow:inset 0 2px 5px rgba(0,0,0,0.05);">
+        <pre id="printPreviewArea" style="white-space:pre-wrap; margin:0; color:#333;">Memuat Preview...</pre>
+      </div>
+
+
+      <button id="btnPrintNow" class="btn-konfirmasi" onclick="printStruk()" style="background:var(--success);">
+        <i class="fas fa-print"></i> PRINT SEKARANG
+      </button>
+      <button id="btnShareWA" class="btn-konfirmasi" onclick="window.shareStrukToWA()" style="display:none; background:linear-gradient(135deg, #25D366, #128C7E); margin-top:10px;">
+        <i class="fab fa-whatsapp"></i> Kirim ke WhatsApp
+      </button>
+
+      <button class="btn-batal" onclick="document.getElementById('modalPrintPreview').style.display='none'" style="margin-top:10px;">Tutup</button>
+    </div>
+  </div>
+
+
+  <script>
+    // Konfigurasi Printer Default
+    let printerSettings = {
+        storeName: 'Nama Toko',
+        address: 'Alamat Toko',
+        footer: 'Terima Kasih',
+        paperSize: '58',
+        markup: 0
+    };
+    
+    // Variabel Global Bluetooth
+    let bluetoothDevice;
+    let printCharacteristic;
+    let currentReceiptData = ''; 
+            document.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem('printerSettings_v1');
+        if(saved) printerSettings = JSON.parse(saved);
+    });
+    
+            window.bukaPengaturanPrinter = function() {
+        document.getElementById('setStoreName').value = printerSettings.storeName || '';
+        document.getElementById('setStoreAddress').value = printerSettings.address || '';
+        document.getElementById('setStoreFooter').value = printerSettings.footer || '';
+        document.getElementById('setPaperSize').value = printerSettings.paperSize || '58';
+        document.getElementById('setGlobalMarkup').value = printerSettings.markup || 0;
+        
+        document.getElementById('modalPrinterSettings').style.display = 'flex';
+        // Render preview awal berdasarkan data saat ini
+        window.updateSettingsPreview();
+    };
+    
+    window.updateSettingsPreview = function() {
+        // Ambil nilai langsung dari input (Live)
+        const sName = document.getElementById('setStoreName').value || 'NAMA TOKO';
+        const sAddr = document.getElementById('setStoreAddress').value || 'Alamat Toko';
+        const sFoot = document.getElementById('setStoreFooter').value || 'Terima Kasih';
+        const sPaper = document.getElementById('setPaperSize').value;
+        const sMarkup = parseInt(document.getElementById('setGlobalMarkup').value) || 0;
+    
+        // Dummy Data Transaksi untuk Preview
+        const dummyItem = { produk: "Pulsa Telkomsel 10k", harga: 10500, tujuan: "08123456789", sn: "1234567890" };
+        const finalPrice = dummyItem.harga + sMarkup;
+        const priceFmt = "Rp " + new Intl.NumberFormat('id-ID').format(finalPrice);
+    
+        // Logic Render Sederhana
+        const width = sPaper === '58' ? 32 : 48;
+        const line = '-'.repeat(width);
+        
+        const center = (txt) => {
+            txt = txt.toString();
+            let output = ''; let remaining = txt;
+            while (remaining.length > 0) {
+                let chunk = remaining.substring(0, width);
+                remaining = remaining.substring(width);
+                const spaces = Math.max(0, Math.floor((width - chunk.length) / 2));
+                output += ' '.repeat(spaces) + chunk;
+                if (remaining.length > 0) output += '\n';
+            }
+            return output;
+        };
+    
+        const leftRight = (left, right) => {
+            left = left.toString(); right = right.toString();
+            let output = '';
+            const maxLeftLen = width - right.length - 1;
+            let remaining = left;
+            while (remaining.length > 0) {
+                if (remaining.length <= maxLeftLen) {
+                    const spaces = width - remaining.length - right.length;
+                    output += remaining + ' '.repeat(spaces) + right;
+                    remaining = '';
+                } else {
+                    const chunk = remaining.substring(0, maxLeftLen);
+                    output += chunk + '\n'; 
+                    remaining = remaining.substring(maxLeftLen);
+                }
+            }
+            return output;
+        };
+    
+        let receipt = '';
+        receipt += center(sName.toUpperCase()) + '\n';
+        if(sAddr) receipt += center(sAddr) + '\n';
+        receipt += line + '\n';
+        receipt += leftRight("No. Trx", "TRX-DUMMY") + '\n';
+        receipt += leftRight("Waktu", "01/01/26 12:00") + '\n';
+        receipt += line + '\n';
+        receipt += leftRight(dummyItem.produk, priceFmt) + '\n';
+        receipt += "Tujuan : " + dummyItem.tujuan + "\n";
+        receipt += "SN : " + dummyItem.sn + "\n";
+        receipt += line + '\n';
+        receipt += leftRight("TOTAL", priceFmt) + '\n';
+        receipt += line + '\n';
+        if(sFoot) receipt += center(sFoot) + '\n';
+        receipt += center("Preview Tampilan") + '\n';
+    
+        const previewArea = document.getElementById('settingsPreviewArea');
+        previewArea.innerText = receipt;
+    };
+    
+            window.simpanPengaturanPrinter = function() {
+        printerSettings.storeName = document.getElementById('setStoreName').value || 'Nama Toko';
+        printerSettings.address = document.getElementById('setStoreAddress').value || '';
+        printerSettings.footer = document.getElementById('setStoreFooter').value || '';
+        printerSettings.paperSize = document.getElementById('setPaperSize').value;
+        printerSettings.markup = parseInt(document.getElementById('setGlobalMarkup').value) || 0;
+        
+        localStorage.setItem('printerSettings_v1', JSON.stringify(printerSettings));
+        alert('Pengaturan Tersimpan!');
+        document.getElementById('modalPrinterSettings').style.display = 'none';
+    };
+    
+    // Variabel Global Live Preview
+    let activePrintData = null;
+    let activePrintType = ''; // 'single' atau 'mass'
+    
+    window.updateLivePreview = function(val) {
+        printerSettings.markup = parseInt(val) || 0;
+        // Simpan otomatis agar tidak hilang saat reload
+        localStorage.setItem('printerSettings_v1', JSON.stringify(printerSettings));
+        
+        if(activePrintType === 'single' && activePrintData) {
+            window.renderSinglePreview(activePrintData);
+        } else if(activePrintType === 'mass' && activePrintData) {
+            generateStrukMasal(activePrintData);
+        }
+    };
+    
+            // Variabel Mode Share
+    window.isShareMode = false;
+    
+    window.siapkanShare = function(strData) {
+        window.isShareMode = true;
+        window.siapkanPrint(strData);
+    };
+    
+    window.shareStrukToWA = async function() {
+        const btn = document.getElementById('btnShareWA');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memproses...';
+        btn.disabled = true;
+    
+        try {
+    const element = document.getElementById('printPreviewArea');
+    const canvas = await html2canvas(element, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        logging: false,
+        onclone: (clonedDoc) => {
+            const el = clonedDoc.getElementById('printPreviewArea');
+            el.style.padding = '20px';
+            el.style.width = 'auto';
+            el.style.color = '#000000';
+        }
+    });
+    
+    // 1. JEMBATAN ANDROID: Cek apakah dibuka di Aplikasi MyPandawa
+    if (window.AndroidShare) {
+        // Kirim Base64 Gambar langsung ke Java Android
+        const base64Data = canvas.toDataURL("image/jpeg", 0.9);
+        window.AndroidShare.shareBase64(base64Data);
+        
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        return; // Stop di sini, biarkan Android yang kerja
+    }
+    
+    // 2. Web Share API (Untuk Browser Chrome/Safari biasa)
+    canvas.toBlob(async (blob) => {
+        const fileName = 'Struk_' + (activePrintData.trx_id || Date.now()) + '.jpg';
+        const file = new File([blob], fileName, { type: "image/jpeg" });
+    
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({
+                    files: [file],
+                    title: 'Struk Transaksi',
+                    text: 'Bukti Transaksi Pandawa-Digital'
+                });
+            } catch (err) {
+                if (err.name !== 'AbortError') alert('Gagal share: ' + err.message);
+            }
+        } else {
+            // Fallback Download
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = canvas.toDataURL("image/jpeg");
+            link.click();
+            alert("Gambar berhasil disimpan (Browser ini tidak mendukung share gambar langsung).");
+        }
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }, 'image/jpeg', 0.9);
+    // ------------------------------
+    
+        } catch (e) {
+    alert("Gagal membuat gambar: " + e.message);
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+        }
+    };
+    
+    window.siapkanPrint = function(strData) {
+        const data = JSON.parse(decodeURIComponent(strData));
+        activePrintData = data;
+        activePrintType = 'single';
+        
+        // Set Nilai Input Markup saat modal dibuka
+        const inputM = document.getElementById('inputLiveMarkup');
+        if(inputM) inputM.value = printerSettings.markup;
+    
+        window.renderSinglePreview(data);
+        document.getElementById('modalPrintPreview').style.display = 'flex';
+        updatePrintButtonState();
+    };
+    
+    window.renderSinglePreview = function(data) {
+        const markup = parseInt(printerSettings.markup) || 0;
+        let rawPrice = parseInt(data.harga) + markup;
+        // PEMBULATAN PINTAR (Kelipatan 500 ke atas)
+        const finalPrice = Math.ceil(rawPrice / 500) * 500;
+        
+        const dateObj = new Date();
+        const dateStr = dateObj.toLocaleDateString('id-ID');
+        const timeStr = dateObj.toLocaleTimeString('id-ID').slice(0,5);
+    
+        // 1. Tentukan Lebar Kertas (32 chars untuk 58mm)
+        const width = printerSettings.paperSize === '58' ? 32 : 48;
+        const dashed = '-'.repeat(width);
+        const doubleDashed = '='.repeat(width);            // 2. Fungsi Perata Teks (Alignment Helper) - Auto Wrap & Multi-line Support
+        const center = (txt) => {
+            if(!txt) return '';
+            txt = txt.toString();
+            
+            // FIX: Pecah dulu berdasarkan baris baru (Enter)
+            const lines = txt.split('\n');
+            let globalOutput = '';
+    
+            lines.forEach(lineTxt => {
+                let remaining = lineTxt;
+                
+                // Handle empty lines
+                if(remaining.length === 0) {
+                    globalOutput += '\n';
+                    return;
+                }
+    
+                while (remaining.length > 0) {
+                    // Ambil potongan teks selebar kertas
+                    let chunk = remaining.substring(0, width);
+                    remaining = remaining.substring(width);
+                    
+                    // Hitung spasi untuk rata tengah baris ini
+                    const spaces = Math.max(0, Math.floor((width - chunk.length) / 2));
+                    
+                    // Susun baris
+                    globalOutput += ' '.repeat(spaces) + chunk + '\n';
+                }
+            });
+            
+            // Hapus enter terakhir agar tidak double space antar bagian
+            return globalOutput.replace(/\n$/, '');
+        };
+        
+        // Helper Align (Kiri - Kanan Wrapping)
+        const leftRight = (left, right) => {
+            left = left.toString(); 
+            right = right.toString();
+            let output = '';
+            
+            // Hitung batas aman lebar kiri (lebar kertas - lebar harga - spasi)
+            const maxLeftLen = width - right.length - 1;
+    
+            // Skenario 1: Teks Muat 1 Baris
+            if (left.length <= maxLeftLen) {
+                const spaces = width - left.length - right.length;
+                return left + ' '.repeat(spaces) + right;
+            } 
+            
+            // Skenario 2: Teks Panjang (Wrap ke bawah)
+            let remaining = left;
+            while (remaining.length > 0) {
+                if (remaining.length <= maxLeftLen) {
+                    // Baris Terakhir: Gabung dengan Harga
+                    const spaces = width - remaining.length - right.length;
+                    output += remaining + ' '.repeat(spaces) + right;
+                    remaining = ''; // Selesai
+                } else {
+                    // Baris Lanjutan: Cetak potongan teks + Enter
+                    // Kita potong per karakter agar format kolom terjaga rapi
+                    const chunk = remaining.substring(0, maxLeftLen);
+                    output += chunk + '\n'; 
+                    remaining = remaining.substring(maxLeftLen);
+                }
+            }
+            return output;
+        };
+    
+        // 3. Susun Teks Struk
+        let receipt = '';
+        receipt += center(printerSettings.storeName.toUpperCase()) + '\n';
+        if(printerSettings.address) receipt += center(printerSettings.address) + '\n';
+        receipt += dashed + '\n';
+        
+        receipt += dateStr + ' ' + timeStr + '\n';
+        receipt += 'No. Trx: ' + (data.trx_id || '-') + '\n';
+        receipt += dashed + '\n';
+        
+        // Item
+        let priceFmt = 'Rp ' + new Intl.NumberFormat('id-ID').format(finalPrice);
+        receipt += leftRight(data.produk || 'Produk', priceFmt) + '\n';
+        
+        // Tujuan & SN
+        receipt += 'Tujuan : ' + (data.tujuan || '-') + '\n';
+        if(data.sn && data.sn !== '-') {
+             // Bersihkan SN agar rapi
+             let cleanSN = data.sn.replace(/SN:|Ref:|Sukses|Berhasil/gi, '').trim();
+             // MODIF: SN Auto Wrap (Anti Potong)
+             receipt += 'SN/Ref :\n' + center(cleanSN) + '\n';
+        }
+        
+        receipt += dashed + '\n';
+        receipt += leftRight('TOTAL', priceFmt) + '\n';
+        receipt += dashed + '\n';
+        
+                    if(printerSettings.footer) receipt += center(printerSettings.footer) + '\n';
+        receipt += '\n\n\n';
+    
+        currentReceiptData = receipt;
+    
+        // 4. Tampilkan Preview ASLI (Menggunakan Pre-formatted Text)
+        const previewArea = document.getElementById('printPreviewArea');
+        previewArea.innerText = receipt;
+        
+        // Styling Wajib agar Preview = Hasil Cetak
+        Object.assign(previewArea.style, {
+            fontFamily: '"Courier New", Courier, monospace',
+            whiteSpace: 'pre',
+            overflowX: 'auto',
+            fontSize: '13px',
+            lineHeight: '1.2',
+            color: '#000',
+            fontWeight: 'bold',
+            textAlign: 'left'
+        });
+    
+        document.getElementById('modalPrintPreview').style.display = 'flex';
+        updatePrintButtonState();
+    };
+    
+                            function updatePrintButtonState() {
+        const btnPrint = document.getElementById('btnPrintNow');
+        const btnConnect = document.getElementById('btnConnectPrinter');
+        const status = document.getElementById('statusPrinter');
+        const btnShare = document.getElementById('btnShareWA');
+        const inputMarkup = document.getElementById('inputLiveMarkup') ? document.getElementById('inputLiveMarkup').parentElement : null;
+    
+        if(inputMarkup) inputMarkup.style.display = 'block';
+    
+        if(window.isShareMode) {
+            if(btnPrint) btnPrint.style.display = 'none';
+            if(btnConnect) btnConnect.style.display = 'none';
+            if(status) status.style.display = 'none';
+            if(btnShare) btnShare.style.display = 'block';
+        } else {
+            // Mode RawBT: Tombol Connect & Status Bluetooth TIDAK diperlukan
+            if(btnShare) btnShare.style.display = 'none';
+            
+            if(btnConnect) btnConnect.style.display = 'none';
+            if(status) status.style.display = 'none';
+    
+                            if(btnPrint) {
+                btnPrint.style.display = 'block';
+                btnPrint.innerText = "PRINT (Via RawBT)";
+            }
+        }
+    }
+    
+    window.connectPrinter = async function() {
+        try {
+            document.getElementById('statusPrinter').innerText = 'Mencari...';
+            bluetoothDevice = await navigator.bluetooth.requestDevice({
+                acceptAllDevices: true,
+                optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', '00001101-0000-1000-8000-00805f9b34fb']
+            });
+            bluetoothDevice.addEventListener('gattserverdisconnected', onDisconnected);
+            const server = await bluetoothDevice.gatt.connect();
+            const services = await server.getPrimaryServices();
+            let printService = services.find(s => s.uuid.startsWith('000018f0') || s.uuid.includes('18f0')) || services[0];
+            const characteristics = await printService.getCharacteristics();
+            printCharacteristic = characteristics.find(c => c.properties.write || c.properties.writeWithoutResponse);
+            
+            alert('Terhubung!');
+            updatePrintButtonState();
+        } catch (error) {
+            alert('Gagal: ' + error.message);
+            document.getElementById('statusPrinter').innerText = 'Gagal: ' + error.message;
+        }
+    };
+    
+    function onDisconnected() {
+        printCharacteristic = null;
+        updatePrintButtonState();
+    }
+    
+    window.printStruk = async function() {
+        const btn = document.getElementById('btnPrintNow');
+        btn.innerText = "Membuka RawBT..."; 
+        btn.disabled = true;
+    
+        try {
+    // Encode Data Struk ke Base64
+    // Tambahkan perintah ESC/POS Bold On (\x1B\x45\x01) dan Reset (\x1B\x40)
+    const textWithBold = '\x1B\x45\x01' + currentReceiptData + '\x1B\x40';
+    const base64Data = btoa(textWithBold);
+    // Gunakan URL Scheme RawBT
+    const rawbtUrl = 'rawbt:base64,' + base64Data;
+    
+    // FIX: Gunakan Anchor Click untuk memicu Intent Android dengan lebih andal
+    const a = document.createElement('a');
+    a.href = rawbtUrl;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    // Reset UI setelah eksekusi
+    setTimeout(() => {
+        document.getElementById('modalPrintPreview').style.display = 'none';
+        btn.innerText = "PRINT SEKARANG"; 
+        btn.disabled = false;
+    }, 1000);
+        } catch(e) {
+    alert("Gagal: " + e.message);
+    btn.innerText = "PRINT SEKARANG"; 
+    btn.disabled = false;
+        }
+    };
+  </script>
+
+
+
+  <script>
+    // Memastikan variabel interval tersedia
+    window.intervalCek = window.intervalCek || {};
+    
+    // Restore Fungsi Helper Bersihkan Pesan (Jaga-jaga jika hilang)
+    if(typeof window.bersihkanPesan === 'undefined') {
+        window.bersihkanPesan = function(txt) {
+            let m = txt; try { m = JSON.parse(txt).body_respon || txt; } catch (e) {}
+            
+            if (m.includes("kodereseller=") || m.includes("password=")) {
+                if (m.includes("#")) {
+                    m = m.substring(m.indexOf("#") + 1).trim();
+                } else {
+                    m = "Transaksi Gagal dari Provider";
+                }
+            }
+            
+            m = m.replace(/\.?\s*Saldo\s+[\d\.,\s\-\=]+(@\d{2}:\d{2})?/gi, "").replace(/Hrg\s+[\d\.,]+/gi, "");
+            return m.trim();
+        };
+    }
+    
+    // Restore Fungsi Cek Status PPOB
+    window.cekStatusBerkala = function(idDoc, trxId, tujuan, kode) {
+        if(window.intervalCek[idDoc]) return;
+        console.log("Memulai Cek Status:", trxId);
+        window.intervalCek[idDoc] = setInterval(async () => {
+            try {
+                const res = await fetch('cek_status.php', { method: 'POST', body: JSON.stringify({ refID: trxId, tujuan: tujuan, kode_produk: kode }) });
+                const json = await res.json();
+                const cleanStat = (json.status || "").toString().trim().toUpperCase();
+                if(cleanStat !== "PENDING") { 
+                    clearInterval(window.intervalCek[idDoc]); 
+                    delete window.intervalCek[idDoc];
+                    
+                    let psn = json.sn;
+                    if(window.bersihkanPesan) psn = window.bersihkanPesan(json.sn);
+                    
+                    if(window.updateFirestoreStatus) {
+                        window.updateFirestoreStatus(idDoc, cleanStat, psn, JSON.stringify(json));
+                    }
+                }
+            } catch(e) {}
+        }, 10000); 
+    };
+    
+    // Restore Fungsi Cek Status Topup
+    window.cekStatusQiospayBerkala = function(idDoc, nominal) {
+        if(window.intervalCek[idDoc]) return;
+        window.intervalCek[idDoc] = setInterval(async () => {
+            try {
+                const req = await fetch('cek_topup.php', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nominal: nominal, docId: idDoc })
+                });
+                const res = await req.json();
+                if(res.status === 'success') {
+                    clearInterval(window.intervalCek[idDoc]);
+                    delete window.intervalCek[idDoc];
+                    
+                    const user = window.auth.currentUser;
+                    if(user) {
+                        const trxRef = window.doc(window.db, "users", user.uid, "riwayat_transaksi", idDoc);
+                        const trxSnap = await window.getDoc(trxRef);
+                        if(trxSnap.exists() && (trxSnap.data().status === 'BERHASIL' || trxSnap.data().status === 'Sukses')) return; // Anti-Double
+                        
+                        const userRef = window.doc(window.db, "users", user.uid);
+                        const userSnap = await window.getDoc(userRef);
+                        const newSaldo = (userSnap.exists() ? parseInt(userSnap.data().saldo) || 0 : 0) + parseInt(nominal);
+                        
+                        /* await window.updateDoc(userRef, { saldo: newSaldo }); // DIHAPUS DEMI KEAMANAN */
+                        console.log('Pembayaran valid, menunggu cronjob/backend server memproses saldo...');
+                        if(window.updateFirestoreStatus) window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup QRIS Otomatis", JSON.stringify(res));
+                        
+                        if(window.triggerDoniGuard) {
+                            window.triggerDoniGuard({
+                                trx_id: 'QRIS-' + idDoc, action: 'topup', produk: 'TOPUP QRIS GOPAY (QIOSPAY)', nominal: parseInt(nominal), saldo_akhir_client: newSaldo
+                            });
+                        }
+                        window.showNotice('success', 'Berhasil', 'Topup QRIS Rp ' + new Intl.NumberFormat('id-ID').format(nominal) + ' masuk!');
+                        if(document.getElementById('statusQrisAuto')) {
+                            document.getElementById('statusQrisAuto').innerHTML = '<i class="fas fa-check-circle"></i> Pembayaran Diterima!';
+                            document.getElementById('statusQrisAuto').style.color = 'var(--success)';
+                        }
+                        setTimeout(() => {
+                            localStorage.removeItem('pending_topup');
+                            if(window.tutupModalTopup) window.tutupModalTopup();
+                            if(window.bukaRiwayatArsip) window.bukaRiwayatArsip();
+                        }, 2000);
+                    }
+                }
+            } catch(e) {}
+        }, 10000);
+    };
+    
+    
+    window.cekStatusTopupBerkala = function(idDoc, uniqueCode) {
+        if(!window.isTopupAuto) return; // Mode manual tidak mengecek API otomatis
+    
+        if(intervalCek[idDoc]) return;
+        intervalCek[idDoc] = setInterval(async () => {
+            try {
+                const req = await fetch('paydisini_cek.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ unique_code: uniqueCode })
+                });
+                const res = await req.json();
+                
+                if(res.success && res.data.status === "Success") {
+                    clearInterval(intervalCek[idDoc]); 
+                    delete intervalCek[idDoc];
+    
+                    // FIX DONIGUARD: Pastikan User Ada
+                    const user = window.auth.currentUser;
+                    if(user) {
+                        // 1. Ambil Saldo Terakhir dari Firestore (Realtime)
+                        const userRef = window.doc(window.db, "users", user.uid);
+                        const userSnap = await window.getDoc(userRef);
+                        const oldSaldo = userSnap.exists() ? (parseInt(userSnap.data().saldo) || 0) : 0;
+                        const nominal = parseInt(res.data.balance); // FIX: Ambil dari balance (Net Settlement)
+                        const newSaldo = oldSaldo + nominal;
+    
+                        // 2. Update Firestore (Client Side) DULUAN
+                        // Kita update saldo di client agar sinkron saat DoniGuard mengecek
+                        /* await window.updateDoc(userRef, { saldo: newSaldo }); // DIHAPUS DEMI KEAMANAN */
+                        console.log('Pembayaran valid, menunggu cronjob/backend server memproses saldo...');
+                        if(window.kirimNotifTelegram) window.kirimNotifTelegram('topup', { harga: nominal, username: userSnap.exists() ? (userSnap.data().username || 'User') : 'User', trx_id: uniqueCode });
+                        window.updateFirestoreStatus(idDoc, "BERHASIL", "Topup Berhasil");
+    
+                        // 3. Lapor ke DoniGuard (Server Side)
+                        // Kirim 'saldo_akhir_client' yang SUDAH DITAMBAH agar validasi server sukses
+                        if(window.triggerDoniGuard) {
+                                                            window.triggerDoniGuard({
+                                trx_id: uniqueCode,
+                                action: 'topup',
+                                produk: 'TOPUP PAYDISINI',
+                                nominal: nominal,
+                                saldo_akhir_client: newSaldo
+                            });
+                        }
+                                                    window.showNotice('success', 'Topup Berhasil', 'Saldo Rp '+new Intl.NumberFormat('id-ID').format(nominal)+' Masuk.');
+                        try {
+                            const uName = userSnap.exists() ? (userSnap.data().username || 'User') : 'User';
+                            const tgNow = new Date();
+                            const tgDateStr = `${tgNow.getDate()} ${["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"][tgNow.getMonth()]} ${tgNow.getFullYear()} ${tgNow.getHours().toString().padStart(2,'0')}.${tgNow.getMinutes().toString().padStart(2,'0')}.${tgNow.getSeconds().toString().padStart(2,'0')}`;
+                            const rawMsg = `✅ TOPUP BERHASIL\n\n👤 Username: ${uName}\n📧 Email: ${user.email}\n💰 Jumlah: Rp ${new Intl.NumberFormat('id-ID').format(nominal)}\n🆔 Trx ID: ${uniqueCode}\n🕒 Waktu: ${tgDateStr}\n\nPandawa-Digital Indonesia\nhttps://www.pandawa-digital.com\nDownload apk:\nhttps://www.pandawa-digital.com/Pandawa.apk`;
+                            const encodedMsg = encodeURIComponent(rawMsg);
+                            fetch(`https://api.telegram.org/bot8490021696:AAGv-lgFCmKCg5x0Tr6xnqS3pQEEENAEZNA/sendMessage?chat_id=-1003888145818&text=${encodedMsg}`);
+                        } catch(etg) { console.log('TeleErr', etg); }
+                    }
+                } else if(res.success && (res.data.status === "Canceled" || res.data.status === "Expired")) {
+                    clearInterval(intervalCek[idDoc]);
+                    delete intervalCek[idDoc];
+                    window.updateFirestoreStatus(idDoc, "GAGAL", "Pembayaran Expired/Batal");
+                }
+            } catch(e) {} 
+        }, 10000); 
+    };
+    
+    console.log("System Cek Status Berhasil Dipulihkan");
+  </script>
+
+  <script>
+    window.isModeMasal = false;
+    
+    window.toggleModeMasal = function() {
+        window.isModeMasal = !window.isModeMasal;
+        const btn = document.getElementById('btnModeMasal');
+        const chkAreas = document.querySelectorAll('.area-chk-masal');
+        const fab = document.getElementById('fabCetakMasal');
+        
+        if(window.isModeMasal) {
+            // Mode Aktif
+            btn.innerHTML = '<i class="fas fa-times"></i> Batalkan';
+            btn.style.background = '#ff7675';
+            btn.style.color = 'white';
+            chkAreas.forEach(el => el.style.display = 'block');
+            fab.style.display = 'block';
+            document.getElementById('riwayat-container').style.paddingBottom = '120px';
+        } else {
+            // Mode Mati
+            btn.innerHTML = '<i class="fas fa-print"></i> Cetak Masal';
+            btn.style.background = '#e1effe';
+            btn.style.color = 'black';
+            chkAreas.forEach(el => el.style.display = 'none');
+            fab.style.display = 'none';
+            document.getElementById('riwayat-container').style.paddingBottom = '10px';
+            
+            // Reset Checklist
+            document.querySelectorAll('.chk-masal').forEach(c => c.checked = false);
+            updateButtonMasal();
+        }
+    };
+    
+    window.updateButtonMasal = function() {
+        const checked = document.querySelectorAll('.chk-masal:checked').length;
+        document.getElementById('countMasal').innerText = checked;
+        const cntShare = document.getElementById('countMasalShare');
+        if(cntShare) cntShare.innerText = checked;
+    };
+    
+    window.prosesShareMasal = function() {
+        window.isShareMode = true;
+        window.prosesPrintMasal();
+    };
+    
+    
+    window.prosesPrintMasal = function() {
+        const checkboxes = document.querySelectorAll('.chk-masal:checked');
+        if(checkboxes.length === 0) return alert("Pilih minimal 1 transaksi!");
+    
+        let totalHarga = 0;
+        let items = [];
+        
+        checkboxes.forEach(chk => {
+            try {
+                const data = JSON.parse(decodeURIComponent(chk.value));
+                items.push(data);
+                totalHarga += parseInt(data.harga);
+            } catch(e) {}
+        });
+    
+        // Generate Struk Gabungan
+        generateStrukMasal(items, totalHarga);
+    };
+    
+    function generateStrukMasal(items, totalReal) {
+        // Set Konteks Live Preview
+        activePrintData = items;
+        activePrintType = 'mass';
+        const inputM = document.getElementById('inputLiveMarkup');
+        if(inputM) inputM.value = printerSettings.markup;
+    
+        // Gunakan Setting Printer yang ada
+        const markupPerItem = parseInt(printerSettings.markup) || 0;
+        const width = printerSettings.paperSize === '58' ? 32 : 48;
+        const line = '-'.repeat(width);
+        const dateObj = new Date();
+        const dateStr = dateObj.toLocaleDateString('id-ID');
+        const timeStr = dateObj.toLocaleTimeString('id-ID').slice(0,5);
+    
+        // Helpers (Copy dari sistem printer utama)
+        const center = (txt) => {
+            if(!txt) return '';
+            txt = txt.toString();
+            
+            // FIX: Support Multi-line Center (Split per enter)
+            const lines = txt.split('\n');
+            let globalOutput = '';
+    
+            lines.forEach(lineTxt => {
+                let remaining = lineTxt;
+                while (remaining.length > 0) {
+                    let chunk = remaining.substring(0, width);
+                    remaining = remaining.substring(width);
+                    const spaces = Math.max(0, Math.floor((width - chunk.length) / 2));
+                    globalOutput += ' '.repeat(spaces) + chunk + '\n';
+                }
+                // Jika baris kosong (hanya enter), tetap tambahkan enter
+                if(lineTxt === '') globalOutput += '\n';
+            });
+            
+            // Hapus enter terakhir yang berlebih
+            return globalOutput.replace(/\n$/, '');
+        };
+    
+        const leftRight = (left, right) => {
+            left = left.toString(); right = right.toString();
+            let output = '';
+            const maxLeftLen = width - right.length - 1;
+            let remaining = left;
+            while (remaining.length > 0) {
+                if (remaining.length <= maxLeftLen) {
+                    const spaces = width - remaining.length - right.length;
+                    output += remaining + ' '.repeat(spaces) + right;
+                    remaining = '';
+                } else {
+                    const chunk = remaining.substring(0, maxLeftLen);
+                    output += chunk + '\n'; 
+                    remaining = remaining.substring(maxLeftLen);
+                }
+            }
+            return output;
+        };
+    
+        // MULAI SUSUN STRUK
+        let receipt = '';
+        receipt += center(printerSettings.storeName.toUpperCase()) + '\n';
+        if(printerSettings.address) receipt += center(printerSettings.address) + '\n';
+        receipt += line + '\n';
+        receipt += center("STRUK REKAPITULASI") + '\n';
+        receipt += center(`${dateStr} ${timeStr}`) + '\n';
+        receipt += line + '\n';
+    
+        let totalTagihan = 0;
+    
+                    items.forEach((item, index) => {
+            let rawItem = parseInt(item.harga) + markupPerItem;
+            // PEMBULATAN PINTAR (Kelipatan 500 ke atas)
+            let hargaItem = Math.ceil(rawItem / 500) * 500;
+            totalTagihan += hargaItem;
+            
+            receipt += `${index+1}. ${item.produk}\n`;
+            receipt += leftRight(item.tujuan, 'Rp '+new Intl.NumberFormat('id-ID').format(hargaItem)) + '\n';
+        });
+    
+        receipt += line + '\n';
+        receipt += leftRight(`TOTAL (${items.length} Trx)`, 'Rp '+new Intl.NumberFormat('id-ID').format(totalTagihan)) + '\n';
+        receipt += line + '\n';
+        
+        if(printerSettings.footer) receipt += center(printerSettings.footer) + '\n';
+        receipt += center('Dicetak Secara Masal') + '\n\n\n';
+    
+        // Set ke Global & Tampilkan Preview
+        currentReceiptData = receipt;
+        const previewArea = document.getElementById('printPreviewArea');
+        previewArea.innerText = receipt;
+        
+        // Styling Preview
+        Object.assign(previewArea.style, {
+            fontFamily: '"Courier New", Courier, monospace',
+            whiteSpace: 'pre',
+            overflowX: 'auto',
+            fontSize: '12px',
+            lineHeight: '1.2',
+            color: '#000',
+            textAlign: 'left'
+        });
+    
+        document.getElementById('modalPrintPreview').style.display = 'flex';
+        updatePrintButtonState();
+    }
+  </script>
+  <script>
+    // CACHE WARMER SYSTEM (Memastikan icon tersimpan di memory browser)
+    (function() {
+        const icons = [
+            "icons/Pulsa.png", "icons/E-Wallet.png", "icons/Games.png", 
+            "icons/Token PLN.png", "icons/Telkomsel.png", "icons/Indosat.png", 
+            "icons/By.U.png", "https://cdn-icons-png.flaticon.com/512/2554/2554978.png"
+        ];
+        icons.forEach(src => { const i = new Image(); i.src = src; });
+    })();
+  </script>
+
+
+
+  <div id="modalMyQR" class="modal" style="z-index: 24000; align-items: center; justify-content: center;">
+    <div class="notice-content" style="text-align: center;">
+      <h3 style="margin-bottom:10px; color:var(--primary);">QR Akun Saya</h3>
+      <p style="font-size:12px; color:#666; margin-bottom:15px;">Tunjukkan QR ini untuk menerima saldo</p>
+      <img id="myQrImage" src="" style="width:200px; height:200px; border-radius:10px; margin:0 auto; display:block; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+      <div id="myQrInfo" style="margin-top:15px; font-weight:bold; font-size:14px; color:#333;"></div>
+      <button class="btn-konfirmasi" style="margin-top:20px; width:100%;" onclick="document.getElementById('modalMyQR').style.display='none'">TUTUP</button>
+    </div>
+  </div>
+
+
+  <div id="modalQRScanner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:99999; flex-direction:column;">
+    <div style="padding:15px; display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.5); color:white; position:absolute; top:0; width:100%; z-index:2; box-sizing:border-box;">
+      <div style="font-weight:bold; font-size:16px;">Scan QR Transfer</div>
+      <i class="fas fa-times" onclick="closeQRScanner()" style="font-size:24px; cursor:pointer;"></i>
+    </div>
+    <div id="qr-reader" style="width:100%; height:100vh; display:flex; align-items:center; justify-content:center;"></div>
+  </div>
+
+
+  <div id="qrisFullscreen" class="qris-overlay">
+    <div class="qris-close" onclick="document.getElementById('qrisFullscreen').style.display='none'"><i class="fas fa-times"></i></div>
+    <img id="qrisImageFull" src="icons/qris.jpg">
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const maskText = (text) => text.replace(/(ICS|KF|REF)-/g, '***-');
+        const walkDOM = (node) => {
+            if (node.nodeType === 3) {
+                if (/(ICS|KF|REF)-/.test(node.nodeValue)) {
+                    node.nodeValue = maskText(node.nodeValue);
+                }
+            } else if (node.nodeType === 1 && !['SCRIPT', 'STYLE', 'INPUT', 'TEXTAREA'].includes(node.nodeName)) {
+                node.childNodes.forEach(walkDOM);
+            }
+        };
+        walkDOM(document.body);
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((m) => {
+                if (m.type === 'childList') {
+                    m.addedNodes.forEach((n) => { if (n.nodeType === 1 || n.nodeType === 3) walkDOM(n); });
+                } else if (m.type === 'characterData') {
+                    if (/(ICS|KF|REF)-/.test(m.target.nodeValue)) {
+                        m.target.nodeValue = maskText(m.target.nodeValue);
+                    }
+                }
+            });
+        });
+        observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+    });
+  </script>
+
+  <script>
+    // BACK BUTTON HANDLER UNTUK SMARTPHONE
+    window.addEventListener('load', function() {
+        history.pushState(null, null, location.href);
+        window.onpopstate = function() {
+            let modalTertutup = false;
+            
+            // 1. Tutup modal yang terbuka (Pilihan Produk, Invoice, Detail, dll)
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(m => {
+                if (window.getComputedStyle(m).display !== 'none') {
+                    m.style.display = 'none';
+                    modalTertutup = true;
+                }
+            });
+    
+            // 2. Jika ada elemen fullscreen lain yang terbuka (seperti QRIS)
+            const qris = document.getElementById('qrisFullscreen');
+            if(qris && window.getComputedStyle(qris).display !== 'none') {
+                qris.style.display = 'none';
+                modalTertutup = true;
+            }
+    
+            // 3. Logika Navigasi
+            if (!modalTertutup) {
+                let diHalamanLain = false;
+                const pages = document.querySelectorAll('.full-page');
+                pages.forEach(p => {
+                    if (window.getComputedStyle(p).display !== 'none') {
+                        diHalamanLain = true;
+                    }
+                });
+    
+                if (diHalamanLain) {
+                    // Sedang di halaman Profil/Keranjang/dll -> Kembali ke Home
+                    if(window.navSwitch) window.navSwitch('home', document.querySelectorAll('.nav-item')[0]);
+                    history.pushState(null, null, location.href);
+                } else {
+                    // Sudah di Home dan tidak ada modal -> Izinkan keluar/tutup browser
+                    history.back();
+                }
+            } else {
+                // Jika tadi menutup modal, tahan tombol back lagi
+                history.pushState(null, null, location.href);
+            }
+        };
+    });
+  </script>
+
+  <script>
+    let html5QrCode;
+    
+    window.showMyQR = async function() {
+        const user = window.auth.currentUser;
+        if(!user) return alert('Silakan login!');
+        
+        try {
+            const uSnap = await window.getDoc(window.doc(window.db, "users", user.uid));
+            const data = uSnap.data();
+            const info = data.email || data.username; // QR value prioritizes email
+            
+            document.getElementById('myQrImage').src = "https://quickchart.io/qr?text=" + encodeURIComponent(info) + "&size=300&ecLevel=M&margin=2";
+            document.getElementById('myQrInfo').innerText = data.username || data.nama || info;
+            document.getElementById('modalMyQR').style.display = 'flex';
+        } catch(e) {
+            console.error("Gagal load QR", e);
+        }
+    };
+    
+    window.openQRScanner = function() {
+        document.getElementById('modalQRScanner').style.display = 'flex';
+        if (!html5QrCode) {
+            html5QrCode = new Html5Qrcode("qr-reader");
+        }
+        
+        if (!html5QrCode.isScanning) {
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+            const onSuccess = (decodedText) => {
+                closeQRScanner();
+                bukaModalTransfer('kirim');
+                
+                const targetInput = document.getElementById('transferTarget');
+                if (targetInput) {
+                    targetInput.value = decodedText;
+                    targetInput.readOnly = true;
+                    targetInput.style.backgroundColor = "#e1effe";
+                    
+                    setTimeout(() => {
+                        document.getElementById('transferNominal').focus();
+                    }, 500);
+                }
+            };
+    
+            html5QrCode.start({ facingMode: "environment" }, config, onSuccess, () => {})
+            .catch((err) => {
+                console.log("Mencoba kamera alternatif...");
+                html5QrCode.start({ facingMode: "user" }, config, onSuccess, () => {})
+                .catch((err2) => {
+                    document.getElementById('qr-reader').innerHTML = "<div style='color:red; padding:20px; text-align:center; background:white; border-radius:10px;'>Gagal akses kamera.<br>Pastikan izin aplikasi diberikan di Pengaturan HP.</div>";
+                });
+            });
+        }
+    };
+    
+    window.closeQRScanner = function() {
+        document.getElementById('modalQRScanner').style.display = 'none';
+        if (html5QrCode && html5QrCode.isScanning) {
+            html5QrCode.stop().then(() => {
+                html5QrCode.clear();
+            }).catch(err => console.error(err));
+        }
+    };
+  </script>
+
+  <script>
+    // SCRIPT PEMBUNUH SERVICE WORKER & CACHE LAMA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister().then(function() {
+                    console.log('Service worker lama berhasil dimatikan!');
+                });
+            }
+        });
+    }
+    
+    // Hapus Cache Storage
+    if ('caches' in window) {
+        caches.keys().then(function(names) {
+            for (let name of names) {
+                caches.delete(name);
+            }
+        });
+    }
+  </script>
 
 </body>
+
 </html>
