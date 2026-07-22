@@ -1012,204 +1012,6 @@
       color: var(--primary);
     }
 
-    .auth-fx-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 35vh;
-      background: var(--grad-main);
-      border-radius: 0 0 32px 32px;
-      z-index: 0;
-      box-shadow: 0 10px 30px rgba(5, 150, 105, 0.1);
-    }
-
-    .auth-card {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 380px;
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 40px 30px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-      border: 1px solid #f1f5f9;
-      color: var(--text-dark);
-      animation: fadeInUp 0.4s ease-out;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .auth-brand {
-      text-align: center;
-      margin-bottom: 5px;
-    }
-
-    .brand-logo-glow {
-      width: 90px;
-      height: 90px;
-      object-fit: contain;
-      margin-bottom: 15px;
-      animation: logoFloat 3s infinite ease-in-out alternate;
-    }
-
-
-      100% {
-        transform: translateY(-5px);
-      }
-    }
-
-    .auth-h1 {
-      font-size: 26px;
-      font-weight: 800;
-      margin: 0;
-      color: var(--text-dark);
-      letter-spacing: -0.5px;
-    }
-
-    .auth-desc {
-      color: var(--text-grey);
-      font-size: 13px;
-      margin-top: 5px;
-      font-weight: 400;
-    }
-
-    .form-area {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .inp-wrapper {
-      position: relative;
-    }
-
-    .inp-modern {
-      width: 100%;
-      background: #f1f5f9;
-      border: 2px solid transparent;
-      border-radius: 14px;
-      padding: 15px 15px 15px 48px;
-      color: var(--text-dark);
-      font-size: 14px;
-      font-weight: 600;
-      font-family: inherit;
-      transition: all 0.2s;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    .inp-modern::placeholder {
-      color: #94a3b8;
-      font-weight: 500;
-    }
-
-    .inp-modern:focus {
-      background: #ffffff;
-      border-color: var(--primary);
-      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.08);
-    }
-
-    .inp-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 18px;
-      transition: 0.2s;
-    }
-
-    .inp-modern:focus~.inp-icon {
-      color: var(--primary);
-    }
-
-    .inp-eye {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      cursor: pointer;
-      padding: 5px;
-    }
-
-    .inp-eye:hover {
-      color: var(--primary);
-    }
-
-    .btn-modern-auth {
-      background: var(--grad-main);
-      width: 100%;
-      padding: 16px;
-      border: none;
-      border-radius: 14px;
-      color: white;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2);
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-modern-auth:active {
-      transform: scale(0.98);
-      box-shadow: 0 2px 10px rgba(5, 150, 105, 0.15);
-    }
-
-    .btn-modern-auth i {
-      margin-left: 8px;
-    }
-
-    .auth-switcher {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-grey);
-      margin-top: 5px;
-      font-weight: 500;
-    }
-
-    .link-accent {
-      color: var(--primary);
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
-      text-decoration: none;
-    }
-
-    .link-accent:hover {
-      text-decoration: underline;
-      color: #047857;
-    }
-
-    .reset-link {
-      text-align: right;
-      margin-top: -8px;
-      margin-bottom: 5px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .reset-link span {
-      color: var(--text-grey);
-      cursor: pointer;
-    }
-
-    .reset-link span:hover {
-      color: var(--primary);
-    }
-
     /* MODAL BROADCAST */
     #modalBroadcast {
       display: none;
@@ -1647,16 +1449,6 @@
       animation: fadeIn 0.3s;
     }
 
-    .cart-item {
-      background: white;
-      padding: 15px;
-      border-radius: 15px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-    }
 
     .prof-header {
       background: var(--grad-main);
@@ -2263,9 +2055,6 @@
     }
 
 
-
-
-
     /* FULLSCREEN QRIS CSS */
     .qris-overlay {
       display: none;
@@ -2400,7 +2189,144 @@
       text-transform: uppercase;
       margin-top: 10px;
     }
-  </style>
+  
+  /* ==========================================================
+     DESAIN ULANG - PROFESIONAL & RAPI
+     ========================================================== */
+  
+  /* ===== SALDO LEBIH MENCOLOK ===== */
+  .saldo-box {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+    border: 1px solid rgba(37,99,235,0.12);
+    box-shadow: 0 8px 30px rgba(37,99,235,0.10);
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .saldo-box::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .saldo-value {
+    font-size: 30px;
+    font-weight: 900;
+    color: #1e3a8a;
+    letter-spacing: -0.5px;
+  }
+  .saldo-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    color: var(--text-grey);
+  }
+  
+  /* ===== CARD & SHADOW KONSISTEN ===== */
+  .menu-container, .history-card, .prof-card {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .history-card {
+    border-radius: 14px;
+    transition: transform 0.2s ease;
+  }
+  .history-card:active {
+    transform: scale(0.98);
+  }
+  
+  /* ===== BUTTON ===== */
+  .btn-konfirmasi {
+    border-radius: 12px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    letter-spacing: 0.3px;
+  }
+  .btn-konfirmasi:active { transform: scale(0.97); }
+  .btn-batal {
+    border-radius: 12px;
+    transition: background 0.2s ease;
+  }
+  .btn-batal:active { background: #e2e8f0; }
+  
+  /* ===== INPUT ===== */
+  .form-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    background: #ffffff;
+  }
+  
+  /* ===== MODAL ANIMASI ===== */
+  .modal-content {
+    animation: slideUpSmooth 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slideUpSmooth {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  /* ===== BOTTOM NAV GLASS ===== */
+  .bottom-nav {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.92);
+  }
+  
+  /* ===== MENU ICON ===== */
+  .icon-box {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .menu-item:active .icon-box {
+    transform: scale(0.88);
+  }
+  
+  /* ===== AUTH ===== */
+  .auth-card {
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+  .inp-modern { transition: all 0.25s ease; }
+  
+  /* ===== HEADER DECORATION ===== */
+  .header {
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 250px;
+    height: 250px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  
+  /* ===== BADGE ===== */
+  .h-badge { font-size: 9px; padding: 3px 10px; border-radius: 10px; letter-spacing: 0.3px; }
+  .bg-BERHASIL { background: #d1fae5; color: #065f46; }
+  .bg-PENDING  { background: #fef3c7; color: #92400e; }
+  .bg-GAGAL    { background: #fee2e2; color: #991b1b; }
+  
+  /* ===== SCROLLBAR ===== */
+  .history-container::-webkit-scrollbar { width: 4px; }
+  .history-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  
+  /* ===== CHAT FAB WA ===== */
+  .chat-fab {
+    background: #25D366 !important;
+    box-shadow: 0 4px 15px rgba(37,211,102,0.4) !important;
+  }
+</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     document.addEventListener('input', function(e) {
@@ -2685,7 +2611,6 @@
   </div>
 
 
-
   <div id="appBanner" style="display: none; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 16px; margin: 0 15px 20px; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3); position: relative; z-index: 2; overflow: hidden;">
     <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.05); border-radius: 50%; filter: blur(10px);"></div>
     <div style="display: flex; align-items: center; gap: 14px; flex: 1; position: relative; z-index: 3;">
@@ -2838,7 +2763,6 @@
       </div>
     </div>
   </div>
-
 
 
   <div id="fabCetakMasal" style="display:none; position:fixed; bottom:120px; left:50%; transform:translateX(-50%); width:90%; z-index:9999; animation: slideUp 0.3s;">
@@ -3189,10 +3113,6 @@
                             urlParams.set('v', serverVersion);
                             window.location.href = window.location.pathname + '?' + urlParams.toString();
                             return;
-                        } else {
-                            // Jika URL sudah berubah dan berhasil dimuat, baru simpan versi ke lokal
-                            localStorage.setItem('appVersion', serverVersion);
-                        }
                     }
                 }
                 // ------------------------------
@@ -3286,7 +3206,6 @@
         document.body.style.overflow = 'hidden';
         return true;
     };
-    
     
     
     // AUTH LISTENER
@@ -3949,7 +3868,6 @@
     };
     
             
-    
     // --- SYSTEM DONIGUARD HYBRID ---
     
             window.prosesKajeInternal = async (target, nominal, senderName, senderUid, idDoc) => {
@@ -4074,7 +3992,6 @@
         } catch (e) { console.error("DoniGuard Audit Failed:", e); }
     };
      
-    
     
     window.checkBroadcast = async (user) => {
         try {
@@ -4475,7 +4392,7 @@
             window.masterData = masterData;
             let dataMentah = [];  
             let transaksiPending = {};
-            let intervalCek = {}; 
+            window.intervalCek = {}; 
     
                     // 1. DOWNLOAD DATA MASSAL (SINGLE FETCH)
             window.showNotice = function(type, title, msg) {
@@ -5433,12 +5350,12 @@
             }
     
             window.cekStatusBerkala = function(idDoc, trxId, tujuan, kode) {
-                if(intervalCek[idDoc]) return;
-                intervalCek[idDoc] = setInterval(async () => {
+                if(window.intervalCek[idDoc]) return;
+                window.intervalCek[idDoc] = setInterval(async () => {
                     try {
     const res = await fetch('cek_status.php', { method: 'POST', body: JSON.stringify({ refID: trxId, tujuan: tujuan, kode_produk: kode }) });
     const json = await res.json();
-    if(json.status !== "PENDING") { clearInterval(intervalCek[idDoc]); window.updateFirestoreStatus(idDoc, json.status, window.bersihkanPesan(json.sn), JSON.stringify(json)); }
+    if(json.status !== "PENDING") { clearInterval(window.intervalCek[idDoc]); window.updateFirestoreStatus(idDoc, json.status, window.bersihkanPesan(json.sn), JSON.stringify(json)); }
                     } catch(e) {}
                 }, 10000); 
             }
@@ -5497,8 +5414,8 @@
             window.cekStatusTopupBerkala = function(idDoc, uniqueCode) {
                 if(!window.isTopupAuto) return; // Mode manual tidak mengecek API otomatis
     
-                if(intervalCek[idDoc]) return;
-                intervalCek[idDoc] = setInterval(async () => {
+                if(window.intervalCek[idDoc]) return;
+                window.intervalCek[idDoc] = setInterval(async () => {
                     try {
     const req = await fetch('paydisini_cek.php', {
         method: 'POST',
@@ -5508,8 +5425,8 @@
     const res = await req.json();
     
     if(res.success && res.data.status === "Success") {
-        clearInterval(intervalCek[idDoc]); 
-        delete intervalCek[idDoc];
+        clearInterval(window.intervalCek[idDoc]); 
+        delete window.intervalCek[idDoc];
     
         // FIX DONIGUARD: Pastikan User Ada
         const user = window.auth.currentUser;
@@ -5558,8 +5475,8 @@
             window.showNotice('success', 'Topup Berhasil', 'Saldo Rp '+new Intl.NumberFormat('id-ID').format(nominal)+' Masuk.');
         }
     } else if(res.success && (res.data.status === "Canceled" || res.data.status === "Expired")) {
-        clearInterval(intervalCek[idDoc]);
-        delete intervalCek[idDoc];
+        clearInterval(window.intervalCek[idDoc]);
+        delete window.intervalCek[idDoc];
         window.updateFirestoreStatus(idDoc, "GAGAL", "Pembayaran Expired/Batal");
     }
                     } catch(e) {} 
@@ -6875,7 +6792,6 @@
             };
     
             
-    
                     window.aksiBeliLangsung = () => {
                 window.checkoutItem = window.currentProduct;
                 document.getElementById('modalCheckoutFisik').style.display = 'flex';
@@ -7474,7 +7390,6 @@
             };  
     
             
-    
             // LOGIKA FAKE LIVE TRANSACTION
             
     
@@ -7605,10 +7520,6 @@
             // Jalankan caching saat halaman selesai dimuat
             window.addEventListener('load', window.setupMenuImageCaching);
     
-    
-    
-    
-                    
     
             // --- CANGKOK SYSTEM AKRAB SPESIAL (TEMBAK XL) ---
             window.currentXlNumber = '';
@@ -9124,33 +9035,6 @@
                             window.showNotice('success', 'Transaksi Sukses', sn);
                         }
                         return;
-                        if(window.updateFirestoreStatus) {
-                            window.updateFirestoreStatus(docId, statusAkhir, sn, JSON.stringify(res));
-                        }
-                        if(statusAkhir === 'GAGAL') {
-                            window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                        } else {
-                            window.showNotice('success', 'Transaksi Sukses', sn);
-                        }
-                        return;
-                        await window.updateDoc(trxRef, { isRefunded: true, sn: sn + ' (REFUND OTOMATIS)' });
-                        
-                        // Lapor Doniguard (Refund)
-                        if(window.triggerDoniGuard) {
-                            window.triggerDoniGuard({
-                                action: 'topup',
-                                produk: 'REFUND: ' + (trxSnap.data().produk || 'Paket Akrab'),
-                                nominal: amount,
-                                                                    trx_id: ((trxSnap.data().trx_id || trxId) + '-REF'),
-                                saldo_akhir_client: (uSnap.data().saldo || 0) + amount
-                            });
-                        }
-                        
-                        window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                    }
-                } else {
-                    window.showNotice('success', 'Transaksi Sukses', sn);
-                }
             }
         }
     }
@@ -9415,44 +9299,6 @@
                             window.showNotice('success', 'Transaksi Sukses', sn);
                         }
                         return;
-                        if(statusAkhir === 'GAGAL' && (httpCode === 404 || msgRaw.includes('tidak ditemukan') || msgRaw.includes('not found'))) {
-                            sn = 'Order WZ tidak ditemukan di server. Saldo dikembalikan otomatis.';
-                        }
-                        await window.updateDoc(trxRef, {
-                            status: statusAkhir,
-                            sn: sn,
-                            raw_json: JSON.stringify(res)
-                        });
-    
-                        if(statusAkhir === 'GAGAL') {
-                            const trxSnap = await window.getDoc(trxRef);
-                            if(trxSnap.exists() && !trxSnap.data().isRefunded) {
-                                const amount = parseInt(trxSnap.data().harga || 0);
-                                const userRef = window.doc(window.db, "users", user.uid);
-                                const uSnap = await window.getDoc(userRef);
-                                const saldoAkhir = (uSnap.data().saldo || 0) + amount;
-    
-                                await window.updateDoc(userRef, { saldo: saldoAkhir });
-                                await window.updateDoc(trxRef, { isRefunded: true, sn: sn + ' (REFUND OTOMATIS)' });
-    
-                                if(window.triggerDoniGuard) {
-                                    window.triggerDoniGuard({
-                                        action: 'topup',
-                                        produk: 'REFUND: ' + (trxSnap.data().produk || 'Cuan+(Promo)'),
-                                        nominal: amount,
-                                        trx_id: (trxSnap.data().trx_id || trxId) + '-REF',
-                                        saldo_akhir_client: saldoAkhir
-                                    });
-                                }
-    
-                                window.showNotice('error', 'Transaksi Gagal', 'Saldo dikembalikan. Info: ' + sn);
-                            }
-                        } else {
-                            window.showNotice('success', 'Transaksi Sukses', sn);
-                        }
-                    } catch(e) {
-                        console.log("Monitoring WZ Skip:", e);
-                    }
                 }, 4000);
             };
     
@@ -9536,7 +9382,6 @@
             };
             
     
-            
             window.filterAkrabSearch = function() {
                 const q = document.getElementById('akrabSearch').value.toLowerCase();
                 const items = document.querySelectorAll('#listProdukArea > div');
@@ -9606,8 +9451,6 @@
             };
             
             
-    
-    
     window.onclick = function(e) {
     if(e.target==document.getElementById('modalTopup')) tutupModalTopup();  if(e.target==modal) tutupModal(); if(e.target==modalInvoice) tutupInvoice(); if(e.target==modalDetailRiwayat) modalDetailRiwayat.style.display='none'; if(e.target==document.getElementById('modalProdukList')) document.getElementById('modalProdukList').style.display='none'; }
   </script>
@@ -9789,9 +9632,6 @@
       <i class="fas fa-user"></i>Profil
     </div>
   </div>
-
-
-
 
 
   <div id="modalPrinterSettings" class="modal">
@@ -10578,7 +10418,6 @@
   </script>
 
 
-
   <script>
     // Memastikan variabel interval tersedia
     window.intervalCek = window.intervalCek || {};
@@ -10678,8 +10517,8 @@
     window.cekStatusTopupBerkala = function(idDoc, uniqueCode) {
         if(!window.isTopupAuto) return; // Mode manual tidak mengecek API otomatis
     
-        if(intervalCek[idDoc]) return;
-        intervalCek[idDoc] = setInterval(async () => {
+        if(window.intervalCek[idDoc]) return;
+        window.intervalCek[idDoc] = setInterval(async () => {
             try {
                 const req = await fetch('paydisini_cek.php', {
                     method: 'POST',
@@ -10689,8 +10528,8 @@
                 const res = await req.json();
                 
                 if(res.success && res.data.status === "Success") {
-                    clearInterval(intervalCek[idDoc]); 
-                    delete intervalCek[idDoc];
+                    clearInterval(window.intervalCek[idDoc]); 
+                    delete window.intervalCek[idDoc];
     
                     // FIX DONIGUARD: Pastikan User Ada
                     const user = window.auth.currentUser;
@@ -10731,8 +10570,8 @@
                         } catch(etg) { console.log('TeleErr', etg); }
                     }
                 } else if(res.success && (res.data.status === "Canceled" || res.data.status === "Expired")) {
-                    clearInterval(intervalCek[idDoc]);
-                    delete intervalCek[idDoc];
+                    clearInterval(window.intervalCek[idDoc]);
+                    delete window.intervalCek[idDoc];
                     window.updateFirestoreStatus(idDoc, "GAGAL", "Pembayaran Expired/Batal");
                 }
             } catch(e) {} 
@@ -10924,7 +10763,6 @@
         icons.forEach(src => { const i = new Image(); i.src = src; });
     })();
   </script>
-
 
 
   <div id="modalMyQR" class="modal" style="z-index: 24000; align-items: center; justify-content: center;">
