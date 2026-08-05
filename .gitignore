@@ -1,0 +1,25 @@
+# Data directories (sensitive user data, passwords, transactions)
+data/
+*.log
+*.tmp
+
+# Sensitive / environment
+.env
+.env.local
+config.local.php
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# PHP
+vendor/
+composer.lock
+.phpunit.result.cache
+
+# Misc
+node_modules/
