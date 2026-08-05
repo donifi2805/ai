@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#4f46e5">
+<title>PayNusa — Bayar Semua Tagihan Jadi Mudah</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef1f8; --surface:#ffffff; --surface-2:#f7f8fc; --surface-3:#f1f3f9;
+    --text:#0f172a; --muted:#6b7690; --border:#e7eaf3;
+    --primary:#4f46e5; --primary-2:#7c3aed; --accent:#f59e0b;
+    --shadow: 0 10px 30px -12px rgba(21,27,59,.18);
+    --nav-bg: rgba(255,255,255,.92);
+  }
+  html.dark{
+    --bg:#080c18; --surface:#111729; --surface-2:#161e33; --surface-3:#1c2540;
+    --text:#eef2ff; --muted:#94a1c0; --border:#243050;
+    --shadow: 0 10px 30px -12px rgba(0,0,0,.6);
+    --nav-bg: rgba(17,23,41,.92);
+  }
+  *{ -webkit-tap-highlight-color: transparent; }
+  html,body{ height:100%; }
+  body{
+    font-family:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background:var(--bg); color:var(--text); margin:0; overflow-x:hidden;
+    transition: background .3s ease, color .3s ease;
+  }
+  .surface{ background:var(--surface); }
+  .surface-2{ background:var(--surface-2); }
+  .surface-3{ background:var(--surface-3); }
+  .txt{ color:var(--text); }
+  .muted{ color:var(--muted); }
+  .bd{ border-color:var(--border); }
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:1.25rem; box-shadow:var(--shadow); }
+  .shell{ width:100%; max-width:468px; margin:0 auto; position:relative; min-height:100dvh; background:var(--bg); }
+  @media (min-width:1024px){
+    .shell{ box-shadow:0 40px 80px -30px rgba(15,23,42,.45); border-left:1px solid var(--border); border-right:1px solid var(--border); }
+  }
+  .no-sb::-webkit-scrollbar{ display:none; }
+  .no-sb{ scrollbar-width:none; }
+  .grad{ background-image:linear-gradient(135deg,#4f46e5 0%,#6d28d9 45%,#2563eb 100%); }
+  .grad-txt{ background:linear-gradient(135deg,#4f46e5,#9333ea); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .press{ transition:transform .14s ease, opacity .14s ease; }
+  .press:active{ transform:scale(.94); opacity:.85; }
+  .tab-active{ color:var(--primary); }
+  html.dark .tab-active{ color:#a5b4fc; }
+  /* Sheets */
+  .sheet-wrap{ position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; justify-content:center; }
+  .sheet-bd{ position:absolute; inset:0; background:rgba(8,12,24,.55); backdrop-filter:blur(3px); opacity:0; transition:opacity .28s ease; }
+  .sheet-panel{ position:relative; width:100%; max-width:468px; background:var(--surface); border-radius:1.75rem 1.75rem 0 0;
+    max-height:93dvh; display:flex; flex-direction:column; transform:translateY(100%); transition:transform .34s cubic-bezier(.32,.72,0,1); box-shadow:0 -12px 40px -12px rgba(8,12,24,.35); }
+  .sheet-wrap.open .sheet-bd{ opacity:1; }
+  .sheet-wrap.open .sheet-panel{ transform:translateY(0); }
+  .sheet-body{ overflow-y:auto; overscroll-behavior:contain; padding-bottom:calc(1.25rem + env(safe-area-inset-bottom)); }
+  .fade-in{ animation:fade .35s ease both; }
+  @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .pop{ animation:pop .4s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes pop{ from{opacity:0; transform:scale(.8);} to{opacity:1; transform:scale(1);} }
+  .shake{ animation:shake .4s ease; }
+  @keyframes shake{ 0%,100%{transform:translateX(0)} 20%{transform:translateX(-9px)} 40%{transform:translateX(9px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
+  .skel{ background:linear-gradient(90deg,var(--surface-3) 25%,var(--surface-2) 50%,var(--surface-3) 75%); background-size:200% 100%; animation:sk 1.2s infinite; }
+  @keyframes sk{ from{background-position:200% 0} to{background-position:-200% 0} }
+  .scanline{ position:absolute; left:0; right:0; height:3px; background:linear-gradient(90deg,transparent,#34d399,transparent); box-shadow:0 0 18px 3px rgba(52,211,153,.6); animation:scan 2.2s ease-in-out infinite; }
+  @keyframes scan{ 0%{top:4%} 50%{top:94%} 100%{top:4%} }
+  .spin{ animation:spin 1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg) } }
+  .dash{ background-image:linear-gradient(to right,var(--border) 55%,transparent 0%); background-size:12px 2px; background-repeat:repeat-x; height:2px; }
+  .checkmark{ stroke-dasharray:52; stroke-dashoffset:52; animation:draw .55s .18s ease forwards; }
+  @keyframes draw{ to{ stroke-dashoffset:0 } }
+  input,select,textarea{ font-family:inherit; }
+  .inp{ width:100%; background:var(--surface-2); border:1.5px solid var(--border); color:var(--text); border-radius:.9rem; padding:.85rem 1rem; font-size:.95rem; font-weight:600; outline:none; transition:.18s; }
+  .inp::placeholder{ color:var(--muted); font-weight:500; }
+  .inp:focus{ border-color:var(--primary); background:var(--surface); box-shadow:0 0 0 4px rgba(79,70,229,.12); }
+  .btn{ width:100%; border-radius:1rem; padding:.95rem 1rem; font-weight:700; font-size:.95rem; transition:.18s; }
+  .btn-primary{ background-image:linear-gradient(135deg,#4f46e5,#7c3aed); color:#fff; box-shadow:0 12px 24px -12px rgba(79,70,229,.9); }
+  .btn-primary:active{ transform:scale(.98); }
+  .btn-primary:disabled{ opacity:.45; box-shadow:none; }
+  .btn-ghost{ background:var(--surface-2); color:var(--text); border:1px solid var(--border); }
+  .chip{ padding:.45rem .85rem; border-radius:999px; font-size:.78rem; font-weight:700; border:1px solid var(--border); background:var(--surface); color:var(--muted); white-space:nowrap; }
+  .chip.on{ background:var(--primary); border-color:var(--primary); color:#fff; }
+  .prod{ border:1.5px solid var(--border); background:var(--surface); border-radius:1rem; padding:.75rem .8rem; text-align:left; transition:.16s; }
+  .prod.on{ border-color:var(--primary); background:rgba(79,70,229,.07); box-shadow:0 0 0 3px rgba(79,70,229,.1); }
+  .key{ font-size:1.4rem; font-weight:700; padding:.7rem 0; border-radius:1rem; transition:.12s; }
+  .key:active{ background:var(--surface-3); transform:scale(.95); }
+  .toast{ animation:tin .3s ease both; }
+  @keyframes tin{ from{ opacity:0; transform:translateY(-14px) } to{ opacity:1; transform:none } }
+  .brandpanel{ display:none; }
+  @media (min-width:1180px){
+    .brandpanel{ display:block; position:fixed; left:max(3rem,calc(50vw - 640px)); top:50%; transform:translateY(-50%); width:min(430px,32vw); z-index:5; }
+  }
+  .glow{ position:fixed; border-radius:50%; filter:blur(90px); opacity:.5; z-index:0; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<div class="glow" style="width:420px;height:420px;background:#6366f1;top:-140px;left:-100px;"></div>
+<div class="glow" style="width:380px;height:380px;background:#a855f7;bottom:-160px;right:-120px;"></div>
+
+<!-- Desktop branding -->
+<aside class="brandpanel">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 rounded-2xl grad grid place-items-center text-white font-extrabold text-xl shadow-lg">P</div>
+    <div>
+      <p class="font-extrabold text-2xl txt">PayNusa</p>
+      <p class="text-xs muted font-semibold">Payment Point Online Bank</p>
+    </div>
+  </div>
+  <h1 class="text-4xl font-extrabold leading-tight txt">Satu aplikasi untuk<br><span class="grad-txt">semua tagihan Anda.</span></h1>
+  <p class="muted mt-4 text-[15px] leading-relaxed">Pulsa, paket data, token listrik, BPJS, PDAM, voucher game sampai cicilan — bayar cepat dalam hitungan detik dengan biaya paling hemat.</p>
+  <div class="grid grid-cols-2 gap-3 mt-7" id="brandFeatures"></div>
+  <p class="mt-7 text-xs muted font-semibold">⚡ Demo interaktif — semua data tersimpan di perangkat Anda.</p>
+</aside>
+
+<div class="shell" id="shell">
+  <main id="view" class="relative z-10"></main>
+  <nav id="tabbar"></nav>
+</div>
+
+<div id="sheets"></div>
+<div id="toasts" class="fixed top-3 left-0 right-0 z-[90] flex flex-col items-center gap-2 px-4 pointer-events-none"></div>
+
+<script>
+/* ==================== ICONS ==================== */
+const ICONS={
+home:'<path d="m3 10.4 9-7 9 7"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M9.5 21v-6h5v6"/>',
+receipt:'<path d="M4 2.5h16v19l-2.7-1.6-2.6 1.6-2.7-1.6L9.3 21.5 6.7 19.9 4 21.5z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+tag:'<path d="M20.6 13.4 12 22l-9-9V4a1 1 0 0 1 1-1h8.9l7.7 7.7a1.9 1.9 0 0 1 0 2.7Z"/><circle cx="7.6" cy="7.6" r="1.3"/>',
+user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.6-3.6 4.4-5.5 8-5.5s6.4 1.9 8 5.5"/>',
+qr:'<rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><path d="M14 14h3v3h-3zM20 14h1M14 20h3M20 17.5v3.5"/>',
+bell:'<path d="M18 8.5a6 6 0 1 0-12 0c0 5.5-2 7-2 7h16s-2-1.5-2-7"/><path d="M10.3 20.5a2 2 0 0 0 3.4 0"/>',
+plus:'<path d="M12 5v14M5 12h14"/>',
+send:'<path d="M21 3 3 10.5l7 3.5 3.5 7L21 3Z"/><path d="m10 14 4.5-4.5"/>',
+wallet:'<path d="M3 8A2.5 2.5 0 0 1 5.5 5.5H18a1 1 0 0 1 1 1V8"/><rect x="3" y="8" width="18" height="12" rx="2.6"/><circle cx="16.4" cy="14" r="1.3"/>',
+cash:'<rect x="2.5" y="6" width="19" height="12" rx="2.6"/><circle cx="12" cy="12" r="2.7"/><path d="M6 10v4M18 10v4"/>',
+smartphone:'<rect x="6" y="2.5" width="12" height="19" rx="2.6"/><path d="M10.8 18.6h2.4"/>',
+wifi:'<path d="M2.5 9a15 15 0 0 1 19 0"/><path d="M5.6 12.5a10.4 10.4 0 0 1 12.8 0"/><path d="M8.6 16a6 6 0 0 1 6.8 0"/><circle cx="12" cy="19.4" r="1"/>',
+zap:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
+droplet:'<path d="M12 2.7 6.6 9.4a7 7 0 1 0 10.8 0L12 2.7Z"/>',
+heart:'<path d="M12 20.5S3.5 15 3.5 9.4A4.7 4.7 0 0 1 12 6.5a4.7 4.7 0 0 1 8.5 2.9c0 5.6-8.5 11.1-8.5 11.1Z"/>',
+game:'<path d="M7 8h10a5 5 0 0 1 5 5v.6A4.4 4.4 0 0 1 17.6 18c-1.4 0-2.3-.6-3.2-1.3l-.5-.4h-3.8l-.5.4C8.7 17.4 7.8 18 6.4 18A4.4 4.4 0 0 1 2 13.6V13a5 5 0 0 1 5-5Z"/><path d="M7 11.4v2.6M5.7 12.7h2.6M16.2 12h.01M18.4 14h.01"/>',
+tv:'<rect x="2.5" y="5.5" width="19" height="13" rx="2.6"/><path d="m8 2.5 4 3 4-3"/><path d="M9 21.5h6"/>',
+globe:'<circle cx="12" cy="12" r="9.2"/><path d="M3 12h18M12 2.8c2.6 2.7 3.9 6 3.9 9.2S14.6 18.5 12 21.2C9.4 18.5 8.1 15.2 8.1 12S9.4 5.5 12 2.8Z"/>',
+card:'<rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19M6 15h3.5"/>',
+shield:'<path d="M12 2.8 4.8 6v6c0 4.4 3 7.6 7.2 9.2 4.2-1.6 7.2-4.8 7.2-9.2V6L12 2.8Z"/><path d="m9 12 2.2 2.2L15.4 10"/>',
+mosque:'<path d="M12 2.5c2.6 2 3.6 3.4 3.6 5H8.4c0-1.6 1-3 3.6-5Z"/><path d="M4.5 21V12a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v9"/><path d="M3.5 21h17M10 21v-3.6a2 2 0 0 1 4 0V21"/>',
+building:'<rect x="4" y="3" width="16" height="18" rx="2.4"/><path d="M8.5 7.5h2M13.5 7.5h2M8.5 11.5h2M13.5 11.5h2M9.8 21v-4.2h4.4V21"/>',
+car:'<path d="M4 15.5h16M6.5 15.5v2.3M17.5 15.5v2.3"/><path d="m4.8 15.5 1.7-6a2.5 2.5 0 0 1 2.4-1.8h6.2a2.5 2.5 0 0 1 2.4 1.8l1.7 6"/>',
+play:'<circle cx="12" cy="12" r="9.2"/><path d="m10 8.4 6 3.6-6 3.6Z"/>',
+gift:'<rect x="3" y="8" width="18" height="4" rx="1.2"/><path d="M5 12v8.6h14V12M12 8v12.6"/><path d="M12 8S10.6 3.6 8.1 4.5 9.6 8 12 8Zm0 0s1.4-4.4 3.9-3.5S14.4 8 12 8Z"/>',
+chevR:'<path d="m9 5 7 7-7 7"/>', chevL:'<path d="m15 5-7 7 7 7"/>', chevD:'<path d="m5 9 7 7 7-7"/>',
+search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/>',
+copy:'<rect x="8" y="8" width="13" height="13" rx="2.6"/><path d="M16 5.6A2.6 2.6 0 0 0 13.4 3H5.6A2.6 2.6 0 0 0 3 5.6v7.8A2.6 2.6 0 0 0 5.6 16"/>',
+share:'<circle cx="18" cy="5" r="2.7"/><circle cx="6" cy="12" r="2.7"/><circle cx="18" cy="19" r="2.7"/><path d="m8.4 10.7 7.2-4.2M8.4 13.3l7.2 4.2"/>',
+download:'<path d="M12 3v12M7.5 10.5 12 15l4.5-4.5"/><path d="M4 20h16"/>',
+check:'<path d="m4.5 12.5 5 5 10-11"/>', x:'<path d="M6 6 18 18M18 6 6 18"/>',
+lock:'<rect x="4.5" y="10" width="15" height="11" rx="2.6"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10"/>',
+settings:'<circle cx="12" cy="12" r="3.2"/><path d="M19.5 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1v.3a2 2 0 1 1-4 0v-.2a1.6 1.6 0 0 0-2.8-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.7 14H3.4a2 2 0 1 1 0-4h.2a1.6 1.6 0 0 0 1.1-2.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1h.3a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.3 1Z"/>',
+help:'<circle cx="12" cy="12" r="9.2"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.9.7c0 1.7-2.5 2.5-2.5 2.5"/><path d="M12 17h.01"/>',
+logout:'<path d="M9 21H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h3"/><path d="M16 16.5 20.5 12 16 7.5M20.5 12H9"/>',
+eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/>',
+eyeOff:'<path d="M3 3l18 18"/><path d="M10.6 6.1A9.7 9.7 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3.3 4M6.2 8.3A17.5 17.5 0 0 0 2.5 12S6 18 12 18a9.6 9.6 0 0 0 3.6-.7"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>',
+ticket:'<path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h13A1.5 1.5 0 0 1 20 7.5v2a2.5 2.5 0 0 0 0 5v2a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 16.5v-2a2.5 2.5 0 0 0 0-5Z"/><path d="M13 6.5v11"/>',
+clock:'<circle cx="12" cy="12" r="9.2"/><path d="M12 6.8v5.5l3.4 2"/>',
+arrowLeft:'<path d="M20 12H4M10 6l-6 6 6 6"/>', arrowUp:'<path d="M12 20V5M6 11l6-6 6 6"/>', arrowDown:'<path d="M12 4v15M6 13l6 6 6-6"/>',
+trend:'<path d="M3 17 9.5 10.5l4 4L21 7"/><path d="M15 7h6v6"/>',
+sparkles:'<path d="m12 3 1.8 4.8L18.5 9.6l-4.7 1.8L12 16.2l-1.8-4.8-4.7-1.8 4.7-1.8Z"/><path d="M18.4 15.4l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9Z"/>',
+camera:'<path d="M4 8h3l1.6-2.2h6.8L17 8h3a1.6 1.6 0 0 1 1.6 1.6v8.8A1.6 1.6 0 0 1 20 20H4a1.6 1.6 0 0 1-1.6-1.6V9.6A1.6 1.6 0 0 1 4 8Z"/><circle cx="12" cy="13.6" r="3.4"/>',
+bank:'<path d="M3.4 9.5 12 4l8.6 5.5"/><path d="M5.6 10.6v8M9.8 10.6v8M14.2 10.6v8M18.4 10.6v8M3 20.6h18"/>',
+grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>',
+info:'<circle cx="12" cy="12" r="9.2"/><path d="M12 11v5.2M12 7.8h.01"/>',
+alert:'<path d="M12 3.5 2.8 19.5h18.4Z"/><path d="M12 10v4M12 17h.01"/>',
+crown:'<path d="M3 7.5 7.2 12 12 4.8 16.8 12 21 7.5l-1.6 11H4.6Z"/><path d="M4.6 21h14.8"/>',
+refresh:'<path d="M20.4 11.5a8.5 8.5 0 1 0-.7 4.3"/><path d="M20.5 4.5v7h-6.5"/>',
+edit:'<path d="M4 20h4L20 8l-4-4L4 16Z"/><path d="m14.6 5.4 4 4"/>',
+phone:'<path d="M7 3.5h3l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 5.5 5.7 2 2 0 0 1 7 3.5Z"/>',
+mail:'<rect x="2.5" y="5" width="19" height="14" rx="2.6"/><path d="m3.5 7 8.5 6 8.5-6"/>',
+moon:'<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+book:'<path d="M4 4.5A2 2 0 0 1 6 2.5h13v17H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 1 6 17.5h13"/>',
+users:'<circle cx="9" cy="8" r="3.6"/><path d="M2.5 20.5c1.3-3.2 3.7-4.8 6.5-4.8s5.2 1.6 6.5 4.8"/><path d="M16.5 4.8a3.6 3.6 0 0 1 0 6.9M17.5 15.9c2 .6 3.4 2 4.2 4.1"/>',
+}
+const ic=(n,cls='w-5 h-5',sw=1.8)=>`<svg viewBox="0 0 24 24" class="${cls}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]||''}</svg>`;
+
+/* ==================== UTILS ==================== */
+const $=s=>document.querySelector(s);
+const rp=n=>'Rp'+Math.round(n).toLocaleString('id-ID');
+const rpShort=n=> n>=1000000? 'Rp'+(n/1000000).toFixed(n%1000000?1:0)+'jt' : n>=1000? 'Rp'+(n/1000)+'rb' : rp(n);
+const uid=()=>Math.random().toString(36).slice(2,9);
+const ref=()=>'PN'+Date.now().toString().slice(-8)+Math.floor(Math.random()*90+10);
+const pad=n=>String(n).padStart(2,'0');
+const MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const MONL=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const dt=s=>new Date(s);
+const fDate=s=>{const d=dt(s);return `${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}`};
+const fTime=s=>{const d=dt(s);return `${pad(d.getHours())}:${pad(d.getMinutes())} WIB`};
+const isSameDay=(a,b)=>a.toDateString()===b.toDateString();
+function dayLabel(s){const d=dt(s),n=new Date(),y=new Date(Date.now()-864e5);
+  if(isSameDay(d,n))return 'Hari Ini'; if(isSameDay(d,y))return 'Kemarin'; return fDate(s);}
+function seedRand(str){let h=2166136261;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),16777619);}
+  return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^h>>>16)>>>0)/4294967296;};}
+const FIRST=['BUDI','SITI','AGUS','DEWI','RIZKY','ANDI','NURUL','JOKO','LINDA','FAJAR','MAYA','HENDRA','RATNA','TAUFIK','SARI'];
+const LAST=['SANTOSO','WIJAYA','PRATAMA','LESTARI','NUGROHO','HALIM','SAPUTRA','ANGGRAINI','KUSUMA','RAHAYU'];
+function custName(no){const r=seedRand('n'+no);return FIRST[Math.floor(r()*FIRST.length)]+' '+LAST[Math.floor(r()*LAST.length)];}
+function toast(msg,type='info'){
+  const c={info:'#4f46e5',success:'#10b981',error:'#ef4444',warn:'#f59e0b'}[type];
+  const i={info:'info',success:'check',error:'alert',warn:'alert'}[type];
+  const el=document.createElement('div');
+  el.className='toast pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl text-white text-sm font-semibold shadow-xl max-w-[420px] w-full';
+  el.style.background=c; el.innerHTML=ic(i,'w-5 h-5 shrink-0')+`<span>${msg}</span>`;
+  $('#toasts').appendChild(el);
+  setTimeout(()=>{el.style.transition='.3s';el.style.opacity='0';el.style.transform='translateY(-12px)';setTimeout(()=>el.remove(),320);},2400);
+}
+function copyText(t,m='Disalin ke clipboard'){navigator.clipboard?.writeText(t).then(()=>toast(m,'success')).catch(()=>toast('Gagal menyalin','error'));}
+
+/* ==================== KATALOG LAYANAN ==================== */
+const nom=(list,fee=0,subFn)=>list.map(v=>({name:'Rp '+v.toLocaleString('id-ID'),price:v+fee,val:v,sub:subFn?subFn(v):''}));
+const OPS={'0811':'Telkomsel','0812':'Telkomsel','0813':'Telkomsel','0821':'Telkomsel','0822':'Telkomsel','0852':'Telkomsel','0853':'Telkomsel','0851':'Telkomsel',
+'0814':'Indosat','0815':'Indosat','0816':'Indosat','0855':'Indosat','0856':'Indosat','0857':'Indosat','0858':'Indosat',
+'0817':'XL','0818':'XL','0819':'XL','0859':'XL','0877':'XL','0878':'XL',
+'0895':'Tri','0896':'Tri','0897':'Tri','0898':'Tri','0899':'Tri','0881':'Smartfren','0882':'Smartfren','0883':'Smartfren','0885':'Smartfren','0887':'Smartfren','0888':'Smartfren'};
+const detectOp=n=>OPS[(n||'').replace(/\D/g,'').slice(0,4)]||'';
+
+const SERVICES=[
+{id:'pulsa',name:'Pulsa',cat:'isi',icon:'smartphone',c1:'#6366f1',c2:'#3b82f6',type:'pre',op:true,
+ field:{label:'Nomor Handphone',ph:'0812 3456 7890',type:'tel'},admin:0,
+ products:[5000,10000,15000,20000,25000,50000,100000,150000].map(v=>({name:'Pulsa '+rpShort(v).replace('Rp',''),val:v,price:v+(v<=25000?1500:v<=50000?1000:-1500),sub:'Aktif 30 hari'}))},
+{id:'data',name:'Paket Data',cat:'isi',icon:'wifi',c1:'#06b6d4',c2:'#3b82f6',type:'pre',op:true,
+ field:{label:'Nomor Handphone',ph:'0812 3456 7890',type:'tel'},admin:0,
+ products:[{name:'Combo Sakti 3GB',price:25000,sub:'30 hari · All network'},{name:'Combo Sakti 8GB',price:55000,sub:'30 hari · All network'},
+ {name:'Internet 15GB',price:78000,sub:'30 hari + 5GB malam'},{name:'Internet 25GB',price:105000,sub:'30 hari · Nasional'},
+ {name:'Unlimited Lite',price:60000,sub:'30 hari · FUP 2Mbps'},{name:'Harian 2GB',price:12000,sub:'3 hari'}]},
+{id:'pln',name:'Token Listrik',cat:'isi',icon:'zap',c1:'#f59e0b',c2:'#ef4444',type:'pre',lookup:true,
+ field:{label:'Nomor Meter / ID Pelanggan',ph:'14 digit nomor meter',type:'tel'},admin:1500,
+ products:nom([20000,50000,100000,200000,500000,1000000],0,v=>'± '+Math.round(v/1444.7)+' kWh')},
+{id:'emoney',name:'E-Money',cat:'isi',icon:'wallet',c1:'#10b981',c2:'#059669',type:'pre',
+ providers:['GoPay','OVO','DANA','ShopeePay','LinkAja','e-Toll Mandiri','BRIZZI'],
+ field:{label:'Nomor HP / Kartu Terdaftar',ph:'0812 3456 7890',type:'tel'},admin:1000,
+ products:nom([20000,50000,100000,200000,300000,500000])},
+{id:'game',name:'Voucher Game',cat:'hib',icon:'game',c1:'#a855f7',c2:'#ec4899',type:'pre',
+ providers:['Mobile Legends','Free Fire','PUBG Mobile','Genshin Impact','Valorant','Roblox'],
+ field:{label:'User ID (Server)',ph:'contoh: 12345678 (2201)',type:'text'},admin:0,
+ productsBy:{'Mobile Legends':[{name:'86 Diamonds',price:21000},{name:'172 Diamonds',price:41000},{name:'257 Diamonds',price:60000},{name:'706 Diamonds',price:158000}],
+ 'Free Fire':[{name:'70 Diamonds',price:10000},{name:'140 Diamonds',price:19500},{name:'355 Diamonds',price:48000},{name:'720 Diamonds',price:95000}],
+ 'PUBG Mobile':[{name:'60 UC',price:15000},{name:'325 UC',price:74000},{name:'660 UC',price:145000}],
+ 'Genshin Impact':[{name:'60 Genesis',price:16000},{name:'330 Genesis',price:79000},{name:'1090 Genesis',price:245000}],
+ 'Valorant':[{name:'125 Points',price:15000},{name:'420 Points',price:49000},{name:'700 Points',price:79000}],
+ 'Roblox':[{name:'80 Robux',price:16000},{name:'400 Robux',price:75000},{name:'800 Robux',price:148000}]}},
+{id:'plnpasca',name:'PLN Pascabayar',cat:'tag',icon:'zap',c1:'#f97316',c2:'#f59e0b',type:'post',
+ field:{label:'ID Pelanggan',ph:'12 digit ID pelanggan',type:'tel'},admin:2500,billRange:[85000,650000],billLabel:'Tagihan Listrik'},
+{id:'pdam',name:'PDAM',cat:'tag',icon:'droplet',c1:'#0ea5e9',c2:'#2563eb',type:'post',
+ providers:['PDAM Jakarta','PDAM Surabaya','PDAM Bandung','PDAM Semarang','PDAM Medan'],
+ field:{label:'Nomor Pelanggan',ph:'Masukkan nomor pelanggan',type:'tel'},admin:2500,billRange:[45000,320000],billLabel:'Tagihan Air'},
+{id:'bpjs',name:'BPJS Kesehatan',cat:'tag',icon:'heart',c1:'#22c55e',c2:'#16a34a',type:'post',
+ field:{label:'Nomor Kartu BPJS',ph:'13 digit nomor kartu',type:'tel'},admin:2500,billRange:[42000,350000],billLabel:'Iuran BPJS'},
+{id:'internet',name:'Internet & TV',cat:'tag',icon:'globe',c1:'#6366f1',c2:'#8b5cf6',type:'post',
+ providers:['IndiHome','First Media','Biznet Home','MyRepublic','MNC Vision'],
+ field:{label:'Nomor Pelanggan',ph:'Masukkan nomor pelanggan',type:'tel'},admin:2500,billRange:[199000,750000],billLabel:'Tagihan Bulanan'},
+{id:'telkom',name:'Telkom',cat:'tag',icon:'phone',c1:'#ef4444',c2:'#f43f5e',type:'post',
+ field:{label:'Nomor Telepon Rumah',ph:'contoh: 0217xxxxxx',type:'tel'},admin:2500,billRange:[85000,260000],billLabel:'Tagihan Telepon'},
+{id:'multifinance',name:'Cicilan Kredit',cat:'tag',icon:'card',c1:'#8b5cf6',c2:'#6366f1',type:'post',
+ providers:['FIF Group','Adira Finance','BAF','WOM Finance','Home Credit','Kredivo'],
+ field:{label:'Nomor Kontrak',ph:'Masukkan nomor kontrak',type:'tel'},admin:3500,billRange:[350000,2500000],billLabel:'Angsuran ke-'},
+{id:'pascabayar',name:'HP Pascabayar',cat:'tag',icon:'smartphone',c1:'#0891b2',c2:'#06b6d4',type:'post',
+ field:{label:'Nomor Handphone',ph:'0812 3456 7890',type:'tel'},admin:2000,billRange:[95000,480000],billLabel:'Tagihan Halo'},
+{id:'pbb',name:'Pajak PBB',cat:'tag',icon:'building',c1:'#14b8a6',c2:'#0d9488',type:'post',
+ field:{label:'Nomor Objek Pajak (NOP)',ph:'18 digit NOP',type:'tel'},admin:2500,billRange:[120000,1800000],billLabel:'PBB Tahun 2026'},
+{id:'esamsat',name:'Pajak Kendaraan',cat:'tag',icon:'car',c1:'#64748b',c2:'#334155',type:'post',
+ field:{label:'Nomor Polisi',ph:'contoh: B1234ABC',type:'text'},admin:5000,billRange:[280000,3200000],billLabel:'PKB Tahunan'},
+{id:'asuransi',name:'Asuransi',cat:'tag',icon:'shield',c1:'#0284c7',c2:'#0ea5e9',type:'post',
+ providers:['Prudential','Allianz','AXA Mandiri','Sinarmas MSIG','BPJS TK'],
+ field:{label:'Nomor Polis',ph:'Masukkan nomor polis',type:'tel'},admin:2500,billRange:[250000,1500000],billLabel:'Premi Bulanan'},
+{id:'streaming',name:'Streaming',cat:'hib',icon:'play',c1:'#e11d48',c2:'#f43f5e',type:'pre',
+ field:{label:'Email Akun',ph:'nama@email.com',type:'text'},admin:0,
+ products:[{name:'Netflix Mobile',price:54000,sub:'1 bulan'},{name:'Netflix Standard',price:120000,sub:'1 bulan'},{name:'Spotify Premium',price:54990,sub:'1 bulan'},
+ {name:'Disney+ Hotstar',price:39000,sub:'1 bulan'},{name:'Vidio Platinum',price:49000,sub:'1 bulan'},{name:'YouTube Premium',price:59000,sub:'1 bulan'}]},
+{id:'voucher',name:'Voucher Belanja',cat:'hib',icon:'ticket',c1:'#f59e0b',c2:'#f97316',type:'pre',
+ providers:['Google Play','Steam Wallet','Alfamart','Indomaret'],
+ field:{label:'Nomor HP Penerima',ph:'0812 3456 7890',type:'tel'},admin:0,
+ products:nom([25000,50000,100000,200000],500)},
+{id:'zakat',name:'Zakat & Donasi',cat:'hib',icon:'mosque',c1:'#059669',c2:'#10b981',type:'pre',free:true,
+ providers:['Zakat Maal','Zakat Fitrah','Infaq','Donasi Kemanusiaan','Wakaf'],
+ field:{label:'Nama Donatur',ph:'Nama Anda / Hamba Allah',type:'text'},admin:0,
+ products:nom([25000,50000,100000,250000,500000,1000000])},
+];
+const SV=Object.fromEntries(SERVICES.map(s=>[s.id,s]));
+const CATS=[{id:'isi',n:'Isi Ulang'},{id:'tag',n:'Tagihan Rutin'},{id:'hib',n:'Hiburan & Lainnya'}];
+const HOME_TILES=['pulsa','data','pln','bpjs','emoney','game','plnpasca','__more'];
+const BANKS=['BCA','Mandiri','BNI','BRI','CIMB Niaga','Permata','BSI','Danamon','GoPay','OVO','DANA'];
+
+/* ==================== STATE ==================== */
+const KEY='paynusa_v1';
+function seedTx(){
+  const T=[
+    ['pulsa','Pulsa Telkomsel 50.000','081234567890',50500,'success',0.3],
+    ['pln','Token Listrik 100.000','14022119887',101500,'success',1.2],
+    ['emoney','Top Up GoPay 100.000','081234567890',101000,'success',2.1],
+    ['bpjs','BPJS Kesehatan Kelas 1','0001234567890',153500,'success',4.4],
+    ['game','Mobile Legends 172 Diamonds','12345678 (2201)',41000,'success',6.2],
+    ['data','Combo Sakti 8GB','081234567890',55000,'failed',8.1],
+    ['plnpasca','Tagihan Listrik Februari','520011223344',287500,'success',10.5],
+    ['internet','IndiHome Paket 2P','122334455',352500,'success',13.2],
+    ['streaming','Netflix Standard','budi@email.com',120000,'success',17.6],
+    ['pdam','PDAM Jakarta','8811223',96500,'pending',21.3],
+    ['multifinance','Adira Finance Angsuran ke-7','9908877665',1253500,'success',25.8],
+    ['pulsa','Pulsa Telkomsel 25.000','081298765432',25800,'success',29.4],
+  ];
+  return T.map(([sid,prod,cust,total,status,days])=>({
+    id:uid(),ref:ref(),sid,serviceName:SV[sid].name,product:prod,customer:cust,customerName:custName(cust),
+    amount:total-(SV[sid].admin||0),admin:SV[sid].admin||0,discount:0,total,method:'Saldo PayNusa',status,
+    date:new Date(Date.now()-days*864e5).toISOString(),token:sid==='pln'?'4411 2233 8877 0099 1122':null
+  }));
+}
+const DEFAULT={
+  user:{name:'Budi Santoso',phone:'0812 3456 7890',email:'budi.santoso@email.com',address:'Jakarta Selatan',since:'2023',verified:true},
+  balance:1250000,points:3480,pin:'123456',
+  settings:{dark:false,hideBalance:false,notif:true,promoNotif:true,biometric:false},
+  vouchers:[
+    {code:'HEMAT10',title:'Diskon 10% Pulsa & Data',desc:'Maks. potongan Rp10.000',type:'pct',val:10,max:10000,min:20000,svc:['pulsa','data'],exp:'31 Des 2026',claimed:true,used:false},
+    {code:'LISTRIK5',title:'Cashback Rp5.000 Token Listrik',desc:'Min. transaksi Rp50.000',type:'flat',val:5000,max:5000,min:50000,svc:['pln','plnpasca'],exp:'30 Jun 2026',claimed:false,used:false},
+    {code:'GAMEON15',title:'Diskon Rp15.000 Voucher Game',desc:'Min. transaksi Rp50.000',type:'flat',val:15000,max:15000,min:50000,svc:['game'],exp:'31 Jul 2026',claimed:false,used:false},
+    {code:'TAGIHAN3',title:'Potongan Admin Tagihan',desc:'Berlaku semua tagihan rutin',type:'flat',val:2500,max:2500,min:0,svc:['plnpasca','pdam','bpjs','internet','telkom','pascabayar','multifinance','pbb','esamsat','asuransi'],exp:'31 Agu 2026',claimed:false,used:false},
+    {code:'NEWUSER25',title:'Cashback Rp25.000 Semua Layanan',desc:'Min. transaksi Rp100.000',type:'flat',val:25000,max:25000,min:100000,svc:[],exp:'31 Mar 2026',claimed:false,used:false},
+  ],
+  notifs:[
+    {id:uid(),title:'Transaksi Berhasil',body:'Pembelian Pulsa Telkomsel Rp50.000 berhasil.',time:new Date(Date.now()-0.3*864e5).toISOString(),read:false,type:'success'},
+    {id:uid(),title:'Promo Spesial Akhir Pekan 🎉',body:'Diskon 10% untuk semua paket data. Klaim sekarang!',time:new Date(Date.now()-1.1*864e5).toISOString(),read:false,type:'promo'},
+    {id:uid(),title:'Tagihan Listrik Menunggu',body:'Tagihan PLN Anda jatuh tempo 5 hari lagi.',time:new Date(Date.now()-2.4*864e5).toISOString(),read:true,type:'warn'},
+    {id:uid(),title:'Top Up Saldo Berhasil',body:'Saldo Rp500.000 telah masuk ke akun Anda.',time:new Date(Date.now()-3.2*864e5).toISOString(),read:true,type:'success'},
+  ],
+  contacts:[{n:'081234567890',l:'Nomor Saya'},{n:'081298765432',l:'Ibu'},{n:'085711223344',l:'Adik'},{n:'081377889900',l:'Kantor'}],
+  tx:seedTx(),tab:'home',loggedIn:true
+};
+let S=load();
+function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);return{...DEFAULT,...p,settings:{...DEFAULT.settings,...(p.settings||{})},user:{...DEFAULT.user,...(p.user||{})}};}}catch(e){}return JSON.parse(JSON.stringify(DEFAULT));}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function applyTheme(){document.documentElement.classList.toggle('dark',!!S.settings.dark);}
+
+/* ==================== FLOW STATE ==================== */
+let F={}; let sheetStack=[]; let vaTimer=null;
+
+/* ==================== SHEETS ==================== */
+function openSheet(id,{title='',sub='',body='',noPad=false,dark=false,full=false}={}){
+  closeSheet(id,true);
+  const w=document.createElement('div'); w.className='sheet-wrap'; w.id='sh-'+id;
+  w.innerHTML=`<div class="sheet-bd" onclick="app.closeSheet('${id}')"></div>
+  <div class="sheet-panel" style="${dark?'background:#0b1020;color:#fff;':''}${full?'height:93dvh;':''}">
+    <div class="pt-2.5 pb-1 flex justify-center shrink-0"><div class="w-11 h-1.5 rounded-full" style="background:var(--border)"></div></div>
+    ${title?`<div class="px-5 pt-1.5 pb-3 flex items-start justify-between gap-3 shrink-0">
+      <div><h3 class="font-extrabold text-lg leading-tight">${title}</h3>${sub?`<p class="text-xs muted mt-0.5 font-medium" ${dark?'style="color:#94a3b8"':''}>${sub}</p>`:''}</div>
+      <button onclick="app.closeSheet('${id}')" class="press w-9 h-9 rounded-full grid place-items-center shrink-0" style="background:var(--surface-2)">${ic('x','w-4.5 h-4.5','2.2')}</button>
+    </div>`:''}
+    <div class="sheet-body ${noPad?'':'px-5'}" id="body-${id}">${body}</div>
+  </div>`;
+  $('#sheets').appendChild(w); sheetStack.push(id);
+  requestAnimationFrame(()=>w.classList.add('open'));
+  return w;
+}
+function setBody(id,html){const b=document.getElementById('body-'+id); if(b)b.innerHTML=html;}
+function closeSheet(id,instant){
+  const w=document.getElementById('sh-'+id); if(!w)return;
+  sheetStack=sheetStack.filter(x=>x!==id);
+  if(instant){w.remove();return;}
+  w.classList.remove('open'); setTimeout(()=>w.remove(),320);
+}
+function closeAllSheets(){[...sheetStack].forEach(id=>closeSheet(id));sheetStack=[];}
+
+/* ==================== VIEWS ==================== */
+function greeting(){const h=new Date().getHours();return h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';}
+function tier(){return S.points>=5000?{n:'Platinum',c:'#8b5cf6'}:S.points>=2000?{n:'Gold',c:'#f59e0b'}:{n:'Silver',c:'#64748b'};}
+const initials=n=>n.split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase();
+
+function tile(sid){
+  if(sid==='__more')return `<button onclick="app.openAllServices()" class="press flex flex-col items-center gap-2">
+    <div class="w-14 h-14 rounded-2xl grid place-items-center" style="background:var(--surface-3);color:var(--primary)">${ic('grid','w-6 h-6')}</div>
+    <span class="text-[11px] font-bold txt leading-tight text-center">Lainnya</span></button>`;
+  const s=SV[sid];
+  return `<button onclick="app.openService('${s.id}')" class="press flex flex-col items-center gap-2">
+    <div class="w-14 h-14 rounded-2xl grid place-items-center text-white shadow-md" style="background:linear-gradient(135deg,${s.c1},${s.c2});box-shadow:0 8px 18px -8px ${s.c1}cc">${ic(s.icon,'w-6 h-6')}</div>
+    <span class="text-[11px] font-bold txt leading-tight text-center">${s.name}</span></button>`;
+}
+function statusPill(st){
+  const m={success:['Berhasil','#10b981'],pending:['Menunggu','#f59e0b'],failed:['Gagal','#ef4444']}[st];
+  return `<span class="text-[10.5px] font-extrabold px-2 py-0.5 rounded-full" style="background:${m[1]}1f;color:${m[1]}">${m[0]}</span>`;
+}
+function txRow(t){
+  const s=SV[t.sid]||{icon:'receipt',c1:'#64748b',c2:'#475569',name:t.serviceName};
+  return `<button onclick="app.openTxDetail('${t.id}')" class="press w-full flex items-center gap-3 py-3 text-left">
+    <div class="w-11 h-11 rounded-xl grid place-items-center text-white shrink-0" style="background:linear-gradient(135deg,${s.c1},${s.c2})">${ic(s.icon,'w-5 h-5')}</div>
+    <div class="flex-1 min-w-0">
+      <p class="text-[13.5px] font-bold txt truncate">${t.product}</p>
+      <p class="text-[11.5px] muted font-medium truncate">${fDate(t.date)} · ${fTime(t.date)}</p>
+    </div>
+    <div class="text-right shrink-0">
+      <p class="text-[13.5px] font-extrabold txt">-${rp(t.total)}</p>
+      <div class="mt-0.5">${statusPill(t.status)}</div>
+    </div></button>`;
+}
+
+/* -------- HOME -------- */
+function viewHome(){
+  const unread=S.notifs.filter(n=>!n.read).length;
+  const t=tier(); const recent=[...S.tx].sort((a,b)=>dt(b.date)-dt(a.date)).slice(0,4);
+  const promos=[
+    {t:'Diskon 10%',s:'Semua paket data',c1:'#4f46e5',c2:'#7c3aed',e:'📶'},
+    {t:'Cashback 5rb',s:'Token listrik PLN',c1:'#f59e0b',c2:'#ef4444',e:'⚡'},
+    {t:'Gratis Admin',s:'Bayar semua tagihan',c1:'#0ea5e9',c2:'#22c55e',e:'🧾'},
+  ];
+  return `<div class="fade-in">
+  <div class="grad rounded-b-[2rem] px-5 pt-[calc(1rem+env(safe-area-inset-top))] pb-24 relative overflow-hidden">
+    <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-white/10"></div>
+    <div class="absolute -left-14 top-16 w-40 h-40 rounded-full bg-white/5"></div>
+    <div class="relative flex items-center gap-3">
+      <button onclick="app.go('profile')" class="press w-11 h-11 rounded-2xl bg-white/20 backdrop-blur grid place-items-center text-white font-extrabold border border-white/30">${initials(S.user.name)}</button>
+      <div class="flex-1 min-w-0">
+        <p class="text-white/80 text-[11.5px] font-semibold">${greeting()},</p>
+        <p class="text-white font-extrabold text-[15px] truncate">${S.user.name}</p>
+      </div>
+      <button onclick="app.openNotif()" class="press relative w-11 h-11 rounded-2xl bg-white/20 backdrop-blur grid place-items-center text-white border border-white/30">
+        ${ic('bell','w-5 h-5')}${unread?`<span class="absolute top-2 right-2.5 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-white/70"></span>`:''}
+      </button>
+    </div>
+    <div class="relative mt-5 flex items-center gap-2">
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur border border-white/25">
+        ${ic('crown','w-3.5 h-3.5 text-amber-300')}<span class="text-white text-[11px] font-extrabold">Member ${t.n}</span>
+      </div>
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur border border-white/25">
+        ${ic('sparkles','w-3.5 h-3.5 text-amber-300')}<span class="text-white text-[11px] font-extrabold">${S.points.toLocaleString('id-ID')} Poin</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-4 -mt-16 relative z-10">
+    <div class="card p-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-[11.5px] muted font-bold">Saldo PayNusa</p>
+          <div class="flex items-center gap-2 mt-0.5">
+            <p class="text-[26px] font-extrabold txt leading-none">${S.settings.hideBalance?'Rp • • • • • •':rp(S.balance)}</p>
+            <button onclick="app.toggleBalance()" class="press muted">${ic(S.settings.hideBalance?'eyeOff':'eye','w-4.5 h-4.5')}</button>
+          </div>
+        </div>
+        <button onclick="app.openTopup()" class="press flex items-center gap-1 px-3 py-2 rounded-xl text-white text-xs font-extrabold" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">${ic('plus','w-4 h-4','2.6')} Top Up</button>
+      </div>
+      <div class="dash my-3.5"></div>
+      <div class="grid grid-cols-4 gap-1">
+        ${[['send','Transfer','openTransfer'],['cash','Tarik Tunai','openTarik'],['qr','Bayar QRIS','openQris'],['receipt','Riwayat','goHistory']].map(([i,l,fn])=>`
+        <button onclick="app.${fn}()" class="press flex flex-col items-center gap-1.5 py-1">
+          <div class="w-10 h-10 rounded-xl grid place-items-center" style="background:var(--surface-3);color:var(--primary)">${ic(i,'w-5 h-5')}</div>
+          <span class="text-[10.5px] font-bold txt">${l}</span></button>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="px-4 mt-5">
+    <button onclick="app.openAllServices()" class="press w-full flex items-center gap-2.5 px-4 py-3 rounded-2xl surface bd border" >
+      ${ic('search','w-4.5 h-4.5 muted')}<span class="text-[13px] muted font-semibold">Cari layanan, tagihan, atau produk...</span>
+    </button>
+  </div>
+
+  <div class="px-4 mt-5">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-extrabold txt text-[15px]">Layanan Populer</h2>
+      <button onclick="app.openAllServices()" class="press text-[12px] font-extrabold" style="color:var(--primary)">Lihat Semua</button>
+    </div>
+    <div class="card p-4 grid grid-cols-4 gap-y-4 gap-x-1">${HOME_TILES.map(tile).join('')}</div>
+  </div>
+
+  <div class="mt-5">
+    <div class="px-4 flex items-center justify-between mb-3">
+      <h2 class="font-extrabold txt text-[15px]">Promo Untukmu</h2>
+      <button onclick="app.go('promo')" class="press text-[12px] font-extrabold" style="color:var(--primary)">Semua Promo</button>
+    </div>
+    <div class="flex gap-3 overflow-x-auto no-sb px-4 pb-1 snap-x">
+      ${promos.map(p=>`<button onclick="app.go('promo')" class="press snap-start shrink-0 w-[250px] h-[112px] rounded-2xl p-4 text-left text-white relative overflow-hidden" style="background:linear-gradient(120deg,${p.c1},${p.c2})">
+        <div class="absolute -right-4 -bottom-6 text-[76px] opacity-25 leading-none">${p.e}</div>
+        <p class="text-[10.5px] font-bold bg-white/25 inline-block px-2 py-0.5 rounded-full backdrop-blur">PROMO</p>
+        <p class="font-extrabold text-xl mt-1.5 leading-none">${p.t}</p>
+        <p class="text-[12px] text-white/85 font-semibold mt-1">${p.s}</p></button>`).join('')}
+    </div>
+  </div>
+
+  <div class="px-4 mt-5">
+    <div class="flex items-center justify-between mb-1">
+      <h2 class="font-extrabold txt text-[15px]">Transaksi Terakhir</h2>
+      <button onclick="app.goHistory()" class="press text-[12px] font-extrabold" style="color:var(--primary)">Lihat Semua</button>
+    </div>
+    <div class="card px-4 py-1 divide-y" style="border-color:var(--border)">
+      ${recent.length?recent.map(txRow).join(''):`<p class="py-8 text-center text-sm muted font-semibold">Belum ada transaksi</p>`}
+    </div>
+  </div>
+
+  <div class="px-4 mt-5">
+    <div class="card p-4 flex items-center gap-3" style="background:linear-gradient(120deg,rgba(79,70,229,.09),rgba(168,85,247,.09))">
+      <div class="w-11 h-11 rounded-xl grad grid place-items-center text-white shrink-0">${ic('users','w-5 h-5')}</div>
+      <div class="flex-1"><p class="font-extrabold text-[13.5px] txt">Ajak Teman, Dapat Rp25.000</p>
+      <p class="text-[11.5px] muted font-medium">Bagikan kode <b class="txt">BUDI2026</b> ke temanmu</p></div>
+      <button onclick="app.copy('BUDI2026','Kode referral disalin!')" class="press px-3 py-2 rounded-xl text-white text-[11.5px] font-extrabold grad">Bagikan</button>
+    </div>
+  </div>
+  <div class="h-28"></div></div>`;
+}
+
+/* -------- HISTORY -------- */
+let hFilter='all', hQuery='';
+function viewHistory(){
+  const now=new Date();
+  const monthTx=S.tx.filter(t=>dt(t.date).getMonth()===now.getMonth()&&dt(t.date).getFullYear()===now.getFullYear()&&t.status==='success');
+  const spent=monthTx.reduce((a,b)=>a+b.total,0);
+  let list=[...S.tx].sort((a,b)=>dt(b.date)-dt(a.date));
+  if(hFilter!=='all')list=list.filter(t=>t.status===hFilter);
+  if(hQuery)list=list.filter(t=>(t.product+t.customer+t.serviceName+t.ref).toLowerCase().includes(hQuery.toLowerCase()));
+  const groups={};list.forEach(t=>{const k=dayLabel(t.date);(groups[k]=groups[k]||[]).push(t);});
+  const chips=[['all','Semua'],['success','Berhasil'],['pending','Menunggu'],['failed','Gagal']];
+  return `<div class="fade-in">
+    <div class="grad px-5 pt-[calc(1.25rem+env(safe-area-inset-top))] pb-16 rounded-b-[2rem] relative overflow-hidden">
+      <div class="absolute -right-8 -top-12 w-40 h-40 rounded-full bg-white/10"></div>
+      <h1 class="text-white font-extrabold text-xl relative">Riwayat Transaksi</h1>
+      <p class="text-white/80 text-[12.5px] font-medium mt-0.5 relative">Semua aktivitas pembayaran Anda</p>
+    </div>
+    <div class="px-4 -mt-10 relative z-10">
+      <div class="card p-4 grid grid-cols-3 divide-x" style="border-color:var(--border)">
+        <div class="pr-2"><p class="text-[10.5px] muted font-bold">Pengeluaran Bulan Ini</p><p class="font-extrabold txt text-[15px] mt-0.5">${rp(spent)}</p></div>
+        <div class="px-3"><p class="text-[10.5px] muted font-bold">Transaksi</p><p class="font-extrabold txt text-[15px] mt-0.5">${monthTx.length}x</p></div>
+        <div class="pl-3"><p class="text-[10.5px] muted font-bold">Poin Didapat</p><p class="font-extrabold text-[15px] mt-0.5" style="color:var(--accent)">+${Math.floor(spent/1000)}</p></div>
+      </div>
+    </div>
+    <div class="px-4 mt-4">
+      <div class="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl surface border bd">
+        ${ic('search','w-4.5 h-4.5 muted')}
+        <input value="${hQuery}" oninput="app.setSearch(this.value)" placeholder="Cari transaksi atau no. referensi" class="flex-1 bg-transparent outline-none text-[13px] font-semibold txt placeholder:font-medium" style="color:var(--text)">
+        ${hQuery?`<button onclick="app.setSearch('')" class="press muted">${ic('x','w-4 h-4')}</button>`:''}
+      </div>
+      <div class="flex gap-2 mt-3 overflow-x-auto no-sb">
+        ${chips.map(([v,l])=>`<button onclick="app.setFilter('${v}')" class="press chip ${hFilter===v?'on':''}">${l}</button>`).join('')}
+      </div>
+    </div>
+    <div class="px-4 mt-4 space-y-4">
+      ${Object.keys(groups).length?Object.entries(groups).map(([d,items])=>`
+        <div><p class="text-[11.5px] font-extrabold muted mb-1.5 px-1">${d}</p>
+        <div class="card px-4 py-1 divide-y" style="border-color:var(--border)">${items.map(txRow).join('')}</div></div>`).join(''):
+        `<div class="card py-14 grid place-items-center gap-3"><div class="w-16 h-16 rounded-2xl surface-3 grid place-items-center muted">${ic('receipt','w-7 h-7')}</div>
+        <p class="font-bold txt text-sm">Tidak ada transaksi</p><p class="text-xs muted -mt-1.5">Coba ubah filter atau kata kunci</p></div>`}
+    </div><div class="h-28"></div></div>`;
+}
+
+/* -------- PROMO -------- */
+function viewPromo(){
+  const banners=[
+    {t:'Serba Hemat Awal Bulan',s:'Diskon hingga 30% untuk semua tagihan rutin',c1:'#4f46e5',c2:'#7c3aed',e:'🎉'},
+    {t:'Gaming Fest 2026',s:'Bonus diamond & voucher game tiap top up',c1:'#a855f7',c2:'#ec4899',e:'🎮'},
+  ];
+  return `<div class="fade-in">
+    <div class="grad px-5 pt-[calc(1.25rem+env(safe-area-inset-top))] pb-16 rounded-b-[2rem] relative overflow-hidden">
+      <div class="absolute -left-10 -bottom-14 w-44 h-44 rounded-full bg-white/10"></div>
+      <h1 class="text-white font-extrabold text-xl relative">Promo & Voucher</h1>
+      <p class="text-white/80 text-[12.5px] font-medium mt-0.5 relative">Klaim vouchermu, hemat setiap transaksi</p>
+    </div>
+    <div class="px-4 -mt-10 relative z-10 space-y-3">
+      ${banners.map(b=>`<div class="rounded-2xl p-5 text-white relative overflow-hidden shadow-lg" style="background:linear-gradient(120deg,${b.c1},${b.c2})">
+        <div class="absolute -right-5 -bottom-8 text-[92px] opacity-20 leading-none">${b.e}</div>
+        <p class="text-[10.5px] font-bold bg-white/25 inline-block px-2 py-0.5 rounded-full">TERBATAS</p>
+        <p class="font-extrabold text-lg mt-2 leading-tight">${b.t}</p>
+        <p class="text-[12.5px] text-white/85 font-medium mt-1 max-w-[80%]">${b.s}</p></div>`).join('')}
+    </div>
+    <div class="px-4 mt-6">
+      <h2 class="font-extrabold txt text-[15px] mb-3">Voucher Tersedia</h2>
+      <div class="space-y-3">${S.vouchers.map(v=>voucherCard(v)).join('')}</div>
+    </div>
+    <div class="px-4 mt-6">
+      <h2 class="font-extrabold txt text-[15px] mb-3">Tukar Poin</h2>
+      <div class="card p-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl grid place-items-center text-white" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">${ic('sparkles','w-5 h-5')}</div>
+          <div class="flex-1"><p class="font-extrabold txt text-sm">${S.points.toLocaleString('id-ID')} Poin</p><p class="text-[11.5px] muted font-medium">1.000 poin = Rp10.000 saldo</p></div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-4">
+          ${[1000,2500,5000].map(p=>`<button onclick="app.redeem(${p})" class="press prod text-center ${S.points<p?'opacity-40':''}">
+            <p class="font-extrabold txt text-[13px]">${p.toLocaleString('id-ID')}</p><p class="text-[10.5px] muted font-semibold">= ${rp(p*10)}</p></button>`).join('')}
+        </div>
+      </div>
+    </div><div class="h-28"></div></div>`;
+}
+function voucherCard(v){
+  const svcTxt=v.svc.length?v.svc.map(s=>SV[s]?.name).filter(Boolean).slice(0,3).join(', ')+(v.svc.length>3?' +'+(v.svc.length-3):''):'Semua layanan';
+  return `<div class="card overflow-hidden flex ${v.used?'opacity-50':''}">
+    <div class="w-[86px] shrink-0 grid place-items-center text-white relative" style="background:linear-gradient(150deg,#4f46e5,#9333ea)">
+      ${ic('ticket','w-7 h-7')}<span class="absolute bottom-2 text-[9.5px] font-extrabold tracking-wider">VOUCHER</span>
+    </div>
+    <div class="flex-1 p-3.5">
+      <p class="font-extrabold txt text-[13.5px] leading-snug">${v.title}</p>
+      <p class="text-[11.5px] muted font-medium mt-0.5">${v.desc}</p>
+      <p class="text-[10.5px] muted font-semibold mt-1.5">Berlaku: ${svcTxt} · s/d ${v.exp}</p>
+      <div class="flex items-center justify-between mt-2.5">
+        <span class="text-[11px] font-extrabold px-2 py-1 rounded-lg" style="background:var(--surface-3);color:var(--primary)">${v.code}</span>
+        ${v.used?`<span class="text-[11.5px] font-extrabold muted">Terpakai</span>`:
+          v.claimed?`<button onclick="app.useVoucherNow('${v.code}')" class="press text-[11.5px] font-extrabold px-3 py-1.5 rounded-lg" style="background:var(--surface-3);color:var(--primary)">Pakai</button>`:
+          `<button onclick="app.claimVoucher('${v.code}')" class="press text-[11.5px] font-extrabold px-3.5 py-1.5 rounded-lg text-white grad">Klaim</button>`}
+      </div>
+    </div></div>`;
+}
+
+/* -------- PROFILE -------- */
+function viewProfile(){
+  const t=tier(); const total=S.tx.filter(x=>x.status==='success').length;
+  const row=(icn,label,sub,fn,extra='')=>`<button onclick="${fn}" class="press w-full flex items-center gap-3 py-3.5 text-left">
+    <div class="w-9 h-9 rounded-xl grid place-items-center shrink-0" style="background:var(--surface-3);color:var(--primary)">${ic(icn,'w-4.5 h-4.5')}</div>
+    <div class="flex-1 min-w-0"><p class="text-[13.5px] font-bold txt">${label}</p>${sub?`<p class="text-[11px] muted font-medium">${sub}</p>`:''}</div>
+    ${extra||ic('chevR','w-4 h-4 muted','2.4')}</button>`;
+  const toggle=(icn,label,sub,key)=>`<div class="flex items-center gap-3 py-3.5">
+    <div class="w-9 h-9 rounded-xl grid place-items-center shrink-0" style="background:var(--surface-3);color:var(--primary)">${ic(icn,'w-4.5 h-4.5')}</div>
+    <div class="flex-1"><p class="text-[13.5px] font-bold txt">${label}</p>${sub?`<p class="text-[11px] muted font-medium">${sub}</p>`:''}</div>
+    <button onclick="app.toggleSetting('${key}')" class="press w-12 h-7 rounded-full relative transition-colors" style="background:${S.settings[key]?'var(--primary)':'var(--surface-3)'}">
+      <span class="absolute top-1 w-5 h-5 rounded-full bg-white shadow transition-all" style="left:${S.settings[key]?'26px':'4px'}"></span></button></div>`;
+  return `<div class="fade-in">
+    <div class="grad px-5 pt-[calc(1.25rem+env(safe-area-inset-top))] pb-20 rounded-b-[2rem] relative overflow-hidden">
+      <div class="absolute -right-12 -top-10 w-44 h-44 rounded-full bg-white/10"></div>
+      <div class="flex items-center justify-between relative">
+        <h1 class="text-white font-extrabold text-xl">Profil Saya</h1>
+        <button onclick="app.openSheetMenu('settings')" class="press w-10 h-10 rounded-2xl bg-white/20 border border-white/25 grid place-items-center text-white">${ic('settings','w-5 h-5')}</button>
+      </div>
+    </div>
+    <div class="px-4 -mt-14 relative z-10">
+      <div class="card p-4">
+        <div class="flex items-center gap-3.5">
+          <div class="relative">
+            <div class="w-[62px] h-[62px] rounded-2xl grad grid place-items-center text-white font-extrabold text-xl">${initials(S.user.name)}</div>
+            <button onclick="app.openEditProfile()" class="press absolute -bottom-1 -right-1 w-7 h-7 rounded-full grid place-items-center text-white border-2" style="background:var(--primary);border-color:var(--surface)">${ic('camera','w-3.5 h-3.5')}</button>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5"><p class="font-extrabold txt text-[16px] truncate">${S.user.name}</p>
+            ${S.user.verified?`<span class="shrink-0 text-emerald-500">${ic('shield','w-4 h-4')}</span>`:''}</div>
+            <p class="text-[12px] muted font-semibold">${S.user.phone}</p>
+            <span class="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[10.5px] font-extrabold" style="background:${t.c}1f;color:${t.c}">${ic('crown','w-3 h-3')} Member ${t.n}</span>
+          </div>
+          <button onclick="app.openEditProfile()" class="press w-9 h-9 rounded-xl grid place-items-center" style="background:var(--surface-3);color:var(--primary)">${ic('edit','w-4.5 h-4.5')}</button>
+        </div>
+        <div class="dash my-3.5"></div>
+        <div class="grid grid-cols-3 divide-x" style="border-color:var(--border)">
+          <div class="text-center"><p class="font-extrabold txt text-[15px]">${total}</p><p class="text-[10.5px] muted font-bold">Transaksi</p></div>
+          <div class="text-center"><p class="font-extrabold text-[15px]" style="color:var(--accent)">${S.points.toLocaleString('id-ID')}</p><p class="text-[10.5px] muted font-bold">Poin</p></div>
+          <div class="text-center"><p class="font-extrabold txt text-[15px]">${S.user.since}</p><p class="text-[10.5px] muted font-bold">Bergabung</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="px-4 mt-4">
+      <div class="card p-4 flex items-center gap-3" style="background:linear-gradient(120deg,rgba(245,158,11,.12),rgba(239,68,68,.1))">
+        <div class="w-11 h-11 rounded-xl grid place-items-center text-white shrink-0" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">${ic('crown','w-5 h-5')}</div>
+        <div class="flex-1"><p class="font-extrabold text-[13.5px] txt">Upgrade ke Premium</p><p class="text-[11.5px] muted font-medium">Bebas biaya admin & cashback 2x</p></div>
+        <button onclick="app.upgrade()" class="press px-3 py-2 rounded-xl text-white text-[11.5px] font-extrabold" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">Upgrade</button>
+      </div>
+    </div>
+    <div class="px-4 mt-4">
+      <p class="text-[11.5px] font-extrabold muted mb-1.5 px-1">AKUN</p>
+      <div class="card px-4 divide-y" style="border-color:var(--border)">
+        ${row('user','Data Pribadi','Nama, email, alamat',"app.openEditProfile()")}
+        ${row('lock','Keamanan & PIN','Ubah PIN transaksi',"app.openSecurity()")}
+        ${row('card','Metode Pembayaran','Kartu & rekening tersimpan',"app.openSheetMenu('payment')")}
+        ${row('bank','Rekening Bank','2 rekening terhubung',"app.openSheetMenu('bank')")}
+      </div>
+    </div>
+    <div class="px-4 mt-4">
+      <p class="text-[11.5px] font-extrabold muted mb-1.5 px-1">PREFERENSI</p>
+      <div class="card px-4 divide-y" style="border-color:var(--border)">
+        ${toggle(S.settings.dark?'moon':'sun','Mode Gelap','Tampilan nyaman di malam hari','dark')}
+        ${toggle('bell','Notifikasi Transaksi','Pemberitahuan status pembayaran','notif')}
+        ${toggle('tag','Notifikasi Promo','Info diskon & voucher terbaru','promoNotif')}
+        ${toggle('shield','Login Biometrik','Sidik jari / Face ID','biometric')}
+      </div>
+    </div>
+    <div class="px-4 mt-4">
+      <p class="text-[11.5px] font-extrabold muted mb-1.5 px-1">LAINNYA</p>
+      <div class="card px-4 divide-y" style="border-color:var(--border)">
+        ${row('help','Pusat Bantuan','FAQ & hubungi CS 24 jam',"app.openSheetMenu('help')")}
+        ${row('book','Syarat & Ketentuan','',"app.openSheetMenu('terms')")}
+        ${row('info','Tentang PayNusa','Versi 4.2.1',"app.openSheetMenu('about')")}
+        ${row('refresh','Reset Data Demo','Kembalikan ke kondisi awal',"app.resetDemo()")}
+      </div>
+    </div>
+    <div class="px-4 mt-4">
+      <button onclick="app.logout()" class="press w-full card py-3.5 flex items-center justify-center gap-2 font-extrabold text-[13.5px] text-red-500">${ic('logout','w-4.5 h-4.5')} Keluar</button>
+      <p class="text-center text-[11px] muted font-semibold mt-4">PayNusa v4.2.1 · Demo Interaktif</p>
+    </div><div class="h-28"></div></div>`;
+}
+
+/* -------- LOGIN -------- */
+function viewLogin(){
+  return `<div class="fade-in min-h-[100dvh] grad flex flex-col justify-end relative overflow-hidden">
+    <div class="absolute -right-16 top-10 w-56 h-56 rounded-full bg-white/10"></div>
+    <div class="absolute left-8 top-24 w-24 h-24 rounded-full bg-white/10"></div>
+    <div class="px-7 pb-10 relative">
+      <div class="w-16 h-16 rounded-3xl bg-white/20 border border-white/30 grid place-items-center text-white font-extrabold text-3xl backdrop-blur">P</div>
+      <h1 class="text-white font-extrabold text-3xl mt-5 leading-tight">Selamat datang<br>di PayNusa</h1>
+      <p class="text-white/80 font-medium text-sm mt-2">Bayar semua tagihan dalam satu aplikasi.</p>
+    </div>
+    <div class="surface rounded-t-[2rem] px-6 pt-7 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+      <p class="font-extrabold txt text-lg">Masuk ke akun Anda</p>
+      <p class="text-[12.5px] muted font-medium mt-1">Gunakan nomor terdaftar untuk melanjutkan</p>
+      <label class="block text-[12px] font-extrabold muted mt-5 mb-1.5">Nomor Handphone</label>
+      <input id="loginPhone" class="inp" value="0812 3456 7890" inputmode="tel">
+      <label class="block text-[12px] font-extrabold muted mt-3.5 mb-1.5">Kata Sandi</label>
+      <input id="loginPass" type="password" class="inp" value="demo1234">
+      <button onclick="app.doLogin()" class="btn btn-primary mt-5">Masuk</button>
+      <button onclick="app.doLogin()" class="btn btn-ghost mt-2.5">Masuk dengan Biometrik</button>
+      <p class="text-center text-[11.5px] muted font-semibold mt-5">Belum punya akun? <b style="color:var(--primary)">Daftar sekarang</b></p>
+    </div></div>`;
+}
+
+/* ==================== RENDER ==================== */
+function render(){
+  applyTheme();
+  const v=$('#view'); const nav=$('#tabbar');
+  if(!S.loggedIn){v.innerHTML=viewLogin();nav.innerHTML='';return;}
+  v.innerHTML={home:viewHome,history:viewHistory,promo:viewPromo,profile:viewProfile}[S.tab]();
+  const items=[['home','home','Beranda'],['history','receipt','Riwayat'],['__qr','qr',''],['promo','tag','Promo'],['profile','user','Akun']];
+  nav.innerHTML=`<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[468px] z-50 px-3 pb-[calc(.5rem+env(safe-area-inset-bottom))] pt-2" style="background:linear-gradient(to top,var(--bg) 62%,transparent)">
+    <div class="rounded-[1.35rem] border bd flex items-end justify-around px-1.5 py-1.5 backdrop-blur-xl" style="background:var(--nav-bg);box-shadow:0 -6px 24px -12px rgba(15,23,42,.35)">
+    ${items.map(([id,i,l])=>id==='__qr'?
+      `<button onclick="app.openQris()" class="press -mt-8 w-[54px] h-[54px] rounded-2xl grad grid place-items-center text-white shrink-0" style="box-shadow:0 14px 26px -12px rgba(79,70,229,.95)">${ic('qr','w-6 h-6')}</button>`:
+      `<button onclick="app.go('${id}')" class="press flex-1 flex flex-col items-center gap-1 py-1.5 ${S.tab===id?'tab-active':'muted'}">
+        ${ic(i,'w-[22px] h-[22px]',S.tab===id?2.2:1.8)}<span class="text-[10px] font-extrabold">${l}</span></button>`).join('')}
+    </div></div>`;
+  document.querySelectorAll('#brandFeatures').forEach(el=>{
+    el.innerHTML=[['zap','Proses instan 24/7'],['shield','Transaksi terenkripsi'],['wallet','Harga paling hemat'],['help','CS siap membantu']]
+      .map(([i,t])=>`<div class="flex items-center gap-2.5 p-3 rounded-2xl card"><span style="color:var(--primary)">${ic(i,'w-5 h-5')}</span><span class="text-[13px] font-bold txt">${t}</span></div>`).join('');
+  });
+}
+
+/* ==================== SERVICE FLOW ==================== */
+function openService(sid,prefill){
+  const s=SV[sid]; if(!s)return;
+  F={sid,provider:s.providers?s.providers[0]:(s.op?'':null),customer:prefill||'',product:null,bill:null,checking:false,
+     amount:0,admin:s.admin||0,discount:0,voucher:null,method:'saldo',free:''};
+  openSheet('svc',{title:s.name,sub:s.type==='post'?'Cek & bayar tagihan':'Pilih nominal & lanjutkan pembayaran',body:''});
+  renderSvc();
+}
+function renderSvc(){
+  const s=SV[F.sid];
+  const op=s.op?detectOp(F.customer):'';
+  const products=s.productsBy?(s.productsBy[F.provider]||[]):(s.products||[]);
+  const sel=F.product;
+  let html=`<div class="pb-4">`;
+  if(s.providers){
+    html+=`<p class="text-[12px] font-extrabold muted mb-2">${s.id==='game'?'Pilih Game':s.id==='zakat'?'Jenis Donasi':'Pilih Penyedia'}</p>
+    <div class="flex gap-2 overflow-x-auto no-sb pb-1 -mx-5 px-5">${s.providers.map(p=>`<button onclick="app.setProvider('${p}')" class="press chip ${F.provider===p?'on':''}">${p}</button>`).join('')}</div>`;
+  }
+  html+=`<p class="text-[12px] font-extrabold muted mt-4 mb-1.5">${s.field.label}</p>
+    <div class="relative">
+      <input id="custInp" value="${F.customer}" oninput="app.setCustomer(this.value)" inputmode="${s.field.type==='tel'?'numeric':'text'}" placeholder="${s.field.ph}" class="inp pr-24">
+      ${op?`<span class="absolute right-11 top-1/2 -translate-y-1/2 text-[11px] font-extrabold px-2 py-1 rounded-lg" style="background:var(--surface-3);color:var(--primary)">${op}</span>`:''}
+      ${F.customer?`<button onclick="app.setCustomer('')" class="press absolute right-3 top-1/2 -translate-y-1/2 muted">${ic('x','w-4 h-4','2.4')}</button>`:''}
+    </div>`;
+  if(s.field.type==='tel'&&['pulsa','data','emoney','pascabayar'].includes(s.id)){
+    html+=`<div class="flex gap-2 overflow-x-auto no-sb mt-2.5 -mx-5 px-5">${S.contacts.map(c=>`<button onclick="app.setCustomer('${c.n}')" class="press chip">${c.l}</button>`).join('')}</div>`;
+  }
+  if(s.type==='post'){
+    if(F.checking){html+=`<div class="mt-4 space-y-2"><div class="skel h-4 w-2/3 rounded-lg"></div><div class="skel h-4 w-1/2 rounded-lg"></div><div class="skel h-16 rounded-2xl"></div></div>`;}
+    else if(F.bill){
+      const b=F.bill;
+      html+=`<div class="mt-4 rounded-2xl border bd p-4" style="background:var(--surface-2)">
+        <div class="flex items-center gap-2 mb-3">${ic('check','w-4 h-4 text-emerald-500','2.6')}<p class="text-[12px] font-extrabold text-emerald-500">Tagihan ditemukan</p></div>
+        ${[['Nama Pelanggan',b.name],['Nomor Pelanggan',F.customer],['Periode / Rincian',b.period],['Jumlah '+s.billLabel.replace(/ ke-$/,''),rp(b.amount)],['Biaya Admin',rp(F.admin)]]
+          .map(([k,v])=>`<div class="flex justify-between py-1"><span class="text-[12.5px] muted font-semibold">${k}</span><span class="text-[12.5px] font-extrabold txt text-right max-w-[58%]">${v}</span></div>`).join('')}
+        <div class="dash my-2.5"></div>
+        <div class="flex justify-between"><span class="text-[13px] font-extrabold txt">Total Bayar</span><span class="text-[15px] font-extrabold" style="color:var(--primary)">${rp(b.amount+F.admin)}</span></div>
+      </div>`;
+    } else {
+      html+=`<div class="mt-4 flex items-start gap-2.5 p-3.5 rounded-2xl" style="background:rgba(79,70,229,.08)">
+        ${ic('info','w-4.5 h-4.5 shrink-0','2')}<p class="text-[12px] font-semibold" style="color:var(--primary)">Masukkan nomor pelanggan lalu tekan Cek Tagihan untuk melihat rincian.</p></div>`;
+    }
+  } else if(s.free){
+    html+=`<p class="text-[12px] font-extrabold muted mt-4 mb-1.5">Nominal Donasi</p>
+      <input id="freeAmt" value="${F.free}" oninput="app.setFree(this.value)" inputmode="numeric" placeholder="Rp 0" class="inp text-lg">
+      <div class="grid grid-cols-3 gap-2 mt-2.5">${products.map((p,i)=>`<button onclick="app.selectProduct(${i})" class="press prod text-center ${sel===i?'on':''}"><p class="font-extrabold txt text-[12.5px]">${p.name.replace('Rp ','')}</p></button>`).join('')}</div>`;
+  } else {
+    html+=`<p class="text-[12px] font-extrabold muted mt-4 mb-2">Pilih Nominal / Produk</p>
+      <div class="grid grid-cols-2 gap-2.5">${products.map((p,i)=>`
+        <button onclick="app.selectProduct(${i})" class="press prod ${sel===i?'on':''}">
+          <p class="font-extrabold txt text-[13px] leading-tight">${p.name}</p>
+          ${p.sub?`<p class="text-[10.5px] muted font-semibold mt-0.5">${p.sub}</p>`:''}
+          <p class="text-[13px] font-extrabold mt-1.5" style="color:var(--primary)">${rp(p.price)}</p>
+          ${sel===i?`<span class="absolute"></span>`:''}
+        </button>`).join('')}</div>`;
+  }
+  const total=calcTotal();
+  html+=`</div>`;
+  html+=`<div class="sticky bottom-0 pt-3 pb-[calc(.75rem+env(safe-area-inset-bottom))]" style="background:linear-gradient(to top,var(--surface) 70%,transparent)">
+    ${total?`<div class="flex items-center justify-between mb-2.5 px-1"><span class="text-[12.5px] muted font-bold">Total Pembayaran</span><span class="text-[17px] font-extrabold txt">${rp(total)}</span></div>`:''}
+    ${s.type==='post'&&!F.bill?
+      `<button onclick="app.checkBill()" ${F.customer.length<4||F.checking?'disabled':''} class="btn btn-primary">${F.checking?'Mengecek...':'Cek Tagihan'}</button>`:
+      `<button onclick="app.toConfirm()" ${canProceed()?'':'disabled'} class="btn btn-primary">Lanjutkan Pembayaran</button>`}
+  </div>`;
+  setBody('svc',html);
+}
+function calcTotal(){
+  const s=SV[F.sid];
+  if(s.type==='post')return F.bill?F.bill.amount+F.admin-F.discount:0;
+  if(s.free){const v=parseInt((F.free||'').replace(/\D/g,''))||0;return v?v+F.admin-F.discount:0;}
+  const products=s.productsBy?(s.productsBy[F.provider]||[]):(s.products||[]);
+  return F.product!=null&&products[F.product]?products[F.product].price+F.admin-F.discount:0;
+}
+function canProceed(){
+  const s=SV[F.sid]; if(F.customer.trim().length<3)return false;
+  if(s.type==='post')return !!F.bill;
+  if(s.free)return (parseInt((F.free||'').replace(/\D/g,''))||0)>=10000;
+  return F.product!=null;
+}
+function productName(){
+  const s=SV[F.sid];
+  if(s.type==='post')return ((F.provider?F.provider+' · ':'')+s.name+' '+(F.bill?F.bill.period:'')).trim();
+  if(s.free)return (F.provider||s.name)+' '+rp(parseInt((F.free||'').replace(/\D/g,''))||0);
+  const products=s.productsBy?(s.productsBy[F.provider]||[]):(s.products||[]);
+  const p=products[F.product]; const pre=s.op?detectOp(F.customer)+' ':(F.provider?F.provider+' ':'');
+  return (pre+p.name).trim();
+}
+
+/* -------- CONFIRM -------- */
+function openConfirm(){
+  openSheet('cf',{title:'Konfirmasi Pembayaran',sub:'Periksa kembali detail transaksi Anda'});
+  renderConfirm();
+}
+function renderConfirm(){
+  const s=SV[F.sid]; const total=calcTotal(); const base=total+F.discount-F.admin;
+  const methods=[['saldo','Saldo PayNusa',rp(S.balance),'wallet',S.balance>=total],
+    ['va','Virtual Account BCA','Transfer bank','bank',true],
+    ['retail','Alfamart / Indomaret','Bayar di kasir','building',true],
+    ['card','Kartu Kredit/Debit','**** 4829','card',true]];
+  setBody('cf',`<div class="pb-4">
+    <div class="rounded-2xl border bd p-4" style="background:var(--surface-2)">
+      <div class="flex items-center gap-3 pb-3">
+        <div class="w-11 h-11 rounded-xl grid place-items-center text-white" style="background:linear-gradient(135deg,${s.c1},${s.c2})">${ic(s.icon,'w-5 h-5')}</div>
+        <div class="min-w-0"><p class="font-extrabold txt text-[14px] truncate">${productName()}</p>
+        <p class="text-[11.5px] muted font-semibold truncate">${F.customer}${F.bill?' · '+F.bill.name:(s.lookup?' · '+custName(F.customer):'')}</p></div>
+      </div>
+      <div class="dash mb-3"></div>
+      ${[['Harga',rp(base)],['Biaya Admin',F.admin?rp(F.admin):'Gratis']].map(([k,v])=>`
+        <div class="flex justify-between py-1"><span class="text-[12.5px] muted font-semibold">${k}</span><span class="text-[12.5px] font-bold txt">${v}</span></div>`).join('')}
+      ${F.discount?`<div class="flex justify-between py-1"><span class="text-[12.5px] font-semibold text-emerald-500">Diskon ${F.voucher}</span><span class="text-[12.5px] font-extrabold text-emerald-500">-${rp(F.discount)}</span></div>`:''}
+      <div class="dash my-2.5"></div>
+      <div class="flex justify-between items-center"><span class="text-[13px] font-extrabold txt">Total</span><span class="text-[18px] font-extrabold" style="color:var(--primary)">${rp(total)}</span></div>
+    </div>
+
+    <button onclick="app.openVoucherPicker()" class="press w-full mt-3 flex items-center gap-3 p-3.5 rounded-2xl border bd surface">
+      <div class="w-9 h-9 rounded-xl grid place-items-center" style="background:rgba(79,70,229,.12);color:var(--primary)">${ic('ticket','w-4.5 h-4.5')}</div>
+      <div class="flex-1 text-left"><p class="text-[13px] font-extrabold txt">${F.voucher?'Voucher '+F.voucher+' dipakai':'Gunakan Voucher'}</p>
+      <p class="text-[11px] muted font-semibold">${F.voucher?'Hemat '+rp(F.discount):'Cek voucher yang tersedia'}</p></div>
+      ${F.voucher?`<span onclick="event.stopPropagation();app.removeVoucher()" class="text-[11.5px] font-extrabold text-red-500 px-2">Hapus</span>`:ic('chevR','w-4 h-4 muted','2.4')}
+    </button>
+
+    <p class="text-[12px] font-extrabold muted mt-4 mb-2">Metode Pembayaran</p>
+    <div class="space-y-2">${methods.map(([id,n,d,i,ok])=>`
+      <button onclick="app.setMethod('${id}')" ${ok?'':'disabled'} class="press w-full flex items-center gap-3 p-3.5 rounded-2xl border ${F.method===id?'':'bd'} ${ok?'':'opacity-45'}" style="${F.method===id?'border-color:var(--primary);background:rgba(79,70,229,.07)':'background:var(--surface)'}">
+        <div class="w-9 h-9 rounded-xl grid place-items-center" style="background:var(--surface-3);color:var(--primary)">${ic(i,'w-4.5 h-4.5')}</div>
+        <div class="flex-1 text-left"><p class="text-[13px] font-extrabold txt">${n}</p><p class="text-[11px] muted font-semibold">${d}${id==='saldo'&&!ok?' · Saldo tidak cukup':''}</p></div>
+        <span class="w-5 h-5 rounded-full border-2 grid place-items-center" style="border-color:${F.method===id?'var(--primary)':'var(--border)'}">
+          ${F.method===id?`<span class="w-2.5 h-2.5 rounded-full" style="background:var(--primary)"></span>`:''}</span>
+      </button>`).join('')}
+    </div>
+    ${S.balance<total?`<button onclick="app.openTopup()" class="press w-full mt-2.5 text-[12px] font-extrabold py-2" style="color:var(--primary)">+ Top Up Saldo Sekarang</button>`:''}
+  </div>
+  <div class="sticky bottom-0 pt-3 pb-[calc(.75rem+env(safe-area-inset-bottom))]" style="background:linear-gradient(to top,var(--surface) 70%,transparent)">
+    <button onclick="app.payNow()" class="btn btn-primary flex items-center justify-center gap-2">${ic('lock','w-4 h-4','2.2')} Bayar ${rp(total)}</button>
+    <p class="text-center text-[10.5px] muted font-semibold mt-2">Transaksi dilindungi enkripsi 256-bit</p>
+  </div>`);
+}
+
+/* -------- PIN -------- */
+let pinBuf='',pinCb=null,pinTries=0;
+function openPin(cb,title='Masukkan PIN Transaksi'){
+  pinBuf='';pinCb=cb;
+  openSheet('pin',{title,sub:'Demo PIN: 123456'});
+  renderPin();
+}
+function renderPin(){
+  const keys=[1,2,3,4,5,6,7,8,9,'',0,'del'];
+  setBody('pin',`<div class="pb-[calc(1rem+env(safe-area-inset-bottom))]">
+    <div id="pinDots" class="flex justify-center gap-3.5 my-7">
+      ${[0,1,2,3,4,5].map(i=>`<span class="w-3.5 h-3.5 rounded-full transition-all" style="background:${i<pinBuf.length?'var(--primary)':'var(--surface-3)'};transform:scale(${i<pinBuf.length?1.15:1})"></span>`).join('')}
+    </div>
+    <button onclick="app.forgotPin()" class="press w-full text-center text-[12px] font-extrabold mb-4" style="color:var(--primary)">Lupa PIN?</button>
+    <div class="grid grid-cols-3 gap-1.5">
+      ${keys.map(k=>k===''?`<span></span>`:k==='del'?
+        `<button onclick="app.pinDel()" class="key grid place-items-center txt">${ic('chevL','w-6 h-6','2.4')}</button>`:
+        `<button onclick="app.pinPress('${k}')" class="key txt">${k}</button>`).join('')}
+    </div></div>`);
+}
+
+/* -------- PROCESS & SUCCESS -------- */
+function processing(msg,cb){
+  const w=document.createElement('div');w.id='proc';
+  w.className='fixed inset-0 z-[80] grid place-items-center';
+  w.style.background='rgba(8,12,24,.6)';w.style.backdropFilter='blur(4px)';
+  w.innerHTML=`<div class="px-8 py-7 rounded-3xl text-center pop" style="background:var(--surface)">
+    <div class="w-14 h-14 mx-auto rounded-full border-4 spin" style="border-color:var(--surface-3);border-top-color:var(--primary)"></div>
+    <p class="mt-4 font-extrabold txt text-sm">${msg}</p><p class="text-[11.5px] muted font-semibold mt-0.5">Mohon tunggu sebentar</p></div>`;
+  document.body.appendChild(w);
+  setTimeout(()=>{w.remove();cb();},1500);
+}
+function finishTx(tx){
+  S.tx.unshift(tx);
+  S.points+=Math.floor(tx.total/1000);
+  S.notifs.unshift({id:uid(),title:tx.status==='success'?'Transaksi Berhasil':'Transaksi Diproses',
+    body:`${tx.product} sebesar ${rp(tx.total)} ${tx.status==='success'?'berhasil dibayar':'sedang diproses'}.`,
+    time:new Date().toISOString(),read:false,type:tx.status==='success'?'success':'warn'});
+  if(F.voucher){const v=S.vouchers.find(x=>x.code===F.voucher);if(v)v.used=true;}
+  save();closeAllSheets();showSuccess(tx);render();
+}
+function showSuccess(tx){
+  const s=SV[tx.sid]||{};
+  const w=document.createElement('div');w.id='succ';w.className='fixed inset-0 z-[85] overflow-y-auto';
+  w.style.background='var(--bg)';
+  w.innerHTML=`<div class="min-h-full w-full max-w-[468px] mx-auto px-5 pt-[calc(2rem+env(safe-area-inset-top))] pb-10">
+    <div class="text-center">
+      <div class="w-[86px] h-[86px] mx-auto rounded-full grid place-items-center pop" style="background:rgba(16,185,129,.14)">
+        <div class="w-[62px] h-[62px] rounded-full grid place-items-center" style="background:#10b981">
+          <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="checkmark" d="m4.5 12.5 5 5 10-11"/></svg>
+        </div>
+      </div>
+      <h2 class="font-extrabold txt text-xl mt-4">Pembayaran Berhasil!</h2>
+      <p class="text-[13px] muted font-medium mt-1">${fDate(tx.date)} · ${fTime(tx.date)}</p>
+      <p class="text-[30px] font-extrabold txt mt-3">${rp(tx.total)}</p>
+    </div>
+    <div class="card mt-6 p-5">
+      <div class="flex items-center gap-3 pb-3">
+        <div class="w-11 h-11 rounded-xl grid place-items-center text-white" style="background:linear-gradient(135deg,${s.c1||'#4f46e5'},${s.c2||'#7c3aed'})">${ic(s.icon||'receipt','w-5 h-5')}</div>
+        <div class="min-w-0"><p class="font-extrabold txt text-[14px] truncate">${tx.product}</p><p class="text-[11.5px] muted font-semibold">${tx.serviceName}</p></div>
+      </div>
+      <div class="dash my-1"></div>
+      <div class="pt-3 space-y-2">
+        ${[['No. Referensi',tx.ref],['Tujuan',tx.customer],['Nama',tx.customerName||'-'],['Metode',tx.method],['Status','Berhasil']]
+        .map(([k,v])=>`<div class="flex justify-between gap-3"><span class="text-[12.5px] muted font-semibold">${k}</span><span class="text-[12.5px] font-extrabold txt text-right">${v}</span></div>`).join('')}
+      </div>
+      ${tx.token?`<div class="mt-4 p-3.5 rounded-2xl text-center" style="background:rgba(245,158,11,.12)">
+        <p class="text-[11px] font-extrabold" style="color:#d97706">TOKEN LISTRIK</p>
+        <p class="font-extrabold txt text-[17px] tracking-wider mt-1">${tx.token}</p>
+        <button onclick="app.copy('${tx.token.replace(/ /g,'')}','Token disalin!')" class="press mt-1.5 text-[11.5px] font-extrabold" style="color:var(--primary)">Salin Token</button></div>`:''}
+      ${tx.serial?`<div class="mt-3 text-center"><p class="text-[11px] muted font-bold">Serial Number</p><p class="font-extrabold txt text-[13px]">${tx.serial}</p></div>`:''}
+      <div class="dash my-4"></div>
+      <div class="space-y-2">
+        <div class="flex justify-between"><span class="text-[12.5px] muted font-semibold">Harga</span><span class="text-[12.5px] font-bold txt">${rp(tx.amount)}</span></div>
+        <div class="flex justify-between"><span class="text-[12.5px] muted font-semibold">Admin</span><span class="text-[12.5px] font-bold txt">${tx.admin?rp(tx.admin):'Gratis'}</span></div>
+        ${tx.discount?`<div class="flex justify-between"><span class="text-[12.5px] font-semibold text-emerald-500">Diskon</span><span class="text-[12.5px] font-extrabold text-emerald-500">-${rp(tx.discount)}</span></div>`:''}
+        <div class="flex justify-between pt-1"><span class="text-[13.5px] font-extrabold txt">Total Bayar</span><span class="text-[15px] font-extrabold" style="color:var(--primary)">${rp(tx.total)}</span></div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 mt-3 p-3.5 rounded-2xl" style="background:rgba(245,158,11,.12)">
+      ${ic('sparkles','w-5 h-5','2')}<p class="text-[12.5px] font-bold" style="color:#d97706">Kamu mendapat +${Math.floor(tx.total/1000)} poin dari transaksi ini!</p>
+    </div>
+    <div class="grid grid-cols-2 gap-2.5 mt-4">
+      <button onclick="app.downloadReceipt('${tx.id}')" class="press btn btn-ghost flex items-center justify-center gap-2">${ic('download','w-4 h-4','2.2')} Struk</button>
+      <button onclick="app.shareTx('${tx.id}')" class="press btn btn-ghost flex items-center justify-center gap-2">${ic('share','w-4 h-4','2.2')} Bagikan</button>
+    </div>
+    <button onclick="app.closeSuccess()" class="btn btn-primary mt-2.5">Selesai</button>
+  </div>`;
+  document.body.appendChild(w);
+}
+
+/* -------- VA INSTRUCTION -------- */
+function openVA(kind,tx){
+  const va='8808 '+Math.floor(Math.random()*9e7+1e7)+' '+Math.floor(Math.random()*90+10);
+  const code=Math.floor(Math.random()*9e5+1e5);
+  const end=Date.now()+23*3600*1000;
+  openSheet('va',{title:kind==='va'?'Virtual Account BCA':'Bayar di Gerai Retail',sub:'Selesaikan pembayaran sebelum batas waktu'});
+  const tick=()=>{
+    const left=Math.max(0,end-Date.now());const h=Math.floor(left/36e5),m=Math.floor(left%36e5/6e4),sec=Math.floor(left%6e4/1000);
+    const e=document.getElementById('vaTime');if(e)e.textContent=`${pad(h)}:${pad(m)}:${pad(sec)}`;
+  };
+  setBody('va',`<div class="pb-4">
+    <div class="rounded-2xl p-4 text-center" style="background:rgba(239,68,68,.1)">
+      <p class="text-[11.5px] font-bold text-red-500">Batas waktu pembayaran</p>
+      <p id="vaTime" class="font-extrabold text-red-500 text-2xl tracking-wider mt-0.5">23:00:00</p>
+    </div>
+    <div class="card p-4 mt-3">
+      <p class="text-[11.5px] muted font-bold">${kind==='va'?'Nomor Virtual Account':'Kode Pembayaran'}</p>
+      <div class="flex items-center justify-between mt-1">
+        <p class="font-extrabold txt text-lg tracking-wide">${kind==='va'?va:code}</p>
+        <button onclick="app.copy('${kind==='va'?va.replace(/ /g,''):code}','Nomor disalin!')" class="press flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11.5px] font-extrabold" style="background:var(--surface-3);color:var(--primary)">${ic('copy','w-3.5 h-3.5')} Salin</button>
+      </div>
+      <div class="dash my-3"></div>
+      <div class="flex justify-between"><span class="text-[12.5px] muted font-semibold">Total Tagihan</span><span class="font-extrabold txt">${rp(tx.total)}</span></div>
+    </div>
+    <div class="card p-4 mt-3">
+      <p class="font-extrabold txt text-[13px] mb-2">Cara Pembayaran</p>
+      <ol class="space-y-2">${(kind==='va'?['Buka aplikasi m-BCA atau ATM terdekat','Pilih menu Transfer > BCA Virtual Account','Masukkan nomor Virtual Account di atas','Periksa nama & nominal, lalu konfirmasi','Simpan bukti pembayaran Anda']:
+      ['Kunjungi gerai Alfamart / Indomaret terdekat','Sebutkan pembayaran PayNusa ke kasir','Berikan kode pembayaran di atas','Bayar sesuai nominal tagihan','Simpan struk sebagai bukti'])
+      .map((s,i)=>`<li class="flex gap-2.5"><span class="w-5 h-5 rounded-full grid place-items-center text-[10.5px] font-extrabold shrink-0" style="background:var(--surface-3);color:var(--primary)">${i+1}</span><span class="text-[12.5px] muted font-medium">${s}</span></li>`).join('')}</ol>
+    </div>
+    <button onclick="app.simulatePaid()" class="btn btn-primary mt-4">Saya Sudah Bayar (Simulasi)</button>
+    <button onclick="app.closeSheet('va')" class="btn btn-ghost mt-2">Bayar Nanti</button>
+  </div>`);
+  clearInterval(vaTimer);vaTimer=setInterval(tick,1000);tick();
+  F.pendingTx=tx;
+}
+
+/* ==================== OTHER SHEETS ==================== */
+function openTopup(){
+  F.topup={amt:0,method:null};
+  openSheet('tu',{title:'Top Up Saldo',sub:'Saldo saat ini '+rp(S.balance)});
+  renderTopup();
+}
+function renderTopup(){
+  const amts=[50000,100000,200000,300000,500000,1000000];
+  const methods=[['BCA Virtual Account','bank','Gratis biaya admin'],['Mandiri Virtual Account','bank','Gratis biaya admin'],['Alfamart / Indomaret','building','Biaya Rp2.500'],['Kartu Kredit / Debit','card','Biaya 1.5%']];
+  setBody('tu',`<div class="pb-4">
+    <p class="text-[12px] font-extrabold muted mb-1.5">Nominal Top Up</p>
+    <input id="tuAmt" value="${F.topup.amt?F.topup.amt.toLocaleString('id-ID'):''}" oninput="app.setTopupAmt(this.value)" inputmode="numeric" placeholder="Rp 0" class="inp text-lg">
+    <div class="grid grid-cols-3 gap-2 mt-2.5">${amts.map(a=>`<button onclick="app.setTopupAmt('${a}')" class="press prod text-center ${F.topup.amt===a?'on':''}"><p class="font-extrabold txt text-[12.5px]">${rpShort(a)}</p></button>`).join('')}</div>
+    <p class="text-[12px] font-extrabold muted mt-4 mb-2">Pilih Metode</p>
+    <div class="space-y-2">${methods.map(([n,i,d],idx)=>`
+      <button onclick="app.setTopupMethod(${idx})" class="press w-full flex items-center gap-3 p-3.5 rounded-2xl border" style="${F.topup.method===idx?'border-color:var(--primary);background:rgba(79,70,229,.07)':'border-color:var(--border);background:var(--surface)'}">
+        <div class="w-9 h-9 rounded-xl grid place-items-center" style="background:var(--surface-3);color:var(--primary)">${ic(i,'w-4.5 h-4.5')}</div>
+        <div class="flex-1 text-left"><p class="text-[13px] font-extrabold txt">${n}</p><p class="text-[11px] muted font-semibold">${d}</p></div>
+        <span class="w-5 h-5 rounded-full border-2 grid place-items-center" style="border-color:${F.topup.method===idx?'var(--primary)':'var(--border)'}">${F.topup.method===idx?`<span class="w-2.5 h-2.5 rounded-full" style="background:var(--primary)"></span>`:''}</span>
+      </button>`).join('')}</div>
+  </div>
+  <div class="sticky bottom-0 pt-3 pb-[calc(.75rem+env(safe-area-inset-bottom))]" style="background:linear-gradient(to top,var(--surface) 70%,transparent)">
+    <button onclick="app.doTopup()" ${F.topup.amt>=10000&&F.topup.method!==null?'':'disabled'} class="btn btn-primary">Lanjutkan Top Up</button>
+    <p class="text-center text-[10.5px] muted font-semibold mt-2">Minimum top up Rp10.000</p></div>`);
+}
+function openTransfer(){
+  F.tf={bank:'BCA',acc:'',amt:0,name:'',note:''};
+  openSheet('tf',{title:'Transfer Dana',sub:'Kirim ke bank atau e-wallet'});
+  renderTransfer();
+}
+function renderTransfer(){
+  const fee=2500;const total=(F.tf.amt||0)+fee;
+  setBody('tf',`<div class="pb-4">
+    <p class="text-[12px] font-extrabold muted mb-2">Bank / E-Wallet Tujuan</p>
+    <div class="flex gap-2 overflow-x-auto no-sb -mx-5 px-5 pb-1">${BANKS.map(b=>`<button onclick="app.setTfBank('${b}')" class="press chip ${F.tf.bank===b?'on':''}">${b}</button>`).join('')}</div>
+    <p class="text-[12px] font-extrabold muted mt-4 mb-1.5">Nomor Rekening / HP</p>
+    <input value="${F.tf.acc}" oninput="app.setTfAcc(this.value)" inputmode="numeric" placeholder="Masukkan nomor rekening" class="inp">
+    ${F.tf.acc.length>=6?`<div class="mt-2 flex items-center gap-2 px-3.5 py-2.5 rounded-xl" style="background:rgba(16,185,129,.1)">
+      ${ic('check','w-4 h-4 text-emerald-500','2.6')}<p class="text-[12.5px] font-extrabold text-emerald-600">${custName(F.tf.acc)}</p></div>`:''}
+    <p class="text-[12px] font-extrabold muted mt-4 mb-1.5">Nominal Transfer</p>
+    <input value="${F.tf.amt?F.tf.amt.toLocaleString('id-ID'):''}" oninput="app.setTfAmt(this.value)" inputmode="numeric" placeholder="Rp 0" class="inp text-lg">
+    <div class="flex gap-2 mt-2.5">${[50000,100000,250000].map(a=>`<button onclick="app.setTfAmt('${a}')" class="press chip">${rpShort(a)}</button>`).join('')}</div>
+    <p class="text-[12px] font-extrabold muted mt-4 mb-1.5">Catatan (opsional)</p>
+    <input value="${F.tf.note}" oninput="app.setTfNote(this.value)" placeholder="contoh: Bayar patungan" class="inp">
+    ${F.tf.amt?`<div class="card p-4 mt-4 space-y-1.5">
+      <div class="flex justify-between"><span class="text-[12.5px] muted font-semibold">Nominal</span><span class="text-[12.5px] font-bold txt">${rp(F.tf.amt)}</span></div>
+      <div class="flex justify-between"><span class="text-[12.5px] muted font-semibold">Biaya Transfer</span><span class="text-[12.5px] font-bold txt">${rp(fee)}</span></div>
+      <div class="dash my-1.5"></div>
+      <div class="flex justify-between"><span class="text-[13px] font-extrabold txt">Total</span><span class="text-[15px] font-extrabold" style="color:var(--primary)">${rp(total)}</span></div></div>`:''}
+  </div>
+  <div class="sticky bottom-0 pt-3 pb-[calc(.75rem+env(safe-area-inset-bottom))]" style="background:linear-gradient(to top,var(--surface) 70%,transparent)">
+    <button onclick="app.doTransfer()" ${F.tf.acc.length>=6&&F.tf.amt>=10000?'':'disabled'} class="btn btn-primary">Transfer ${F.tf.amt?rp(total):''}</button></div>`);
+}
+function openTarik(){
+  openSheet('tk',{title:'Tarik Tunai Tanpa Kartu',sub:'Ambil uang di ATM & gerai retail'});
+  const amts=[50000,100000,200000,500000];
+  setBody('tk',`<div class="pb-6">
+    <div class="rounded-2xl p-4 mb-4" style="background:rgba(79,70,229,.08)">
+      <p class="text-[12.5px] font-semibold" style="color:var(--primary)">Kode berlaku 24 jam dan dapat dicairkan di ATM Bersama, Alfamart, dan Indomaret.</p></div>
+    <p class="text-[12px] font-extrabold muted mb-2">Pilih Nominal Penarikan</p>
+    <div class="grid grid-cols-2 gap-2.5">${amts.map(a=>`<button onclick="app.doTarik(${a})" class="press prod text-center py-4"><p class="font-extrabold txt text-[15px]">${rp(a)}</p><p class="text-[10.5px] muted font-semibold mt-0.5">Biaya Rp2.500</p></button>`).join('')}</div>
+  </div>`);
+}
+function openQris(){
+  openSheet('qr',{title:'',dark:true,noPad:true,full:true});
+  setBody('qr',`<div class="px-5 pb-8 text-white">
+    <div class="flex items-center justify-between mb-5">
+      <div><h3 class="font-extrabold text-lg">Scan QRIS</h3><p class="text-[12px] text-slate-400 font-medium">Arahkan kamera ke kode QR merchant</p></div>
+      <button onclick="app.closeSheet('qr')" class="press w-9 h-9 rounded-full grid place-items-center bg-white/10">${ic('x','w-4.5 h-4.5','2.2')}</button>
+    </div>
+    <div class="relative rounded-3xl overflow-hidden" style="aspect-ratio:1/1;background:linear-gradient(150deg,#1e293b,#0f172a)">
+      <div class="scanline"></div>
+      ${['top-4 left-4 border-t-4 border-l-4 rounded-tl-2xl','top-4 right-4 border-t-4 border-r-4 rounded-tr-2xl','bottom-4 left-4 border-b-4 border-l-4 rounded-bl-2xl','bottom-4 right-4 border-b-4 border-r-4 rounded-br-2xl']
+        .map(c=>`<span class="absolute w-14 h-14 ${c}" style="border-color:#34d399"></span>`).join('')}
+      <div class="absolute inset-0 grid place-items-center text-slate-600">${ic('qr','w-24 h-24',1.2)}</div>
+    </div>
+    <p class="text-center text-[12px] text-slate-400 font-medium mt-5">Kamera dinonaktifkan pada mode demo</p>
+    <button onclick="app.qrisSimulate()" class="btn btn-primary mt-4">Simulasikan Scan QR</button>
+    <div class="grid grid-cols-2 gap-2.5 mt-2.5">
+      <button onclick="app.myQris()" class="press btn bg-white/10 text-white flex items-center justify-center gap-2">${ic('qr','w-4 h-4')} QR Saya</button>
+      <button onclick="app.toast('Galeri tidak tersedia di demo','warn')" class="press btn bg-white/10 text-white flex items-center justify-center gap-2">${ic('camera','w-4 h-4')} Galeri</button>
+    </div></div>`);
+}
+const MERCHANTS=[['Kopi Kenangan Sudirman','Makanan & Minuman','☕'],['Warung Bu Tini','Kuliner','🍜'],['Apotek Sehat Jaya','Kesehatan','💊'],['Toko Buku Cerdas','Retail','📚'],['Bengkel Motor Jaya','Otomotif','🔧']];
+function qrisSimulate(){
+  closeSheet('qr');
+  const m=MERCHANTS[Math.floor(Math.random()*MERCHANTS.length)];
+  F={sid:'qris',merchant:m,amount:0,method:'saldo',admin:0,discount:0,voucher:null,customer:m[0]};
+  setTimeout(()=>{
+    openSheet('qm',{title:'Pembayaran QRIS',sub:'Merchant terverifikasi'});
+    setBody('qm',`<div class="pb-4">
+      <div class="card p-4 flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl grid place-items-center text-2xl" style="background:var(--surface-3)">${m[2]}</div>
+        <div><p class="font-extrabold txt text-[14px]">${m[0]}</p><p class="text-[11.5px] muted font-semibold">${m[1]} · NMID 93600${Math.floor(Math.random()*9e5+1e5)}</p></div>
+      </div>
+      <p class="text-[12px] font-extrabold muted mt-4 mb-1.5">Nominal Pembayaran</p>
+      <input id="qrAmt" oninput="app.setQrAmt(this.value)" inputmode="numeric" placeholder="Rp 0" class="inp text-xl">
+      <div class="flex gap-2 mt-2.5 flex-wrap">${[15000,25000,50000,100000].map(a=>`<button onclick="app.setQrAmt('${a}')" class="press chip">${rpShort(a)}</button>`).join('')}</div>
+      <div class="flex items-center gap-2 mt-4 p-3.5 rounded-2xl" style="background:var(--surface-2)">
+        ${ic('wallet','w-5 h-5','2')}<div class="flex-1"><p class="text-[12.5px] font-extrabold txt">Saldo PayNusa</p><p class="text-[11px] muted font-semibold">${rp(S.balance)}</p></div>
+        <span class="text-[11px] font-extrabold" style="color:var(--primary)">Terpilih</span></div>
+    </div>
+    <div class="sticky bottom-0 pt-3 pb-[calc(.75rem+env(safe-area-inset-bottom))]" style="background:linear-gradient(to top,var(--surface) 70%,transparent)">
+      <button id="qrPayBtn" onclick="app.qrisPay()" disabled class="btn btn-primary">Bayar Sekarang</button></div>`);
+  },220);
+}
+function openNotif(){
+  openSheet('nt',{title:'Notifikasi',sub:S.notifs.filter(n=>!n.read).length+' pesan belum dibaca'});
+  const colors={success:'#10b981',promo:'#a855f7',warn:'#f59e0b',info:'#4f46e5'};
+  const icons={success:'check',promo:'gift',warn:'alert',info:'info'};
+  setBody('nt',`<div class="pb-6">
+    <button onclick="app.markAllRead()" class="press w-full text-right text-[12px] font-extrabold mb-2" style="color:var(--primary)">Tandai semua dibaca</button>
+    <div class="space-y-2">${S.notifs.map(n=>`
+      <div class="flex gap-3 p-3.5 rounded-2xl border bd" style="background:${n.read?'var(--surface)':'rgba(79,70,229,.06)'}">
+        <div class="w-9 h-9 rounded-xl grid place-items-center shrink-0 text-white" style="background:${colors[n.type]}">${ic(icons[n.type],'w-4.5 h-4.5')}</div>
+        <div class="flex-1 min-w-0"><div class="flex items-start gap-2"><p class="text-[13px] font-extrabold txt flex-1">${n.title}</p>${!n.read?`<span class="w-2 h-2 rounded-full mt-1.5 shrink-0" style="background:var(--primary)"></span>`:''}</div>
+        <p class="text-[12px] muted font-medium mt-0.5 leading-snug">${n.body}</p>
+        <p class="text-[10.5px] muted font-semibold mt-1.5">${dayLabel(n.time)} · ${fTime(n.time)}</p></div>
+      </div>`).join('')}</div></div>`);
+}
+function openAllServices(q=''){
+  if(!document.getElementById('sh-all'))openSheet('all',{title:'Semua Layanan',sub:'Pilih kategori layanan yang Anda butuhkan',full:true});
+  const list=SERVICES.filter(s=>s.name.toLowerCase().includes(q.toLowerCase())||(s.providers||[]).join(' ').toLowerCase().includes(q.toLowerCase()));
+  setBody('all',`<div class="pb-6">
+    <div class="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border bd mb-4" style="background:var(--surface-2)">
+      ${ic('search','w-4.5 h-4.5 muted')}<input id="svcSearch" value="${q}" oninput="app.searchServices(this.value)" placeholder="Cari layanan..." class="flex-1 bg-transparent outline-none text-[13px] font-semibold" style="color:var(--text)">
+    </div>
+    ${CATS.map(c=>{const items=list.filter(s=>s.cat===c.id);if(!items.length)return '';
+      return `<div class="mb-5"><p class="text-[12px] font-extrabold muted mb-3">${c.n.toUpperCase()}</p>
+      <div class="grid grid-cols-4 gap-y-4 gap-x-1">${items.map(s=>tile(s.id)).join('')}</div></div>`}).join('')}
+    ${!list.length?`<p class="text-center py-10 text-sm muted font-semibold">Layanan tidak ditemukan</p>`:''}</div>`);
+  const el=document.getElementById('svcSearch');if(el&&q){el.focus();el.setSelectionRange(q.length,q.length);}
+}
+function openTxDetail(id){
+  const t=S.tx.find(x=>x.id===id);if(!t)return;
+  const s=SV[t.sid]||{icon:'receipt',c1:'#64748b',c2:'#475569'};
+  const st={success:['Berhasil','#10b981','check'],pending:['Menunggu Pembayaran','#f59e0b','clock'],failed:['Transaksi Gagal','#ef4444','x']}[t.status];
+  openSheet('td',{title:'Detail Transaksi',sub:'No. Ref '+t.ref});
+  setBody('td',`<div class="pb-6">
+    <div class="text-center py-2">
+      <div class="w-16 h-16 mx-auto rounded-full grid place-items-center" style="background:${st[1]}1f;color:${st[1]}">${ic(st[2],'w-8 h-8','2.6')}</div>
+      <p class="font-extrabold txt text-[15px] mt-3">${st[0]}</p>
+      <p class="text-[24px] font-extrabold txt mt-1">${rp(t.total)}</p>
+      <p class="text-[12px] muted font-semibold mt-0.5">${fDate(t.date)} · ${fTime(t.date)}</p>
+    </div>
+    <div class="card p-4 mt-3">
+      <div class="flex items-center gap-3 pb-3">
+        <div class="w-11 h-11 rounded-xl grid place-items-center text-white" style="background:linear-gradient(135deg,${s.c1},${s.c2})">${ic(s.icon,'w-5 h-5')}</div>
+        <div class="min-w-0"><p class="font-extrabold txt text-[14px] truncate">${t.product}</p><p class="text-[11.5px] muted font-semibold">${t.serviceName}</p></div>
+      </div>
+      <div class="dash mb-3"></div>
+      ${[['Nomor Tujuan',t.customer],['Nama',t.customerName||'-'],['Metode Bayar',t.method],['No. Referensi',t.ref]]
+        .map(([k,v])=>`<div class="flex justify-between gap-3 py-1"><span class="text-[12.5px] muted font-semibold">${k}</span><span class="text-[12.5px] font-extrabold txt text-right">${v}</span></div>`).join('')}
+      ${t.token?`<div class="mt-3 p-3 rounded-2xl text-center" style="background:rgba(245,158,11,.12)"><p class="text-[10.5px] font-extrabold" style="color:#d97706">TOKEN LISTRIK</p><p class="font-extrabold txt tracking-wider mt-0.5">${t.token}</p></div>`:''}
+      <div class="dash my-3"></div>
+      <div class="flex justify-between py-1"><span class="text-[12.5px] muted font-semibold">Harga</span><span class="text-[12.5px] font-bold txt">${rp(t.amount)}</span></div>
+      <div class="flex justify-between py-1"><span class="text-[12.5px] muted font-semibold">Admin</span><span class="text-[12.5px] font-bold txt">${t.admin?rp(t.admin):'Gratis'}</span></div>
+      ${t.discount?`<div class="flex justify-between py-1"><span class="text-[12.5px] text-emerald-500 font-semibold">Diskon</span><span class="text-[12.5px] font-extrabold text-emerald-500">-${rp(t.discount)}</span></div>`:''}
+      <div class="flex justify-between pt-2"><span class="text-[13.5px] font-extrabold txt">Total</span><span class="text-[15px] font-extrabold" style="color:var(--primary)">${rp(t.total)}</span></div>
+    </div>
+    ${t.status==='pending'?`<button onclick="app.checkStatus('${t.id}')" class="btn btn-primary mt-3">Cek Status Pembayaran</button>`:''}
+    <div class="grid grid-cols-2 gap-2.5 mt-3">
+      <button onclick="app.downloadReceipt('${t.id}')" class="press btn btn-ghost flex items-center justify-center gap-2">${ic('download','w-4 h-4','2.2')} Struk</button>
+      <button onclick="app.shareTx('${t.id}')" class="press btn btn-ghost flex items-center justify-center gap-2">${ic('share','w-4 h-4','2.2')} Bagikan</button>
+    </div>
+    ${SV[t.sid]?`<button onclick="app.repeatTx('${t.id}')" class="btn btn-primary mt-2.5">Ulangi Transaksi</button>`:''}
+    <button onclick="app.toast('Tim CS akan menghubungi Anda dalam 1x24 jam','info')" class="press w-full text-center text-[12px] font-extrabold py-3 mt-1" style="color:var(--primary)">Laporkan Masalah</button>
+  </div>`);
+}
+function openEditProfile(){
+  openSheet('ep',{title:'Data Pribadi',sub:'Perbarui informasi akun Anda'});
+  setBody('ep',`<div class="pb-6">
+    <div class="flex justify-center py-3"><div class="w-20 h-20 rounded-3xl grad grid place-items-center text-white font-extrabold text-2xl">${initials(S.user.name)}</div></div>
+    ${[['Nama Lengkap','epName',S.user.name,'text'],['Nomor Handphone','epPhone',S.user.phone,'tel'],['Email','epEmail',S.user.email,'text'],['Kota / Domisili','epAddr',S.user.address,'text']]
+      .map(([l,id,v,t])=>`<p class="text-[12px] font-extrabold muted mt-3 mb-1.5">${l}</p><input id="${id}" value="${v}" inputmode="${t==='tel'?'tel':'text'}" class="inp">`).join('')}
+    <div class="flex items-center gap-2 mt-4 p-3.5 rounded-2xl" style="background:rgba(16,185,129,.1)">
+      ${ic('shield','w-5 h-5 text-emerald-500','2')}<p class="text-[12px] font-bold text-emerald-600">Akun Anda sudah terverifikasi KTP (KYC Level 2)</p></div>
+    <button onclick="app.saveProfile()" class="btn btn-primary mt-4">Simpan Perubahan</button></div>`);
+}
+function openSecurity(){
+  openSheet('sc',{title:'Keamanan & PIN',sub:'Lindungi akun dan transaksi Anda'});
+  setBody('sc',`<div class="pb-6">
+    <p class="text-[12px] font-extrabold muted mb-1.5">PIN Lama</p><input id="pinOld" type="password" inputmode="numeric" maxlength="6" placeholder="••••••" class="inp tracking-[.4em]">
+    <p class="text-[12px] font-extrabold muted mt-3 mb-1.5">PIN Baru</p><input id="pinNew" type="password" inputmode="numeric" maxlength="6" placeholder="••••••" class="inp tracking-[.4em]">
+    <p class="text-[12px] font-extrabold muted mt-3 mb-1.5">Konfirmasi PIN Baru</p><input id="pinNew2" type="password" inputmode="numeric" maxlength="6" placeholder="••••••" class="inp tracking-[.4em]">
+    <div class="flex items-start gap-2 mt-4 p-3.5 rounded-2xl" style="background:rgba(245,158,11,.12)">
+      ${ic('alert','w-4.5 h-4.5 shrink-0','2')}<p class="text-[12px] font-semibold" style="color:#d97706">Jangan bagikan PIN kepada siapa pun, termasuk pihak yang mengaku customer service.</p></div>
+    <button onclick="app.changePin()" class="btn btn-primary mt-4">Ubah PIN</button>
+    <div class="card mt-4 px-4 divide-y" style="border-color:var(--border)">
+      ${[['clock','Riwayat Login','iPhone 15 · Jakarta · Hari ini'],['phone','Perangkat Terhubung','2 perangkat aktif'],['mail','Verifikasi Email','budi.santoso@email.com']]
+      .map(([i,t,s])=>`<button onclick="app.toast('Fitur demo: ${t}','info')" class="press w-full flex items-center gap-3 py-3.5 text-left">
+        <div class="w-9 h-9 rounded-xl grid place-items-center" style="background:var(--surface-3);color:var(--primary)">${ic(i,'w-4.5 h-4.5')}</div>
+        <div class="flex-1"><p class="text-[13px] font-bold txt">${t}</p><p class="text-[11px] muted font-medium">${s}</p></div>${ic('chevR','w-4 h-4 muted','2.4')}</button>`).join('')}
+    </div></div>`);
+}
+function openSheetMenu(kind){
+  const C={
+    settings:{t:'Pengaturan',b:()=>`<div class="pb-6 space-y-2">
+      ${[['moon','Mode Gelap','dark'],['bell','Notifikasi Transaksi','notif'],['tag','Notifikasi Promo','promoNotif'],['shield','Login Biometrik','biometric'],['eye','Sembunyikan Saldo','hideBalance']]
+      .map(([i,l,k])=>`<div class="flex items-center gap-3 p-3.5 rounded-2xl border bd">
+        <div class="w-9 h-9 rounded-xl grid place-items-center" style="background:var(--surface-3);color:var(--primary)">${ic(i,'w-4.5 h-4.5')}</div>
+        <p class="flex-1 text-[13px] font-bold txt">${l}</p>
+        <button onclick="app.toggleSetting('${k}',true)" class="press w-12 h-7 rounded-full relative" style="background:${S.settings[k]?'var(--primary)':'var(--surface-3)'}">
+        <span class="absolute top-1 w-5 h-5 rounded-full bg-white shadow transition-all" style="left:${S.settings[k]?'26px':'4px'}"></span></button></div>`).join('')}
+      <div class="p-3.5 rounded-2xl border bd"><p class="text-[13px] font-bold txt mb-1">Bahasa</p>
+        <div class="flex gap-2 mt-2"><button class="chip on">Indonesia</button><button onclick="app.toast('English coming soon','info')" class="press chip">English</button></div></div></div>`},
+    help:{t:'Pusat Bantuan',b:()=>`<div class="pb-6">
+      <div class="grid grid-cols-2 gap-2.5 mb-4">
+        <button onclick="app.toast('Menghubungkan ke live chat...','info')" class="press card p-4 text-left"><div class="w-9 h-9 rounded-xl grid place-items-center text-white mb-2" style="background:#10b981">${ic('mail','w-4.5 h-4.5')}</div><p class="text-[13px] font-extrabold txt">Live Chat</p><p class="text-[11px] muted font-semibold">Online 24 jam</p></button>
+        <button onclick="app.toast('Menghubungi 1500-123...','info')" class="press card p-4 text-left"><div class="w-9 h-9 rounded-xl grid place-items-center text-white mb-2" style="background:#4f46e5">${ic('phone','w-4.5 h-4.5')}</div><p class="text-[13px] font-extrabold txt">Telepon CS</p><p class="text-[11px] muted font-semibold">1500-123</p></button>
+      </div>
+      <p class="text-[12px] font-extrabold muted mb-2">PERTANYAAN UMUM</p>
+      <div class="space-y-2">${[['Berapa lama proses transaksi?','Umumnya transaksi diproses instan kurang dari 30 detik. Bila lebih dari 1 jam, dana otomatis dikembalikan.'],
+      ['Bagaimana cara top up saldo?','Buka Beranda > Top Up, pilih nominal dan metode pembayaran, lalu ikuti instruksi yang tersedia.'],
+      ['Transaksi gagal tapi saldo terpotong?','Dana akan dikembalikan otomatis maksimal 1x24 jam. Hubungi CS bila melewati batas waktu.'],
+      ['Apakah token listrik bisa dicek ulang?','Bisa. Buka menu Riwayat, pilih transaksi PLN, dan token akan tampil pada detail transaksi.'],
+      ['Bagaimana cara mengubah PIN?','Masuk ke Profil > Keamanan & PIN, lalu masukkan PIN lama dan PIN baru Anda.']]
+      .map(([q,a],i)=>`<div class="card overflow-hidden"><button onclick="app.faq(${i})" class="press w-full flex items-center gap-3 p-3.5 text-left">
+        <p class="flex-1 text-[13px] font-bold txt">${q}</p>${ic('chevD','w-4 h-4 muted','2.4')}</button>
+        <div id="faq${i}" class="hidden px-3.5 pb-3.5 -mt-1"><p class="text-[12.5px] muted font-medium leading-relaxed">${a}</p></div></div>`).join('')}</div></div>`},
+    about:{t:'Tentang PayNusa',b:()=>`<div class="pb-6 text-center">
+      <div class="w-20 h-20 mx-auto rounded-3xl grad grid place-items-center text-white font-extrabold text-3xl">P</div>
+      <p class="font-extrabold txt text-lg mt-3">PayNusa</p><p class="text-[12px] muted font-semibold">Versi 4.2.1 (Demo Build)</p>
+      <p class="text-[12.5px] muted font-medium mt-4 leading-relaxed text-left">PayNusa adalah aplikasi Payment Point Online Bank (PPOB) yang memudahkan Anda membayar berbagai tagihan, membeli pulsa, paket data, token listrik, voucher game, hingga transfer dana — semuanya dalam satu aplikasi.</p>
+      <div class="grid grid-cols-3 gap-2 mt-5">${[['2.5jt+','Pengguna'],['18','Layanan'],['99.9%','Uptime']].map(([a,b])=>`<div class="card p-3"><p class="font-extrabold txt text-[15px]">${a}</p><p class="text-[10.5px] muted font-bold">${b}</p></div>`).join('')}</div>
+      <p class="text-[11px] muted font-semibold mt-5">Berizin & diawasi Bank Indonesia<br>© 2026 PT PayNusa Digital Indonesia</p></div>`},
+    terms:{t:'Syarat & Ketentuan',b:()=>`<div class="pb-6 space-y-3">
+      ${[['1. Ketentuan Umum','Dengan menggunakan layanan PayNusa, pengguna dianggap telah membaca, memahami, dan menyetujui seluruh syarat dan ketentuan yang berlaku.'],
+      ['2. Akun Pengguna','Pengguna wajib menjaga kerahasiaan PIN dan data akun. Segala aktivitas yang terjadi pada akun menjadi tanggung jawab pemilik akun.'],
+      ['3. Transaksi','Seluruh transaksi yang telah berhasil diproses tidak dapat dibatalkan. Pastikan data tujuan sudah benar sebelum konfirmasi pembayaran.'],
+      ['4. Saldo & Pengembalian Dana','Saldo tidak dapat diuangkan kecuali melalui fitur resmi. Pengembalian dana atas transaksi gagal diproses maksimal 1x24 jam kerja.'],
+      ['5. Privasi Data','Data pribadi pengguna dilindungi dan hanya digunakan untuk keperluan layanan sesuai peraturan perundang-undangan yang berlaku.']]
+      .map(([t,d])=>`<div class="card p-4"><p class="font-extrabold txt text-[13px] mb-1">${t}</p><p class="text-[12.5px] muted font-medium leading-relaxed">${d}</p></div>`).join('')}</div>`},
+    payment:{t:'Metode Pembayaran',b:()=>`<div class="pb-6">
+      <div class="space-y-2">${[['card','Kartu Debit BCA','**** **** **** 4829','#4f46e5'],['card','Kartu Kredit Mandiri','**** **** **** 1157','#f59e0b'],['wallet','Saldo PayNusa',rp(S.balance),'#10b981']]
+      .map(([i,n,d,c])=>`<div class="card p-4 flex items-center gap-3"><div class="w-10 h-10 rounded-xl grid place-items-center text-white" style="background:${c}">${ic(i,'w-5 h-5')}</div>
+      <div class="flex-1"><p class="text-[13px] font-extrabold txt">${n}</p><p class="text-[11.5px] muted font-semibold">${d}</p></div>
+      <button onclick="app.toast('Fitur demo','info')" class="press muted">${ic('chevR','w-4 h-4','2.4')}</button></div>`).join('')}</div>
+      <button onclick="app.toast('Tambah kartu — fitur demo','info')" class="btn btn-ghost mt-3 flex items-center justify-center gap-2">${ic('plus','w-4 h-4','2.4')} Tambah Metode Pembayaran</button></div>`},
+    bank:{t:'Rekening Bank',b:()=>`<div class="pb-6">
+      <div class="space-y-2">${[['BCA','1234567890','Budi Santoso'],['Mandiri','9876543210','Budi Santoso']]
+      .map(([b,n,o])=>`<div class="card p-4 flex items-center gap-3"><div class="w-10 h-10 rounded-xl grid place-items-center text-white" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">${ic('bank','w-5 h-5')}</div>
+      <div class="flex-1"><p class="text-[13px] font-extrabold txt">${b} · ${n}</p><p class="text-[11.5px] muted font-semibold">a.n. ${o}</p></div>
+      <button onclick="app.copy('${n}','Nomor rekening disalin')" class="press muted">${ic('copy','w-4 h-4')}</button></div>`).join('')}</div>
+      <button onclick="app.toast('Tambah rekening — fitur demo','info')" class="btn btn-ghost mt-3 flex items-center justify-center gap-2">${ic('plus','w-4 h-4','2.4')} Tambah Rekening</button></div>`},
+  }[kind];
+  openSheet('mn',{title:C.t});setBody('mn',C.b());
+}
+
+/* ==================== APP ACTIONS ==================== */
+const app={
+  toast,copy:copyText,closeSheet,
+  go(t){S.tab=t;save();render();window.scrollTo({top:0,behavior:'smooth'});},
+  goHistory(){hFilter='all';hQuery='';app.go('history');},
+  toggleBalance(){S.settings.hideBalance=!S.settings.hideBalance;save();render();},
+  openAllServices,openService,openNotif,openTopup,openTransfer,openTarik,openQris,openTxDetail,openEditProfile,openSecurity,openSheetMenu,qrisSimulate,
+  /* service */
+  setProvider(p){F.provider=p;F.product=null;F.bill=null;renderSvc();},
+  setCustomer(v){F.customer=v;F.bill=null;renderSvc();const i=document.getElementById('custInp');if(i){i.focus();i.setSelectionRange(v.length,v.length);}},
+  setFree(v){const n=v.replace(/\D/g,'');F.free=n?parseInt(n).toLocaleString('id-ID'):'';F.product=null;renderSvc();
+    const i=document.getElementById('freeAmt');if(i){i.focus();i.setSelectionRange(F.free.length,F.free.length);}},
+  selectProduct(i){const s=SV[F.sid];if(s.free){const p=(s.products||[])[i];F.free=p.price.toLocaleString('id-ID');F.product=i;}else F.product=i;renderSvc();},
+  checkBill(){F.checking=true;renderSvc();
+    setTimeout(()=>{const s=SV[F.sid];const r=seedRand(F.sid+F.customer);
+      const [lo,hi]=s.billRange;const amt=Math.round((lo+r()*(hi-lo))/500)*500;
+      const m=new Date();const per=MONL[(m.getMonth()+11)%12]+' '+m.getFullYear();
+      const period=s.id==='multifinance'?('Angsuran ke-'+Math.floor(r()*24+1)+' · '+per):(s.id==='pbb'?'Tahun '+m.getFullYear():(s.id==='esamsat'?'Jatuh tempo '+per:per));
+      F.bill={name:custName(F.customer),amount:amt,period};
+      F.checking=false;renderSvc();toast('Tagihan ditemukan','success');},1300);},
+  toConfirm(){if(!canProceed())return;F.discount=0;F.voucher=null;openConfirm();},
+  setMethod(m){F.method=m;renderConfirm();},
+  openVoucherPicker(){
+    const total=calcTotal()+F.discount;
+    const avail=S.vouchers.filter(v=>v.claimed&&!v.used);
+    openSheet('vc',{title:'Pilih Voucher',sub:'Voucher yang sudah Anda klaim'});
+    setBody('vc',`<div class="pb-6 space-y-2">
+      ${avail.length?avail.map(v=>{const ok=(!v.svc.length||v.svc.includes(F.sid))&&total>=v.min;
+        return `<button onclick="${ok?`app.applyVoucher('${v.code}')`:`app.toast('Voucher tidak berlaku untuk transaksi ini','warn')`}" class="press w-full card p-4 text-left ${ok?'':'opacity-50'}">
+        <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl grid place-items-center text-white shrink-0 grad">${ic('ticket','w-5 h-5')}</div>
+        <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold txt">${v.title}</p><p class="text-[11.5px] muted font-medium">${v.desc}</p>
+        ${!ok?`<p class="text-[11px] font-bold text-red-500 mt-0.5">Tidak berlaku · min. ${rp(v.min)}</p>`:''}</div>
+        ${ok?ic('chevR','w-4 h-4 muted','2.4'):''}</div></button>`}).join(''):
+        `<p class="text-center py-10 text-sm muted font-semibold">Belum ada voucher. Klaim dulu di halaman Promo.</p>`}
+      <button onclick="app.go('promo');app.closeSheet('vc')" class="btn btn-ghost mt-2">Lihat Semua Promo</button></div>`);},
+  applyVoucher(code){const v=S.vouchers.find(x=>x.code===code);const base=calcTotal()+F.discount;
+    let d=v.type==='pct'?Math.min(Math.round(base*v.val/100),v.max):v.val;
+    d=Math.min(d,base-1000);F.discount=d;F.voucher=code;closeSheet('vc');renderConfirm();toast('Voucher diterapkan, hemat '+rp(d),'success');},
+  removeVoucher(){F.discount=0;F.voucher=null;renderConfirm();},
+  useVoucherNow(code){const v=S.vouchers.find(x=>x.code===code);toast('Pilih layanan lalu voucher '+v.code+' bisa dipakai','info');app.openAllServices();},
+  claimVoucher(code){const v=S.vouchers.find(x=>x.code===code);v.claimed=true;save();render();toast('Voucher '+code+' berhasil diklaim!','success');},
+  payNow(){
+    const total=calcTotal();
+    if(F.method==='saldo'){
+      if(S.balance<total){toast('Saldo tidak mencukupi','error');return;}
+      openPin(()=>{closeSheet('pin');processing('Memproses pembayaran...',()=>{
+        S.balance-=total;const tx=buildTx(total,'Saldo PayNusa','success');finishTx(tx);});});
+    } else if(F.method==='card'){
+      openPin(()=>{closeSheet('pin');processing('Memverifikasi kartu...',()=>{
+        const tx=buildTx(total,'Kartu Kredit **** 4829','success');finishTx(tx);});},'Masukkan PIN Kartu');
+    } else {
+      const tx=buildTx(total,F.method==='va'?'BCA Virtual Account':'Alfamart / Indomaret','pending');
+      closeSheet('cf');setTimeout(()=>openVA(F.method,tx),200);
+    }},
+  simulatePaid(){clearInterval(vaTimer);const tx=F.pendingTx;closeSheet('va');
+    processing('Mengonfirmasi pembayaran...',()=>{tx.status='success';tx.date=new Date().toISOString();finishTx(tx);});},
+  pinPress(d){if(pinBuf.length>=6)return;pinBuf+=d;renderPin();
+    if(pinBuf.length===6){setTimeout(()=>{
+      if(pinBuf===S.pin){pinTries=0;pinCb&&pinCb();}
+      else{pinTries++;pinBuf='';renderPin();const p=document.getElementById('pinDots');if(p)p.classList.add('shake');
+        toast(pinTries>=3?'PIN salah. Sisa percobaan '+(5-pinTries):'PIN salah, coba lagi','error');setTimeout(()=>p&&p.classList.remove('shake'),450);}
+    },160);}},
+  pinDel(){pinBuf=pinBuf.slice(0,-1);renderPin();},
+  forgotPin(){toast('Demo: PIN Anda adalah 123456','info');},
+  /* success */
+  closeSuccess(){document.getElementById('succ')?.remove();render();},
+  downloadReceipt(id){const t=S.tx.find(x=>x.id===id);if(!t)return;
+    const L=['==============================','        PAYNUSA - STRUK','==============================',
+      'No. Ref     : '+t.ref,'Tanggal     : '+fDate(t.date)+' '+fTime(t.date),'Status      : '+t.status.toUpperCase(),
+      '------------------------------','Layanan     : '+t.serviceName,'Produk      : '+t.product,'Tujuan      : '+t.customer,
+      'Nama        : '+(t.customerName||'-'),t.token?'Token       : '+t.token:'','------------------------------',
+      'Harga       : '+rp(t.amount),'Admin       : '+(t.admin?rp(t.admin):'Gratis'),t.discount?'Diskon      : -'+rp(t.discount):'',
+      'TOTAL       : '+rp(t.total),'Metode      : '+t.method,'==============================','  Terima kasih telah bertransaksi','      www.paynusa.co.id'].filter(Boolean).join('\n');
+    const b=new Blob([L],{type:'text/plain'});const u=URL.createObjectURL(b);const a=document.createElement('a');
+    a.href=u;a.download='Struk-'+t.ref+'.txt';a.click();URL.revokeObjectURL(u);toast('Struk berhasil diunduh','success');},
+  shareTx(id){const t=S.tx.find(x=>x.id===id);if(!t)return;
+    const txt=`Struk PayNusa\n${t.product}\nTujuan: ${t.customer}\nTotal: ${rp(t.total)}\nRef: ${t.ref}\nStatus: ${t.status.toUpperCase()}`;
+    if(navigator.share)navigator.share({title:'Struk PayNusa',text:txt}).catch(()=>{});else copyText(txt,'Struk disalin ke clipboard');},
+  repeatTx(id){const t=S.tx.find(x=>x.id===id);closeSheet('td');setTimeout(()=>openService(t.sid,t.customer),250);},
+  checkStatus(id){const t=S.tx.find(x=>x.id===id);closeSheet('td');
+    processing('Mengecek status...',()=>{t.status='success';save();toast('Pembayaran terkonfirmasi!','success');render();setTimeout(()=>openTxDetail(id),200);});},
+  setFilter(f){hFilter=f;render();},
+  setSearch(v){hQuery=v;render();const i=document.querySelector('input[placeholder^="Cari transaksi"]');if(i){i.focus();i.setSelectionRange(v.length,v.length);}},
+  searchServices(q){openAllServices(q);},
+  markAllRead(){S.notifs.forEach(n=>n.read=true);save();openNotif();render();toast('Semua notifikasi telah dibaca','success');},
+  /* topup */
+  setTopupAmt(v){F.topup.amt=parseInt(String(v).replace(/\D/g,''))||0;renderTopup();
+    const i=document.getElementById('tuAmt');if(i){const s=i.value.length;i.focus();i.setSelectionRange(s,s);}},
+  setTopupMethod(i){F.topup.method=i;renderTopup();},
+  doTopup(){const amt=F.topup.amt;closeSheet('tu');
+    setTimeout(()=>{openPin(()=>{closeSheet('pin');processing('Memproses top up...',()=>{
+      S.balance+=amt;S.notifs.unshift({id:uid(),title:'Top Up Berhasil',body:`Saldo ${rp(amt)} telah masuk ke akun Anda.`,time:new Date().toISOString(),read:false,type:'success'});
+      const tx={id:uid(),ref:ref(),sid:'topup',serviceName:'Top Up Saldo',product:'Top Up Saldo '+rp(amt),customer:S.user.phone,customerName:S.user.name,
+        amount:amt,admin:0,discount:0,total:amt,method:'Virtual Account',status:'success',date:new Date().toISOString()};
+      S.tx.unshift(tx);save();render();toast('Top up berhasil! Saldo bertambah '+rp(amt),'success');});},'Konfirmasi Top Up');},220);},
+  /* transfer */
+  setTfBank(b){F.tf.bank=b;renderTransfer();},
+  setTfAcc(v){F.tf.acc=v.replace(/\D/g,'');renderTransfer();},
+  setTfAmt(v){F.tf.amt=parseInt(String(v).replace(/\D/g,''))||0;renderTransfer();},
+  setTfNote(v){F.tf.note=v;},
+  doTransfer(){const t=F.tf;const total=t.amt+2500;
+    if(S.balance<total){toast('Saldo tidak mencukupi','error');return;}
+    closeSheet('tf');setTimeout(()=>openPin(()=>{closeSheet('pin');processing('Mengirim dana...',()=>{
+      S.balance-=total;
+      const tx={id:uid(),ref:ref(),sid:'transfer',serviceName:'Transfer Dana',product:'Transfer ke '+t.bank+' '+t.acc,customer:t.acc,customerName:custName(t.acc),
+        amount:t.amt,admin:2500,discount:0,total,method:'Saldo PayNusa',status:'success',date:new Date().toISOString()};
+      S.tx.unshift(tx);S.points+=Math.floor(total/1000);
+      S.notifs.unshift({id:uid(),title:'Transfer Berhasil',body:`Transfer ${rp(t.amt)} ke ${custName(t.acc)} (${t.bank}) berhasil.`,time:new Date().toISOString(),read:false,type:'success'});
+      save();showSuccess(tx);render();});}),220);},
+  doTarik(a){const total=a+2500;
+    if(S.balance<total){toast('Saldo tidak mencukupi','error');return;}
+    closeSheet('tk');setTimeout(()=>openPin(()=>{closeSheet('pin');processing('Membuat kode penarikan...',()=>{
+      S.balance-=total;const code=String(Math.floor(Math.random()*9e5+1e5))+' '+String(Math.floor(Math.random()*9e5+1e5));
+      const tx={id:uid(),ref:ref(),sid:'tarik',serviceName:'Tarik Tunai',product:'Tarik Tunai '+rp(a),customer:S.user.phone,customerName:S.user.name,
+        amount:a,admin:2500,discount:0,total,method:'Saldo PayNusa',status:'success',date:new Date().toISOString(),token:code};
+      S.tx.unshift(tx);save();showSuccess(tx);render();toast('Kode penarikan berhasil dibuat','success');});}),220);},
+  /* qris */
+  setQrAmt(v){const n=parseInt(String(v).replace(/\D/g,''))||0;F.amount=n;
+    const i=document.getElementById('qrAmt');if(i){i.value=n?n.toLocaleString('id-ID'):'';const s=i.value.length;i.setSelectionRange(s,s);}
+    const b=document.getElementById('qrPayBtn');if(b){b.disabled=n<1000;b.textContent=n?'Bayar '+rp(n):'Bayar Sekarang';}},
+  qrisPay(){const total=F.amount;if(S.balance<total){toast('Saldo tidak mencukupi','error');return;}
+    closeSheet('qm');setTimeout(()=>openPin(()=>{closeSheet('pin');processing('Memproses pembayaran QRIS...',()=>{
+      S.balance-=total;
+      const tx={id:uid(),ref:ref(),sid:'qris',serviceName:'Pembayaran QRIS',product:F.merchant[0],customer:F.merchant[0],customerName:F.merchant[1],
+        amount:total,admin:0,discount:0,total,method:'Saldo PayNusa (QRIS)',status:'success',date:new Date().toISOString()};
+      S.tx.unshift(tx);S.points+=Math.floor(total/1000);
+      S.notifs.unshift({id:uid(),title:'Pembayaran QRIS Berhasil',body:`Pembayaran ${rp(total)} di ${F.merchant[0]} berhasil.`,time:new Date().toISOString(),read:false,type:'success'});
+      save();showSuccess(tx);render();});}),220);},
+  myQris(){closeSheet('qr');setTimeout(()=>{openSheet('mq',{title:'QRIS Saya',sub:'Tunjukkan kode ini untuk menerima pembayaran'});
+    setBody('mq',`<div class="pb-8 text-center">
+      <div class="card p-6 mx-auto" style="max-width:300px">
+        <p class="font-extrabold txt">${S.user.name}</p><p class="text-[11.5px] muted font-semibold">NMID ID10${Math.floor(Math.random()*9e8+1e8)}</p>
+        <div class="mt-4 grid grid-cols-[repeat(21,1fr)] gap-[2px] mx-auto" style="width:210px">
+          ${Array.from({length:441}).map((_,i)=>{const r=seedRand('q'+i)();return `<span style="aspect-ratio:1;background:${r>0.5?'var(--text)':'transparent'};border-radius:1px"></span>`}).join('')}
+        </div>
+        <p class="text-[11px] muted font-bold mt-4">QRIS · Semua Pembayaran</p>
+      </div>
+      <button onclick="app.toast('QR berhasil disimpan ke galeri','success')" class="btn btn-ghost mt-4">Simpan Gambar QR</button></div>`);},220);},
+  /* profile */
+  saveProfile(){S.user.name=document.getElementById('epName').value||S.user.name;
+    S.user.phone=document.getElementById('epPhone').value;S.user.email=document.getElementById('epEmail').value;
+    S.user.address=document.getElementById('epAddr').value;save();closeSheet('ep');render();toast('Profil berhasil diperbarui','success');},
+  changePin(){const o=document.getElementById('pinOld').value,n=document.getElementById('pinNew').value,n2=document.getElementById('pinNew2').value;
+    if(o!==S.pin)return toast('PIN lama salah','error');
+    if(n.length!==6||!/^\d+$/.test(n))return toast('PIN baru harus 6 digit angka','error');
+    if(n!==n2)return toast('Konfirmasi PIN tidak cocok','error');
+    S.pin=n;save();closeSheet('sc');toast('PIN berhasil diubah','success');},
+  toggleSetting(k,inSheet){S.settings[k]=!S.settings[k];save();applyTheme();render();if(inSheet)openSheetMenu('settings');},
+  faq(i){const e=document.getElementById('faq'+i);if(e)e.classList.toggle('hidden');},
+  upgrade(){processing('Memuat penawaran...',()=>{toast('Premium Rp29.000/bulan — fitur demo','info');});},
+  redeem(p){if(S.points<p)return toast('Poin tidak mencukupi','error');
+    S.points-=p;S.balance+=p*10;save();render();toast(`${p.toLocaleString('id-ID')} poin ditukar jadi ${rp(p*10)} saldo`,'success');},
+  resetDemo(){openSheet('rs',{title:'Reset Data Demo?',sub:'Semua transaksi & saldo kembali ke awal'});
+    setBody('rs',`<div class="pb-6"><div class="flex items-start gap-2.5 p-3.5 rounded-2xl mb-4" style="background:rgba(239,68,68,.1)">
+      ${ic('alert','w-4.5 h-4.5 shrink-0 text-red-500','2')}<p class="text-[12.5px] font-semibold text-red-500">Tindakan ini akan menghapus seluruh riwayat transaksi demo dan mengembalikan saldo ke Rp1.250.000.</p></div>
+      <button onclick="app.doReset()" class="btn" style="background:#ef4444;color:#fff">Ya, Reset Sekarang</button>
+      <button onclick="app.closeSheet('rs')" class="btn btn-ghost mt-2">Batal</button></div>`);},
+  doReset(){const dark=S.settings.dark;localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEFAULT));S.settings.dark=dark;save();closeAllSheets();render();toast('Data demo berhasil direset','success');},
+  logout(){openSheet('lo',{title:'Keluar dari akun?',sub:'Anda perlu masuk kembali untuk bertransaksi'});
+    setBody('lo',`<div class="pb-6"><button onclick="app.doLogout()" class="btn" style="background:#ef4444;color:#fff">Ya, Keluar</button>
+      <button onclick="app.closeSheet('lo')" class="btn btn-ghost mt-2">Batal</button></div>`);},
+  doLogout(){closeAllSheets();S.loggedIn=false;save();render();toast('Anda telah keluar','info');},
+  doLogin(){processing('Memverifikasi...',()=>{S.loggedIn=true;S.tab='home';save();render();toast('Selamat datang kembali, '+S.user.name.split(' ')[0]+'!','success');});},
+};
+function buildTx(total,method,status){
+  const s=SV[F.sid];
+  return {id:uid(),ref:ref(),sid:F.sid,serviceName:s.name,product:productName(),customer:F.customer,
+    customerName:F.bill?F.bill.name:(s.lookup?custName(F.customer):(s.op?detectOp(F.customer)+' Prabayar':'-')),
+    amount:total+F.discount-F.admin,admin:F.admin,discount:F.discount,total,method,status,date:new Date().toISOString(),
+    token:F.sid==='pln'?Array.from({length:20},()=>Math.floor(Math.random()*10)).join('').replace(/(\d{4})(?=\d)/g,'$1 '):null,
+    serial:['pulsa','data','voucher','streaming','game','emoney'].includes(F.sid)?'SN'+Date.now().toString().slice(-10):null};
+}
+window.app=app;
+/* init */
+applyTheme();render();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheetStack.length)closeSheet(sheetStack[sheetStack.length-1]);});
+</script>
+</body>
+</html>
