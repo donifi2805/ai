@@ -1,0 +1,7 @@
+# PayNusa — proteksi folder api (Apache)
+# Cegah file state/lock internal (dotfile: .nonce_store.json, .tflimit_*,
+# *.lock) diunduh langsung dari browser. Endpoint .php tetap berjalan normal.
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
