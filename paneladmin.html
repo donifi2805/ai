@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - H2H Integration Center</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+        --bg-body: #080d1a; --panel-card: #111b2e; --primary: #3b82f6; --primary-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        --accent: #10b981; --danger: #ef4444; --warning: #f59e0b; --text-main: #f8fafc; --text-sub: #94a3b8;
+        --border-color: rgba(255, 255, 255, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 40px; }
+    .navbar { background: rgba(8, 13, 26, 0.85); border-bottom: 1px solid rgba(59, 130, 246, 0.25); padding: 15px 22px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 16px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .logo i { color: var(--danger); }
+    .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+    
+    #authOverlay { position: fixed; inset: 0; background: rgba(8, 13, 26, 0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; }
+    .auth-card { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 360px; padding: 25px; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 11px; font-weight: 600; color: var(--text-sub); margin-bottom: 4px; }
+    input, select { width: 100%; padding: 10px; background: rgba(8, 13, 26, 0.7); border: 1px solid var(--border-color); border-radius: 8px; color: white; font-size: 12px; outline: none; }
+    
+    .btn { background: var(--primary-gradient); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-block { width: 100%; }
+    .btn-success { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+    .btn-danger { background: linear-gradient(135deg, #dc2626, #ef4444); }
+    .btn-warning { background: linear-gradient(135deg, #d97706, #f59e0b); color: #000; }
+    .btn-outline { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-main); }
+    
+    .card { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px; }
+    .tab-nav { display: flex; gap: 5px; background: rgba(8, 13, 26, 0.6); padding: 5px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; }
+    .tab-btn { padding: 10px 16px; background: transparent; border: 1px solid transparent; color: var(--text-sub); font-weight: 700; cursor: pointer; white-space: nowrap; font-size: 12px; border-radius: 8px; }
+    .tab-btn.active { color: #fca5a5; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.4); }
+    
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 12px; font-size: 12px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); text-align: left; }
+    th { color: var(--text-sub); font-weight: 700; background: rgba(8, 13, 26, 0.4); }
+    .badge { font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 5px; }
+    .badge-success { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-fail { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    
+    .modal { position: fixed; inset: 0; background: rgba(4, 8, 16, 0.85); z-index: 10001; display: none; align-items: center; justify-content: center; padding: 15px; }
+    .modal-content { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 420px; padding: 22px; }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo"><i class="fas fa-shield-alt"></i> dt17.store - ADMIN PANEL</div>
+    <button class="btn btn-outline" onclick="handleLogout()" style="border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+  </nav>
+
+  <div id="authOverlay">
+    <div class="auth-card">
+      <h2 style="text-align:center; color:var(--danger); margin-bottom: 20px;"><i class="fas fa-lock"></i> Login Admin</h2>
+      <div class="form-group"><label>Nomor WhatsApp</label><input type="text" id="logWA" placeholder="08xxxxxxxxxx" /></div>
+      <div class="form-group"><label>Kata Sandi</label><input type="password" id="logPass" placeholder="***" /></div>
+      <button class="btn btn-danger btn-block" onclick="handleLogin()">Masuk Panel</button>
+    </div>
+  </div>
+
+  <div class="container" id="mainDashboard" style="display: none;">
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
+      <button class="tab-btn" onclick="switchTab('topup')"><i class="fas fa-wallet"></i> Manajemen Topup</button>
+      <button class="tab-btn" onclick="switchTab('trx')"><i class="fas fa-list-alt"></i> Semua Transaksi</button>
+      <button class="tab-btn" onclick="switchTab('users')"><i class="fas fa-users"></i> Manajemen User</button>
+      <button class="tab-btn" onclick="switchTab('settings')"><i class="fas fa-cogs"></i> Pengaturan</button>
+    </div>
+
+    <!-- TAB DASHBOARD -->
+    <div id="tabDashboard" class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+        <h2><i class="fas fa-chart-pie" style="color: var(--primary);"></i> Dashboard Statistik</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <label style="margin: 0; font-size: 12px;">Pilih Bulan:</label>
+          <input type="month" id="dashMonth" onchange="loadAdminDashboard()" style="width: auto; padding: 6px 12px; font-size: 12px; color-scheme: dark;">
+        </div>
+      </div>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+        <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+          <small style="color: var(--text-sub); font-size: 11px; text-transform: uppercase; font-weight: bold;">Total Saldo Masuk (Topup)</small>
+          <h3 id="dashSaldoMasuk" style="color: #10b981; font-size: 24px; margin-top: 5px;">Rp 0</h3>
+        </div>
+        <div style="background: rgba(239, 68, 68, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3);">
+          <small style="color: var(--text-sub); font-size: 11px; text-transform: uppercase; font-weight: bold;">Total Saldo Dipakai (Trx)</small>
+          <h3 id="dashSaldoDipakai" style="color: #ef4444; font-size: 24px; margin-top: 5px;">Rp 0</h3>
+        </div>
+        <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.3);">
+          <small style="color: var(--text-sub); font-size: 11px; text-transform: uppercase; font-weight: bold;">Total Saldo Belum Dipakai (Sisa User)</small>
+          <h3 id="dashSaldoSisa" style="color: #3b82f6; font-size: 24px; margin-top: 5px;">Rp 0</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB TOPUP -->
+    <div id="tabTopup" class="card" style="display:none;">
+      <h2><i class="fas fa-wallet" style="color: var(--accent);"></i> Konfirmasi Topup Saldo</h2>
+      <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 15px;">Terima topup untuk otomatis menambahkan saldo ke user.</p>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>User</th>
+              <th>RefID</th>
+              <th>Nominal Transfer</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="adminTopupTable">
+            <tr>
+              <td colspan="6" style="text-align:center;">Memuat data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB TRANSAKSI -->
+    <div id="tabTrx" class="card" style="display:none;">
+      <h2><i class="fas fa-list-alt"></i> Monitor Semua Transaksi</h2>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>RefID H2H</th>
+              <th>Produk / Target</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="adminTrxTable">
+            <tr>
+              <td colspan="5" style="text-align:center;">Memuat data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB USER -->
+    <div id="tabUsers" class="card" style="display:none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h2><i class="fas fa-users"></i> Manajemen User</h2>
+        <button class="btn btn-success" onclick="document.getElementById('modalAddUser').style.display='flex'"><i class="fas fa-plus"></i> Tambah User</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>WA</th>
+              <th>Role</th>
+              <th>Saldo</th>
+              <th>Markup</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="adminUserTable">
+            <tr>
+              <td colspan="6" style="text-align:center;">Memuat data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB SETTINGS -->
+    <div id="tabSettings" class="card" style="display:none;">
+      <h2><i class="fas fa-cogs"></i> Pengaturan Sistem</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px;">
+        <div style="background: rgba(8, 13, 26, 0.6); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+          <h3>Status API Server</h3>
+          <div style="margin-top: 10px; display:flex; flex-direction:column; gap:8px;">
+            <select id="statusApi1Select">
+              <option value="1">API 1 ONLINE</option>
+              <option value="0">API 1 OFFLINE</option>
+            </select>
+            <select id="statusApi2Select">
+              <option value="1">API 2 ONLINE</option>
+              <option value="0">API 2 OFFLINE</option>
+            </select>
+            <select id="statusApi3Select">
+              <option value="1">API 3 ONLINE</option>
+              <option value="0">API 3 OFFLINE</option>
+            </select>
+            <select id="statusApi4Select">
+              <option value="1">API 4 ONLINE</option>
+              <option value="0">API 4 OFFLINE</option>
+            </select>
+            <button class="btn btn-success" onclick="saveApiStatusConfig()">Simpan Status API</button>
+          </div>
+        </div>
+        <div style="background: rgba(8, 13, 26, 0.6); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+          <h3>Kredensial OkeConnect (API 4)</h3>
+          <div style="margin-top: 10px; display:flex; flex-direction:column; gap:8px;">
+            <input type="text" id="okMemberId" placeholder="Member ID">
+            <input type="password" id="okPin" placeholder="PIN Transaksi">
+            <input type="password" id="okPassword" placeholder="Password API">
+            <button class="btn btn-warning" onclick="saveOkeConnectConfig()">Simpan Kredensial</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal" id="modalOverrideStatus">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 15px;">Ubah Status Transaksi</h3>
+      <input type="hidden" id="ovTargetUserId"><input type="hidden" id="ovRefIdH2H">
+      <div class="form-group"><label>Status Baru</label><select id="ovNewStatus">
+          <option value="BERHASIL">BERHASIL</option>
+          <option value="GAGAL">GAGAL</option>
+          <option value="PENDING">PENDING</option>
+        </select></div>
+      <div class="form-group"><label>SN / Keterangan</label><input type="text" id="ovNewSn"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-outline" style="flex:1;" onclick="document.getElementById('modalOverrideStatus').style.display='none'">Batal</button>
+        <button class="btn btn-success" style="flex:1;" onclick="submitOverrideStatus()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modalEditUser">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 15px;">Edit User</h3>
+      <input type="hidden" id="editUserId">
+      <div class="form-group"><label>Username</label><input type="text" id="editUsername"></div>
+      <div class="form-group"><label>Email</label><input type="text" id="editEmail"></div>
+      <div class="form-group"><label>WA</label><input type="text" id="editWA"></div>
+      <div class="form-group"><label>Role</label><select id="editRole">
+          <option value="user">USER</option>
+          <option value="admin">ADMIN</option>
+        </select></div>
+      <div class="form-group"><label>Saldo</label><input type="number" id="editSaldo"></div>
+      <div class="form-group"><label>Markup API 1-4</label>
+        <div style="display:flex; gap:5px;">
+          <input type="number" id="editMarkupApi1" placeholder="A1"><input type="number" id="editMarkupApi2" placeholder="A2">
+          <input type="number" id="editMarkupApi3" placeholder="A3"><input type="number" id="editMarkupApi4" placeholder="A4">
+        </div>
+      </div>
+      <div class="form-group"><label>Password Baru</label><input type="password" id="editPassword"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-outline" style="flex:1;" onclick="document.getElementById('modalEditUser').style.display='none'">Batal</button>
+        <button class="btn btn-success" style="flex:1;" onclick="submitEditUser()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modalAddUser">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 15px;">Tambah User</h3>
+      <div class="form-group"><label>Username</label><input type="text" id="addUsername"></div>
+      <div class="form-group"><label>Email</label><input type="text" id="addEmail"></div>
+      <div class="form-group"><label>WA</label><input type="text" id="addWA"></div>
+      <div class="form-group"><label>Role</label><select id="addRole">
+          <option value="user">USER</option>
+          <option value="admin">ADMIN</option>
+        </select></div>
+      <div class="form-group"><label>Saldo</label><input type="number" id="addSaldo" value="0"></div>
+      <div class="form-group"><label>Markup API 1-4</label>
+        <div style="display:flex; gap:5px;">
+          <input type="number" id="addMarkupApi1" value="0"><input type="number" id="addMarkupApi2" value="0">
+          <input type="number" id="addMarkupApi3" value="0"><input type="number" id="addMarkupApi4" value="0">
+        </div>
+      </div>
+      <div class="form-group"><label>Password</label><input type="password" id="addPassword"></div>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-outline" style="flex:1;" onclick="document.getElementById('modalAddUser').style.display='none'">Batal</button>
+        <button class="btn btn-success" style="flex:1;" onclick="submitAddUser()">Tambah</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentUser = null;
+    let cachedUsersList = [];
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedSession = localStorage.getItem('dt17_admin_session');
+        if (savedSession) verifySession(savedSession);
+    });
+    
+    async function handleLogin() {
+        const payload = { action: 'login', nomorwa: document.getElementById('logWA').value, password: document.getElementById('logPass').value };
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (data.status) {
+            if (data.data.role !== 'admin') { alert('Akses Ditolak! Anda bukan Admin.'); return; }
+            currentUser = data.data;
+            localStorage.setItem('dt17_admin_session', currentUser.session_token);
+            renderApp();
+        } else alert(data.message);
+    }
+    
+    async function verifySession(token) {
+        const res = await fetch(`../auth.php?action=check_session&session_token=${token}`);
+        const data = await res.json();
+        if (data.status && data.data.role === 'admin') { currentUser = data.data; renderApp(); }
+        else handleLogout();
+    }
+    
+    function handleLogout() { localStorage.removeItem('dt17_admin_session'); location.reload(); }
+    
+    function renderApp() {
+        document.getElementById('authOverlay').style.display = 'none';
+        document.getElementById('mainDashboard').style.display = 'block';
+        const now = new Date();
+        const wibTime = new Date(now.getTime() + (7 * 3600 * 1000) + (now.getTimezoneOffset() * 60000));
+        document.getElementById('dashMonth').value = wibTime.getFullYear() + '-' + String(wibTime.getMonth() + 1).padStart(2, '0');
+        loadAdminDashboard();
+    
+        loadAdminTopups();
+        loadAdminAllHistory();
+        loadAdminUsers();
+        loadApiStatusConfig();
+        loadOkeConnectConfig();
+        setInterval(() => { loadAdminTopups(); loadAdminAllHistory(); loadAdminDashboard(); }, 10000);
+    }
+    
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        ['tabDashboard', 'tabTopup', 'tabTrx', 'tabUsers', 'tabSettings'].forEach(id => document.getElementById(id).style.display = 'none');
+        document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.display = 'block';
+    }
+    
+    async function loadAdminDashboard() {
+        const monthVal = document.getElementById('dashMonth').value;
+        if(!monthVal) return;
+        
+        const resU = await fetch(`../auth.php?action=list_users&session_token=${currentUser.session_token}`);
+        const dataU = await resU.json();
+        let totalSisa = 0;
+        if(dataU.status) dataU.data.forEach(u => totalSisa += (u.saldo || 0));
+        document.getElementById('dashSaldoSisa').innerText = 'Rp ' + totalSisa.toLocaleString('id-ID');
+    
+        const resT = await fetch('../topup_api.php', { method: 'POST', body: JSON.stringify({ action: 'admin_list_topup', session_token: currentUser.session_token }) });
+        const dataT = await resT.json();
+        let totalMasuk = 0;
+        if(dataT.status) {
+            dataT.data.forEach(t => {
+                if(t.status === 'BERHASIL') {
+                    let d = new Date(t.time * 1000);
+                    let wibTime = new Date(d.getTime() + (7 * 3600 * 1000) + (d.getTimezoneOffset() * 60000));
+                    let m = wibTime.getFullYear() + '-' + String(wibTime.getMonth()+1).padStart(2, '0');
+                    if(m === monthVal) totalMasuk += t.unique_amount;
+                }
+            });
+        }
+        document.getElementById('dashSaldoMasuk').innerText = 'Rp ' + totalMasuk.toLocaleString('id-ID');
+    
+        const resH = await fetch(`../auth.php?action=admin_list_all_history&session_token=${currentUser.session_token}`);
+        const dataH = await resH.json();
+        let totalDipakai = 0;
+        if(dataH.status) {
+            dataH.data.forEach(t => {
+                const isTopup = (t.server_code === 'TOPUP SALDO' || t.kode_produk === 'SALDO' || String(t.refid_h2h).startsWith('TP-') || t.server_code === 'TOPUP QRIS');
+                if(t.status === 'BERHASIL' && !isTopup) {
+                    if(t.created_at && t.created_at.startsWith(monthVal)) {
+                        totalDipakai += parseInt(t.harga || 0);
+                    }
+                }
+            });
+        }
+        document.getElementById('dashSaldoDipakai').innerText = 'Rp ' + totalDipakai.toLocaleString('id-ID');
+    }
+    
+    // TOPUP MANAGEMENT
+    async function loadAdminTopups() {
+        const res = await fetch('../topup_api.php', { method: 'POST', body: JSON.stringify({ action: 'admin_list_topup', session_token: currentUser.session_token }) });
+        const data = await res.json();
+        if (data.status) {
+            let html = '';
+            data.data.forEach(t => {
+                let d = new Date(t.time * 1000);
+                let badge = t.status === 'PENDING' ? 'badge-pending' : (t.status === 'BERHASIL' ? 'badge-success' : 'badge-fail');
+                let act = t.status === 'PENDING' ? 
+                    `<button class="btn btn-success" style="padding:4px 8px; font-size:10px;" onclick="actionTopup('${t.id}', 'accept')">Terima</button>
+                     <button class="btn btn-danger" style="padding:4px 8px; font-size:10px;" onclick="actionTopup('${t.id}', 'reject')">Tolak</button>` : '-';
+                html += `<tr><td>${d.toLocaleString()}</td><td>${t.username}</td><td><code>${t.id}</code></td>
+                         <td><b style="color:var(--accent)">Rp ${t.unique_amount.toLocaleString('id-ID')}</b></td>
+                         <td><span class="badge ${badge}">${t.status}</span></td><td>${act}</td></tr>`;
+            });
+            document.getElementById('adminTopupTable').innerHTML = html || '<tr><td colspan="6" style="text-align:center;">Tidak ada data topup</td></tr>';
+        }
+    }
+    
+    async function actionTopup(id, act) {
+        if (!confirm(`Yakin ingin ${act === 'accept' ? 'MENERIMA' : 'MENOLAK'} topup ini?`)) return;
+        const res = await fetch('../topup_api.php', { method: 'POST', body: JSON.stringify({ action: 'admin_action_topup', session_token: currentUser.session_token, topup_id: id, act: act }) });
+        const data = await res.json(); alert(data.message); loadAdminTopups(); loadAdminAllHistory(); loadAdminDashboard();
+    }
+    
+    // TRX MANAGEMENT
+    async function loadAdminAllHistory() {
+        const res = await fetch(`../auth.php?action=admin_list_all_history&session_token=${currentUser.session_token}`);
+        const data = await res.json();
+        if (data.status) {
+            let html = '';
+            data.data.slice(0, 50).forEach(t => {
+                let badge = t.status === 'BERHASIL' ? 'badge-success' : (t.status === 'GAGAL' ? 'badge-fail' : 'badge-pending');
+                html += `<tr><td><b>${t.username}</b></td><td><code>${t.refid_h2h}</code></td>
+                         <td><span class="badge badge-user">${t.server_code}</span><br><small>${t.kode_produk} -> ${t.target}</small></td>
+                         <td><span class="badge ${badge}">${t.status}</span></td>
+                         <td>
+                           <button class="btn btn-warning" style="padding:4px 8px; font-size:10px; margin-bottom:4px;" onclick="openOverrideModal('${t.user_id}', '${t.refid_h2h}', '${t.status}', '${t.sn}')">Ubah Status</button>
+                           ${(t.server_code === 'TOPUP SALDO' || t.kode_produk === 'SALDO' || String(t.refid_h2h).startsWith('TP-')) ? '' : `<button class="btn btn-outline" style="padding:4px 8px; font-size:10px;" onclick="adminSyncUpstream('${t.user_id}', '${t.refid_h2h}')"><i class="fas fa-sync"></i> Cek Pusat</button>`}
+                         </td></tr>`;
+            });
+            document.getElementById('adminTrxTable').innerHTML = html;
+        }
+    }
+    
+    function openOverrideModal(uid, ref, st, sn) {
+        document.getElementById('ovTargetUserId').value = uid; document.getElementById('ovRefIdH2H').value = ref;
+        document.getElementById('ovNewStatus').value = st; document.getElementById('ovNewSn').value = sn;
+        document.getElementById('modalOverrideStatus').style.display = 'flex';
+    }
+    
+    async function submitOverrideStatus() {
+        const payload = { action: 'admin_update_trx_status', session_token: currentUser.session_token, target_user_id: document.getElementById('ovTargetUserId').value, refid_h2h: document.getElementById('ovRefIdH2H').value, new_status: document.getElementById('ovNewStatus').value, new_sn: document.getElementById('ovNewSn').value };
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json(); alert(data.message);
+        if (data.status) { document.getElementById('modalOverrideStatus').style.display = 'none'; loadAdminAllHistory(); loadAdminTopups(); loadAdminDashboard(); }
+    }
+    
+    // USER MANAGEMENT
+    async function loadAdminUsers() {
+        const res = await fetch(`../auth.php?action=list_users&session_token=${currentUser.session_token}`);
+        const data = await res.json();
+        if (data.status) {
+            cachedUsersList = data.data; let html = '';
+            data.data.forEach(u => {
+                html += `<tr><td><b>${u.username}</b></td><td>${u.nomorwa}</td><td><span class="badge">${u.role}</span></td>
+                         <td>Rp ${u.saldo.toLocaleString('id-ID')}</td><td><small>A1:${u.markup_api1}|A2:${u.markup_api2}</small></td>
+                         <td>
+                           <button class="btn btn-warning" style="padding:4px 8px; font-size:10px; margin-bottom:4px;" onclick="openEditUserModal('${u.id}')">Edit</button>
+                           <button class="btn btn-outline" style="padding:4px 8px; font-size:10px; margin-bottom:4px;" onclick="adminRegenKey('${u.id}')"><i class="fas fa-key"></i> Key</button>
+                           <button class="btn btn-danger" style="padding:4px 8px; font-size:10px;" onclick="adminDeleteUser('${u.id}', '${u.username}')"><i class="fas fa-trash"></i></button>
+                         </td></tr>`;
+            });
+            document.getElementById('adminUserTable').innerHTML = html;
+        }
+    }
+    
+    async function submitAddUser() {
+        const payload = { action: 'admin_add_user', session_token: currentUser.session_token, username: document.getElementById('addUsername').value, email: document.getElementById('addEmail').value, nomorwa: document.getElementById('addWA').value, role: document.getElementById('addRole').value, saldo: parseInt(document.getElementById('addSaldo').value||0), markup_api1: parseInt(document.getElementById('addMarkupApi1').value||0), markup_api2: parseInt(document.getElementById('addMarkupApi2').value||0), markup_api3: parseInt(document.getElementById('addMarkupApi3').value||0), markup_api4: parseInt(document.getElementById('addMarkupApi4').value||0), password: document.getElementById('addPassword').value };
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json(); alert(data.message); if (data.status) { document.getElementById('modalAddUser').style.display = 'none'; loadAdminUsers(); }
+    }
+    
+    function openEditUserModal(uid) {
+        const u = cachedUsersList.find(x => x.id === uid);
+        if(!u) return;
+        document.getElementById('editUserId').value = u.id; document.getElementById('editUsername').value = u.username; document.getElementById('editEmail').value = u.email; document.getElementById('editWA').value = u.nomorwa; document.getElementById('editRole').value = u.role; document.getElementById('editSaldo').value = u.saldo; document.getElementById('editMarkupApi1').value = u.markup_api1; document.getElementById('editMarkupApi2').value = u.markup_api2; document.getElementById('editMarkupApi3').value = u.markup_api3; document.getElementById('editMarkupApi4').value = u.markup_api4;
+        document.getElementById('modalEditUser').style.display = 'flex';
+    }
+    
+    async function submitEditUser() {
+        const payload = { action: 'admin_edit_user', session_token: currentUser.session_token, target_id: document.getElementById('editUserId').value, username: document.getElementById('editUsername').value, email: document.getElementById('editEmail').value, nomorwa: document.getElementById('editWA').value, role: document.getElementById('editRole').value, saldo: parseInt(document.getElementById('editSaldo').value||0), markup_api1: parseInt(document.getElementById('editMarkupApi1').value||0), markup_api2: parseInt(document.getElementById('editMarkupApi2').value||0), markup_api3: parseInt(document.getElementById('editMarkupApi3').value||0), markup_api4: parseInt(document.getElementById('editMarkupApi4').value||0), password: document.getElementById('editPassword').value };
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json(); alert(data.message); if (data.status) { document.getElementById('modalEditUser').style.display = 'none'; loadAdminUsers(); }
+    }
+    
+    async function adminSyncUpstream(userId, refidH2H) {
+        const payload = { action: 'admin_sync_upstream_status', session_token: currentUser.session_token, target_user_id: userId, refid_h2h: refidH2H };
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (data.status) alert('=== HASIL RESPON MENTAH API PUSAT ===\n\n' + JSON.stringify(data.raw_response, null, 2));
+        else alert('Gagal: ' + (data.message || 'Gagal mengambil respon dari pusat'));
+        loadAdminAllHistory();
+    }
+    async function adminDeleteUser(userId, username) {
+        if (!confirm('Hapus user ' + username + '?')) return;
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify({ action: 'admin_delete_user', session_token: currentUser.session_token, target_id: userId }) });
+        const data = await res.json(); alert(data.message); if (data.status) { loadAdminUsers(); loadAdminDashboard(); }
+    }
+    async function adminRegenKey(userId) {
+        if (!confirm('Regenerate API Key user ini?')) return;
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify({ action: 'admin_regen_user_key', session_token: currentUser.session_token, target_id: userId }) });
+        const data = await res.json(); alert(data.message); if (data.status) loadAdminUsers();
+    }
+    
+    // SETTINGS
+    async function loadApiStatusConfig() {
+        const res = await fetch(`../auth.php?action=get_api_status`);
+        const data = await res.json();
+        if (data.status) {
+            ['api1', 'api2', 'api3', 'api4'].forEach(k => document.getElementById('status' + k.charAt(0).toUpperCase() + k.slice(1) + 'Select').value = data.data[k] ? '1' : '0');
+        }
+    }
+    async function saveApiStatusConfig() {
+        const payload = { action: 'save_api_status', session_token: currentUser.session_token, api1: document.getElementById('statusApi1Select').value === '1', api2: document.getElementById('statusApi2Select').value === '1', api3: document.getElementById('statusApi3Select').value === '1', api4: document.getElementById('statusApi4Select').value === '1' };
+        const res = await fetch('../auth.php', { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json(); alert(data.message);
+    }
+    async function loadOkeConnectConfig() {
+        const res = await fetch(`../auth.php?action=get_okeconnect_config&session_token=${currentUser.session_token}`);
+        const data = await res.json();
+        if (data.status && data.data) { document.getElementById("okMemberId").value = data.data.member_id || ""; document.getElementById("okPin").value = data.data.pin || ""; document.getElementById("okPassword").value = data.data.password || ""; }
+    }
+    async function saveOkeConnectConfig() {
+        const payload = { action: "save_okeconnect_config", session_token: currentUser.session_token, member_id: document.getElementById("okMemberId").value, pin: document.getElementById("okPin").value, password: document.getElementById("okPassword").value };
+        const res = await fetch("../auth.php", { method: "POST", body: JSON.stringify(payload) });
+        const data = await res.json(); alert(data.message);
+    }
+  </script>
+</body>
+
+</html>
