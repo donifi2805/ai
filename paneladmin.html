@@ -1235,6 +1235,7 @@
       const data = await apiCall('login', { nomorwa: wa, password: pass });
       if (!data.status) { toast('error', 'Login Gagal', data.message || 'Kredensial salah'); return; }
       if (data.data.role !== 'admin') { toast('error', 'Akses Ditolak', 'Akun ini bukan admin'); audit('LOGIN_DITOLAK', 'Percobaan login non-admin: ' + wa); return; }
+      if (data.data.is_blocked || data.data.status === 'blocked') { toast('error', 'Akun Diblokir', 'Akun admin ini sedang ditangguhkan'); audit('LOGIN_DITOLAK', 'Admin terblokir: ' + wa); return; }
       S.currentUser = data.data;
       if ($('logRemember').checked) localStorage.setItem(LS.session, S.currentUser.session_token);
       else sessionStorage.setItem(LS.session, S.currentUser.session_token);
@@ -1252,7 +1253,7 @@
   async function verifySession(token) {
     try {
       const data = await apiCall('check_session', { session_token: token });
-      if (data.status && data.data.role === 'admin') { S.currentUser = data.data; logMsg('OK', 'AUTH', 'Sesi dipulihkan: ' + S.currentUser.username); enterPanel(); }
+      if (data.status && data.data.role === 'admin' && !data.data.is_blocked && data.data.status !== 'blocked') { S.currentUser = data.data; logMsg('OK', 'AUTH', 'Sesi dipulihkan: ' + S.currentUser.username); enterPanel(); }
       else { localStorage.removeItem(LS.session); sessionStorage.removeItem(LS.session); logMsg('WARN', 'AUTH', 'Sesi tidak valid / kedaluwarsa'); }
     } catch (e) { logMsg('ERROR', 'AUTH', 'Verifikasi sesi gagal: ' + e.message); }
   }
@@ -1374,7 +1375,7 @@
       if (resH.status) { S.trx = resH.data || []; } else { logMsg('ERROR', 'API', 'admin_list_all_history gagal: ' + (resH.message || '?')); }
       if (resT.status) { S.topups = resT.data || []; } else { logMsg('ERROR', 'API', 'admin_list_topup gagal: ' + (resT.message || '?')); }
       if (resS.status && resS.data) { S.apiStatus = resS.data; }
-      if (fatal && S.mode === 'live' && /sesi|session|token|unauthor/i.test(resU.message || '')) {
+      if (fatal && S.mode === 'live' && /sesi|session|token|unauthor|admin/i.test(resU.message || '')) {
         toast('error', 'Sesi Berakhir', 'Silakan login kembali');
         localStorage.removeItem(LS.session); sessionStorage.removeItem(LS.session);
         setTimeout(() => location.reload(), 1500); return;
@@ -1706,7 +1707,12 @@
       try {
         const data = await apiCall('admin_regen_user_key', { session_token: S.currentUser.session_token, target_id: userId });
         toast(data.status ? 'success' : 'error', data.status ? 'API Key Diperbarui' : 'Gagal', data.message);
-        if (data.status) { audit('REGEN_API_KEY', u ? u.username : userId); refreshAllData(false); if (data.data && data.data.api_key) showJson('API Key Baru — ' + (u ? u.username : ''), data.data); }
+        if (data.status) {
+          audit('REGEN_API_KEY', u ? u.username : userId);
+          refreshAllData(false);
+          const newKey = data.new_api_key || (data.data && data.data.api_key) || null;
+          if (newKey) showJson('API Key Baru — ' + (u ? u.username : userId), { username: u ? u.username : userId, api_key_baru: newKey, catatan: 'Key lama otomatis hangus. User harus segera update integrasinya.' });
+        }
       } catch (e) { toast('error', 'Kesalahan', e.message); }
     });
   }
@@ -1978,16 +1984,26 @@
 
   async function adminSyncUpstream(userId, refidH2H) {
     const t = S.trx.find(x => x.refid_h2h === refidH2H);
+    const statusLama = t ? t.status : '?';
     toast('info', 'Menghubungi Pusat...', 'Cek status ' + refidH2H);
     try {
       const data = await apiCall('admin_sync_upstream_status', { target_user_id: userId, refid_h2h: refidH2H });
       if (data.status) {
         logMsg('OK', 'SYNC-PUSAT', refidH2H + ' → respon diterima');
         audit('CEK_PUSAT', refidH2H);
-        showJson('Respon Mentah API Pusat — ' + refidH2H, { transaksi_lokal: t, respon_pusat: data.raw_response, hasil_setelah_sinkron: data.updated || null });
-        refreshAllData(false);
-        const newSt = data.updated ? data.updated.status : null;
-        if (newSt) toast('success', 'Sinkronisasi Selesai', 'Status terbaru: ' + newSt);
+        await refreshAllData(false);
+        const tAfter = S.trx.find(x => x.refid_h2h === refidH2H);
+        const statusBaru = tAfter ? tAfter.status : 'tidak ditemukan';
+        showJson('Respon Mentah API Pusat — ' + refidH2H, {
+          refid_h2h: data.refid_h2h || refidH2H,
+          refid_pusat: data.refid_pusat || (t ? t.refid_pusat : ''),
+          respon_pusat: data.raw_response,
+          status_sebelum_sinkron: statusLama,
+          status_setelah_sinkron: statusBaru,
+          sn_terbaru: tAfter ? (tAfter.sn || '-') : '-'
+        });
+        if (statusBaru !== statusLama) toast('success', 'Status Berubah', refidH2H + ': ' + statusLama + ' → ' + statusBaru);
+        else toast('info', 'Sinkronisasi Selesai', 'Status tetap: ' + statusBaru);
       } else {
         toast('error', 'Gagal Sinkron', data.message || 'Tidak dapat respon dari pusat');
         logMsg('ERROR', 'SYNC-PUSAT', refidH2H + ' gagal: ' + (data.message || '?'));
@@ -2482,17 +2498,20 @@
 
   function renderEndpointDocs() {
     const docs = [
-      ['auth.php', 'login', 'Login admin (POST nomorwa+password)'],
-      ['auth.php', 'check_session', 'Verifikasi sesi token admin'],
-      ['auth.php', 'list_users', 'Daftar semua user + detail'],
-      ['auth.php', 'admin_add_user', 'Tambah user (POST)'],
-      ['auth.php', 'admin_edit_user', 'Edit user / saldo / markup (POST)'],
+      ['auth.php', 'register', 'Registrasi user baru (POST, user pertama otomatis admin)'],
+      ['auth.php', 'login', 'Login user/admin (POST nomorwa+password)'],
+      ['auth.php', 'check_session', 'Verifikasi sesi token'],
+      ['auth.php', 'regen_key', 'Regenerate API key sendiri (POST)'],
+      ['auth.php', 'my_history', 'Riwayat transaksi sendiri (auto-sync pending)'],
+      ['auth.php', 'list_users', 'Daftar semua user (khusus admin)'],
+      ['auth.php', 'admin_add_user', 'Tambah user (POST, khusus admin)'],
+      ['auth.php', 'admin_edit_user', 'Edit user / saldo / markup / blokir (POST)'],
       ['auth.php', 'admin_delete_user', 'Hapus user (POST)'],
       ['auth.php', 'admin_block_user', 'Blokir / buka blokir user (POST)'],
-      ['auth.php', 'admin_regen_user_key', 'Regenerate API key user (POST)'],
-      ['auth.php', 'admin_list_all_history', 'Seluruh riwayat transaksi semua user'],
-      ['auth.php', 'admin_update_trx_status', 'Override status transaksi + SN (POST)'],
-      ['auth.php', 'admin_sync_upstream_status', 'Cek status transaksi ke API pusat (POST)'],
+      ['auth.php', 'admin_regen_user_key', 'Regenerate API key user — balas new_api_key (POST)'],
+      ['auth.php', 'admin_list_all_history', 'Seluruh transaksi semua user (tanpa auto-sync)'],
+      ['auth.php', 'admin_update_trx_status', 'Override status + SN; GAGAL otomatis kembalikan saldo (POST)'],
+      ['auth.php', 'admin_sync_upstream_status', 'Cek status ke API pusat + raw_response (POST)'],
       ['auth.php', 'get_api_status / save_api_status', 'Baca/tulis status server API 1-4'],
       ['auth.php', 'get_okeconnect_config / save_okeconnect_config', 'Kredensial OkeConnect'],
       ['topup_api.php', 'admin_list_topup', 'Daftar semua topup (POST)'],
@@ -2512,6 +2531,12 @@
   });
 
   // ================== BOOT ==================
+  document.addEventListener('DOMContentLoaded', () => { initApp(); });
+  </script>
+</body>
+
+</html>
+=============== BOOT ==================
   document.addEventListener('DOMContentLoaded', () => { initApp(); });
   </script>
 </body>
