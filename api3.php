@@ -90,9 +90,11 @@ switch ($action) {
         $res = clean_api_message($res);
         if (isset($res['data']) && is_array($res['data'])) {
             inject_stock_to_products($res['data']);
+            ledger_cache_products($res['data']);
             apply_user_markup($res['data'], $userMarkup);
         } elseif (is_array($res)) {
             inject_stock_to_products($res);
+            ledger_cache_products($res);
             apply_user_markup($res, $userMarkup);
         }
         echo json_encode($res);
@@ -133,7 +135,18 @@ switch ($action) {
             exit();
         }
 
-        deduct_user_balance($userData['id'], $hargaPrice);
+        // Potong Saldo User + Catat ke Buku Besar Saldo (Audit)
+        ledger_charge($userData['id'], $hargaPrice, array(
+            'jenis'       => 'PEMBELIAN',
+            'refid'       => $refidH2H,
+            'refid_pusat' => $refidPusat,
+            'kode_produk' => $code,
+            'target'      => $target,
+            'server'      => 'api3',
+            'status'      => 'PENDING',
+            'keterangan'  => 'Beli ' . ledger_product_name($code) . ' (' . $target . ')',
+            'catatan'     => 'Order dikirim ke Server 3 (VipReseller)',
+        ));
 
         $res = wz_request_api3('/restapi/product/order', ['code' => $code, 'destination' => $target, 'order_id' => $refidPusat]);
         
@@ -144,7 +157,17 @@ switch ($action) {
         $sn = clean_api_message($res['sn'] ?? $res['serial_number'] ?? '-');
 
         if ($statusFinal === 'GAGAL') {
-            add_user_balance($userData['id'], $hargaPrice);
+            // Refund saldo + Catat ke Buku Besar Saldo (Audit)
+            ledger_refund($userData['id'], $hargaPrice, array(
+                'refid'       => $refidH2H,
+                'refid_pusat' => $refidPusat,
+                'kode_produk' => $code,
+                'target'      => $target,
+                'server'      => 'api3',
+                'status'      => 'GAGAL',
+                'keterangan'  => 'Refund ' . ledger_product_name($code) . ' (' . $target . ')',
+                'catatan'     => 'Order ditolak server pusat: ' . $cleanedMsg,
+            ));
         }
 
         $trxRecord = [
@@ -197,7 +220,19 @@ switch ($action) {
 
         if ($oldStatus !== 'GAGAL' && $trx['status'] === 'GAGAL') {
             $harga = (int)($trx['harga'] ?? 0);
-            if ($harga > 0) add_user_balance($trx['user_id'], $harga);
+            if ($harga > 0) {
+                // Refund saldo + Catat ke Buku Besar Saldo (Audit)
+                ledger_refund($trx['user_id'], $harga, array(
+                    'refid'       => $trx['refid_h2h'] ?? '-',
+                    'refid_pusat' => $trx['refid_pusat'] ?? '',
+                    'kode_produk' => $trx['kode_produk'] ?? '',
+                    'target'      => $trx['target'] ?? '',
+                    'server'      => $trx['server_code'] ?? 'api3',
+                    'status'      => 'GAGAL',
+                    'keterangan'  => 'Refund ' . ledger_product_name($trx['kode_produk'] ?? ''),
+                    'catatan'     => 'Refund via pengecekan status (status sebelumnya ' . $oldStatus . ')',
+                ));
+            }
         }
 
         echo json_encode([

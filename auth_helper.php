@@ -3,6 +3,9 @@
 ini_set('display_errors', 0);
 date_default_timezone_set('Asia/Jakarta');
 
+// Sistem pencatatan saldo detil (buku besar / audit saldo per user)
+require_once __DIR__ . '/ledger_helper.php';
+
 // ==========================================
 // SISTEM KONFIGURASI GLOBAL & ON/OFF API
 // ==========================================
@@ -555,7 +558,19 @@ function sync_transaction_status($userId, &$trx, $forceSync = false) {
         if ($oldStatus !== 'GAGAL' && $newStatus === 'GAGAL') {
             $harga = (int)($trx['harga'] ?? 0);
             if ($harga > 0) {
-                add_user_balance($ownerId, $harga);
+                // Catat refund ke buku besar saldo agar rantai saldo tetap utuh
+                ledger_refund($ownerId, $harga, array(
+                    'refid'       => $trx['refid_h2h'] ?? '-',
+                    'refid_pusat' => $trx['refid_pusat'] ?? '',
+                    'kode_produk' => $trx['kode_produk'] ?? '',
+                    'produk_nama' => $trx['produk_nama'] ?? '',
+                    'target'      => $trx['target'] ?? '',
+                    'server'      => $trx['server_code'] ?? $trx['server'] ?? '',
+                    'status'      => 'GAGAL',
+                    'keterangan'  => 'Refund ' . ledger_product_name($trx['kode_produk'] ?? '', $trx['produk_nama'] ?? ''),
+                    'catatan'     => 'Refund otomatis: status berubah ' . $oldStatus . ' -> GAGAL dari server pusat',
+                    'trx_id'      => $trx['trx_id'] ?? '',
+                ));
             }
         }
 

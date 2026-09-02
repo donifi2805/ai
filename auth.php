@@ -24,6 +24,18 @@ function check_admin_access($sessionToken) {
     return false;
 }
 
+/** Ambil username admin dari token sesi (untuk jejak audit saldo) */
+function get_admin_name_by_token($sessionToken) {
+    if (empty($sessionToken)) return 'admin';
+    $users = get_users_data();
+    foreach ($users as $u) {
+        if (isset($u['session_token']) && $u['session_token'] === $sessionToken && ($u['role'] ?? '') === 'admin') {
+            return $u['username'] ?? 'admin';
+        }
+    }
+    return 'admin';
+}
+
 switch ($action) {
     case 'register':
         $username = trim($input['username'] ?? '');
@@ -270,6 +282,23 @@ switch ($action) {
                 if (isset($input['markup_api2'])) { $users[$idx]['markup_api2'] = (int)$input['markup_api2']; }
                 if (isset($input['markup_api3'])) { $users[$idx]['markup_api3'] = (int)$input['markup_api3']; }
                 if (isset($input['markup_api4'])) { $users[$idx]['markup_api4'] = (int)$input['markup_api4']; }
+
+                // --- PENCATATAN AUDIT SALDO (BUKU BESAR) ---
+                // Perubahan saldo oleh admin wajib tercatat supaya rantai saldo tidak putus
+                if (isset($input['saldo'])) {
+                    $newSaldoVal = (int)$input['saldo'];
+                    $oldSaldoVal = (int)($u['saldo'] ?? 0);
+                    if ($newSaldoVal !== $oldSaldoVal) {
+                        ledger_set_saldo($userId, $newSaldoVal, array(
+                            'server'     => 'paneladmin',
+                            'refid'      => 'ADJ-' . date('YmdHis') . rand(100, 999),
+                            'keterangan' => 'Penyesuaian saldo oleh admin',
+                            'catatan'    => trim((string)($input['saldo_note'] ?? '')) !== '' ? trim((string)$input['saldo_note']) : 'Tanpa catatan',
+                            'admin'      => get_admin_name_by_token($input['session_token'] ?? ''),
+                        ));
+                    }
+                }
+
                 if (isset($input['saldo'])) { $users[$idx]['saldo'] = (int)$input['saldo']; }
                 if (isset($input['is_blocked'])) { $users[$idx]['is_blocked'] = (bool)$input['is_blocked']; }
                 if (!empty($input['password'])) {
@@ -314,13 +343,39 @@ switch ($action) {
         $isTopup = (($trx['server_code'] ?? '') === 'TOPUP SALDO' || ($trx['kode_produk'] ?? '') === 'SALDO' || strpos($refidH2H, 'TP-') === 0);
 
         if ($isTopup) {
+            $adminName = get_admin_name_by_token($token);
             if ($newStatus === 'BERHASIL' && $oldStatus !== 'BERHASIL') {
                 $harga = (int)($trx['harga'] ?? 0);
-                if ($harga > 0) add_user_balance($targetUserId, $harga);
+                if ($harga > 0) {
+                    ledger_topup($targetUserId, $harga, array(
+                        'refid'       => $trx['refid_h2h'] ?? '-',
+                        'refid_pusat' => $trx['refid_pusat'] ?? '',
+                        'kode_produk' => 'SALDO',
+                        'produk_nama' => 'Topup Saldo',
+                        'server'      => $trx['server_code'] ?? 'TOPUP SALDO',
+                        'status'      => 'BERHASIL',
+                        'keterangan'  => 'Topup saldo disetujui admin',
+                        'catatan'     => 'Status topup diubah manual menjadi BERHASIL oleh admin',
+                        'admin'       => $adminName,
+                    ));
+                }
             }
             if ($newStatus === 'GAGAL' && $oldStatus === 'BERHASIL') {
                 $harga = (int)($trx['harga'] ?? 0);
-                if ($harga > 0) deduct_user_balance($targetUserId, $harga);
+                if ($harga > 0) {
+                    ledger_charge($targetUserId, $harga, array(
+                        'jenis'       => 'PENYESUAIAN',
+                        'refid'       => $trx['refid_h2h'] ?? '-',
+                        'refid_pusat' => $trx['refid_pusat'] ?? '',
+                        'kode_produk' => 'SALDO',
+                        'produk_nama' => 'Topup Saldo',
+                        'server'      => $trx['server_code'] ?? 'TOPUP SALDO',
+                        'status'      => 'GAGAL',
+                        'keterangan'  => 'Pembatalan topup saldo oleh admin',
+                        'catatan'     => 'Status topup diubah manual dari BERHASIL menjadi GAGAL oleh admin',
+                        'admin'       => $adminName,
+                    ));
+                }
             }
 
             $dbTopup = __DIR__ . '/data_private/db_topup.json';
@@ -357,13 +412,43 @@ switch ($action) {
                 }
             }
         } else {
+            $adminName = get_admin_name_by_token($token);
             if ($newStatus === 'GAGAL' && $oldStatus !== 'GAGAL') {
                 $harga = (int)($trx['harga'] ?? 0);
-                if ($harga > 0) add_user_balance($targetUserId, $harga);
+                if ($harga > 0) {
+                    ledger_refund($targetUserId, $harga, array(
+                        'refid'       => $trx['refid_h2h'] ?? '-',
+                        'refid_pusat' => $trx['refid_pusat'] ?? '',
+                        'kode_produk' => $trx['kode_produk'] ?? '',
+                        'produk_nama' => $trx['produk_nama'] ?? '',
+                        'target'      => $trx['target'] ?? '',
+                        'server'      => $trx['server_code'] ?? $trx['server'] ?? '',
+                        'status'      => 'GAGAL',
+                        'keterangan'  => 'Refund ' . ledger_product_name($trx['kode_produk'] ?? '', $trx['produk_nama'] ?? ''),
+                        'catatan'     => 'Transaksi ditandai GAGAL manual oleh admin (' . $oldStatus . ' -> GAGAL)',
+                        'admin'       => $adminName,
+                        'trx_id'      => $trx['trx_id'] ?? '',
+                    ));
+                }
             }
             if ($oldStatus === 'GAGAL' && $newStatus !== 'GAGAL') {
                 $harga = (int)($trx['harga'] ?? 0);
-                if ($harga > 0) deduct_user_balance($targetUserId, $harga);
+                if ($harga > 0) {
+                    ledger_charge($targetUserId, $harga, array(
+                        'jenis'       => 'PENYESUAIAN',
+                        'refid'       => $trx['refid_h2h'] ?? '-',
+                        'refid_pusat' => $trx['refid_pusat'] ?? '',
+                        'kode_produk' => $trx['kode_produk'] ?? '',
+                        'produk_nama' => $trx['produk_nama'] ?? '',
+                        'target'      => $trx['target'] ?? '',
+                        'server'      => $trx['server_code'] ?? $trx['server'] ?? '',
+                        'status'      => $newStatus,
+                        'keterangan'  => 'Penyesuaian saldo: status transaksi dibalik oleh admin',
+                        'catatan'     => 'Status diubah manual GAGAL -> ' . $newStatus . ' oleh admin, saldo dipotong kembali',
+                        'admin'       => $adminName,
+                        'trx_id'      => $trx['trx_id'] ?? '',
+                    ));
+                }
             }
         }
 
@@ -437,6 +522,52 @@ switch ($action) {
         ];
         @file_put_contents($dir . '/gateway_okeconnect.json', json_encode($cfg, JSON_PRETTY_PRINT));
         echo json_encode(['status' => true, 'message' => 'Kredensial OkeConnect berhasil disimpan']);
+        break;
+
+    // ==================================================================
+    // AUDIT SALDO — BUKU BESAR SALDO PER USER (MENU AUDIT DI PANELADMIN)
+    // ==================================================================
+    case 'admin_get_audit':
+        $token = $input['session_token'] ?? $_GET['session_token'] ?? '';
+        if (!check_admin_access($token)) { echo json_encode(['status' => false, 'message' => 'Khusus Admin']); exit; }
+
+        $targetUserId = trim((string)($input['target_user_id'] ?? $_GET['target_user_id'] ?? $input['user_id'] ?? $_GET['user_id'] ?? ''));
+        if ($targetUserId === '') {
+            echo json_encode(['status' => false, 'message' => 'User belum dipilih']); exit;
+        }
+
+        $users = get_users_data();
+        $target = null;
+        foreach ($users as $u) {
+            if (($u['id'] ?? '') === $targetUserId || strtolower((string)($u['username'] ?? '')) === strtolower($targetUserId)) {
+                $target = $u; break;
+            }
+        }
+        if (!$target) { echo json_encode(['status' => false, 'message' => 'User tidak ditemukan']); exit; }
+
+        unset($target['password']);
+
+        $ledger   = get_user_ledger($target['id']);
+        $validate = ledger_validate_chain($ledger);
+        $summary  = ledger_summary($ledger);
+
+        echo json_encode([
+            'status' => true,
+            'data'   => [
+                'user'    => [
+                    'id'       => $target['id'],
+                    'username' => $target['username'] ?? '',
+                    'email'    => $target['email'] ?? '',
+                    'nomorwa'  => $target['nomorwa'] ?? '',
+                    'role'     => $target['role'] ?? 'user',
+                ],
+                'saldo'   => (int)($target['saldo'] ?? 0),
+                'saldo_tercatat' => !empty($ledger) ? (int)(end($ledger)['saldo_akhir'] ?? 0) : (int)($target['saldo'] ?? 0),
+                'ledger'  => $ledger,
+                'summary' => $summary,
+                'chain'   => $validate,
+            ]
+        ]);
         break;
 
     default:
