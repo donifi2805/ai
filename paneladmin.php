@@ -6,10 +6,634 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>Admin Panel — PayNusa Control Center</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    /* ========================================================================
+       MODALS & NEW UTILITIES (RAW JSON, FULL IMAGE, BLOCK, BROADCAST, CROP)
+       ===================================================================== */
+    let lastRawJsonData = null;
+
+    function showRawJsonResponseModal(ref, data) {
+      lastRawJsonData = data;
+      setTxt('rawJsonSubtitle', 'Hasil Pengecekan Provider — Ref ID: ' + ref);
+      const codeBox = $('rawJsonCode');
+      if (codeBox) {
+        codeBox.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+      }
+      $('modalRawJson').classList.remove('hidden');
+    }
+
+    function closeRawJsonModal() {
+      $('modalRawJson').classList.add('hidden');
+    }
+
+    function copyRawJsonText() {
+      if (!lastRawJsonData) return toast('Tidak ada data JSON untuk disalin', 'warn');
+      copyText(JSON.stringify(lastRawJsonData, null, 2));
+    }
+
+    function openFullImageModal(url, title = 'Foto Ukuran Penuh') {
+      if (!url) return toast('Gambar tidak dapat dibuka', 'warn');
+      let src = url;
+      if (!src.startsWith('http') && !src.startsWith('data:')) {
+        src = src.startsWith('public_html') ? '../' + src : src;
+      }
+      $('fullImageContent').src = src;
+      setTxt('fullImageTitle', title);
+      $('modalFullImage').classList.remove('hidden');
+    }
+
+    function closeFullImageModal() {
+      $('modalFullImage').classList.add('hidden');
+    }
+
+    async function toggleBlockUser(uid, blockState) {
+      const u = usersData.find(x => String(x.uid) === String(uid) || String(x.user?.phone) === String(uid));
+      if (!u) return toast("Data user tidak ditemukan", 'err');
+      u.is_blocked = blockState;
+      u.status = blockState ? 'blocked' : 'active';
+      if (u.user) {
+        u.user.is_blocked = blockState;
+        u.user.status = blockState ? 'blocked' : 'active';
+      }
+
+      try {
+        await secureFetch("manager.php?action=update_user_admin", {
+          uid: u.uid,
+          status: blockState ? 'blocked' : 'active',
+          is_blocked: blockState,
+          user: { ...(u.user || {}), is_blocked: blockState, status: blockState ? 'blocked' : 'active' }
+        });
+        toast(blockState ? "Akun user berhasil DIBLOKIR!" : "Blokir akun user BERHASIL DIBUKA!", blockState ? 'warn' : 'ok');
+        renderUsersTable();
+      } catch(e) {
+        errMsg("Gagal memperbarui status blokir user");
+      }
+    }
+
+    function toggleMaintenanceTotal() {
+      siteSettings.maintenance_total = !siteSettings.maintenance_total;
+      renderSettingsForm();
+      toast(siteSettings.maintenance_total ? "Maintenance Total DIAKTIFKAN!" : "Maintenance Total DINONAKTIFKAN", siteSettings.maintenance_total ? "warn" : "ok");
+    }
+
+    /* ---------- PROMO CROPPER ---------- */
+    function openCropForPromo(input, index) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentCropType = 'promo';
+        currentCropIndex = index;
+        const img = $('cropperImage');
+        img.src = e.target.result;
+        $('cropperModal').classList.remove('hidden');
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(img, {
+          aspectRatio: 16 / 9,
+          viewMode: 1,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* ---------- BROADCAST SYSTEM ---------- */
+    function renderBroadcastUI() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || { active: true, title: "", message: "", image: "", max_views: 1 };
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const bm = siteSettings.broadcast_mass;
+
+      const btnMass = $("btnMassBcStatus");
+      if (btnMass) {
+        btnMass.innerHTML = bm.active !== false ? '<i class="fas fa-power-off"></i> <span>Aktif</span>' : '<i class="fas fa-power-off"></i> <span>Nonaktif</span>';
+        btnMass.className = bm.active !== false ? "btn btn-xs btn-ok" : "btn btn-xs";
+      }
+
+      if ($("bmTitle")) $("bmTitle").value = bm.title || "";
+      if ($("bmMessage")) $("bmMessage").value = bm.message || "";
+      if ($("bmImage")) $("bmImage").value = bm.image || "";
+      if ($("bmMaxViews")) $("bmMaxViews").value = bm.max_views || 1;
+
+      // Populate targeted user select
+      const select = $("btUserSelect");
+      if (select) {
+        select.innerHTML = '<option value="">-- Pilih User --</option>' + usersData.map(u => `
+          <option value="${esc(u.uid)}">${esc(u.user?.name || 'No Name')} (${esc(u.user?.phone || u.uid)})</option>
+        `).join('');
+      }
+
+      // Render active targeted broadcasts
+      const container = $("targetedBroadcastListContainer");
+      if (container) {
+        const list = siteSettings.broadcast_targeted || [];
+        if (!list.length) {
+          container.innerHTML = '<div class="tbl-empty"><i class="fas fa-bullhorn"></i>Belum ada siaran khusus user</div>';
+        } else {
+          container.innerHTML = list.map((b, i) => `
+            <div class="list-item" style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+              <div>
+                <b style="font-size:.75rem;color:var(--pri-text);">${esc(b.title || 'Siaran Khusus')}</b>
+                <p style="font-size:.65rem;color:var(--muted);margin-top:.1rem;">Target: <b>${esc(b.target_name || b.target_uids?.join(', ') || '-')}</b> · Maks Tampil: <b>${b.max_views || 1}x</b></p>
+                <small style="font-size:.62rem;color:var(--pri-text);">${esc(b.message || '')}</small>
+              </div>
+              <button type="button" class="btn btn-xs btn-danger" onclick="deleteTargetedBroadcast('${esc(b.id)}')"><i class="fas fa-trash"></i> <span>Hapus</span></button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function toggleMassBroadcastStatus() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.active = siteSettings.broadcast_mass.active === false ? true : false;
+      renderBroadcastUI();
+    }
+
+    async function saveMassBroadcast() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.id = siteSettings.broadcast_mass.id || ('bm_' + Date.now());
+      siteSettings.broadcast_mass.title = $("bmTitle").value;
+      siteSettings.broadcast_mass.message = $("bmMessage").value;
+      siteSettings.broadcast_mass.image = $("bmImage").value;
+      siteSettings.broadcast_mass.max_views = parseInt($("bmMaxViews").value) || 1;
+      await saveSiteSettings();
+      toast("Pengaturan Siaran Massal berhasil disimpan!", "ok");
+    }
+
+    async function sendTargetedBroadcast() {
+      const uid = $("btUserSelect").value;
+      const title = $("btTitle").value.trim();
+      const message = $("btMessage").value.trim();
+      const image = $("btImage").value.trim();
+      const maxViews = parseInt($("btMaxViews").value) || 1;
+
+      if (!uid) return toast("Pilih target user terlebih dahulu!", "warn");
+      if (!title && !message) return toast("Isi judul atau pesan siaran!", "warn");
+
+      const u = usersData.find(x => String(x.uid) === String(uid));
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const newBc = {
+        id: 'bt_' + Date.now(),
+        target_uids: [uid, u?.user?.phone || ''].filter(Boolean),
+        target_name: u?.user?.name || uid,
+        title: title || 'Pesan Khusus',
+        message: message,
+        image: image,
+        max_views: maxViews,
+        active: true,
+        created_at: new Date().toISOString()
+      };
+      siteSettings.broadcast_targeted.push(newBc);
+      await saveSiteSettings();
+      $("btTitle").value = "";
+      $("btMessage").value = "";
+      $("btImage").value = "";
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dikirim ke " + (u?.user?.name || uid), "ok");
+    }
+
+    async function deleteTargetedBroadcast(id) {
+      siteSettings.broadcast_targeted = (siteSettings.broadcast_targeted || []).filter(b => b.id !== id);
+      await saveSiteSettings();
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dihapus", "ok");
+    }
+
+    function uploadBroadcastImg(input, type) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (type === 'mass') {
+          $("bmImage").value = e.target.result;
+        } else {
+          $("btImage").value = e.target.result;
+        }
+        toast("Gambar siaran siap dipasang!", "ok");
+      };
+      reader.readAsDataURL(file);
+    }
+
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js">
+    /* ========================================================================
+       MODALS & NEW UTILITIES (RAW JSON, FULL IMAGE, BLOCK, BROADCAST, CROP)
+       ===================================================================== */
+    let lastRawJsonData = null;
+
+    function showRawJsonResponseModal(ref, data) {
+      lastRawJsonData = data;
+      setTxt('rawJsonSubtitle', 'Hasil Pengecekan Provider — Ref ID: ' + ref);
+      const codeBox = $('rawJsonCode');
+      if (codeBox) {
+        codeBox.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+      }
+      $('modalRawJson').classList.remove('hidden');
+    }
+
+    function closeRawJsonModal() {
+      $('modalRawJson').classList.add('hidden');
+    }
+
+    function copyRawJsonText() {
+      if (!lastRawJsonData) return toast('Tidak ada data JSON untuk disalin', 'warn');
+      copyText(JSON.stringify(lastRawJsonData, null, 2));
+    }
+
+    function openFullImageModal(url, title = 'Foto Ukuran Penuh') {
+      if (!url) return toast('Gambar tidak dapat dibuka', 'warn');
+      let src = url;
+      if (!src.startsWith('http') && !src.startsWith('data:')) {
+        src = src.startsWith('public_html') ? '../' + src : src;
+      }
+      $('fullImageContent').src = src;
+      setTxt('fullImageTitle', title);
+      $('modalFullImage').classList.remove('hidden');
+    }
+
+    function closeFullImageModal() {
+      $('modalFullImage').classList.add('hidden');
+    }
+
+    async function toggleBlockUser(uid, blockState) {
+      const u = usersData.find(x => String(x.uid) === String(uid) || String(x.user?.phone) === String(uid));
+      if (!u) return toast("Data user tidak ditemukan", 'err');
+      u.is_blocked = blockState;
+      u.status = blockState ? 'blocked' : 'active';
+      if (u.user) {
+        u.user.is_blocked = blockState;
+        u.user.status = blockState ? 'blocked' : 'active';
+      }
+
+      try {
+        await secureFetch("manager.php?action=update_user_admin", {
+          uid: u.uid,
+          status: blockState ? 'blocked' : 'active',
+          is_blocked: blockState,
+          user: { ...(u.user || {}), is_blocked: blockState, status: blockState ? 'blocked' : 'active' }
+        });
+        toast(blockState ? "Akun user berhasil DIBLOKIR!" : "Blokir akun user BERHASIL DIBUKA!", blockState ? 'warn' : 'ok');
+        renderUsersTable();
+      } catch(e) {
+        errMsg("Gagal memperbarui status blokir user");
+      }
+    }
+
+    function toggleMaintenanceTotal() {
+      siteSettings.maintenance_total = !siteSettings.maintenance_total;
+      renderSettingsForm();
+      toast(siteSettings.maintenance_total ? "Maintenance Total DIAKTIFKAN!" : "Maintenance Total DINONAKTIFKAN", siteSettings.maintenance_total ? "warn" : "ok");
+    }
+
+    /* ---------- PROMO CROPPER ---------- */
+    function openCropForPromo(input, index) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentCropType = 'promo';
+        currentCropIndex = index;
+        const img = $('cropperImage');
+        img.src = e.target.result;
+        $('cropperModal').classList.remove('hidden');
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(img, {
+          aspectRatio: 16 / 9,
+          viewMode: 1,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* ---------- BROADCAST SYSTEM ---------- */
+    function renderBroadcastUI() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || { active: true, title: "", message: "", image: "", max_views: 1 };
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const bm = siteSettings.broadcast_mass;
+
+      const btnMass = $("btnMassBcStatus");
+      if (btnMass) {
+        btnMass.innerHTML = bm.active !== false ? '<i class="fas fa-power-off"></i> <span>Aktif</span>' : '<i class="fas fa-power-off"></i> <span>Nonaktif</span>';
+        btnMass.className = bm.active !== false ? "btn btn-xs btn-ok" : "btn btn-xs";
+      }
+
+      if ($("bmTitle")) $("bmTitle").value = bm.title || "";
+      if ($("bmMessage")) $("bmMessage").value = bm.message || "";
+      if ($("bmImage")) $("bmImage").value = bm.image || "";
+      if ($("bmMaxViews")) $("bmMaxViews").value = bm.max_views || 1;
+
+      // Populate targeted user select
+      const select = $("btUserSelect");
+      if (select) {
+        select.innerHTML = '<option value="">-- Pilih User --</option>' + usersData.map(u => `
+          <option value="${esc(u.uid)}">${esc(u.user?.name || 'No Name')} (${esc(u.user?.phone || u.uid)})</option>
+        `).join('');
+      }
+
+      // Render active targeted broadcasts
+      const container = $("targetedBroadcastListContainer");
+      if (container) {
+        const list = siteSettings.broadcast_targeted || [];
+        if (!list.length) {
+          container.innerHTML = '<div class="tbl-empty"><i class="fas fa-bullhorn"></i>Belum ada siaran khusus user</div>';
+        } else {
+          container.innerHTML = list.map((b, i) => `
+            <div class="list-item" style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+              <div>
+                <b style="font-size:.75rem;color:var(--pri-text);">${esc(b.title || 'Siaran Khusus')}</b>
+                <p style="font-size:.65rem;color:var(--muted);margin-top:.1rem;">Target: <b>${esc(b.target_name || b.target_uids?.join(', ') || '-')}</b> · Maks Tampil: <b>${b.max_views || 1}x</b></p>
+                <small style="font-size:.62rem;color:var(--pri-text);">${esc(b.message || '')}</small>
+              </div>
+              <button type="button" class="btn btn-xs btn-danger" onclick="deleteTargetedBroadcast('${esc(b.id)}')"><i class="fas fa-trash"></i> <span>Hapus</span></button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function toggleMassBroadcastStatus() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.active = siteSettings.broadcast_mass.active === false ? true : false;
+      renderBroadcastUI();
+    }
+
+    async function saveMassBroadcast() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.id = siteSettings.broadcast_mass.id || ('bm_' + Date.now());
+      siteSettings.broadcast_mass.title = $("bmTitle").value;
+      siteSettings.broadcast_mass.message = $("bmMessage").value;
+      siteSettings.broadcast_mass.image = $("bmImage").value;
+      siteSettings.broadcast_mass.max_views = parseInt($("bmMaxViews").value) || 1;
+      await saveSiteSettings();
+      toast("Pengaturan Siaran Massal berhasil disimpan!", "ok");
+    }
+
+    async function sendTargetedBroadcast() {
+      const uid = $("btUserSelect").value;
+      const title = $("btTitle").value.trim();
+      const message = $("btMessage").value.trim();
+      const image = $("btImage").value.trim();
+      const maxViews = parseInt($("btMaxViews").value) || 1;
+
+      if (!uid) return toast("Pilih target user terlebih dahulu!", "warn");
+      if (!title && !message) return toast("Isi judul atau pesan siaran!", "warn");
+
+      const u = usersData.find(x => String(x.uid) === String(uid));
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const newBc = {
+        id: 'bt_' + Date.now(),
+        target_uids: [uid, u?.user?.phone || ''].filter(Boolean),
+        target_name: u?.user?.name || uid,
+        title: title || 'Pesan Khusus',
+        message: message,
+        image: image,
+        max_views: maxViews,
+        active: true,
+        created_at: new Date().toISOString()
+      };
+      siteSettings.broadcast_targeted.push(newBc);
+      await saveSiteSettings();
+      $("btTitle").value = "";
+      $("btMessage").value = "";
+      $("btImage").value = "";
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dikirim ke " + (u?.user?.name || uid), "ok");
+    }
+
+    async function deleteTargetedBroadcast(id) {
+      siteSettings.broadcast_targeted = (siteSettings.broadcast_targeted || []).filter(b => b.id !== id);
+      await saveSiteSettings();
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dihapus", "ok");
+    }
+
+    function uploadBroadcastImg(input, type) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (type === 'mass') {
+          $("bmImage").value = e.target.result;
+        } else {
+          $("btImage").value = e.target.result;
+        }
+        toast("Gambar siaran siap dipasang!", "ok");
+      };
+      reader.readAsDataURL(file);
+    }
+
+
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js">
+    /* ========================================================================
+       MODALS & NEW UTILITIES (RAW JSON, FULL IMAGE, BLOCK, BROADCAST, CROP)
+       ===================================================================== */
+    let lastRawJsonData = null;
+
+    function showRawJsonResponseModal(ref, data) {
+      lastRawJsonData = data;
+      setTxt('rawJsonSubtitle', 'Hasil Pengecekan Provider — Ref ID: ' + ref);
+      const codeBox = $('rawJsonCode');
+      if (codeBox) {
+        codeBox.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+      }
+      $('modalRawJson').classList.remove('hidden');
+    }
+
+    function closeRawJsonModal() {
+      $('modalRawJson').classList.add('hidden');
+    }
+
+    function copyRawJsonText() {
+      if (!lastRawJsonData) return toast('Tidak ada data JSON untuk disalin', 'warn');
+      copyText(JSON.stringify(lastRawJsonData, null, 2));
+    }
+
+    function openFullImageModal(url, title = 'Foto Ukuran Penuh') {
+      if (!url) return toast('Gambar tidak dapat dibuka', 'warn');
+      let src = url;
+      if (!src.startsWith('http') && !src.startsWith('data:')) {
+        src = src.startsWith('public_html') ? '../' + src : src;
+      }
+      $('fullImageContent').src = src;
+      setTxt('fullImageTitle', title);
+      $('modalFullImage').classList.remove('hidden');
+    }
+
+    function closeFullImageModal() {
+      $('modalFullImage').classList.add('hidden');
+    }
+
+    async function toggleBlockUser(uid, blockState) {
+      const u = usersData.find(x => String(x.uid) === String(uid) || String(x.user?.phone) === String(uid));
+      if (!u) return toast("Data user tidak ditemukan", 'err');
+      u.is_blocked = blockState;
+      u.status = blockState ? 'blocked' : 'active';
+      if (u.user) {
+        u.user.is_blocked = blockState;
+        u.user.status = blockState ? 'blocked' : 'active';
+      }
+
+      try {
+        await secureFetch("manager.php?action=update_user_admin", {
+          uid: u.uid,
+          status: blockState ? 'blocked' : 'active',
+          is_blocked: blockState,
+          user: { ...(u.user || {}), is_blocked: blockState, status: blockState ? 'blocked' : 'active' }
+        });
+        toast(blockState ? "Akun user berhasil DIBLOKIR!" : "Blokir akun user BERHASIL DIBUKA!", blockState ? 'warn' : 'ok');
+        renderUsersTable();
+      } catch(e) {
+        errMsg("Gagal memperbarui status blokir user");
+      }
+    }
+
+    function toggleMaintenanceTotal() {
+      siteSettings.maintenance_total = !siteSettings.maintenance_total;
+      renderSettingsForm();
+      toast(siteSettings.maintenance_total ? "Maintenance Total DIAKTIFKAN!" : "Maintenance Total DINONAKTIFKAN", siteSettings.maintenance_total ? "warn" : "ok");
+    }
+
+    /* ---------- PROMO CROPPER ---------- */
+    function openCropForPromo(input, index) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentCropType = 'promo';
+        currentCropIndex = index;
+        const img = $('cropperImage');
+        img.src = e.target.result;
+        $('cropperModal').classList.remove('hidden');
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(img, {
+          aspectRatio: 16 / 9,
+          viewMode: 1,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* ---------- BROADCAST SYSTEM ---------- */
+    function renderBroadcastUI() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || { active: true, title: "", message: "", image: "", max_views: 1 };
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const bm = siteSettings.broadcast_mass;
+
+      const btnMass = $("btnMassBcStatus");
+      if (btnMass) {
+        btnMass.innerHTML = bm.active !== false ? '<i class="fas fa-power-off"></i> <span>Aktif</span>' : '<i class="fas fa-power-off"></i> <span>Nonaktif</span>';
+        btnMass.className = bm.active !== false ? "btn btn-xs btn-ok" : "btn btn-xs";
+      }
+
+      if ($("bmTitle")) $("bmTitle").value = bm.title || "";
+      if ($("bmMessage")) $("bmMessage").value = bm.message || "";
+      if ($("bmImage")) $("bmImage").value = bm.image || "";
+      if ($("bmMaxViews")) $("bmMaxViews").value = bm.max_views || 1;
+
+      // Populate targeted user select
+      const select = $("btUserSelect");
+      if (select) {
+        select.innerHTML = '<option value="">-- Pilih User --</option>' + usersData.map(u => `
+          <option value="${esc(u.uid)}">${esc(u.user?.name || 'No Name')} (${esc(u.user?.phone || u.uid)})</option>
+        `).join('');
+      }
+
+      // Render active targeted broadcasts
+      const container = $("targetedBroadcastListContainer");
+      if (container) {
+        const list = siteSettings.broadcast_targeted || [];
+        if (!list.length) {
+          container.innerHTML = '<div class="tbl-empty"><i class="fas fa-bullhorn"></i>Belum ada siaran khusus user</div>';
+        } else {
+          container.innerHTML = list.map((b, i) => `
+            <div class="list-item" style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+              <div>
+                <b style="font-size:.75rem;color:var(--pri-text);">${esc(b.title || 'Siaran Khusus')}</b>
+                <p style="font-size:.65rem;color:var(--muted);margin-top:.1rem;">Target: <b>${esc(b.target_name || b.target_uids?.join(', ') || '-')}</b> · Maks Tampil: <b>${b.max_views || 1}x</b></p>
+                <small style="font-size:.62rem;color:var(--pri-text);">${esc(b.message || '')}</small>
+              </div>
+              <button type="button" class="btn btn-xs btn-danger" onclick="deleteTargetedBroadcast('${esc(b.id)}')"><i class="fas fa-trash"></i> <span>Hapus</span></button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function toggleMassBroadcastStatus() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.active = siteSettings.broadcast_mass.active === false ? true : false;
+      renderBroadcastUI();
+    }
+
+    async function saveMassBroadcast() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.id = siteSettings.broadcast_mass.id || ('bm_' + Date.now());
+      siteSettings.broadcast_mass.title = $("bmTitle").value;
+      siteSettings.broadcast_mass.message = $("bmMessage").value;
+      siteSettings.broadcast_mass.image = $("bmImage").value;
+      siteSettings.broadcast_mass.max_views = parseInt($("bmMaxViews").value) || 1;
+      await saveSiteSettings();
+      toast("Pengaturan Siaran Massal berhasil disimpan!", "ok");
+    }
+
+    async function sendTargetedBroadcast() {
+      const uid = $("btUserSelect").value;
+      const title = $("btTitle").value.trim();
+      const message = $("btMessage").value.trim();
+      const image = $("btImage").value.trim();
+      const maxViews = parseInt($("btMaxViews").value) || 1;
+
+      if (!uid) return toast("Pilih target user terlebih dahulu!", "warn");
+      if (!title && !message) return toast("Isi judul atau pesan siaran!", "warn");
+
+      const u = usersData.find(x => String(x.uid) === String(uid));
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const newBc = {
+        id: 'bt_' + Date.now(),
+        target_uids: [uid, u?.user?.phone || ''].filter(Boolean),
+        target_name: u?.user?.name || uid,
+        title: title || 'Pesan Khusus',
+        message: message,
+        image: image,
+        max_views: maxViews,
+        active: true,
+        created_at: new Date().toISOString()
+      };
+      siteSettings.broadcast_targeted.push(newBc);
+      await saveSiteSettings();
+      $("btTitle").value = "";
+      $("btMessage").value = "";
+      $("btImage").value = "";
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dikirim ke " + (u?.user?.name || uid), "ok");
+    }
+
+    async function deleteTargetedBroadcast(id) {
+      siteSettings.broadcast_targeted = (siteSettings.broadcast_targeted || []).filter(b => b.id !== id);
+      await saveSiteSettings();
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dihapus", "ok");
+    }
+
+    function uploadBroadcastImg(input, type) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (type === 'mass') {
+          $("bmImage").value = e.target.result;
+        } else {
+          $("btImage").value = e.target.result;
+        }
+        toast("Gambar siaran siap dipasang!", "ok");
+      };
+      reader.readAsDataURL(file);
+    }
+
+
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -653,6 +1277,9 @@
           <li class="sb-item" id="tab-promo" onclick="switchTab('promo')">
             <i class="fas fa-gift"></i><span>Promo &amp; Voucher</span>
           </li>
+          <li class="sb-item" id="tab-broadcast" onclick="switchTab('broadcast')">
+            <i class="fas fa-bullhorn"></i><span>Siaran / Broadcast</span>
+          </li>
 
           <li class="sb-label">Pelacakan Transaksi</li>
           <li class="sb-item" id="tab-txtrace" onclick="switchTab('txtrace')">
@@ -997,7 +1624,11 @@
                   <div class="card-title"><i class="fas fa-bullhorn"></i> Banner Promo Utama</div>
                   <button class="btn btn-pri btn-xs" onclick="addPromoRow()"><i class="fas fa-plus"></i> Tambah</button>
                 </div>
-                <div class="card-body" id="promoListContainer"></div>
+                <div style="padding:.55rem .75rem;margin:.6rem .6rem 0;border-radius:var(--r);background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.2);font-size:.68rem;color:var(--pri-text);">
+                    <i class="fas fa-circle-info" style="color:var(--pri);margin-right:.25rem;"></i>
+                    <b>Panduan Rasio Foto Promo:</b> Ukuran rasio pas yang disarankan adalah <b>16:9 (misal: 1280x720 px)</b> untuk tampilan banner promo terbaik di aplikasi.
+                  </div>
+                  <div class="card-body" id="promoListContainer"></div>
               </div>
 
               <div class="card">
@@ -1011,6 +1642,92 @@
 
             <button class="btn btn-pri btn-lg btn-block" onclick="saveSiteSettings()"><i class="fas fa-floppy-disk"></i> Simpan
               Perubahan Promo &amp; Voucher</button>
+          </section>
+
+          <!-- ==================== TAB: SIARAN / BROADCAST ==================== -->
+          <section id="sec-broadcast" class="page-section stack">
+            <div class="page-head">
+              <div>
+                <h2><i class="fas fa-bullhorn"></i> Siaran Massal &amp; Pengguna</h2>
+                <p>Kirim pesan dan gambar siaran langsung ke aplikasi pengguna</p>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem;" class="broadcast-grid">
+              <!-- Card 1: Siaran Massal -->
+              <div class="card">
+                <div class="card-head">
+                  <div class="card-title"><i class="fas fa-tower-broadcast"></i> Siaran Massal (Semua User)</div>
+                  <button id="btnMassBcStatus" type="button" class="btn btn-xs btn-ok" onclick="toggleMassBroadcastStatus()"><i class="fas fa-power-off"></i> <span>Aktif</span></button>
+                </div>
+                <div class="card-body">
+                  <div class="field">
+                    <label class="lbl">Judul Siaran Massal</label>
+                    <input type="text" id="bmTitle" class="inp" placeholder="Contoh: Promo Spesial Hari Ini!" />
+                  </div>
+                  <div class="field" style="margin-top:.5rem;">
+                    <label class="lbl">Pesan Siaran</label>
+                    <textarea id="bmMessage" class="inp" rows="3" placeholder="Tuliskan isi pesan siaran massal..."></textarea>
+                  </div>
+                  <div class="field" style="margin-top:.5rem;">
+                    <label class="lbl">Gambar Siaran (URL / Unggah)</label>
+                    <div style="display:flex;gap:.5rem;align-items:center;">
+                      <input type="text" id="bmImage" class="inp" placeholder="https://... atau unggah gambar" style="flex:1;" />
+                      <input type="file" id="bmFile" accept="image/*" style="display:none;" onchange="uploadBroadcastImg(this, 'mass')" />
+                      <button type="button" class="btn btn-xs btn-soft" onclick="$('bmFile').click()"><i class="fas fa-upload"></i> <span>Unggah</span></button>
+                    </div>
+                  </div>
+                  <div class="field" style="margin-top:.5rem;">
+                    <label class="lbl">Jumlah Tampil Saat User Membuka Index (Default: 1x)</label>
+                    <input type="number" id="bmMaxViews" class="inp" min="1" value="1" placeholder="Berapa kali muncul" />
+                  </div>
+                  <button type="button" class="btn btn-pri btn-sm" style="margin-top:.8rem;width:100%;" onclick="saveMassBroadcast()"><i class="fas fa-floppy-disk"></i> <span>Simpan Siaran Massal</span></button>
+                </div>
+              </div>
+
+              <!-- Card 2: Siaran Ke User Tertentu -->
+              <div class="card">
+                <div class="card-head">
+                  <div class="card-title"><i class="fas fa-user-tag"></i> Siaran Ke User Tertentu</div>
+                </div>
+                <div class="card-body">
+                  <div class="field">
+                    <label class="lbl">Pilih Target User</label>
+                    <select id="btUserSelect" class="inp">
+                      <option value="">-- Pilih User --</option>
+                    </select>
+                  </div>
+                  <div class="field" style="margin-top:.5rem;">
+                    <label class="lbl">Judul Pesan Khusus</label>
+                    <input type="text" id="btTitle" class="inp" placeholder="Pesan Khusus Untuk Anda" />
+                  </div>
+                  <div class="field" style="margin-top:.5rem;">
+                    <label class="lbl">Isi Pesan Khusus</label>
+                    <textarea id="btMessage" class="inp" rows="3" placeholder="Pesan khusus pengguna..."></textarea>
+                  </div>
+                  <div class="field" style="margin-top:.5rem;">
+                    <label class="lbl">Gambar Siaran (Opsional)</label>
+                    <div style="display:flex;gap:.5rem;align-items:center;">
+                      <input type="text" id="btImage" class="inp" placeholder="URL atau unggah..." style="flex:1;" />
+                      <input type="file" id="btFile" accept="image/*" style="display:none;" onchange="uploadBroadcastImg(this, 'targeted')" />
+                      <button type="button" class="btn btn-xs btn-soft" onclick="$('btFile').click()"><i class="fas fa-upload"></i> <span>Unggah</span></button>
+                    </div>
+                  </div>
+                  <div class="field" style="margin-top:.5rem;">
+                    <label class="lbl">Jumlah Tampil Saat Membuka Index</label>
+                    <input type="number" id="btMaxViews" class="inp" min="1" value="1" placeholder="1" />
+                  </div>
+                  <button type="button" class="btn btn-ok btn-sm" style="margin-top:.8rem;width:100%;" onclick="sendTargetedBroadcast()"><i class="fas fa-paper-plane"></i> <span>Kirim Siaran Ke User</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:1rem;">
+              <div class="card-head">
+                <div class="card-title"><i class="fas fa-list-check"></i> Daftar Siaran Khusus User Aktif</div>
+              </div>
+              <div class="card-body" id="targetedBroadcastListContainer"></div>
+            </div>
           </section>
 
           <!-- ==================== TAB: LANDING PAGE ==================== -->
@@ -1877,6 +2594,42 @@
       </div>
     </div>
 
+    <!-- ==================== MODAL: RAW JSON RESPONSE ==================== -->
+    <div id="modalRawJson" class="modal hidden" style="z-index:280;">
+      <div class="modal-card w-lg">
+        <div class="modal-head">
+          <div>
+            <h3><i class="fas fa-code" style="color:var(--pri);"></i> Respon Mentah Server (JSON)</h3>
+            <p id="rawJsonSubtitle">Hasil Live Check Transaction Status</p>
+          </div>
+          <button onclick="closeRawJsonModal()" class="modal-x" title="Tutup"><i class="fas fa-xmark"></i> <span>Tutup</span></button>
+        </div>
+        <div class="modal-body">
+          <pre id="rawJsonCode" style="background:#0f172a;color:#4ade80;padding:1rem;border-radius:var(--r);font-family:monospace;font-size:.72rem;overflow:auto;max-height:24rem;white-space:pre-wrap;word-break:break-all;user-select:all;"></pre>
+        </div>
+        <div class="modal-foot">
+          <button onclick="copyRawJsonText()" class="btn btn-sm btn-soft"><i class="fas fa-copy"></i> <span>Salin JSON</span></button>
+          <button onclick="closeRawJsonModal()" class="btn btn-sm btn-pri"><i class="fas fa-check"></i> <span>Tutup</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: FULL SIZE IMAGE ==================== -->
+    <div id="modalFullImage" class="modal hidden" style="background:rgba(2,6,16,.88);z-index:300;" onclick="closeFullImageModal()">
+      <div class="modal-card w-lg" onclick="event.stopPropagation()">
+        <div class="modal-head">
+          <h3 id="fullImageTitle"><i class="fas fa-image" style="color:var(--pri);"></i> Foto Ukuran Penuh</h3>
+          <button onclick="closeFullImageModal()" class="modal-x" title="Tutup"><i class="fas fa-xmark"></i> <span>Tutup</span></button>
+        </div>
+        <div class="modal-body" style="display:grid;place-items:center;background:#020617;padding:1rem;min-height:18rem;">
+          <img id="fullImageContent" src="" style="max-width:100%;max-height:75vh;object-fit:contain;border-radius:var(--r);" />
+        </div>
+        <div class="modal-foot">
+          <button onclick="closeFullImageModal()" class="btn btn-sm btn-pri"><i class="fas fa-xmark"></i> <span>Tutup</span></button>
+        </div>
+      </div>
+    </div>
+
     <!-- ==================== MODAL: EDIT USER ==================== -->
     <div id="modalUser" class="modal hidden">
       <div class="modal-card w-md">
@@ -2728,9 +3481,13 @@
           <td>${u.jenis_akun === 'admin' ? '<span class="badge b-pri"><i class="fas fa-user-shield"></i> admin</span>' : '<span class="badge b-mute">member</span>'}</td>
           <td>
             <div class="row">
-              <button onclick="openUserHistory('${esc(u.uid)}')" class="btn btn-xs btn-ok">Riwayat</button>
-              <button onclick="openEditUser('${esc(u.uid)}')" class="btn btn-xs btn-soft">Edit</button>
-              <button onclick="deleteUser('${esc(u.uid)}')" class="btn btn-xs btn-danger">Hapus</button>
+              <button onclick="openUserHistory('${esc(u.uid)}')" class="btn btn-xs btn-ok"><i class="fas fa-clock-rotate-left"></i> <span>Riwayat</span></button>
+              <button onclick="openEditUser('${esc(u.uid)}')" class="btn btn-xs btn-soft"><i class="fas fa-user-pen"></i> <span>Edit</span></button>
+              ${(u.status === 'blocked' || u.is_blocked || (u.user && u.user.is_blocked)) ? 
+                `<button onclick="toggleBlockUser('${esc(u.uid)}', false)" class="btn btn-xs btn-ok"><i class="fas fa-lock-open"></i> <span>Buka Blokir</span></button>` : 
+                `<button onclick="toggleBlockUser('${esc(u.uid)}', true)" class="btn btn-xs btn-warn"><i class="fas fa-ban"></i> <span>Blokir User</span></button>`
+              }
+              <button onclick="deleteUser('${esc(u.uid)}')" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> <span>Hapus</span></button>
             </div>
           </td>
         </tr>
@@ -2894,12 +3651,21 @@
        ===================================================================== */
     function renderSettingsForm() {
       $("confSiteName").value = siteSettings.site_name || '';
-      $("appLogoPreview").src = siteSettings.app_logo ? '../' + siteSettings.app_logo : '';
+      if ($("confAppLogo")) $("confAppLogo").value = siteSettings.app_logo || '';
+      $("appLogoPreview").src = siteSettings.app_logo ? (siteSettings.app_logo.startsWith('http') || siteSettings.app_logo.startsWith('data:') ? siteSettings.app_logo : '../' + siteSettings.app_logo) : '';
       $("confAppTitle").value = siteSettings.app_title || '';
-      $("confCsPhone").value = siteSettings.cs_phone || '';
+      if ($("confAdminContact")) $("confAdminContact").value = siteSettings.admin_contact || siteSettings.cs_phone || '';
+      $("confCsPhone").value = siteSettings.cs_phone || siteSettings.admin_contact || '';
       $("confCsEmail").value = siteSettings.cs_email || '';
       $("confQrisStatic").value = siteSettings.qris_static || '';
       $("confQrisName").value = siteSettings.qris_name || '';
+      
+      const btnMaint = $("btnMaintenanceTotal");
+      if (btnMaint) {
+        const isMaint = siteSettings.maintenance_total === true;
+        btnMaint.innerHTML = isMaint ? '<i class="fas fa-triangle-exclamation"></i> <span>MAINTENANCE AKTIF</span>' : '<i class="fas fa-power-off"></i> <span>Normal (Nonaktif)</span>';
+        btnMaint.className = isMaint ? "btn btn-danger btn-xs" : "btn btn-ok btn-xs";
+      }
     
       const btnQris = $("btnToggleQris");
       if (btnQris) {
@@ -3130,6 +3896,20 @@
     
     async function performCropAndUpload() {
       if (!cropper) return;
+      if (currentCropType === 'promo') {
+        const canvas = cropper.getCroppedCanvas({ width: 1280, height: 720 });
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        if (siteSettings.promos && siteSettings.promos[currentCropIndex]) {
+          siteSettings.promos[currentCropIndex].image = dataUrl;
+          siteSettings.promos[currentCropIndex].img = dataUrl;
+        }
+        $('cropperModal').classList.add('hidden');
+        renderSettingsForm();
+        okMsg('Foto promo berhasil dipotong (Rasio 16:9) & dipasang');
+        if (cropper) { cropper.destroy(); cropper = null; }
+        return;
+      }
+
       const canvas = cropper.getCroppedCanvas({
         width: currentCropType === 'main' ? 800 : 780,
         height: currentCropType === 'main' ? 1000 : 360,
@@ -3243,8 +4023,10 @@
     
     async function saveSiteSettings() {
       siteSettings.site_name = $("confSiteName").value;
+      if ($("confAppLogo")) siteSettings.app_logo = $("confAppLogo").value;
       siteSettings.app_title = $("confAppTitle").value;
-      siteSettings.cs_phone = $("confCsPhone").value;
+      if ($("confAdminContact")) siteSettings.admin_contact = $("confAdminContact").value;
+      siteSettings.cs_phone = $("confAdminContact") ? $("confAdminContact").value : $("confCsPhone").value;
       siteSettings.cs_email = $("confCsEmail").value;
       siteSettings.qris_static = $("confQrisStatic").value;
       siteSettings.qris_name = $("confQrisName").value;
@@ -3402,21 +4184,32 @@
     
     async function liveCheckTxStatusAdmin(ref) {
       try {
-        const res = await fetch("cektrx.php", {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "status", refid: ref })
-        });
-        const data = await res.json();
-        
         const t = allTxData.find(x => x.ref === ref);
-        if (t) {
+        const sid = t ? t.sid : "";
+        const svc = t ? t.service : "";
+        const isAkrab = sid === "xl_akrab" || (svc || "").toLowerCase().includes("akrab");
+        const apiUrl = isAkrab ? "api/api1.php" : "api/api4.php";
+        
+        let data = null;
+        try {
+          data = await secureFetch(apiUrl + "?action=status", { action: "status", refid: ref });
+        } catch(err) {
+          const res = await fetch("cektrx.php", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "status", refid: ref })
+          });
+          data = await res.json();
+        }
+        
+        if (t && data) {
           t.raw_response = data;
-          await secureFetch("manager.php?action=save_tx", { uid: t.uid || ('u_' + t.user_phone), tx: t });
+          await secureFetch("manager.php?action=save_tx", { uid: t.uid || ('u_' + (t.user_phone || 'guest')), tx: t });
         }
     
-        toast("Respon live cektrx.php: " + JSON.stringify(data), 'info', 'Live Status ' + ref);
-        initAdminDashboard();
-      } catch (e) { errMsg("Gagal melakukan Live Check Status"); }
+        toast("Live Cek Status Berhasil", 'ok', 'Status Ref: ' + ref);
+        await initAdminDashboard();
+        showRawJsonResponseModal(ref, data);
+      } catch (e) { errMsg("Gagal melakukan Live Check Status: " + (e.message || e)); }
     }
     
     async function deleteTxAdmin(ref) {
@@ -4263,13 +5056,27 @@
     async function txiLiveCheck(ref) {
       const r = TXI.byRef[ref]; if (!r) return;
       try {
-        const res = await fetch('cektrx.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'status', refid: ref }) });
-        const data = await res.json();
-        r.raw.raw_response = data;
-        await secureFetch('manager.php?action=save_tx', { uid: r.uid, tx: r.raw });
+        const sid = r.raw ? r.raw.sid : "";
+        const svc = r.service || "";
+        const isAkrab = sid === "xl_akrab" || svc.toLowerCase().includes("akrab");
+        const apiUrl = isAkrab ? "api/api1.php" : "api/api4.php";
+
+        let data = null;
+        try {
+          data = await secureFetch(apiUrl + "?action=status", { action: "status", refid: ref });
+        } catch(e) {
+          const res = await fetch('cektrx.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'status', refid: ref }) });
+          data = await res.json();
+        }
+
+        if (r.raw && data) {
+          r.raw.raw_response = data;
+          await secureFetch('manager.php?action=save_tx', { uid: r.uid, tx: r.raw });
+        }
         txiLog('live_check', ref, 'Respon: ' + JSON.stringify(data).slice(0, 180));
-        toast('Respon provider: ' + JSON.stringify(data).slice(0, 200), 'info', 'Live Status ' + ref);
+        toast('Live check berhasil', 'ok', 'Live Status ' + ref);
         await initAdminDashboard();
+        showRawJsonResponseModal(ref, data);
         if (TXI.modalRef === ref) txiOpenModal(ref);
       } catch (e) { toast('Gagal melakukan live check', 'err'); }
     }
@@ -5151,6 +5958,214 @@
       try { txiBoot(); } catch (e) { console.warn('TXI boot', e); }
       document.getElementById('admPass').addEventListener('keydown', (e) => { if (e.key === 'Enter') e.target.blur(); });
     });
+    
+    /* ========================================================================
+       MODALS & NEW UTILITIES (RAW JSON, FULL IMAGE, BLOCK, BROADCAST, CROP)
+       ===================================================================== */
+    let lastRawJsonData = null;
+
+    function showRawJsonResponseModal(ref, data) {
+      lastRawJsonData = data;
+      setTxt('rawJsonSubtitle', 'Hasil Pengecekan Provider — Ref ID: ' + ref);
+      const codeBox = $('rawJsonCode');
+      if (codeBox) {
+        codeBox.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : String(data);
+      }
+      $('modalRawJson').classList.remove('hidden');
+    }
+
+    function closeRawJsonModal() {
+      $('modalRawJson').classList.add('hidden');
+    }
+
+    function copyRawJsonText() {
+      if (!lastRawJsonData) return toast('Tidak ada data JSON untuk disalin', 'warn');
+      copyText(JSON.stringify(lastRawJsonData, null, 2));
+    }
+
+    function openFullImageModal(url, title = 'Foto Ukuran Penuh') {
+      if (!url) return toast('Gambar tidak dapat dibuka', 'warn');
+      let src = url;
+      if (!src.startsWith('http') && !src.startsWith('data:')) {
+        src = src.startsWith('public_html') ? '../' + src : src;
+      }
+      $('fullImageContent').src = src;
+      setTxt('fullImageTitle', title);
+      $('modalFullImage').classList.remove('hidden');
+    }
+
+    function closeFullImageModal() {
+      $('modalFullImage').classList.add('hidden');
+    }
+
+    async function toggleBlockUser(uid, blockState) {
+      const u = usersData.find(x => String(x.uid) === String(uid) || String(x.user?.phone) === String(uid));
+      if (!u) return toast("Data user tidak ditemukan", 'err');
+      u.is_blocked = blockState;
+      u.status = blockState ? 'blocked' : 'active';
+      if (u.user) {
+        u.user.is_blocked = blockState;
+        u.user.status = blockState ? 'blocked' : 'active';
+      }
+
+      try {
+        await secureFetch("manager.php?action=update_user_admin", {
+          uid: u.uid,
+          status: blockState ? 'blocked' : 'active',
+          is_blocked: blockState,
+          user: { ...(u.user || {}), is_blocked: blockState, status: blockState ? 'blocked' : 'active' }
+        });
+        toast(blockState ? "Akun user berhasil DIBLOKIR!" : "Blokir akun user BERHASIL DIBUKA!", blockState ? 'warn' : 'ok');
+        renderUsersTable();
+      } catch(e) {
+        errMsg("Gagal memperbarui status blokir user");
+      }
+    }
+
+    function toggleMaintenanceTotal() {
+      siteSettings.maintenance_total = !siteSettings.maintenance_total;
+      renderSettingsForm();
+      toast(siteSettings.maintenance_total ? "Maintenance Total DIAKTIFKAN!" : "Maintenance Total DINONAKTIFKAN", siteSettings.maintenance_total ? "warn" : "ok");
+    }
+
+    /* ---------- PROMO CROPPER ---------- */
+    function openCropForPromo(input, index) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        currentCropType = 'promo';
+        currentCropIndex = index;
+        const img = $('cropperImage');
+        img.src = e.target.result;
+        $('cropperModal').classList.remove('hidden');
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(img, {
+          aspectRatio: 16 / 9,
+          viewMode: 1,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* ---------- BROADCAST SYSTEM ---------- */
+    function renderBroadcastUI() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || { active: true, title: "", message: "", image: "", max_views: 1 };
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const bm = siteSettings.broadcast_mass;
+
+      const btnMass = $("btnMassBcStatus");
+      if (btnMass) {
+        btnMass.innerHTML = bm.active !== false ? '<i class="fas fa-power-off"></i> <span>Aktif</span>' : '<i class="fas fa-power-off"></i> <span>Nonaktif</span>';
+        btnMass.className = bm.active !== false ? "btn btn-xs btn-ok" : "btn btn-xs";
+      }
+
+      if ($("bmTitle")) $("bmTitle").value = bm.title || "";
+      if ($("bmMessage")) $("bmMessage").value = bm.message || "";
+      if ($("bmImage")) $("bmImage").value = bm.image || "";
+      if ($("bmMaxViews")) $("bmMaxViews").value = bm.max_views || 1;
+
+      // Populate targeted user select
+      const select = $("btUserSelect");
+      if (select) {
+        select.innerHTML = '<option value="">-- Pilih User --</option>' + usersData.map(u => `
+          <option value="${esc(u.uid)}">${esc(u.user?.name || 'No Name')} (${esc(u.user?.phone || u.uid)})</option>
+        `).join('');
+      }
+
+      // Render active targeted broadcasts
+      const container = $("targetedBroadcastListContainer");
+      if (container) {
+        const list = siteSettings.broadcast_targeted || [];
+        if (!list.length) {
+          container.innerHTML = '<div class="tbl-empty"><i class="fas fa-bullhorn"></i>Belum ada siaran khusus user</div>';
+        } else {
+          container.innerHTML = list.map((b, i) => `
+            <div class="list-item" style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+              <div>
+                <b style="font-size:.75rem;color:var(--pri-text);">${esc(b.title || 'Siaran Khusus')}</b>
+                <p style="font-size:.65rem;color:var(--muted);margin-top:.1rem;">Target: <b>${esc(b.target_name || b.target_uids?.join(', ') || '-')}</b> · Maks Tampil: <b>${b.max_views || 1}x</b></p>
+                <small style="font-size:.62rem;color:var(--pri-text);">${esc(b.message || '')}</small>
+              </div>
+              <button type="button" class="btn btn-xs btn-danger" onclick="deleteTargetedBroadcast('${esc(b.id)}')"><i class="fas fa-trash"></i> <span>Hapus</span></button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function toggleMassBroadcastStatus() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.active = siteSettings.broadcast_mass.active === false ? true : false;
+      renderBroadcastUI();
+    }
+
+    async function saveMassBroadcast() {
+      siteSettings.broadcast_mass = siteSettings.broadcast_mass || {};
+      siteSettings.broadcast_mass.id = siteSettings.broadcast_mass.id || ('bm_' + Date.now());
+      siteSettings.broadcast_mass.title = $("bmTitle").value;
+      siteSettings.broadcast_mass.message = $("bmMessage").value;
+      siteSettings.broadcast_mass.image = $("bmImage").value;
+      siteSettings.broadcast_mass.max_views = parseInt($("bmMaxViews").value) || 1;
+      await saveSiteSettings();
+      toast("Pengaturan Siaran Massal berhasil disimpan!", "ok");
+    }
+
+    async function sendTargetedBroadcast() {
+      const uid = $("btUserSelect").value;
+      const title = $("btTitle").value.trim();
+      const message = $("btMessage").value.trim();
+      const image = $("btImage").value.trim();
+      const maxViews = parseInt($("btMaxViews").value) || 1;
+
+      if (!uid) return toast("Pilih target user terlebih dahulu!", "warn");
+      if (!title && !message) return toast("Isi judul atau pesan siaran!", "warn");
+
+      const u = usersData.find(x => String(x.uid) === String(uid));
+      siteSettings.broadcast_targeted = siteSettings.broadcast_targeted || [];
+      const newBc = {
+        id: 'bt_' + Date.now(),
+        target_uids: [uid, u?.user?.phone || ''].filter(Boolean),
+        target_name: u?.user?.name || uid,
+        title: title || 'Pesan Khusus',
+        message: message,
+        image: image,
+        max_views: maxViews,
+        active: true,
+        created_at: new Date().toISOString()
+      };
+      siteSettings.broadcast_targeted.push(newBc);
+      await saveSiteSettings();
+      $("btTitle").value = "";
+      $("btMessage").value = "";
+      $("btImage").value = "";
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dikirim ke " + (u?.user?.name || uid), "ok");
+    }
+
+    async function deleteTargetedBroadcast(id) {
+      siteSettings.broadcast_targeted = (siteSettings.broadcast_targeted || []).filter(b => b.id !== id);
+      await saveSiteSettings();
+      renderBroadcastUI();
+      toast("Siaran khusus berhasil dihapus", "ok");
+    }
+
+    function uploadBroadcastImg(input, type) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (type === 'mass') {
+          $("bmImage").value = e.target.result;
+        } else {
+          $("btImage").value = e.target.result;
+        }
+        toast("Gambar siaran siap dipasang!", "ok");
+      };
+      reader.readAsDataURL(file);
+    }
+
+
     </script>
   </body>
 

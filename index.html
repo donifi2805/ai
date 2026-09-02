@@ -6,11 +6,495 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1" />
     <meta name="theme-color" content="#cc0000" />
     <title>PayNusa — Bayar Semua Tagihan Jadi Mudah</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    /* ========================================================================
+       USER BLOCKED, MAINTENANCE, BROADCAST, PROFILE PHOTO & PROMO LIGHTBOX
+       ===================================================================== */
+    function viewUserBlocked() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 bg-slate-950 text-white text-center">
+        <div class="card max-w-sm w-full p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-full bg-red-500/20 text-red-500 grid place-items-center mb-4 text-4xl border border-red-500/30 shadow-inner">
+            ${ic("shield", "w-10 h-10 text-red-500")}
+          </div>
+          <h2 class="text-xl font-extrabold text-red-400 mb-2">Akun Dibekukan</h2>
+          <p class="text-xs font-medium text-slate-300 leading-relaxed mb-6">
+            Akun anda telah di bekukan atau di baned oleh admin, untuk pengajuan pembukaan akun harap hubungi admin
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+          <button onclick="app.logout()" class="press mt-3 text-xs font-bold text-slate-400 hover:text-white">Keluar Akun</button>
+        </div>
+      </div>`;
+    }
+
+    function viewMaintenanceTotal() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 text-slate-800 text-center" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+        <div class="card max-w-sm w-full p-8 rounded-3xl bg-white/90 backdrop-blur-lg border border-sky-200 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-3xl bg-sky-100 text-sky-600 grid place-items-center mb-5 text-4xl shadow-inner border border-sky-200">
+            <svg class="w-10 h-10 text-sky-600 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-extrabold text-sky-900 mb-2">Perbaikan Rutin</h2>
+          <p class="text-xs font-semibold text-sky-800/90 leading-relaxed mb-6">
+            Sedang dalam perbaikan rutin 1-2jam mohon tunggu yaa<br><b class="text-sky-900 font-extrabold text-sm mt-2 block">Thx</b>
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+        </div>
+      </div>`;
+    }
+
+    function checkAndShowBroadcast() {
+      if (!S || !S.loggedIn) return;
+
+      // 1. Targeted Broadcast
+      if (Array.isArray(SITE_SETTINGS.broadcast_targeted)) {
+        const myUid = String(S.uid || S.user?.phone || '');
+        const myPhone = String(S.user?.phone || '');
+        const targeted = SITE_SETTINGS.broadcast_targeted.find(b => 
+          b.active !== false && 
+          Array.isArray(b.target_uids) && 
+          (b.target_uids.includes(myUid) || b.target_uids.includes(myPhone))
+        );
+
+        if (targeted) {
+          const key = 'pn_bc_tgt_' + targeted.id;
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(targeted.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(targeted);
+            return;
+          }
+        }
+      }
+
+      // 2. Mass Broadcast
+      if (SITE_SETTINGS.broadcast_mass && SITE_SETTINGS.broadcast_mass.active !== false) {
+        const bm = SITE_SETTINGS.broadcast_mass;
+        if (bm.title || bm.message || bm.image) {
+          const key = 'pn_bc_mass_' + (bm.id || 'default');
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(bm.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(bm);
+            return;
+          }
+        }
+      }
+    }
+
+    function showBroadcastPopupModal(bc) {
+      if (!bc) return;
+      const modal = document.createElement("div");
+      modal.id = "broadcastModal";
+      modal.className = "fixed inset-0 z-[95] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 fade-in";
+      modal.onclick = () => modal.remove();
+
+      const hasImg = bc.image;
+
+      modal.innerHTML = `<div class="relative max-w-sm w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col items-center p-5 text-white" onclick="event.stopPropagation()">
+        <button onclick="document.getElementById('broadcastModal').remove()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-400 grid place-items-center text-sm font-bold hover:text-white z-10">✕</button>
+
+        ${hasImg ? `
+          <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-black flex items-center justify-center">
+            <img src="${bc.image}" class="w-full h-full object-cover rounded-2xl cursor-pointer" onclick="app.openFullPhoto('${bc.image}', '${bc.title || 'Siaran'}')" />
+          </div>
+        ` : `
+          <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 grid place-items-center text-3xl mb-3 border border-indigo-500/30">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+        `}
+
+        <h2 class="text-lg font-extrabold text-white text-center mb-2">${bc.title || 'Pengumuman'}</h2>
+        <p class="text-xs text-slate-300 font-medium text-center leading-relaxed mb-5 max-h-48 overflow-y-auto px-1">${bc.message || ''}</p>
+
+        <button onclick="document.getElementById('broadcastModal').remove()" class="press w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-xs shadow-lg shadow-indigo-500/20">Tutup</button>
+      </div>`;
+
+      document.body.appendChild(modal);
+    }
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js">
+    /* ========================================================================
+       USER BLOCKED, MAINTENANCE, BROADCAST, PROFILE PHOTO & PROMO LIGHTBOX
+       ===================================================================== */
+    function viewUserBlocked() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 bg-slate-950 text-white text-center">
+        <div class="card max-w-sm w-full p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-full bg-red-500/20 text-red-500 grid place-items-center mb-4 text-4xl border border-red-500/30 shadow-inner">
+            ${ic("shield", "w-10 h-10 text-red-500")}
+          </div>
+          <h2 class="text-xl font-extrabold text-red-400 mb-2">Akun Dibekukan</h2>
+          <p class="text-xs font-medium text-slate-300 leading-relaxed mb-6">
+            Akun anda telah di bekukan atau di baned oleh admin, untuk pengajuan pembukaan akun harap hubungi admin
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+          <button onclick="app.logout()" class="press mt-3 text-xs font-bold text-slate-400 hover:text-white">Keluar Akun</button>
+        </div>
+      </div>`;
+    }
+
+    function viewMaintenanceTotal() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 text-slate-800 text-center" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+        <div class="card max-w-sm w-full p-8 rounded-3xl bg-white/90 backdrop-blur-lg border border-sky-200 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-3xl bg-sky-100 text-sky-600 grid place-items-center mb-5 text-4xl shadow-inner border border-sky-200">
+            <svg class="w-10 h-10 text-sky-600 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-extrabold text-sky-900 mb-2">Perbaikan Rutin</h2>
+          <p class="text-xs font-semibold text-sky-800/90 leading-relaxed mb-6">
+            Sedang dalam perbaikan rutin 1-2jam mohon tunggu yaa<br><b class="text-sky-900 font-extrabold text-sm mt-2 block">Thx</b>
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+        </div>
+      </div>`;
+    }
+
+    function checkAndShowBroadcast() {
+      if (!S || !S.loggedIn) return;
+
+      // 1. Targeted Broadcast
+      if (Array.isArray(SITE_SETTINGS.broadcast_targeted)) {
+        const myUid = String(S.uid || S.user?.phone || '');
+        const myPhone = String(S.user?.phone || '');
+        const targeted = SITE_SETTINGS.broadcast_targeted.find(b => 
+          b.active !== false && 
+          Array.isArray(b.target_uids) && 
+          (b.target_uids.includes(myUid) || b.target_uids.includes(myPhone))
+        );
+
+        if (targeted) {
+          const key = 'pn_bc_tgt_' + targeted.id;
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(targeted.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(targeted);
+            return;
+          }
+        }
+      }
+
+      // 2. Mass Broadcast
+      if (SITE_SETTINGS.broadcast_mass && SITE_SETTINGS.broadcast_mass.active !== false) {
+        const bm = SITE_SETTINGS.broadcast_mass;
+        if (bm.title || bm.message || bm.image) {
+          const key = 'pn_bc_mass_' + (bm.id || 'default');
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(bm.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(bm);
+            return;
+          }
+        }
+      }
+    }
+
+    function showBroadcastPopupModal(bc) {
+      if (!bc) return;
+      const modal = document.createElement("div");
+      modal.id = "broadcastModal";
+      modal.className = "fixed inset-0 z-[95] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 fade-in";
+      modal.onclick = () => modal.remove();
+
+      const hasImg = bc.image;
+
+      modal.innerHTML = `<div class="relative max-w-sm w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col items-center p-5 text-white" onclick="event.stopPropagation()">
+        <button onclick="document.getElementById('broadcastModal').remove()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-400 grid place-items-center text-sm font-bold hover:text-white z-10">✕</button>
+
+        ${hasImg ? `
+          <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-black flex items-center justify-center">
+            <img src="${bc.image}" class="w-full h-full object-cover rounded-2xl cursor-pointer" onclick="app.openFullPhoto('${bc.image}', '${bc.title || 'Siaran'}')" />
+          </div>
+        ` : `
+          <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 grid place-items-center text-3xl mb-3 border border-indigo-500/30">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+        `}
+
+        <h2 class="text-lg font-extrabold text-white text-center mb-2">${bc.title || 'Pengumuman'}</h2>
+        <p class="text-xs text-slate-300 font-medium text-center leading-relaxed mb-5 max-h-48 overflow-y-auto px-1">${bc.message || ''}</p>
+
+        <button onclick="document.getElementById('broadcastModal').remove()" class="press w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-xs shadow-lg shadow-indigo-500/20">Tutup</button>
+      </div>`;
+
+      document.body.appendChild(modal);
+    }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js">
+    /* ========================================================================
+       USER BLOCKED, MAINTENANCE, BROADCAST, PROFILE PHOTO & PROMO LIGHTBOX
+       ===================================================================== */
+    function viewUserBlocked() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 bg-slate-950 text-white text-center">
+        <div class="card max-w-sm w-full p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-full bg-red-500/20 text-red-500 grid place-items-center mb-4 text-4xl border border-red-500/30 shadow-inner">
+            ${ic("shield", "w-10 h-10 text-red-500")}
+          </div>
+          <h2 class="text-xl font-extrabold text-red-400 mb-2">Akun Dibekukan</h2>
+          <p class="text-xs font-medium text-slate-300 leading-relaxed mb-6">
+            Akun anda telah di bekukan atau di baned oleh admin, untuk pengajuan pembukaan akun harap hubungi admin
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+          <button onclick="app.logout()" class="press mt-3 text-xs font-bold text-slate-400 hover:text-white">Keluar Akun</button>
+        </div>
+      </div>`;
+    }
+
+    function viewMaintenanceTotal() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 text-slate-800 text-center" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+        <div class="card max-w-sm w-full p-8 rounded-3xl bg-white/90 backdrop-blur-lg border border-sky-200 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-3xl bg-sky-100 text-sky-600 grid place-items-center mb-5 text-4xl shadow-inner border border-sky-200">
+            <svg class="w-10 h-10 text-sky-600 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-extrabold text-sky-900 mb-2">Perbaikan Rutin</h2>
+          <p class="text-xs font-semibold text-sky-800/90 leading-relaxed mb-6">
+            Sedang dalam perbaikan rutin 1-2jam mohon tunggu yaa<br><b class="text-sky-900 font-extrabold text-sm mt-2 block">Thx</b>
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+        </div>
+      </div>`;
+    }
+
+    function checkAndShowBroadcast() {
+      if (!S || !S.loggedIn) return;
+
+      // 1. Targeted Broadcast
+      if (Array.isArray(SITE_SETTINGS.broadcast_targeted)) {
+        const myUid = String(S.uid || S.user?.phone || '');
+        const myPhone = String(S.user?.phone || '');
+        const targeted = SITE_SETTINGS.broadcast_targeted.find(b => 
+          b.active !== false && 
+          Array.isArray(b.target_uids) && 
+          (b.target_uids.includes(myUid) || b.target_uids.includes(myPhone))
+        );
+
+        if (targeted) {
+          const key = 'pn_bc_tgt_' + targeted.id;
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(targeted.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(targeted);
+            return;
+          }
+        }
+      }
+
+      // 2. Mass Broadcast
+      if (SITE_SETTINGS.broadcast_mass && SITE_SETTINGS.broadcast_mass.active !== false) {
+        const bm = SITE_SETTINGS.broadcast_mass;
+        if (bm.title || bm.message || bm.image) {
+          const key = 'pn_bc_mass_' + (bm.id || 'default');
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(bm.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(bm);
+            return;
+          }
+        }
+      }
+    }
+
+    function showBroadcastPopupModal(bc) {
+      if (!bc) return;
+      const modal = document.createElement("div");
+      modal.id = "broadcastModal";
+      modal.className = "fixed inset-0 z-[95] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 fade-in";
+      modal.onclick = () => modal.remove();
+
+      const hasImg = bc.image;
+
+      modal.innerHTML = `<div class="relative max-w-sm w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col items-center p-5 text-white" onclick="event.stopPropagation()">
+        <button onclick="document.getElementById('broadcastModal').remove()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-400 grid place-items-center text-sm font-bold hover:text-white z-10">✕</button>
+
+        ${hasImg ? `
+          <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-black flex items-center justify-center">
+            <img src="${bc.image}" class="w-full h-full object-cover rounded-2xl cursor-pointer" onclick="app.openFullPhoto('${bc.image}', '${bc.title || 'Siaran'}')" />
+          </div>
+        ` : `
+          <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 grid place-items-center text-3xl mb-3 border border-indigo-500/30">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+        `}
+
+        <h2 class="text-lg font-extrabold text-white text-center mb-2">${bc.title || 'Pengumuman'}</h2>
+        <p class="text-xs text-slate-300 font-medium text-center leading-relaxed mb-5 max-h-48 overflow-y-auto px-1">${bc.message || ''}</p>
+
+        <button onclick="document.getElementById('broadcastModal').remove()" class="press w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-xs shadow-lg shadow-indigo-500/20">Tutup</button>
+      </div>`;
+
+      document.body.appendChild(modal);
+    }
+
+    </script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript">
+    /* ========================================================================
+       USER BLOCKED, MAINTENANCE, BROADCAST, PROFILE PHOTO & PROMO LIGHTBOX
+       ===================================================================== */
+    function viewUserBlocked() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 bg-slate-950 text-white text-center">
+        <div class="card max-w-sm w-full p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-full bg-red-500/20 text-red-500 grid place-items-center mb-4 text-4xl border border-red-500/30 shadow-inner">
+            ${ic("shield", "w-10 h-10 text-red-500")}
+          </div>
+          <h2 class="text-xl font-extrabold text-red-400 mb-2">Akun Dibekukan</h2>
+          <p class="text-xs font-medium text-slate-300 leading-relaxed mb-6">
+            Akun anda telah di bekukan atau di baned oleh admin, untuk pengajuan pembukaan akun harap hubungi admin
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+          <button onclick="app.logout()" class="press mt-3 text-xs font-bold text-slate-400 hover:text-white">Keluar Akun</button>
+        </div>
+      </div>`;
+    }
+
+    function viewMaintenanceTotal() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 text-slate-800 text-center" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+        <div class="card max-w-sm w-full p-8 rounded-3xl bg-white/90 backdrop-blur-lg border border-sky-200 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-3xl bg-sky-100 text-sky-600 grid place-items-center mb-5 text-4xl shadow-inner border border-sky-200">
+            <svg class="w-10 h-10 text-sky-600 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-extrabold text-sky-900 mb-2">Perbaikan Rutin</h2>
+          <p class="text-xs font-semibold text-sky-800/90 leading-relaxed mb-6">
+            Sedang dalam perbaikan rutin 1-2jam mohon tunggu yaa<br><b class="text-sky-900 font-extrabold text-sm mt-2 block">Thx</b>
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+        </div>
+      </div>`;
+    }
+
+    function checkAndShowBroadcast() {
+      if (!S || !S.loggedIn) return;
+
+      // 1. Targeted Broadcast
+      if (Array.isArray(SITE_SETTINGS.broadcast_targeted)) {
+        const myUid = String(S.uid || S.user?.phone || '');
+        const myPhone = String(S.user?.phone || '');
+        const targeted = SITE_SETTINGS.broadcast_targeted.find(b => 
+          b.active !== false && 
+          Array.isArray(b.target_uids) && 
+          (b.target_uids.includes(myUid) || b.target_uids.includes(myPhone))
+        );
+
+        if (targeted) {
+          const key = 'pn_bc_tgt_' + targeted.id;
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(targeted.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(targeted);
+            return;
+          }
+        }
+      }
+
+      // 2. Mass Broadcast
+      if (SITE_SETTINGS.broadcast_mass && SITE_SETTINGS.broadcast_mass.active !== false) {
+        const bm = SITE_SETTINGS.broadcast_mass;
+        if (bm.title || bm.message || bm.image) {
+          const key = 'pn_bc_mass_' + (bm.id || 'default');
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(bm.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(bm);
+            return;
+          }
+        }
+      }
+    }
+
+    function showBroadcastPopupModal(bc) {
+      if (!bc) return;
+      const modal = document.createElement("div");
+      modal.id = "broadcastModal";
+      modal.className = "fixed inset-0 z-[95] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 fade-in";
+      modal.onclick = () => modal.remove();
+
+      const hasImg = bc.image;
+
+      modal.innerHTML = `<div class="relative max-w-sm w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col items-center p-5 text-white" onclick="event.stopPropagation()">
+        <button onclick="document.getElementById('broadcastModal').remove()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-400 grid place-items-center text-sm font-bold hover:text-white z-10">✕</button>
+
+        ${hasImg ? `
+          <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-black flex items-center justify-center">
+            <img src="${bc.image}" class="w-full h-full object-cover rounded-2xl cursor-pointer" onclick="app.openFullPhoto('${bc.image}', '${bc.title || 'Siaran'}')" />
+          </div>
+        ` : `
+          <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 grid place-items-center text-3xl mb-3 border border-indigo-500/30">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+        `}
+
+        <h2 class="text-lg font-extrabold text-white text-center mb-2">${bc.title || 'Pengumuman'}</h2>
+        <p class="text-xs text-slate-300 font-medium text-center leading-relaxed mb-5 max-h-48 overflow-y-auto px-1">${bc.message || ''}</p>
+
+        <button onclick="document.getElementById('broadcastModal').remove()" class="press w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-xs shadow-lg shadow-indigo-500/20">Tutup</button>
+      </div>`;
+
+      document.body.appendChild(modal);
+    }
+
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
@@ -2244,11 +2728,14 @@
           .map(
             (
               p,
-            ) => `<button onclick="app.go('promo')" class="press snap-start shrink-0 w-[250px] h-[112px] rounded-2xl p-4 text-left text-white relative overflow-hidden" style="background:linear-gradient(120deg,${p.c1},${p.c2})">
-          <div class="absolute -right-4 -bottom-6 text-[76px] opacity-25 leading-none">${p.e}</div>
-          <p class="text-[10.5px] font-bold bg-white/25 inline-block px-2 py-0.5 rounded-full backdrop-blur">PROMO</p>
-          <p class="font-extrabold text-xl mt-1.5 leading-none">${p.t}</p>
-          <p class="text-[12px] text-white/85 font-semibold mt-1">${p.s}</p></button>`,
+              i,
+            ) => `<button onclick="app.openPromoSwipeModal(${i})" class="press snap-start shrink-0 w-[250px] h-[112px] rounded-2xl p-4 text-left text-white relative overflow-hidden" style="background:linear-gradient(120deg,${p.c1 || '#4f46e5'},${p.c2 || '#7c3aed'})">
+          ${(p.image || p.img) ? `<img src="${p.image || p.img}" class="absolute inset-0 w-full h-full object-cover" />` : `<div class="absolute -right-4 -bottom-6 text-[76px] opacity-25 leading-none">${p.e || '🎁'}</div>`}
+          <div class="relative z-10">
+            <p class="text-[10.5px] font-bold bg-black/40 inline-block px-2 py-0.5 rounded-full backdrop-blur">PROMO</p>
+            <p class="font-extrabold text-xl mt-1.5 leading-none drop-shadow">${p.t}</p>
+            <p class="text-[12px] text-white/90 font-semibold mt-1 drop-shadow">${p.s}</p>
+          </div></button>`,
           )
           .join("")}
       </div>
@@ -2409,6 +2896,10 @@
         <p class="font-extrabold txt text-[13.5px] leading-snug">${v.title}</p>
         <p class="text-[11.5px] muted font-medium mt-0.5">${displayDesc}</p>
         <p class="text-[10.5px] muted font-semibold mt-1.5">Berlaku: ${svcTxt} · s/d ${v.exp || '-'}</p>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${ (v.stock !== undefined && v.stock <= 0) ? 'bg-red-500/15 text-red-500' : 'bg-emerald-500/15 text-emerald-600' }">${ (v.stock !== undefined) ? (v.stock > 0 ? 'Stok: ' + v.stock : 'Stok: Habis') : 'Stok: Tersedia' }</span>
+          <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-600">${ v.usage_limit === 'once' ? '1x Pakai' : 'Bisa Berkali-kali' }</span>
+        </div>
         <div class="flex items-center justify-between mt-2.5">
           <span class="text-[11px] font-extrabold px-2 py-1 rounded-lg" style="background:var(--surface-3);color:var(--primary)">${v.code}</span>
           ${
@@ -2451,7 +2942,9 @@
         <div class="card p-4">
           <div class="flex items-center gap-3.5">
             <div class="relative">
-              <div class="w-[62px] h-[62px] rounded-2xl grad grid place-items-center text-white font-extrabold text-xl">${initials(S.user.name)}</div>
+              <div onclick="${(S.user.photo || S.user.profile_photo) ? `app.openFullPhoto('${S.user.photo || S.user.profile_photo}', '${S.user.name}')` : ''}" class="w-[62px] h-[62px] rounded-2xl grad grid place-items-center text-white font-extrabold text-xl overflow-hidden cursor-pointer border border-white/30 shadow-md">
+                ${(S.user.photo || S.user.profile_photo) ? `<img src="${S.user.photo || S.user.profile_photo}" class="w-full h-full object-cover" />` : initials(S.user.name)}
+              </div>
               <button onclick="app.openEditProfile()" class="press absolute -bottom-1 -right-1 w-7 h-7 rounded-full grid place-items-center text-white border-2" style="background:var(--primary);border-color:var(--surface)">${ic("camera", "w-3.5 h-3.5")}</button>
             </div>
             <div class="flex-1 min-w-0">
@@ -2696,6 +3189,21 @@
         nav.innerHTML = "";
         return;
       }
+      
+      // CHECK TOTAL MAINTENANCE MODE
+      if (SITE_SETTINGS.maintenance_total) {
+        v.innerHTML = viewMaintenanceTotal();
+        nav.innerHTML = "";
+        return;
+      }
+
+      // CHECK USER BLOCKED STATUS
+      if (S.is_blocked || S.status === "blocked" || (S.user && (S.user.is_blocked || S.user.status === "blocked"))) {
+        v.innerHTML = viewUserBlocked();
+        nav.innerHTML = "";
+        return;
+      }
+
       v.innerHTML = { home: viewHome, history: viewHistory, promo: viewPromo, profile: viewProfile }[S.tab]();
       const items = [
         ["home", "home", "Beranda"],
@@ -3996,10 +4504,26 @@
     }
     function openEditProfile() {
       openSheet("ep", { title: "Data Pribadi", sub: "Perbarui informasi akun Anda" });
+      const photo = S.user.photo || S.user.profile_photo || "";
       setBody(
         "ep",
         `<div class="pb-6">
-      <div class="flex justify-center py-3"><div class="w-20 h-20 rounded-3xl grad grid place-items-center text-white font-extrabold text-2xl">${initials(S.user.name)}</div></div>
+      <div class="flex flex-col items-center justify-center py-3">
+        <div onclick="${photo ? `app.openFullPhoto('${photo}', '${S.user.name}')` : ''}" class="w-20 h-20 rounded-3xl grad grid place-items-center text-white font-extrabold text-2xl overflow-hidden cursor-pointer border-2 border-indigo-500/30 shadow-lg relative">
+          ${photo ? `<img src="${photo}" class="w-full h-full object-cover" />` : initials(S.user.name)}
+        </div>
+        <div class="flex items-center gap-2 mt-3">
+          <input type="file" id="sysFotoInput" accept="image/*" class="hidden" onchange="app.uploadProfilePhoto(this)" />
+          <button onclick="document.getElementById('sysFotoInput').click()" class="press px-3 py-1.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-extrabold text-xs flex items-center gap-1.5">
+            ${ic("camera", "w-3.5 h-3.5")} Ganti Foto
+          </button>
+          ${photo ? `
+            <button onclick="app.deleteProfilePhoto()" class="press px-3 py-1.5 rounded-xl bg-red-500/10 text-red-500 font-extrabold text-xs flex items-center gap-1.5">
+              ${ic("trash", "w-3.5 h-3.5")} Hapus
+            </button>
+          ` : ''}
+        </div>
+      </div>
       ${[
         ["Nama Lengkap", "epName", S.user.name, "text"],
         ["Nomor Handphone", "epPhone", S.user.phone, "tel"],
@@ -4170,6 +4694,160 @@
     
     /* ==================== APP ACTIONS ==================== */
     const app = {
+      openFullPhoto(url, title = "Foto Profil") {
+        if (!url) return;
+        const existing = document.getElementById("fullPhotoModal");
+        if (existing) existing.remove();
+        const modal = document.createElement("div");
+        modal.id = "fullPhotoModal";
+        modal.className = "fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 fade-in";
+        modal.onclick = () => modal.remove();
+        modal.innerHTML = `<div class="relative max-w-sm w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col items-center p-4" onclick="event.stopPropagation()">
+          <div class="w-full flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <h3 class="text-white font-extrabold text-sm flex items-center gap-2">${ic("user", "w-4 h-4 text-indigo-400")} ${title}</h3>
+            <button onclick="document.getElementById('fullPhotoModal').remove()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 grid place-items-center text-sm font-bold hover:text-white">✕</button>
+          </div>
+          <div class="w-full max-h-[70vh] flex items-center justify-center overflow-hidden rounded-2xl bg-black">
+            <img src="${url}" class="max-w-full max-h-[65vh] object-contain rounded-2xl" />
+          </div>
+          <button onclick="document.getElementById('fullPhotoModal').remove()" class="press mt-4 w-full py-2.5 rounded-xl bg-slate-800 text-white font-bold text-xs">Tutup</button>
+        </div>`;
+        document.body.appendChild(modal);
+      },
+
+      openPromoSwipeModal(startIndex = 0) {
+        const promos = (SITE_SETTINGS.promos && SITE_SETTINGS.promos.length) ? SITE_SETTINGS.promos : [
+          { t: "Diskon 10%", s: "Semua paket data", c1: "#4f46e5", c2: "#7c3aed", e: "📶" },
+          { t: "Cashback 5rb", s: "Token listrik PLN", c1: "#f59e0b", c2: "#ef4444", e: "⚡" },
+          { t: "Gratis Admin", s: "Bayar semua tagihan", c1: "#0ea5e9", c2: "#22c55e", e: "🧾" }
+        ];
+
+        let idx = Math.max(0, Math.min(startIndex, promos.length - 1));
+
+        const existing = document.getElementById("promoSwipeModal");
+        if (existing) existing.remove();
+
+        const modal = document.createElement("div");
+        modal.id = "promoSwipeModal";
+        modal.className = "fixed inset-0 z-[100] bg-black/92 backdrop-blur-md flex flex-col items-center justify-center p-4 fade-in";
+        
+        function renderPromoContent() {
+          const p = promos[idx];
+          const hasImg = p.image || p.img;
+          modal.innerHTML = `<div class="relative max-w-sm w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col items-center p-4 text-white" onclick="event.stopPropagation()">
+            <div class="w-full flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+              <span class="text-xs font-extrabold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full">PROMO (${idx + 1}/${promos.length})</span>
+              <button onclick="document.getElementById('promoSwipeModal').remove()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 grid place-items-center text-sm font-bold hover:text-white">✕</button>
+            </div>
+            
+            <div id="promoImageContainer" class="w-full h-52 rounded-2xl overflow-hidden relative flex items-center justify-center text-center p-4" style="background:${hasImg ? '#020617' : `linear-gradient(120deg,${p.c1 || '#4f46e5'},${p.c2 || '#7c3aed'})`}">
+              ${hasImg ? `<img src="${p.image || p.img}" class="w-full h-full object-contain rounded-2xl" />` : `
+                <div class="absolute -right-4 -bottom-6 text-[88px] opacity-20 leading-none">${p.e || '🎁'}</div>
+                <div>
+                  <p class="font-extrabold text-2xl mb-1">${p.t}</p>
+                  <p class="text-sm font-medium text-white/80">${p.s}</p>
+                </div>
+              `}
+            </div>
+
+            <div class="mt-4 text-center px-2">
+              <h3 class="font-extrabold text-lg text-white">${p.t}</h3>
+              <p class="text-xs text-slate-400 font-medium mt-1">${p.s}</p>
+            </div>
+
+            <div class="w-full flex items-center justify-between mt-5 pt-3 border-t border-slate-800">
+              <button id="btnPrevPromo" class="press px-3.5 py-2 rounded-xl bg-slate-800 text-xs font-bold ${idx === 0 ? 'opacity-40 cursor-not-allowed' : ''}">◀ Prev</button>
+              <div class="flex items-center gap-1.5">
+                ${promos.map((_, i) => `<span class="w-2 h-2 rounded-full transition-all ${i === idx ? 'bg-indigo-500 w-4' : 'bg-slate-700'}"></span>`).join('')}
+              </div>
+              <button id="btnNextPromo" class="press px-3.5 py-2 rounded-xl bg-slate-800 text-xs font-bold ${idx === promos.length - 1 ? 'opacity-40 cursor-not-allowed' : ''}">Next ▶</button>
+            </div>
+            <p class="text-[10px] text-slate-500 font-medium mt-2">Geser / Swipe kiri &amp; kanan untuk navigasi</p>
+          </div>`;
+
+          modal.querySelector("#btnPrevPromo")?.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (idx > 0) { idx--; renderPromoContent(); }
+          });
+
+          modal.querySelector("#btnNextPromo")?.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (idx < promos.length - 1) { idx++; renderPromoContent(); }
+          });
+
+          let touchStartX = 0;
+          let touchEndX = 0;
+          const container = modal.querySelector("#promoImageContainer");
+          if (container) {
+            container.addEventListener("touchstart", (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+            container.addEventListener("touchend", (e) => {
+              touchEndX = e.changedTouches[0].screenX;
+              if (touchStartX - touchEndX > 40 && idx < promos.length - 1) {
+                idx++; renderPromoContent();
+              } else if (touchEndX - touchStartX > 40 && idx > 0) {
+                idx--; renderPromoContent();
+              }
+            }, { passive: true });
+          }
+        }
+
+        renderPromoContent();
+        document.body.appendChild(modal);
+      },
+
+      uploadProfilePhoto(input) {
+        if (!input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const fd = new FormData();
+        fd.append('photo', file);
+        fd.append('action', 'upload');
+        fd.append('uid', S.uid || S.user.phone);
+
+        processing("Mengunggah foto profil...", async () => {
+          try {
+            const res = await fetch('public_html/sysfoto.php', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (data.status && data.url) {
+              S.user.photo = data.url;
+              S.user.profile_photo = data.url;
+              save();
+              render();
+              openEditProfile();
+              toast("Foto profil berhasil diperbarui!", "success");
+              secureFetch("manager.php?action=save_user", { uid: S.uid, user: S.user, settings: S.settings, pin: S.pin });
+            } else {
+              toast(data.message || "Gagal mengunggah foto profil", "error");
+            }
+          } catch(e) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              S.user.photo = ev.target.result;
+              S.user.profile_photo = ev.target.result;
+              save();
+              render();
+              openEditProfile();
+              toast("Foto profil disimpan secara lokal", "info");
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      },
+
+      deleteProfilePhoto() {
+        processing("Menghapus foto...", async () => {
+          try {
+            await fetch('public_html/sysfoto.php?action=delete&uid=' + (S.uid || S.user.phone));
+          } catch(e) {}
+          S.user.photo = "";
+          S.user.profile_photo = "";
+          save();
+          render();
+          openEditProfile();
+          toast("Foto profil berhasil dihapus", "info");
+          secureFetch("manager.php?action=save_user", { uid: S.uid, user: S.user, settings: S.settings, pin: S.pin });
+        });
+      },
+
       toast,
       openXlLocSheet() {
         openSheet('xlloc', { title: 'Pilih Lokasi Wilayah', sub: 'Pilih Kepulauan Anda terlebih dahulu' });
@@ -5253,6 +5931,15 @@
       applyVoucher(code) {
         const v = S.vouchers.find((x) => x.code === code);
         if (!v) return toast("Voucher tidak ditemukan", "error");
+        if (v.stock !== undefined && v.stock <= 0) {
+          return toast("Stok voucher " + code + " telah habis!", "warn");
+        }
+        if (v.usage_limit === 'once') {
+          const usedMap = S.user.used_vouchers || {};
+          if (usedMap[code]) {
+            return toast("Voucher ini hanya dapat digunakan 1x per pengguna!", "warn");
+          }
+        }
         const base = calcTotal() + F.discount;
         const minTx = parseInt(v.min) || 0;
         if (base < minTx) return toast("Min. transaksi untuk voucher ini adalah " + rp(minTx), "warn");
@@ -6236,6 +6923,7 @@
             }
             if (SITE_SETTINGS.app_title) document.title = SITE_SETTINGS.app_title;
             render();
+            checkAndShowBroadcast();
           }
         }
       } catch (e) {}
@@ -6250,6 +6938,127 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && sheetStack.length) closeSheet(sheetStack[sheetStack.length - 1]);
     });
+    
+    /* ========================================================================
+       USER BLOCKED, MAINTENANCE, BROADCAST, PROFILE PHOTO & PROMO LIGHTBOX
+       ===================================================================== */
+    function viewUserBlocked() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 bg-slate-950 text-white text-center">
+        <div class="card max-w-sm w-full p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-full bg-red-500/20 text-red-500 grid place-items-center mb-4 text-4xl border border-red-500/30 shadow-inner">
+            ${ic("shield", "w-10 h-10 text-red-500")}
+          </div>
+          <h2 class="text-xl font-extrabold text-red-400 mb-2">Akun Dibekukan</h2>
+          <p class="text-xs font-medium text-slate-300 leading-relaxed mb-6">
+            Akun anda telah di bekukan atau di baned oleh admin, untuk pengajuan pembukaan akun harap hubungi admin
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+          <button onclick="app.logout()" class="press mt-3 text-xs font-bold text-slate-400 hover:text-white">Keluar Akun</button>
+        </div>
+      </div>`;
+    }
+
+    function viewMaintenanceTotal() {
+      const waContact = SITE_SETTINGS.admin_contact || SITE_SETTINGS.cs_phone || "";
+      const cleanPhone = waContact.replace(/[^0-9]/g, "");
+      const waUrl = cleanPhone ? ("https://wa.me/" + cleanPhone) : "https://wa.me/";
+
+      return `<div class="fade-in min-h-screen grid place-items-center p-6 text-slate-800 text-center" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+        <div class="card max-w-sm w-full p-8 rounded-3xl bg-white/90 backdrop-blur-lg border border-sky-200 shadow-2xl flex flex-col items-center">
+          <div class="w-20 h-20 rounded-3xl bg-sky-100 text-sky-600 grid place-items-center mb-5 text-4xl shadow-inner border border-sky-200">
+            <svg class="w-10 h-10 text-sky-600 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-extrabold text-sky-900 mb-2">Perbaikan Rutin</h2>
+          <p class="text-xs font-semibold text-sky-800/90 leading-relaxed mb-6">
+            Sedang dalam perbaikan rutin 1-2jam mohon tunggu yaa<br><b class="text-sky-900 font-extrabold text-sm mt-2 block">Thx</b>
+          </p>
+          <a href="${waUrl}" target="_blank" class="press w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/25">
+            ${ic("phone", "w-4 h-4")} Hubungi Admin
+          </a>
+        </div>
+      </div>`;
+    }
+
+    function checkAndShowBroadcast() {
+      if (!S || !S.loggedIn) return;
+
+      // 1. Targeted Broadcast
+      if (Array.isArray(SITE_SETTINGS.broadcast_targeted)) {
+        const myUid = String(S.uid || S.user?.phone || '');
+        const myPhone = String(S.user?.phone || '');
+        const targeted = SITE_SETTINGS.broadcast_targeted.find(b => 
+          b.active !== false && 
+          Array.isArray(b.target_uids) && 
+          (b.target_uids.includes(myUid) || b.target_uids.includes(myPhone))
+        );
+
+        if (targeted) {
+          const key = 'pn_bc_tgt_' + targeted.id;
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(targeted.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(targeted);
+            return;
+          }
+        }
+      }
+
+      // 2. Mass Broadcast
+      if (SITE_SETTINGS.broadcast_mass && SITE_SETTINGS.broadcast_mass.active !== false) {
+        const bm = SITE_SETTINGS.broadcast_mass;
+        if (bm.title || bm.message || bm.image) {
+          const key = 'pn_bc_mass_' + (bm.id || 'default');
+          const views = parseInt(localStorage.getItem(key)) || 0;
+          const maxViews = parseInt(bm.max_views) || 1;
+          if (views < maxViews) {
+            localStorage.setItem(key, views + 1);
+            showBroadcastPopupModal(bm);
+            return;
+          }
+        }
+      }
+    }
+
+    function showBroadcastPopupModal(bc) {
+      if (!bc) return;
+      const modal = document.createElement("div");
+      modal.id = "broadcastModal";
+      modal.className = "fixed inset-0 z-[95] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 fade-in";
+      modal.onclick = () => modal.remove();
+
+      const hasImg = bc.image;
+
+      modal.innerHTML = `<div class="relative max-w-sm w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex flex-col items-center p-5 text-white" onclick="event.stopPropagation()">
+        <button onclick="document.getElementById('broadcastModal').remove()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-400 grid place-items-center text-sm font-bold hover:text-white z-10">✕</button>
+
+        ${hasImg ? `
+          <div class="w-full h-48 rounded-2xl overflow-hidden mb-4 bg-black flex items-center justify-center">
+            <img src="${bc.image}" class="w-full h-full object-cover rounded-2xl cursor-pointer" onclick="app.openFullPhoto('${bc.image}', '${bc.title || 'Siaran'}')" />
+          </div>
+        ` : `
+          <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-400 grid place-items-center text-3xl mb-3 border border-indigo-500/30">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+        `}
+
+        <h2 class="text-lg font-extrabold text-white text-center mb-2">${bc.title || 'Pengumuman'}</h2>
+        <p class="text-xs text-slate-300 font-medium text-center leading-relaxed mb-5 max-h-48 overflow-y-auto px-1">${bc.message || ''}</p>
+
+        <button onclick="document.getElementById('broadcastModal').remove()" class="press w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-xs shadow-lg shadow-indigo-500/20">Tutup</button>
+      </div>`;
+
+      document.body.appendChild(modal);
+    }
+
     </script>
   </body>
 
