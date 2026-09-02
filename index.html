@@ -408,16 +408,15 @@
     <div class="glow" style="width: 420px; height: 420px; background: #cc0000; top: -140px; left: -100px"></div>
     <div class="glow" style="width: 380px; height: 380px; background: #990000; bottom: -160px; right: -120px"></div>
 
-    <!-- Desktop branding -->
+    <!-- Desktop branding (nama/logo dari pengaturan admin; kosong bila belum diset) -->
     <aside class="brandpanel">
       <div class="flex items-center gap-3 mb-6">
-        ${SITE_SETTINGS.app_logo ? `<img src="${SITE_SETTINGS.app_logo}" class="w-12 h-12 rounded-2xl object-cover shadow-lg">` :
-        `<div class="w-12 h-12 rounded-2xl grad grid place-items-center text-white font-extrabold text-xl shadow-lg">P</div>`}
-        P
+        <img id="brandLogoImg" src="" class="w-12 h-12 rounded-2xl object-cover shadow-lg hidden">
+        <div id="brandLogoFallback" class="w-12 h-12 rounded-2xl grad grid place-items-center text-white font-extrabold text-xl shadow-lg hidden">P</div>
       </div>
       <div>
-        <p class="font-extrabold text-2xl txt">PayNusa</p>
-        <p class="text-xs muted font-semibold">Payment Point Online Bank</p>
+        <p class="font-extrabold text-2xl txt" id="brandName" style="display:none;"></p>
+        <p class="text-xs muted font-semibold" id="brandTag" style="display:none;">Payment Point Online Bank</p>
       </div>
       </div>
       <h1 class="text-4xl font-extrabold leading-tight txt">
@@ -440,6 +439,19 @@
 
     <div id="sheets"></div>
     <div id="toasts" class="fixed top-3 left-0 right-0 z-[90] flex flex-col items-center gap-2 px-4 pointer-events-none"></div>
+
+    <!-- ===== LIGHTBOX FOTO UKURAN PENUH (foto profil / promo / siaran) ===== -->
+    <div id="lightbox" class="hidden fixed inset-0 z-[120]" style="background:rgba(3,7,18,.95);" onclick="closeLightbox()">
+      <button onclick="closeLightbox()" class="absolute top-4 right-4 z-[125] w-11 h-11 rounded-full grid place-items-center text-white text-xl press" style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25)">✕</button>
+      <span id="lbCounter" class="absolute top-5 left-1/2 -translate-x-1/2 text-white/90 text-[12px] font-bold z-[125]"></span>
+      <div id="lbTrack" class="w-full h-full overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex items-center no-sb" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <!-- ===== LAYAR AKUN DIBEKUKAN / DIBLOKIR ===== -->
+    <div id="blockedScreen" class="hidden fixed inset-0 z-[110] overflow-y-auto" style="background:linear-gradient(160deg,#e8f4fd 0%,#d6ebfa 45%,#eef7ff 100%);"></div>
+
+    <!-- ===== LAYAR MAINTENANCE (biru muda lembut & menenangkan) ===== -->
+    <div id="maintenanceScreen" class="hidden fixed inset-0 z-[115] overflow-y-auto" style="background:linear-gradient(160deg,#e6f3fc 0%,#d2eafb 45%,#eaf6ff 100%);"></div>
 
     <script>
     /* ==================== ICONS ==================== */
@@ -1886,6 +1898,347 @@
     function applyTheme() {
       document.documentElement.classList.toggle("dark", !!S.settings.dark);
     }
+
+    /* ==================== HELPER FOTO / WA / LIGHTBOX ==================== */
+    /* URL gambar dari server (mis. icons/uploads/xxx.jpg) -> path relatif root */
+    function imgUrl(p) {
+      if (!p) return "";
+      let s = String(p);
+      if (/^https?:\/\//i.test(s) || s.startsWith("data:")) return s;
+      s = s.replace(/^\.?\//, "").replace(/^(\.\.\/)+/, "");
+      return s;
+    }
+    function adminWaPhone() {
+      let p = String(SITE_SETTINGS.cs_phone || "").replace(/[^0-9]/g, "");
+      if (p.startsWith("0")) p = "62" + p.slice(1);
+      return p;
+    }
+    function adminWaLink(msg) {
+      const p = adminWaPhone();
+      if (!p) return "";
+      return "https://wa.me/" + p + (msg ? "?text=" + encodeURIComponent(msg) : "");
+    }
+    function waButtonHtml(msg, label) {
+      const url = adminWaLink(msg);
+      if (!url) return "";
+      return `<a href="${url}" target="_blank" rel="noopener" class="press inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-white font-extrabold text-[14px] shadow-lg" style="background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 10px 26px -10px rgba(34,197,94,.7);">
+        <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.1-4.4-3.9-4.5-4.1-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.2 1 2.2 1.4 2.5 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.2 1.3Z"/></svg>
+        ${label || "Hubungi Admin"}
+      </a>`;
+    }
+
+    /* Avatar foto profil dengan inisial fallback */
+    function profileAvatarHtml(sizeClass, extraStyle, clickable) {
+      const photo = imgUrl(S.user && S.user.photo);
+      const cls = sizeClass || "w-11 h-11 rounded-2xl";
+      if (photo) {
+        return `<div class="${cls} overflow-hidden grid place-items-center bg-white/20 border border-white/30 ${clickable ? "press" : ""}" style="${extraStyle || ""}" ${clickable ? `onclick="openLightbox(['${photo}'])"` : ""}><img src="${photo}" class="w-full h-full object-cover" alt="Foto profil"></div>`;
+      }
+      return `<div class="${cls} bg-white/20 backdrop-blur grid place-items-center text-white font-extrabold border border-white/30" style="${extraStyle || ""}">${initials(S.user.name)}</div>`;
+    }
+
+    /* Lightbox foto ukuran penuh; banyak foto = bisa di-swipe */
+    function openLightbox(images, startIndex) {
+      const imgs = (images || []).map(imgUrl).filter(Boolean);
+      if (!imgs.length) return;
+      const track = $("#lbTrack");
+      track.innerHTML = imgs.map((src, i) => `
+        <div class="snap-center shrink-0 w-full h-full flex items-center justify-center px-3">
+          <img src="${src}" class="max-w-full max-h-[88vh] object-contain rounded-xl shadow-2xl" style="touch-action:pan-x;" alt="Foto ${i + 1}">
+        </div>`).join("");
+      $("#lbCounter").textContent = imgs.length > 1 ? ("1 / " + imgs.length) : "";
+      $("#lightbox").classList.remove("hidden");
+      track.onscroll = () => {
+        const idx = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+        $("#lbCounter").textContent = imgs.length > 1 ? ((idx + 1) + " / " + imgs.length) : "";
+      };
+      if (startIndex) track.scrollLeft = startIndex * track.clientWidth;
+      document.body.style.overflow = "hidden";
+    }
+    function closeLightbox() {
+      $("#lightbox").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    /* ==================== BLOKIR AKUN ==================== */
+    function isBlockedNow() {
+      if (S.jenis_akun === "admin") return false;
+      const list = SITE_SETTINGS.blocked_users || [];
+      const key = String(S.uid || (S.user && S.user.phone ? "u_" + S.user.phone : ""));
+      const phone = S.user && S.user.phone ? String(S.user.phone) : "";
+      return list.includes(key) || (phone && list.includes(phone));
+    }
+    function renderBlockedScreen() {
+      const el = $("#blockedScreen");
+      if (!el) return;
+      el.innerHTML = `<div class="min-h-[100dvh] flex flex-col items-center justify-center px-7 py-10 text-center">
+        <div class="w-20 h-20 rounded-full grid place-items-center mb-5" style="background:#fff;box-shadow:0 16px 40px -16px rgba(56,189,248,.55);">
+          <svg viewBox="0 0 24 24" class="w-10 h-10" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.5 5.5l13 13"/></svg>
+        </div>
+        <h1 class="font-extrabold text-[20px] text-slate-800 leading-snug">Akun Anda Telah Dibekukan</h1>
+        <p class="text-[13.5px] text-slate-600 mt-3 leading-relaxed max-w-[22rem]">
+          Akun anda telah di bekukan atau di banned oleh admin, untuk pengajuan pembukaan akun harap hubungi admin.
+        </p>
+        <div class="w-full max-w-[20rem] mt-8">${waButtonHtml("Halo Admin, akun saya (nama: " + (S.user?.name || "-") + ", No: " + (S.user?.phone || "-") + ") dibekukan/dibanned. Mohon bantuan pembukaan kembali akun.", "Hubungi Admin") || ""}</div>
+        <button onclick="app.doLogout()" class="press mt-4 text-[12.5px] font-bold text-slate-500 underline">Keluar dari akun ini</button>
+      </div>`;
+    }
+
+    /* ==================== MAINTENANCE ==================== */
+    function renderMaintenanceScreen() {
+      const el = $("#maintenanceScreen");
+      if (!el) return;
+      el.innerHTML = `<div class="min-h-[100dvh] flex flex-col items-center justify-center px-7 py-10 text-center">
+        <div class="w-20 h-20 rounded-full grid place-items-center mb-5 animate-pulse" style="background:#fff;box-shadow:0 16px 40px -16px rgba(56,189,248,.55);">
+          <svg viewBox="0 0 24 24" class="w-10 h-10" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5 5l-6 6v3h3l6-6a4 4 0 0 0 5-5l-2.5 2.5-2-2 2.5-2.5Z"/></svg>
+        </div>
+        <h1 class="font-extrabold text-[20px] text-slate-800 leading-snug">Sedang Perbaikan Rutin</h1>
+        <p class="text-[13.5px] text-slate-600 mt-3 leading-relaxed max-w-[22rem]">
+          Sedang dalam perbaikan rutin 1-2 jam mohon tunggu yaa. Terima kasih atas kesabarannya. Thx 💕
+        </p>
+        <div class="w-full max-w-[20rem] mt-8">${waButtonHtml("Halo Admin, saya melihat aplikasi sedang dalam perbaikan/maintenance. Ada yang bisa dibantu?", "Hubungi Admin") || ""}</div>
+        <button onclick="app.doLogout()" class="press mt-4 text-[12.5px] font-bold text-slate-500 underline">Keluar dari akun ini</button>
+      </div>`;
+    }
+    /* Terapkan identitas (nama/logo) dari pengaturan admin — default KOSONG */
+    function applyBrandIdentity() {
+      const name = (SITE_SETTINGS.site_name || SITE_SETTINGS.app_title || "").trim();
+      const logo = imgUrl(SITE_SETTINGS.app_logo || "");
+      const set = (id, fn) => { const el = document.getElementById(id); if (el) fn(el); };
+      set("brandLogoImg", el => { if (logo) { el.src = logo; el.classList.remove("hidden"); } else el.classList.add("hidden"); });
+      set("brandLogoFallback", el => el.classList.toggle("hidden", !!logo));
+      set("brandName", el => { if (name) { el.textContent = name; el.style.display = ""; } else el.style.display = "none"; });
+      set("brandTag", el => { if (name) el.style.display = ""; else el.style.display = "none"; });
+      // judul dokumen hanya diubah jika admin mengisinya
+      if (SITE_SETTINGS.app_title) document.title = SITE_SETTINGS.app_title;
+    }
+
+    function applyGateScreens() {
+      const bEl = $("#blockedScreen"), mEl = $("#maintenanceScreen");
+      if (!bEl || !mEl) return;
+      const showBlock = S.loggedIn && isBlockedNow();
+      const showMaint = S.loggedIn && !!SITE_SETTINGS.maintenance && !showBlock && S.jenis_akun !== "admin";
+      bEl.classList.toggle("hidden", !showBlock);
+      mEl.classList.toggle("hidden", !showMaint);
+      if (showBlock) renderBlockedScreen();
+      if (showMaint) renderMaintenanceScreen();
+    }
+
+    /* ==================== FOTO PROFIL (upload/hapus) ==================== */
+    function uploadProfilePhoto(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) { toast("Ukuran gambar maksimal 8MB", "error"); return; }
+      processing("Mengunggah foto profil...", async () => {
+        try {
+          // pangkas 1:1 di sisi klien agar konsisten
+          const dataUrl = await new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = e => {
+              const img = new Image();
+              img.onload = () => {
+                const n = Math.min(img.width, img.height);
+                const cv = document.createElement("canvas");
+                cv.width = 600; cv.height = 600;
+                const ctx = cv.getContext("2d");
+                ctx.drawImage(img, (img.width - n) / 2, (img.height - n) / 2, n, n, 0, 0, 600, 600);
+                res(cv.toDataURL("image/jpeg", 0.9));
+              };
+              img.onerror = rej;
+              img.src = e.target.result;
+            };
+            r.onerror = rej;
+            r.readAsDataURL(file);
+          });
+          const blob = await (await fetch(dataUrl)).blob();
+          const fd = new FormData();
+          fd.append("image", blob, "profile_" + (S.uid || Date.now()) + ".jpg");
+          fd.append("action", "upload");
+          const resp = await fetch("icons/syslndng.php", { method: "POST", body: fd });
+          const data = await resp.json();
+          if (data.status) {
+            const old = S.user.photo;
+            S.user.photo = data.url;
+            save();
+            // hapus foto lama di server
+            if (old && old !== data.url) {
+              fetch("icons/syslndng.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", url: old }) }).catch(() => {});
+            }
+            render();
+            if (!$("ep").classList.contains("hidden")) openEditProfile();
+            toast("Foto profil berhasil diunggah", "success");
+          } else {
+            toast(data.message || "Gagal mengunggah foto", "error");
+          }
+        } catch (e) { toast("Gagal mengunggah foto profil", "error"); }
+      });
+      input.value = "";
+    }
+    function removeProfilePhoto() {
+      if (!S.user.photo) return;
+      if (!confirm("Hapus foto profil Anda?")) return;
+      const old = S.user.photo;
+      S.user.photo = "";
+      save();
+      fetch("icons/syslndng.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", url: old }) }).catch(() => {});
+      render();
+      if (!$("ep").classList.contains("hidden")) openEditProfile();
+      toast("Foto profil dihapus", "info");
+    }
+
+    /* Foto profil yang dipilih saat pendaftaran (opsional), diunggah setelah register sukses */
+    let REG_PHOTO_FILE = null;
+    function pickRegPhoto(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) { toast("Ukuran gambar maksimal 8MB", "error"); return; }
+      REG_PHOTO_FILE = file;
+      const r = new FileReader();
+      r.onload = e => {
+        const box = $("#regPhotoBox");
+        box.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover" alt="pratinjau">`;
+        const l = $("#regPhotoLabel"); if (l) l.textContent = "Ganti Foto";
+        const rm = $("#regPhotoRemove"); if (rm) rm.classList.remove("hidden");
+      };
+      r.readAsDataURL(file);
+      input.value = "";
+    }
+    function clearRegPhoto() {
+      REG_PHOTO_FILE = null;
+      const box = $("#regPhotoBox");
+      if (box) box.innerHTML = `<span id="regPhotoInitial">P</span>`;
+      const l = $("#regPhotoLabel"); if (l) l.textContent = "Foto Profil (Opsional)";
+      const rm = $("#regPhotoRemove"); if (rm) rm.classList.add("hidden");
+    }
+    async function uploadPendingRegPhoto() {
+      if (!REG_PHOTO_FILE) return;
+      try {
+        const dataUrl = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = e => {
+            const img = new Image();
+            img.onload = () => {
+              const n = Math.min(img.width, img.height);
+              const cv = document.createElement("canvas");
+              cv.width = 600; cv.height = 600;
+              const ctx = cv.getContext("2d");
+              ctx.drawImage(img, (img.width - n) / 2, (img.height - n) / 2, n, n, 0, 0, 600, 600);
+              res(cv.toDataURL("image/jpeg", 0.9));
+            };
+            img.onerror = rej;
+            img.src = e.target.result;
+          };
+          r.onerror = rej;
+          r.readAsDataURL(REG_PHOTO_FILE);
+        });
+        const blob = await (await fetch(dataUrl)).blob();
+        const fd = new FormData();
+        fd.append("image", blob, "profile_" + (S.uid || Date.now()) + ".jpg");
+        fd.append("action", "upload");
+        const resp = await fetch("icons/syslndng.php", { method: "POST", body: fd });
+        const data = await resp.json();
+        if (data.status) {
+          S.user.photo = data.url;
+          save();
+          // sinkron field photo ke manager agar terbaca admin
+          await secureFetch("manager.php?action=update_user_admin", {
+            uid: S.uid, jenis_akun: S.jenis_akun || "member",
+            user: { name: S.user.name, phone: S.user.phone, email: S.user.email, address: S.user.address || "", photo: data.url }
+          }).catch(() => {});
+        }
+      } catch (e) {}
+      REG_PHOTO_FILE = null;
+      clearRegPhoto();
+    }
+
+    /* ==================== SIARAN MASSAL (BROADCAST) ==================== */
+    const BC_SEEN_KEY = "paynusa_bc_seen_v1";
+    function bcSeenMap() {
+      try { return JSON.parse(localStorage.getItem(BC_SEEN_KEY) || "{}"); } catch (e) { return {}; }
+    }
+    function bcSaveSeen(map) {
+      try { localStorage.setItem(BC_SEEN_KEY, JSON.stringify(map)); } catch (e) {}
+    }
+    function bcMyTargets() {
+      const uid = String(S.uid || (S.user && S.user.phone ? "u_" + S.user.phone : ""));
+      const phone = S.user && S.user.phone ? String(S.user.phone) : "";
+      return [uid, phone];
+    }
+    function bcAppliesToMe(b) {
+      if (!b) return false;
+      if (b.target === "selected") {
+        const mine = bcMyTargets();
+        return (b.targets || []).some(t => mine.includes(String(t)));
+      }
+      return true; // 'all'
+    }
+    function bcDueList() {
+      const list = SITE_SETTINGS.broadcasts || [];
+      const seen = bcSeenMap();
+      return list.filter(b => {
+        if (!bcAppliesToMe(b)) return false;
+        const max = parseInt(b.show_count);
+        if (isNaN(max)) return true;
+        if (max === 0) return true; // tak terbatas
+        return (seen[b.id] || 0) < max;
+      });
+    }
+    function showDueBroadcasts() {
+      if (!S.loggedIn) return;
+      if (isBlockedNow() || (SITE_SETTINGS.maintenance && S.jenis_akun !== "admin")) return;
+      const due = bcDueList();
+      if (!due.length) return;
+      const b = due[0];
+      const seen = bcSeenMap();
+      seen[b.id] = (seen[b.id] || 0) + 1;
+      bcSaveSeen(seen);
+      const photo = b.img ? imgUrl(b.img) : "";
+      openSheet("bc", { title: "Siaran", sub: "Pengumuman resmi dari admin" });
+      setBody("bc", `<div class="pb-6 text-center">
+        <div class="w-14 h-14 rounded-2xl grad grid place-items-center text-white mx-auto mb-3">
+          <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+        </div>
+        ${b.title ? `<p class="font-extrabold txt text-[16px] mb-2">${b.title}</p>` : ""}
+        ${photo ? `<button onclick="openLightbox(['${photo}'])" class="press w-full rounded-2xl overflow-hidden mb-3 border bd"><img src="${photo}" class="w-full object-cover" alt="Gambar siaran"></button>` : ""}
+        ${b.body ? `<p class="text-[13px] txt font-medium leading-relaxed text-left whitespace-pre-wrap bg-surface rounded-2xl border bd p-4" style="background:var(--surface)">${b.body}</p>` : ""}
+        ${waButtonHtml("Halo Admin, saya ingin bertanya tentang siaran: " + (b.title || ""), "Hubungi Admin") ? `<div class="mt-4">${waButtonHtml("Halo Admin, saya ingin bertanya tentang siaran: " + (b.title || ""), "Hubungi Admin")}</div>` : ""}
+        <button onclick="bcClose()" class="btn btn-primary mt-3 w-full">Mengerti, Tutup</button>
+      </div>`);
+    }
+    function bcClose() {
+      app.closeSheet("bc");
+      // lanjut ke siaran berikutnya yang masih jatuh tempo (jika ada)
+      setTimeout(showDueBroadcasts, 250);
+    }
+
+    /* ==================== STOK VOUCHER (runtime dari voucherdata.php) ==================== */
+    let VOUCHER_RT = { stock: {}, used: {} };
+    async function fetchVoucherRt() {
+      try {
+        const res = await fetch("voucherdata.php?action=get");
+        if (!res.ok) return;
+        const d = await res.json();
+        if (d && d.status) { VOUCHER_RT = { stock: d.stock || {}, used: d.used || {} }; render(); }
+      } catch (e) {}
+    }
+    function voucherStock(code) {
+      const v = S.vouchers.find(x => x.code === code);
+      const live = VOUCHER_RT.stock && VOUCHER_RT.stock[code];
+      let st = (live !== undefined && live !== null) ? live : (v ? v.stock : null);
+      if (st === null || st === undefined || st === "" || st < 0) return null; // null = tak terbatas
+      return parseInt(st);
+    }
+    async function reportVoucherUse(code) {
+      const v = S.vouchers.find(x => x.code === code);
+      if (!v) return;
+      try {
+        await fetch("voucherdata.php", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "use", uid: S.uid || ("u_" + (S.user.phone || "")), code: code, once: v.once !== false })
+        });
+        fetchVoucherRt();
+      } catch (e) {}
+    }
     
     /* ==================== FLOW STATE ==================== */
     let F = {};
@@ -2058,7 +2411,9 @@
       <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-white/10"></div>
       <div class="absolute -left-14 top-16 w-40 h-40 rounded-full bg-white/5"></div>
       <div class="relative flex items-center gap-3">
-        <button onclick="app.go('profile')" class="press w-11 h-11 rounded-2xl bg-white/20 backdrop-blur grid place-items-center text-white font-extrabold border border-white/30">${initials(S.user.name)}</button>
+        <button onclick="app.go('profile')" class="press overflow-hidden w-11 h-11 rounded-2xl bg-white/20 backdrop-blur grid place-items-center text-white font-extrabold border border-white/30">
+          ${S.user && S.user.photo ? `<img src="${imgUrl(S.user.photo)}" class="w-full h-full object-cover" alt="Foto profil">` : initials(S.user.name)}
+        </button>
         <div class="flex-1 min-w-0">
           <p class="text-white/80 text-[11.5px] font-semibold">${greeting()},</p>
           <p class="text-white font-extrabold text-[15px] truncate">${S.user.name}</p>
@@ -2239,6 +2594,7 @@
         <h2 class="font-extrabold txt text-[15px]">Promo Untukmu</h2>
         <button onclick="app.go('promo')" class="press text-[12px] font-extrabold" style="color:var(--primary)">Semua Promo</button>
       </div>
+      ${promoImagesHtml(SITE_SETTINGS.promo_imgs)}
       <div class="flex gap-3 overflow-x-auto no-sb px-4 pb-1 snap-x">
         ${promos
           .map(
@@ -2349,6 +2705,18 @@
     }
     
     /* -------- PROMO -------- */
+    /* Galeri foto "Promo Untukmu" — klik untuk ukuran penuh & bisa di-swipe */
+    function promoImagesHtml(list) {
+      const imgs = (list || []).filter(p => p && p.img);
+      if (!imgs.length) return "";
+      const urls = imgs.map(p => imgUrl(p.img));
+      return `<div class="flex gap-3 overflow-x-auto no-sb px-4 pb-2 snap-x mb-1">
+        ${urls.map((u, i) => `
+          <button onclick='openLightbox(${JSON.stringify(urls).replace(/'/g, "&#39;")}, ${i})' class="press snap-start shrink-0 w-[242px] h-[110px] rounded-2xl overflow-hidden relative border bd shadow-sm" style="aspect-ratio:11/5;">
+            <img src="${u}" class="w-full h-full object-cover" alt="${imgs[i].title || "Promo"}">
+          </button>`).join("")}
+      </div>`;
+    }
     function viewPromo() {
       const banners = (SITE_SETTINGS.promos && SITE_SETTINGS.promos.length) ? SITE_SETTINGS.promos : [
         {
@@ -2372,7 +2740,8 @@
         <h1 class="text-white font-extrabold text-xl relative">Promo & Voucher</h1>
         <p class="text-white/80 text-[12.5px] font-medium mt-0.5 relative">Klaim vouchermu, hemat setiap transaksi</p>
       </div>
-      <div class="px-4 -mt-10 relative z-10 space-y-3">
+      <div class="px-4 -mt-10 relative z-10">${promoImagesHtml(SITE_SETTINGS.promo_imgs)}</div>
+      <div class="px-4 -mt-6 relative z-10 space-y-3">
         ${banners
           .map(
             (
@@ -2401,7 +2770,11 @@
         : "Semua layanan";
       const minVal = parseInt(v.min) || 0;
       const displayDesc = v.desc ? v.desc.replace(/Min\.\s*Rp[\d.,]+/i, "Min. " + rp(minVal)) : ("Min. " + rp(minVal));
-      return `<div class="card overflow-hidden flex ${v.used ? "opacity-50" : ""}">
+      const stock = voucherStock(v.code);
+      const once = v.once !== false;
+      const habis = (stock !== null && stock <= 0);
+      const terpakai = once && v.used;
+      return `<div class="card overflow-hidden flex ${habis || terpakai ? "opacity-60" : ""}">
       <div class="w-[86px] shrink-0 grid place-items-center text-white relative" style="background:linear-gradient(150deg,#4f46e5,#9333ea)">
         ${ic("ticket", "w-7 h-7")}<span class="absolute bottom-2 text-[9.5px] font-extrabold tracking-wider">VOUCHER</span>
       </div>
@@ -2409,14 +2782,21 @@
         <p class="font-extrabold txt text-[13.5px] leading-snug">${v.title}</p>
         <p class="text-[11.5px] muted font-medium mt-0.5">${displayDesc}</p>
         <p class="text-[10.5px] muted font-semibold mt-1.5">Berlaku: ${svcTxt} · s/d ${v.exp || '-'}</p>
+        <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${habis ? 'bg-red-100 text-red-500' : 'bg-emerald-100 text-emerald-600'} dark:bg-transparent">
+            ${habis ? "Stok habis" : (stock === null ? "Stok tersedia" : "Stok: " + stock + " · " + (once ? "1x/akun" : "boleh berulang"))}
+          </span>
+        </div>
         <div class="flex items-center justify-between mt-2.5">
           <span class="text-[11px] font-extrabold px-2 py-1 rounded-lg" style="background:var(--surface-3);color:var(--primary)">${v.code}</span>
           ${
-            v.used
-              ? `<span class="text-[11.5px] font-extrabold muted">Terpakai</span>`
-              : v.claimed
-                ? `<button onclick="app.useVoucherNow('${v.code}')" class="press text-[11.5px] font-extrabold px-3 py-1.5 rounded-lg" style="background:var(--surface-3);color:var(--primary)">Pakai</button>`
-                : `<button onclick="app.claimVoucher('${v.code}')" class="press text-[11.5px] font-extrabold px-3.5 py-1.5 rounded-lg text-white grad">Klaim</button>`
+            habis
+              ? `<span class="text-[11.5px] font-extrabold text-red-500">Habis</span>`
+              : terpakai
+                ? `<span class="text-[11.5px] font-extrabold muted">Terpakai</span>`
+                : v.claimed
+                  ? `<button onclick="app.useVoucherNow('${v.code}')" class="press text-[11.5px] font-extrabold px-3 py-1.5 rounded-lg" style="background:var(--surface-3);color:var(--primary)">Pakai</button>`
+                  : `<button onclick="app.claimVoucher('${v.code}')" class="press text-[11.5px] font-extrabold px-3.5 py-1.5 rounded-lg text-white grad">Klaim</button>`
           }
         </div>
       </div></div>`;
@@ -2451,7 +2831,9 @@
         <div class="card p-4">
           <div class="flex items-center gap-3.5">
             <div class="relative">
-              <div class="w-[62px] h-[62px] rounded-2xl grad grid place-items-center text-white font-extrabold text-xl">${initials(S.user.name)}</div>
+              ${S.user && S.user.photo
+                ? `<button onclick="openLightbox(['${imgUrl(S.user.photo)}'])" class="press w-[62px] h-[62px] rounded-2xl overflow-hidden border-2 border-white shadow-lg"><img src="${imgUrl(S.user.photo)}" class="w-full h-full object-cover" alt="Foto profil"></button>`
+                : `<div class="w-[62px] h-[62px] rounded-2xl grad grid place-items-center text-white font-extrabold text-xl">${initials(S.user.name)}</div>`}
               <button onclick="app.openEditProfile()" class="press absolute -bottom-1 -right-1 w-7 h-7 rounded-full grid place-items-center text-white border-2" style="background:var(--primary);border-color:var(--surface)">${ic("camera", "w-3.5 h-3.5")}</button>
             </div>
             <div class="flex-1 min-w-0">
@@ -2529,8 +2911,8 @@
       return `<div class="fade-in min-h-[100dvh] bg-white flex flex-col relative pb-24">
     <div class="pt-12 pb-6 px-6 text-center">
       <div class="flex items-center justify-center gap-2 mb-3">
-        ${d.app_logo ? `<img src="${d.app_logo}" class="w-10 h-10 rounded-xl object-cover shadow-lg">` : `<div class="w-10 h-10 rounded-xl grad grid place-items-center text-white font-extrabold text-xl shadow-lg">P</div>`}
-        <h1 class="text-2xl font-black txt tracking-tight">${d.title || 'PayNusa'}</h1>
+        ${d.app_logo ? `<img src="${d.app_logo}" class="w-10 h-10 rounded-xl object-cover shadow-lg">` : (SITE_SETTINGS.app_logo ? `<img src="${imgUrl(SITE_SETTINGS.app_logo)}" class="w-10 h-10 rounded-xl object-cover shadow-lg">` : "")}
+        ${(d.title || SITE_SETTINGS.site_name) ? `<h1 class="text-2xl font-black txt tracking-tight">${d.title || SITE_SETTINGS.site_name}</h1>` : ""}
       </div>
       <p class="text-[11px] font-bold muted mb-4">${d.version || 'Versi 1.0.0'}</p>
       <h2 class="text-xl font-extrabold text-[#cc0000] leading-snug whitespace-pre-line">${d.slogan || 'Harga Lebih Murah\ndari Aplikasi Lainnya'}</h2>
@@ -2629,6 +3011,21 @@
         </div>
         <div class="surface rounded-t-[2rem] px-6 pt-5 pb-[calc(2rem+env(safe-area-inset-bottom))] max-h-[78dvh] overflow-y-auto">
           <p class="font-extrabold txt text-base">Pendaftaran Akun</p>
+
+          <div class="flex flex-col items-center mt-3 mb-1 gap-2">
+            <div id="regPhotoBox" class="w-20 h-20 rounded-3xl grad grid place-items-center text-white font-extrabold text-2xl overflow-hidden">
+              <span id="regPhotoInitial">P</span>
+            </div>
+            <div class="flex gap-2">
+              <label class="press text-[11.5px] font-extrabold px-3.5 py-2 rounded-xl text-white grad cursor-pointer">
+                ${ic("camera", "w-3.5 h-3.5")} <span id="regPhotoLabel">Foto Profil (Opsional)</span>
+                <input type="file" accept="image/*" class="hidden" onchange="pickRegPhoto(this)">
+              </label>
+              <button id="regPhotoRemove" type="button" onclick="clearRegPhoto()" class="press hidden text-[11.5px] font-extrabold px-3.5 py-2 rounded-xl text-red-500 border bd">Hapus</button>
+            </div>
+            <p class="text-[10.5px] muted font-semibold text-center">Boleh dikosongkan. Foto otomatis dipotong persegi (1:1).</p>
+          </div>
+
           <label class="block text-[11px] font-extrabold muted mt-3 mb-1">Nama Lengkap</label>
           <input id="regName" class="inp" placeholder="contoh: Budi Santoso">
           <label class="block text-[11px] font-extrabold muted mt-3 mb-1">Nomor Handphone</label>
@@ -2697,6 +3094,13 @@
         return;
       }
       v.innerHTML = { home: viewHome, history: viewHistory, promo: viewPromo, profile: viewProfile }[S.tab]();
+      applyBrandIdentity();
+      applyGateScreens();
+      // Tampilkan siaran yang belum habis jatah kemunculannya (sekali setiap kali aplikasi dibuka)
+      if (S.loggedIn && S.tab === "home" && !window._bcCheckedThisLoad) {
+        window._bcCheckedThisLoad = true;
+        setTimeout(showDueBroadcasts, 600);
+      }
       const items = [
         ["home", "home", "Beranda"],
         ["history", "receipt", "Riwayat"],
@@ -3390,7 +3794,12 @@
       });
       if (F.voucher) {
         const v = S.vouchers.find((x) => x.code === F.voucher);
-        if (v) v.used = true;
+        if (v) {
+          // Voucher 1x pakai -> tandai terpakai; boleh berulang (once=false) -> tetap aktif
+          if (v.once !== false) v.used = true;
+          // Catat pemakaian & kurangi stok di server melalui jembatan voucherdata.php
+          reportVoucherUse(F.voucher);
+        }
       }
       syncTxServer(tx);
       save();
@@ -3995,11 +4404,24 @@
       );
     }
     function openEditProfile() {
-      openSheet("ep", { title: "Data Pribadi", sub: "Perbarui informasi akun Anda" });
+      openSheet("ep", { title: "Data Pribadi", sub: "Perbarui foto profil dan informasi akun Anda" });
+      const photo = S.user && S.user.photo ? imgUrl(S.user.photo) : "";
       setBody(
         "ep",
         `<div class="pb-6">
-      <div class="flex justify-center py-3"><div class="w-20 h-20 rounded-3xl grad grid place-items-center text-white font-extrabold text-2xl">${initials(S.user.name)}</div></div>
+      <div class="flex flex-col items-center py-3 gap-2.5">
+        ${photo
+          ? `<button onclick="openLightbox(['${photo}'])" class="press w-20 h-20 rounded-3xl overflow-hidden shadow-lg border-2" style="border-color:var(--surface)"><img src="${photo}" class="w-full h-full object-cover" alt="Foto profil"></button>`
+          : `<div class="w-20 h-20 rounded-3xl grad grid place-items-center text-white font-extrabold text-2xl">${initials(S.user.name)}</div>`}
+        <div class="flex gap-2">
+          <label class="press text-[11.5px] font-extrabold px-3.5 py-2 rounded-xl text-white grad cursor-pointer">
+            ${ic("camera", "w-3.5 h-3.5")} ${photo ? "Ganti Foto" : "Tambah Foto"}
+            <input type="file" accept="image/*" class="hidden" onchange="uploadProfilePhoto(this)">
+          </label>
+          ${photo ? `<button onclick="removeProfilePhoto()" class="press text-[11.5px] font-extrabold px-3.5 py-2 rounded-xl text-red-500 border bd">Hapus Foto</button>` : ""}
+        </div>
+        <p class="text-[10.5px] muted font-semibold text-center">Foto profil bersifat opsional. Foto otomatis dipotong persegi (1:1). Tekan foto untuk melihat ukuran penuh.</p>
+      </div>
       ${[
         ["Nama Lengkap", "epName", S.user.name, "text"],
         ["Nomor Handphone", "epPhone", S.user.phone, "tel"],
@@ -4072,13 +4494,16 @@
         help: {
           t: "Pusat Bantuan",
           b: () => {
-            const phone = SITE_SETTINGS.cs_phone || '1500-123';
-            const email = SITE_SETTINGS.cs_email || 'support@paynusa.co.id';
+            const phone = (SITE_SETTINGS.cs_phone || '').trim();
+            const email = (SITE_SETTINGS.cs_email || '').trim();
+            const waUrl = adminWaLink("Halo Admin, saya butuh bantuan.");
+            const contactCards = [
+              waUrl ? `<a href="${waUrl}" target="_blank" rel="noopener" class="press card p-4 text-left"><div class="w-9 h-9 rounded-xl grid place-items-center text-white mb-2" style="background:#16a34a">${ic("send", "w-4.5 h-4.5")}</div><p class="text-[13px] font-extrabold txt">Chat Admin (WA)</p><p class="text-[11px] muted font-semibold truncate">${adminWaPhone()}</p></a>` : "",
+              email ? `<a href="mailto:${email}" class="press card p-4 text-left"><div class="w-9 h-9 rounded-xl grid place-items-center text-white mb-2" style="background:#10b981">${ic("mail", "w-4.5 h-4.5")}</div><p class="text-[13px] font-extrabold txt">Email CS</p><p class="text-[11px] muted font-semibold truncate">${email}</p></a>` : "",
+              phone ? `<a href="tel:${phone}" class="press card p-4 text-left"><div class="w-9 h-9 rounded-xl grid place-items-center text-white mb-2" style="background:#4f46e5">${ic("phone", "w-4.5 h-4.5")}</div><p class="text-[13px] font-extrabold txt">Telepon CS</p><p class="text-[11px] muted font-semibold truncate">${phone}</p></a>` : ""
+            ].join("");
             return `<div class="pb-6">
-        <div class="grid grid-cols-2 gap-2.5 mb-4">
-          <button onclick="window.open('mailto:' + '${email}')" class="press card p-4 text-left"><div class="w-9 h-9 rounded-xl grid place-items-center text-white mb-2" style="background:#10b981">${ic("mail", "w-4.5 h-4.5")}</div><p class="text-[13px] font-extrabold txt">Email CS</p><p class="text-[11px] muted font-semibold truncate">${email}</p></button>
-          <button onclick="window.open('tel:' + '${phone}')" class="press card p-4 text-left"><div class="w-9 h-9 rounded-xl grid place-items-center text-white mb-2" style="background:#4f46e5">${ic("phone", "w-4.5 h-4.5")}</div><p class="text-[13px] font-extrabold txt">Telepon CS</p><p class="text-[11px] muted font-semibold truncate">${phone}</p></button>
-        </div>
+        ${contactCards ? `<div class="grid grid-cols-2 gap-2.5 mb-4">${contactCards}</div>` : `<div class="card p-4 mb-4 text-center"><p class="text-[12px] muted font-semibold">Kontak admin belum diatur. Silakan tunggu informasi lebih lanjut.</p></div>`}
         <p class="text-[12px] font-extrabold muted mb-2">PERTANYAAN UMUM</p>
         <div class="space-y-2">${[
           ["Berapa lama proses transaksi?", "Umumnya transaksi diproses instan kurang dari 30 detik. Bila lebih dari 1 jam, dana otomatis dikembalikan."],
@@ -5226,7 +5651,11 @@
       },
       openVoucherPicker() {
         const total = calcTotal() + F.discount;
-        const avail = S.vouchers.filter((v) => v.claimed && !v.used);
+        const avail = S.vouchers.filter((v) => v.claimed && !((v.once !== false) && v.used))
+          .filter((v) => {
+            const st = voucherStock(v.code);
+            return st === null || st > 0;
+          });
         openSheet("vc", { title: "Pilih Voucher", sub: "Voucher yang sudah Anda klaim" });
         setBody(
           "vc",
@@ -5253,6 +5682,9 @@
       applyVoucher(code) {
         const v = S.vouchers.find((x) => x.code === code);
         if (!v) return toast("Voucher tidak ditemukan", "error");
+        if ((v.once !== false) && v.used) return toast("Voucher ini hanya bisa dipakai satu kali per akun", "warn");
+        const st = voucherStock(code);
+        if (st !== null && st <= 0) return toast("Stok voucher " + code + " sudah habis", "error");
         const base = calcTotal() + F.discount;
         const minTx = parseInt(v.min) || 0;
         if (base < minTx) return toast("Min. transaksi untuk voucher ini adalah " + rp(minTx), "warn");
@@ -5278,6 +5710,9 @@
       },
       claimVoucher(code) {
         const v = S.vouchers.find((x) => x.code === code);
+        if (!v) return;
+        const st = voucherStock(code);
+        if (st !== null && st <= 0) return toast("Stok voucher " + code + " sudah habis", "error");
         v.claimed = true;
         save();
         render();
@@ -5995,6 +6430,9 @@
               await fetchMarkupConfig();
               save();
               render();
+              // Unggah foto profil opsional (jika dipilih) setelah akun jadi
+              await uploadPendingRegPhoto();
+              render();
               toast("Pendaftaran berhasil! Jenis Akun: " + (S.jenis_akun || "member").toUpperCase(), "success");
             } else {
               toast(data.message || "Pendaftaran gagal", "error");
@@ -6023,6 +6461,8 @@
                   if (myAcc.user && JSON.stringify(S.user) !== JSON.stringify({ ...S.user, ...myAcc.user })) { S.user = { ...S.user, ...myAcc.user }; changed = true; }
                   if (myAcc.uid && S.uid !== myAcc.uid) { S.uid = myAcc.uid; changed = true; }
                   if (changed) { save(); render(); }
+                  // Segera tampilkan layar blokir bila admin baru saja membekukan akun ini
+                  applyGateScreens();
                 }
               }
             }
@@ -6236,6 +6676,9 @@
             }
             if (SITE_SETTINGS.app_title) document.title = SITE_SETTINGS.app_title;
             render();
+            applyGateScreens();
+            fetchVoucherRt();
+            showDueBroadcasts();
           }
         }
       } catch (e) {}

@@ -648,6 +648,8 @@
           <li class="sb-label">Manajemen</li>
           <li class="sb-item" id="tab-users" onclick="switchTab('users')"><i class="fas fa-users"></i><span>Control Users</span>
           </li>
+          <li class="sb-item" id="tab-siaran" onclick="switchTab('siaran')"><i class="fas fa-tower-cell"></i><span>Siaran Massal</span>
+          </li>
           <li class="sb-item" id="tab-markup" onclick="switchTab('markup')"><i class="fas fa-tags"></i><span>Markup Produk</span>
           </li>
           <li class="sb-item" id="tab-promo" onclick="switchTab('promo')">
@@ -694,10 +696,13 @@
 
         <div class="sb-foot">
           <div class="sb-foot-card">
-            <div class="sb-avatar" id="admAvatar">AD</div>
+            <label style="position:relative;cursor:pointer;display:contents;" title="Klik untuk ganti foto profil admin">
+              <div class="sb-avatar" id="admAvatar">AD</div>
+              <input type="file" accept="image/*" style="display:none;" onchange="uploadAdminSelfPhoto(this)">
+            </label>
             <div class="sb-foot-info">
               <b id="admFootName">Administrator</b>
-              <span><i class="fas fa-circle" style="font-size:.34rem;color:#34d399;"></i> Sesi aktif</span>
+              <span><i class="fas fa-circle" style="font-size:.34rem;color:#34d399;"></i> Sesi aktif · klik avatar untuk foto</span>
             </div>
           </div>
         </div>
@@ -835,7 +840,7 @@
                 <div class="row">
                   <button class="btn btn-ghost btn-sm" onclick="switchTab('tx')">Lihat Semua
                     <i class="fas fa-arrow-right"></i></button>
-                  <button class="btn btn-soft btn-sm" onclick="fetchTransactions()"><i class="fas fa-arrows-rotate"></i></button>
+                  <button class="btn btn-soft btn-sm" onclick="fetchTransactions()"><i class="fas fa-arrows-rotate"></i> Muat Ulang</button>
                 </div>
               </div>
               <div class="tbl-wrap">
@@ -979,15 +984,117 @@
             </div>
           </section>
 
+          <!-- ==================== TAB: SIARAN MASSAL ==================== -->
+          <section id="sec-siaran" class="page-section stack">
+            <div class="page-head">
+              <div>
+                <h2><i class="fas fa-tower-cell"></i> Siaran Massal</h2>
+                <p>Kirim pengumuman ke seluruh pengguna, atau hanya ke pengguna yang dipilih.
+                  Mendukung gambar. Jumlah kemunculan di halaman index bisa diatur.</p>
+              </div>
+              <div class="page-head-actions">
+                <button class="btn btn-sm btn-pri" onclick="newBroadcast()"><i class="fas fa-plus"></i> Buat Siaran Baru</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title"><i class="fas fa-paper-plane"></i> Komposer Siaran</div>
+              </div>
+              <div class="card-body">
+                <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;">
+                  <div>
+                    <label class="lbl">Judul Siaran</label>
+                    <input type="text" id="bcTitle" class="inp" placeholder="Contoh: Promo Spesial Akhir Pekan">
+                  </div>
+                  <div>
+                    <label class="lbl">Jumlah Kemunculan (berapa kali tampil saat user buka index, mulai terhitung 1)</label>
+                    <input type="number" id="bcShow" class="inp" value="1" min="1" max="99">
+                    <small style="font-size:.62rem;color:var(--muted);font-weight:600;">1 = tampil sekali; 3 = tampil di 3 kali pembukaan aplikasi; 0/99 = tak terbatas.</small>
+                  </div>
+                </div>
+                <div class="field" style="margin-top:.7rem;">
+                  <label class="lbl">Isi Pesan Siaran</label>
+                  <textarea id="bcBody" class="inp" style="height:5.5rem;" placeholder="Tulis isi pengumuman untuk pengguna..."></textarea>
+                </div>
+                <div class="field" style="margin-top:.7rem;">
+                  <label class="lbl">Gambar Siaran (Opsional)</label>
+                  <div class="row" style="gap:.7rem;align-items:center;">
+                    <div class="thumb" style="width:7rem;height:5rem;">
+                      <img id="bcImgPreview" src="" style="display:none;object-fit:contain;">
+                      <span class="ph" id="bcImgPh">Belum ada gambar</span>
+                    </div>
+                    <div class="row" style="gap:.4rem;flex-wrap:wrap;">
+                      <label class="btn btn-soft btn-xs" style="cursor:pointer;"><i class="fas fa-image"></i> Pilih Gambar
+                        <input type="file" accept="image/*" style="display:none;" onchange="uploadBcImage(this)"></label>
+                      <button class="btn btn-xs btn-danger" onclick="clearBcImage()"><i class="fas fa-trash"></i> Hapus Gambar</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-top:.7rem;">
+                  <label class="lbl">Target Penerima</label>
+                  <div class="row" style="gap:.5rem;">
+                    <label class="row" style="gap:.3rem;font-size:.72rem;font-weight:700;cursor:pointer;">
+                      <input type="radio" name="bcTarget" value="all" checked onchange="toggleBcTarget()"> Semua Pengguna
+                    </label>
+                    <label class="row" style="gap:.3rem;font-size:.72rem;font-weight:700;cursor:pointer;">
+                      <input type="radio" name="bcTarget" value="selected" onchange="toggleBcTarget()"> Hanya User Terpilih
+                    </label>
+                  </div>
+                </div>
+                <div id="bcUserPickWrap" style="display:none;margin-top:.7rem;">
+                  <div class="row" style="justify-content:space-between;margin-bottom:.4rem;">
+                    <label class="lbl" style="margin:0;">Pilih pengguna yang akan menerima siaran</label>
+                    <div class="row" style="gap:.3rem;">
+                      <button class="btn btn-xs btn-soft" onclick="bcSelectAll(true)"><i class="fas fa-check-double"></i> Pilih Semua</button>
+                      <button class="btn btn-xs btn-soft" onclick="bcSelectAll(false)"><i class="fas fa-undo"></i> Bersihkan</button>
+                    </div>
+                  </div>
+                  <div id="bcUserList" style="max-height:14rem;overflow:auto;border:1px solid var(--border);border-radius:var(--r);padding:.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr));gap:.35rem;"></div>
+                </div>
+                <div class="row" style="margin-top:.9rem;justify-content:flex-end;gap:.5rem;">
+                  <button class="btn btn-sm" onclick="resetBcForm()"><i class="fas fa-eraser"></i> Bersihkan Form</button>
+                  <button class="btn btn-sm btn-pri" id="bcSaveBtn" onclick="saveBroadcast('')"><i class="fas fa-paper-plane"></i> Simpan &amp; Kirim Siaran</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title"><i class="fas fa-list-check"></i> Daftar Siaran Terpasang</div>
+              </div>
+              <div class="card-body" id="bcListContainer"></div>
+            </div>
+          </section>
+
           <!-- ==================== TAB: PROMO & VOUCHER ==================== -->
           <section id="sec-promo" class="page-section stack">
             <div class="page-head">
               <div>
                 <h2><i class="fas fa-gift"></i> Promo &amp; Voucher</h2>
-                <p>Banner promosi dan kode voucher yang tampil di aplikasi pengguna</p>
+                <p>Banner promosi, foto "Promo Untukmu", dan kode voucher yang tampil di aplikasi pengguna</p>
               </div>
               <div class="page-head-actions">
                 <span class="badge b-mute" id="promoCountInfo">0 promo · 0 voucher</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title"><i class="fas fa-camera-retro"></i> Foto "Promo Untukmu" (Gambar Banner)</div>
+                <button class="btn btn-pri btn-xs" onclick="addPromoImageRow()"><i class="fas fa-plus"></i> Tambah Foto Promo</button>
+              </div>
+              <div class="card-body">
+                <div style="background:var(--info-soft);border:1px solid var(--info-line);border-radius:var(--r);padding:.6rem .7rem;margin-bottom:.7rem;">
+                  <p style="font-size:.7rem;font-weight:700;color:var(--info);"><i class="fas fa-circle-info"></i> Panduan Ukuran Foto Promo</p>
+                  <p style="font-size:.66rem;color:var(--text-2);margin-top:.25rem;line-height:1.5;">
+                    Rasio pas yang digunakan aplikasi adalah <b>11 : 5</b> (lanskap lebar). Ukuran unggahan yang ideal:
+                    <b>1100 × 500 piksel</b> (atau kelipatannya seperti 880×400, 1320×600). Sistem akan otomatis
+                    <b>memotong (crop)</b> gambar ke rasio 11:5 saat upload, jadi cukup pilih area yang diinginkan.
+                    Di halaman index, foto bisa ditekan untuk melihat ukuran penuh dan bisa <b>di-swipe</b> antar foto.
+                  </p>
+                </div>
+                <div id="promoImgContainer"></div>
               </div>
             </div>
 
@@ -1173,6 +1280,24 @@
                   <button class="btn btn-soft btn-xs" onclick="addTopupFeeRow()"><i class="fas fa-plus"></i> Tambah</button>
                 </div>
                 <div class="card-body" id="topupFeeListContainer"></div>
+              </div>
+
+              <div class="card" style="grid-column:1 / -1;">
+                <div class="card-head">
+                  <div class="card-title"><i class="fas fa-screwdriver-wrench" style="color:var(--info);"></i> Mode Maintenance (Pemeliharaan Total)</div>
+                  <button id="btnToggleMaintenance" class="btn btn-ok btn-xs" onclick="toggleMaintenance()">MATI (Normal)</button>
+                </div>
+                <div class="card-body">
+                  <p style="font-size:.72rem;color:var(--text-2);line-height:1.6;">
+                    Saat <b>dinyalakan</b>, seluruh pengguna yang login tidak bisa mengakses aplikasi dan akan melihat
+                    halaman lembut berwarna biru muda bertuliskan <i>"sedang dalam perbaikan rutin 1-2 jam mohon tunggu ya"</i>
+                    lengkap dengan tombol <b>Hubungi Admin (WhatsApp)</b>. Tombol ini langsung tersimpan — tidak perlu klik Simpan.
+                  </p>
+                  <div class="field" style="margin-top:.6rem;">
+                    <label class="lbl">Nomor WhatsApp Admin untuk tombol Hubungi Admin (isi juga di Identitas Aplikasi)</label>
+                    <input type="text" id="confWaAdmin" class="inp" placeholder="Contoh: 6281234567890" onchange="siteSettings.cs_phone=this.value" style="max-width:18rem;">
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1628,11 +1753,11 @@
 
             <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;" class="txi-two">
               <div class="card">
-                <div class="card-head"><h3><i class="fas fa-crown"></i> Pengguna Teratas</h3><button class="btn btn-xs btn-soft" onclick="txiExportTop('user')"><i class="fas fa-download"></i></button></div>
+                <div class="card-head"><h3><i class="fas fa-crown"></i> Pengguna Teratas</h3><button class="btn btn-xs btn-soft" onclick="txiExportTop('user')"><i class="fas fa-download"></i> Ekspor</button></div>
                 <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Pengguna</th><th>Tx</th><th>Volume</th><th>Sukses</th><th></th></tr></thead><tbody id="txiTopUsers"></tbody></table></div>
               </div>
               <div class="card">
-                <div class="card-head"><h3><i class="fas fa-box-open"></i> Produk Terlaris</h3><button class="btn btn-xs btn-soft" onclick="txiExportTop('product')"><i class="fas fa-download"></i></button></div>
+                <div class="card-head"><h3><i class="fas fa-box-open"></i> Produk Terlaris</h3><button class="btn btn-xs btn-soft" onclick="txiExportTop('product')"><i class="fas fa-download"></i> Ekspor</button></div>
                 <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Produk</th><th>Tx</th><th>Volume</th><th>Margin</th><th>Gagal</th></tr></thead><tbody id="txiTopProducts"></tbody></table></div>
               </div>
             </div>
@@ -1857,6 +1982,32 @@
             Server</button>
         </div>
       </div>
+    </div>
+
+    <!-- ==================== MODAL: RAW JSON RESPONSE ==================== -->
+    <div id="modalRawJson" class="modal hidden" style="background:rgba(2,6,16,.85);z-index:260;">
+      <div class="modal-card w-lg">
+        <div class="modal-head">
+          <div>
+            <h3><i class="fas fa-code" style="color:var(--pri);"></i> <span id="rawJsonTitle">Respon Mentah Server</span></h3>
+            <p>JSON mentah apa adanya dari server provider (hasil live cek status)</p>
+          </div>
+          <button onclick="closeRawJsonModal()" class="modal-x" title="Tutup"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <pre class="mono" id="rawJsonContent" style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:.7rem;font-size:.68rem;max-height:60vh;overflow:auto;white-space:pre-wrap;word-break:break-all;margin:0;"></pre>
+        </div>
+        <div class="modal-foot">
+          <button onclick="copyRawJson()" class="btn btn-sm btn-soft"><i class="fas fa-copy"></i> Salin JSON</button>
+          <button onclick="closeRawJsonModal()" class="btn btn-sm btn-pri"><i class="fas fa-xmark"></i> Tutup</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: LIGHTBOX FOTO ==================== -->
+    <div id="modalImgView" class="modal hidden" onclick="closeImgView()" style="background:rgba(2,6,16,.94);z-index:300;">
+      <button onclick="closeImgView()" class="modal-x" style="position:fixed;top:1rem;right:1rem;z-index:310;color:#fff;font-size:1.4rem;background:rgba(255,255,255,.12);width:2.6rem;height:2.6rem;border-radius:50%;" title="Tutup"><i class="fas fa-xmark"></i></button>
+      <img id="imgViewEl" src="" style="max-width:94vw;max-height:90vh;object-fit:contain;border-radius:.6rem;box-shadow:0 20px 60px rgba(0,0,0,.6);" onclick="event.stopPropagation()">
     </div>
 
     <!-- ==================== MODAL: CROPPER ==================== -->
@@ -2136,8 +2287,9 @@
             const label = currentAdmin.user.name + " (" + currentAdmin.user.phone + ")";
             setTxt("admProfileName", label);
             setTxt("admFootName", currentAdmin.user.name || 'Administrator');
-            const av = $('admAvatar');
-            if (av) av.textContent = (currentAdmin.user.name || 'AD').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+            if (currentAdmin.user && currentAdmin.user.photo) renderAdmAvatar(currentAdmin.user.photo);
+            else { const av = $('admAvatar');
+            if (av) av.textContent = (currentAdmin.user.name || 'AD').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase(); }
             initAdminDashboard();
           } else {
             errMsg("Akses ditolak! Akun Anda bukan akun Admin.");
@@ -2172,13 +2324,14 @@
       }
     }
     
-    const TAB_LIST = ["dashboard", "users", "promo", "settings", "tx", "topup_queue", "refund_audit", "markup", "landing", "doniguard", "livechat", "txtrace", "txintel", "txuser", "txrecon", "txalert", "txaudit"];
+    const TAB_LIST = ["dashboard", "users", "siaran", "promo", "settings", "tx", "topup_queue", "refund_audit", "markup", "landing", "doniguard", "livechat", "txtrace", "txintel", "txuser", "txrecon", "txalert", "txaudit"];
     const TAB_META = {
       dashboard: { t: "PayNusa Admin Center", s: "Ringkasan operasional PPOB hari ini", i: "fa-chart-pie" },
       tx: { t: "Semua Transaksi", s: "Riwayat lengkap transaksi seluruh pengguna", i: "fa-receipt" },
       topup_queue: { t: "Antrian Top Up", s: "Verifikasi pembayaran masuk dari pengguna", i: "fa-wallet" },
       refund_audit: { t: "Audit Refund", s: "Log pengembalian saldo transaksi gagal", i: "fa-rotate-left" },
-      users: { t: "Control Users", s: "Kelola data, saldo, dan hak akses pengguna", i: "fa-users" },
+      users: { t: "Control Users", s: "Kelola data, saldo, foto profil, blokir, dan hak akses pengguna", i: "fa-users" },
+      siaran: { t: "Siaran Massal", s: "Kirim pengumuman/gambar ke seluruh atau pengguna terpilih", i: "fa-tower-cell" },
       markup: { t: "Markup Produk", s: "Atur selisih harga jual per produk", i: "fa-tags" },
       promo: { t: "Promo & Voucher", s: "Banner promosi dan kode voucher", i: "fa-gift" },
       landing: { t: "Landing Page", s: "Konten halaman depan aplikasi", i: "fa-desktop" },
@@ -2207,6 +2360,7 @@
       setTxt("admHeaderSub", meta.s);
     
       if (name === 'tx' || name === 'dashboard') fetchTransactions();
+      if (name === 'siaran') { renderBroadcastList(); renderBcUserList(bcSelectedUids()); toggleBcTarget(); }
       if (name === 'livechat') fetchLiveChatAdmin();
       if (name === 'txtrace') { txiPopulateSelects(); txiRender(); }
       if (name === 'txintel') txiRenderAnalytics();
@@ -2586,10 +2740,18 @@
         const data = await secureFetch("seting.php");
         if (data.status && data.settings) {
           siteSettings = data.settings;
-          if (siteSettings.site_name) setTxt("admHeaderTitle", siteSettings.site_name + " Admin Center");
-          renderSettingsForm();
         }
       } catch (e) {}
+      // pastikan array/objek baru tersedia walau seting.php lama belum memilikinya
+      siteSettings = siteSettings || {};
+      siteSettings.broadcasts = Array.isArray(siteSettings.broadcasts) ? siteSettings.broadcasts : [];
+      siteSettings.blocked_users = Array.isArray(siteSettings.blocked_users) ? siteSettings.blocked_users : [];
+      siteSettings.promo_imgs = Array.isArray(siteSettings.promo_imgs) ? siteSettings.promo_imgs : [];
+      siteSettings.vouchers = Array.isArray(siteSettings.vouchers) ? siteSettings.vouchers : [];
+      if (siteSettings.site_name) setTxt("admHeaderTitle", siteSettings.site_name + " Admin Center");
+      renderSettingsForm();
+      renderBroadcastList();
+      fetchVoucherRuntime();
     }
     
     function renderStats() {
@@ -2716,25 +2878,54 @@
       const paginated = filtered.slice(start, start + ITEMS_PER_PAGE);
     
       const tb = $("userTableBody");
-      tb.innerHTML = paginated.map(u => `
-        <tr>
+      tb.innerHTML = paginated.map(u => {
+        const photo = u.user && u.user.photo ? ('../' + String(u.user.photo).replace(/^\.?\//, '').replace(/^(\.\.\/)+/, '')) : '';
+        const photoOk = u.user && u.user.photo;
+        const blocked = isUserBlocked(u);
+        const isAdmin = u.jenis_akun === 'admin';
+        return `
+        <tr ${blocked ? 'style="background:var(--bad-soft);"' : ''}>
           <td><span class="cell-mono">${esc(u.uid)}</span></td>
-          <td class="cell-strong">${esc(u.user?.name || '-')}</td>
+          <td class="cell-strong">
+            <div class="row" style="gap:.45rem;align-items:center;">
+              <div style="width:2.1rem;height:2.1rem;border-radius:.5rem;overflow:hidden;background:var(--pri-soft);display:grid;place-items:center;flex-shrink:0;cursor:${photoOk ? 'zoom-in' : 'default'};" ${photoOk ? `onclick="openImgView('../${esc(u.user.photo.replace(/^\.?\//, '').replace(/^(\.\.\/)+/, ''))}')"` : ''} title="${photoOk ? 'Klik untuk lihat foto penuh' : 'Belum ada foto'}">
+                ${photoOk
+                  ? `<img src="${esc(photo)}" style="width:100%;height:100%;object-fit:cover;">`
+                  : `<i class="fas fa-user" style="color:var(--pri-text);font-size:.8rem;"></i>`}
+              </div>
+              <div style="min-width:0;">
+                <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;">${esc(u.user?.name || '-')}
+                  ${blocked ? '<span class="badge b-bad"><i class="fas fa-ban"></i> Diblokir</span>' : ''}
+                  ${photoOk ? '<i class="fas fa-circle-check" style="color:var(--ok);font-size:.55rem;" title="Foto profil terpasang"></i>' : ''}
+                </div>
+                <div class="row" style="gap:.25rem;margin-top:.15rem;">
+                  <label class="btn btn-xs btn-soft" style="cursor:pointer;font-size:.58rem;padding:.1rem .35rem;" title="Unggah / ganti foto profil user">
+                    <i class="fas fa-camera"></i> Foto
+                    <input type="file" accept="image/*" style="display:none;" onchange="uploadUserPhoto(this,'${esc(u.uid)}')">
+                  </label>
+                  ${photoOk ? `<button class="btn btn-xs" style="font-size:.58rem;padding:.1rem .35rem;" onclick="deleteUserPhoto('${esc(u.uid)}')" title="Hapus foto profil"><i class="fas fa-trash-can"></i></button>` : ''}
+                </div>
+              </div>
+            </div>
+          </td>
           <td>${esc(u.user?.phone || '-')}</td>
           <td>${esc(u.user?.email || '-')}</td>
           <td>${esc(u.user?.address || '-')}</td>
           <td class="cell-money">${rp(u.balance)}</td>
           <td><span class="badge b-info">${u.points || 0}</span></td>
-          <td>${u.jenis_akun === 'admin' ? '<span class="badge b-pri"><i class="fas fa-user-shield"></i> admin</span>' : '<span class="badge b-mute">member</span>'}</td>
+          <td>${isAdmin ? '<span class="badge b-pri"><i class="fas fa-user-shield"></i> admin</span>' : '<span class="badge b-mute">member</span>'}</td>
           <td>
-            <div class="row">
-              <button onclick="openUserHistory('${esc(u.uid)}')" class="btn btn-xs btn-ok">Riwayat</button>
-              <button onclick="openEditUser('${esc(u.uid)}')" class="btn btn-xs btn-soft">Edit</button>
-              <button onclick="deleteUser('${esc(u.uid)}')" class="btn btn-xs btn-danger">Hapus</button>
+            <div class="row-wrap" style="gap:.25rem;">
+              <button onclick="openUserHistory('${esc(u.uid)}')" class="btn btn-xs btn-ok"><i class="fas fa-clock-rotate-left"></i> Riwayat</button>
+              <button onclick="openEditUser('${esc(u.uid)}')" class="btn btn-xs btn-soft"><i class="fas fa-user-pen"></i> Edit</button>
+              ${isAdmin ? '' : (blocked
+                ? `<button onclick="toggleBlockUser('${esc(u.uid)}', false)" class="btn btn-xs btn-ok"><i class="fas fa-unlock"></i> Buka Blokir</button>`
+                : `<button onclick="toggleBlockUser('${esc(u.uid)}', true)" class="btn btn-xs btn-warn"><i class="fas fa-ban"></i> Blokir</button>`)}
+              <button onclick="deleteUser('${esc(u.uid)}')" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> Hapus</button>
             </div>
           </td>
-        </tr>
-      `).join('') || emptyRow(9, 'Data pengguna tidak ditemukan', 'fa-user-slash');
+        </tr>`;
+      }).join('') || emptyRow(9, 'Data pengguna tidak ditemukan', 'fa-user-slash');
     
       renderPaginationControls("userPagination", currentPageUsers, totalPages, filtered.length, "renderUsersTable");
     }
@@ -2836,6 +3027,77 @@
         initAdminDashboard();
       } catch (e) { errMsg("Gagal menghapus user."); }
     }
+
+    /* ========================================================================
+       BLOKIR / BEBUKAN USER
+       Daftar blokir disimpan di siteSettings.blocked_users (array uid/phone),
+       dibaca index lewat seting.php. Sinkron field blocked pada user bila bisa.
+       ===================================================================== */
+    function userBlockKey(u) {
+      return String(u.uid || (u.user && u.user.phone ? 'u_' + u.user.phone : ''));
+    }
+    function isUserBlocked(u) {
+      const list = siteSettings.blocked_users || [];
+      const key = userBlockKey(u);
+      const phone = u.user && u.user.phone ? String(u.user.phone) : '';
+      return list.includes(key) || (phone && list.includes(phone)) || (u.blocked === true) || (u.user && u.user.blocked === true);
+    }
+    async function toggleBlockUser(uid, block) {
+      const u = usersData.find(x => String(x.uid) === String(uid));
+      if (!u) return toast('User tidak ditemukan', 'err');
+      const key = userBlockKey(u);
+      siteSettings.blocked_users = siteSettings.blocked_users || [];
+      if (block) {
+        if (!confirm('Blokir akun ' + (u.user && u.user.name || uid) + '?\n\nUser tidak bisa menggunakan aplikasi setelah login dan akan diarahkan ke halaman "akun dibekukan".')) return;
+        if (!siteSettings.blocked_users.includes(key)) siteSettings.blocked_users.push(key);
+        if (u.user && u.user.phone && !siteSettings.blocked_users.includes(String(u.user.phone))) siteSettings.blocked_users.push(String(u.user.phone));
+        u.blocked = true;
+      } else {
+        if (!confirm('Buka blokir akun ' + (u.user && u.user.name || uid) + '?')) return;
+        siteSettings.blocked_users = siteSettings.blocked_users.filter(k => k !== key && k !== String(u.user && u.user.phone));
+        u.blocked = false;
+      }
+      try {
+        // simpan daftar blokir ke seting.php
+        await secureFetch("seting.php", { settings: siteSettings });
+        // tandai juga field pada user (jika didukung manager.php)
+        try {
+          await secureFetch('manager.php?action=update_user_admin', {
+            uid: u.uid,
+            jenis_akun: u.jenis_akun || 'member',
+            user: {
+              name: u.user?.name || '', phone: u.user?.phone || '', email: u.user?.email || '',
+              address: u.user?.address || '', photo: u.user?.photo || '', blocked: block
+            },
+            blocked: block
+          });
+        } catch (e2) {}
+        toast(block ? 'User diblokir.' : 'Blokir dibuka.', 'ok');
+        renderUsersTable();
+      } catch (e) { errMsg('Gagal menyimpan status blokir ke seting.php'); }
+    }
+
+    /* ========================================================================
+       MAINTENANCE MODE
+       ===================================================================== */
+    function renderMaintenanceToggle() {
+      const btn = $('btnToggleMaintenance');
+      if (!btn) return;
+      const on = !!siteSettings.maintenance;
+      btn.textContent = on ? 'NYALAKAN (Sedang Maintenance)' : 'MATI (Normal)';
+      btn.className = 'btn btn-xs ' + (on ? 'btn-danger' : 'btn-ok');
+    }
+    async function toggleMaintenance() {
+      const turnOn = !siteSettings.maintenance;
+      if (turnOn && !confirm('Nyalakan MODE MAINTENANCE?\n\nSeluruh user yang login akan melihat halaman "sedang perbaikan" dan tidak bisa mengakses aplikasi sampai dimatikan.')) return;
+      siteSettings.maintenance = turnOn;
+      if (turnOn) siteSettings.maintenance_since = new Date().toISOString();
+      renderMaintenanceToggle();
+      try {
+        await secureFetch("seting.php", { settings: siteSettings });
+        toast(turnOn ? 'Mode maintenance DINYALAKAN. Aplikasi ditutup untuk user.' : 'Mode maintenance DIMATIKAN. Aplikasi normal kembali.', 'ok');
+      } catch (e) { errMsg('Gagal menyimpan ke seting.php'); }
+    }
     
     /* ========================================================================
        RIWAYAT TRANSAKSI PER USER
@@ -2880,7 +3142,7 @@
           <td>
             <div class="row" style="gap:.25rem;">
               <button onclick="openTxDetailAdmin('${esc(t.ref)}')" class="btn btn-xs btn-soft"><i class="fas fa-bolt"></i> Detail &amp; Cek</button>
-              <button onclick="deleteTxAdmin('${esc(t.ref)}')" class="btn btn-xs btn-danger" title="Hapus Riwayat Transaksi ini"><i class="fas fa-trash"></i></button>
+              <button onclick="deleteTxAdmin('${esc(t.ref)}')" class="btn btn-xs btn-danger" title="Hapus Riwayat Transaksi ini"><i class="fas fa-trash"></i> Hapus</button>
             </div>
           </td>
         </tr>
@@ -2907,6 +3169,9 @@
         btnQris.textContent = qrisActive ? "Aktif" : "Nonaktif";
         btnQris.className = qrisActive ? "btn btn-ok btn-xs" : "btn btn-xs";
       }
+      const waInp = $("confWaAdmin");
+      if (waInp) waInp.value = siteSettings.cs_phone || '';
+      renderMaintenanceToggle();
     
       /* Metode top up manual */
       const mtContainer = $("manualTopupListContainer");
@@ -2955,21 +3220,59 @@
       /* Voucher */
       const vcContainer = $("voucherListContainer");
       if (vcContainer) {
-        vcContainer.innerHTML = (siteSettings.vouchers || []).map((v, i) => `
+        vcContainer.innerHTML = (siteSettings.vouchers || []).map((v, i) => {
+          const once = v.once !== false; // default 1x pakai
+          const stock = (v.stock === undefined || v.stock === null) ? 0 : v.stock;
+          const liveStock = (voucherRuntime.stock && voucherRuntime.stock[v.code] !== undefined) ? voucherRuntime.stock[v.code] : null;
+          return `
           <div class="list-item">
             <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.35rem;">
               <input type="text" value="${esc(v.code)}" onchange="siteSettings.vouchers[${i}].code=this.value" class="inp mono" style="height:1.7rem;font-size:.68rem;" placeholder="Kode Voucher" />
               <input type="text" value="${esc(v.title)}" onchange="siteSettings.vouchers[${i}].title=this.value" class="inp" style="height:1.7rem;font-size:.68rem;" placeholder="Judul Voucher" />
               <input type="number" value="${v.val}" onchange="siteSettings.vouchers[${i}].val=parseInt(this.value)" class="inp" style="height:1.7rem;font-size:.68rem;" placeholder="Nominal Potongan" />
               <input type="number" value="${v.min}" onchange="siteSettings.vouchers[${i}].min=parseInt(this.value)" class="inp" style="height:1.7rem;font-size:.68rem;" placeholder="Min. Transaksi" />
+              <input type="number" value="${stock}" min="0" onchange="siteSettings.vouchers[${i}].stock=parseInt(this.value)||0" class="inp" style="height:1.7rem;font-size:.68rem;" placeholder="Stok Voucher" title="Jumlah stok voucher (0 = kosong)" />
+              <select onchange="siteSettings.vouchers[${i}].once=(this.value==='1');renderSettingsForm()" class="inp" style="height:1.7rem;font-size:.68rem;" title="Aturan pemakaian per user">
+                <option value="1" ${once ? 'selected' : ''}>1x pakai per user</option>
+                <option value="0" ${!once ? 'selected' : ''}>Boleh berulang</option>
+              </select>
             </div>
-            <div class="row" style="margin-top:.35rem;justify-content:flex-end;">
-              <button class="btn btn-xs btn-danger" onclick="siteSettings.vouchers.splice(${i},1);renderSettingsForm()"><i class="fas fa-trash"></i> Hapus</button>
+            <div class="row" style="margin-top:.35rem;justify-content:space-between;gap:.4rem;flex-wrap:wrap;">
+              <span class="badge ${liveStock !== null && liveStock <= 0 ? 'b-bad' : (liveStock !== null && liveStock < 5 ? 'b-warn' : 'b-ok')}" style="font-size:.6rem;">
+                <i class="fas fa-boxes-stacked"></i> Stok live: ${liveStock === null ? '–' : (liveStock < 0 ? 'tanpa batas' : liveStock)} · Set: ${stock}
+              </span>
+              <div class="row" style="gap:.35rem;">
+                <button class="btn btn-xs btn-soft" title="Isi ulang stok voucher ini di server sesuai nilai Stok yang diisi" onclick="resetVoucherStock(${i})"><i class="fas fa-rotate"></i> Reset Stok</button>
+                <button class="btn btn-xs btn-danger" onclick="siteSettings.vouchers.splice(${i},1);renderSettingsForm()"><i class="fas fa-trash"></i> Hapus</button>
+              </div>
             </div>
           </div>
-        `).join('') || '<div class="tbl-empty"><i class="fas fa-ticket"></i>Belum ada voucher aktif</div>';
+        `;
+        }).join('') || '<div class="tbl-empty"><i class="fas fa-ticket"></i>Belum ada voucher aktif</div>';
       }
-      setTxt('promoCountInfo', (siteSettings.promos || []).length + ' promo · ' + (siteSettings.vouchers || []).length + ' voucher');
+
+      /* Foto banner "Promo Untukmu" */
+      const piContainer = $("promoImgContainer");
+      if (piContainer) {
+        piContainer.innerHTML = (siteSettings.promo_imgs || []).map((p, i) => `
+          <div class="list-item" style="display:flex;gap:.7rem;align-items:flex-start;">
+            <div class="thumb" style="width:8.8rem;height:4rem;border-radius:var(--r-sm);overflow:hidden;">
+              ${p.img ? `<img src="../${esc(p.img)}" style="object-fit:cover;cursor:zoom-in;" onclick="openImgView('../${esc(p.img)}')" title="Klik untuk ukuran penuh">` : `<span class="ph">11:5</span>`}
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:.4rem;">
+              <input type="text" value="${esc(p.title || '')}" onchange="siteSettings.promo_imgs[${i}].title=this.value" class="inp" style="height:1.7rem;font-size:.68rem;" placeholder="Judul/keterangan singkat (opsional)">
+              <div class="row" style="gap:.4rem;flex-wrap:wrap;">
+                <label class="btn btn-xs btn-soft" style="cursor:pointer;"><i class="fas fa-upload"></i> ${p.img ? 'Ganti Foto' : 'Upload Foto (11:5)'}
+                  <input type="file" accept="image/*" style="display:none;" onchange="uploadPromoImg(this, ${i})"></label>
+                <button class="btn btn-xs ${p.img ? 'btn-soft' : ''}" ${p.img ? `onclick="openImgView('../${esc(p.img)}')"` : 'disabled'}><i class="fas fa-magnifying-glass-plus"></i> Lihat Penuh</button>
+                <button class="btn btn-xs btn-danger" onclick="deletePromoImgRow(${i})"><i class="fas fa-trash"></i> Hapus</button>
+              </div>
+            </div>
+          </div>
+        `).join('') || '<div class="tbl-empty"><i class="fas fa-camera-retro"></i>Belum ada foto promo. Klik "Tambah Foto Promo".</div>';
+      }
+
+      setTxt('promoCountInfo', ((siteSettings.promo_imgs || []).length + (siteSettings.promos || []).length) + ' promo · ' + (siteSettings.vouchers || []).length + ' voucher');
     
       /* Rekening bank penampung */
       const bkContainer = $("bankListContainer");
@@ -2979,7 +3282,7 @@
             <input type="text" value="${esc(b.bank)}" onchange="siteSettings.banks[${i}].bank=this.value" class="inp" style="width:6rem;height:1.7rem;font-size:.68rem;" placeholder="Bank" />
             <input type="text" value="${esc(b.number)}" onchange="siteSettings.banks[${i}].number=this.value" class="inp mono" style="flex:1;height:1.7rem;font-size:.68rem;" placeholder="No Rekening" />
             <input type="text" value="${esc(b.holder)}" onchange="siteSettings.banks[${i}].holder=this.value" class="inp" style="flex:1;height:1.7rem;font-size:.68rem;" placeholder="Atas Nama" />
-            <button class="btn btn-xs btn-danger" onclick="siteSettings.banks.splice(${i},1);renderSettingsForm()"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-xs btn-danger" onclick="siteSettings.banks.splice(${i},1);renderSettingsForm()"><i class="fas fa-trash"></i> Hapus</button>
           </div>
         `).join('') || '<div class="tbl-empty"><i class="fas fa-piggy-bank"></i>Belum ada rekening penampung</div>';
       }
@@ -3086,6 +3389,104 @@
     let cropper = null;
     let currentCropType = '';
     let currentCropIndex = -1;
+    let pendingPhotoCtx = null; // { kind:'admin-self'|'user', uid?, oldUrl? }
+
+    /* Dibutuhkan performCropAndUpload untuk tipe 'profile' */
+    function applyAdminProfilePhoto(url) {
+      if (!pendingPhotoCtx) return;
+      if (pendingPhotoCtx.kind === 'admin-self') {
+        // foto profil admin yang sedang login -> simpan ke akunnya
+        const adminUid = currentAdmin && (currentAdmin.uid || (currentAdmin.user && currentAdmin.user.phone) ? ('u_' + currentAdmin.user.phone) : '');
+        const uname = currentAdmin && currentAdmin.user ? currentAdmin.user.name : '';
+        const uphone = currentAdmin && currentAdmin.user ? currentAdmin.user.phone : '';
+        const uemail = currentAdmin && currentAdmin.user ? currentAdmin.user.email : '';
+        if (pendingPhotoCtx.oldUrl) deleteLandingImg(pendingPhotoCtx.oldUrl);
+        secureFetch('manager.php?action=update_user_admin', {
+          uid: adminUid, jenis_akun: 'admin',
+          user: { name: uname, phone: uphone, email: uemail, photo: url }
+        }).then(() => okMsg('Foto profil admin diperbarui')).catch(() => errMsg('Gagal menyimpan foto profil admin'));
+        if (currentAdmin.user) currentAdmin.user.photo = url;
+        renderAdmAvatar(url);
+      } else if (pendingPhotoCtx.kind === 'user') {
+        const u = usersData.find(x => String(x.uid) === String(pendingPhotoCtx.uid));
+        if (u) {
+          if (pendingPhotoCtx.oldUrl) deleteLandingImg(pendingPhotoCtx.oldUrl);
+          u.user = u.user || {};
+          u.user.photo = url;
+          secureFetch('manager.php?action=update_user_admin', {
+            uid: u.uid, jenis_akun: u.jenis_akun || 'member',
+            user: { name: u.user.name || '', phone: u.user.phone || '', email: u.user.email || '', address: u.user.address || '', photo: url }
+          }).then(() => { okMsg('Foto profil user diperbarui'); }).catch(() => errMsg('Gagal menyimpan foto user'));
+          renderUsersTable();
+        }
+      }
+      pendingPhotoCtx = null;
+    }
+    function renderAdmAvatar(url) {
+      const av = $('admAvatar');
+      if (!av) return;
+      if (url) {
+        av.innerHTML = '<img src="../' + url + '" style="width:100%;height:100%;border-radius:inherit;object-fit:cover;">';
+      } else {
+        const nm = (currentAdmin && currentAdmin.user && currentAdmin.user.name) || 'AD';
+        av.textContent = nm.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+      }
+    }
+    /* Foto profil admin yang sedang login (avatar sidebar) */
+    function uploadAdminSelfPhoto(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const oldUrl = (currentAdmin && currentAdmin.user && currentAdmin.user.photo) || null;
+      pendingPhotoCtx = { kind: 'admin-self', oldUrl: oldUrl };
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $('cropperModal').classList.remove('hidden');
+        const image = $('cropperImage');
+        image.src = e.target.result;
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(image, { aspectRatio: 1, viewMode: 1, background: false });
+        currentCropType = 'profile';
+        currentCropIndex = -1;
+        input.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    /* Dipanggil dari input file foto profil user di tabel users */
+    function uploadUserPhoto(input, uid) {
+      const file = input.files[0];
+      if (!file) return;
+      const u = usersData.find(x => String(x.uid) === String(uid));
+      pendingPhotoCtx = { kind: 'user', uid: uid, oldUrl: (u && u.user && u.user.photo) || null };
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $('cropperModal').classList.remove('hidden');
+        const image = $('cropperImage');
+        image.src = e.target.result;
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(image, { aspectRatio: 1, viewMode: 1, background: false });
+        currentCropType = 'profile';
+        currentCropIndex = -1;
+        input.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+    async function deleteUserPhoto(uid) {
+      const u = usersData.find(x => String(x.uid) === String(uid));
+      if (!u || !u.user) return;
+      const old = u.user.photo;
+      if (!confirm('Hapus foto profil user ini?')) return;
+      if (old) deleteLandingImg(old);
+      u.user.photo = '';
+      try {
+        await secureFetch('manager.php?action=update_user_admin', {
+          uid: u.uid, jenis_akun: u.jenis_akun || 'member',
+          user: { name: u.user.name || '', phone: u.user.phone || '', email: u.user.email || '', address: u.user.address || '', photo: '' }
+        });
+        okMsg('Foto profil user dihapus');
+      } catch (e) { errMsg('Gagal menghapus foto user'); }
+      renderUsersTable();
+    }
     
     function uploadLandingImg(input, type, index) {
       const file = input.files[0];
@@ -3128,12 +3529,18 @@
       cropper = null;
     }
     
+    function cropDimsFor(type) {
+      if (type === 'main') return { width: 800, height: 1000 };
+      if (type === 'sec') return { width: 780, height: 360 };
+      if (type === 'promoimg') return { width: 1100, height: 500 }; // rasio 11:5
+      if (type === 'profile') return { width: 600, height: 600 };   // foto profil 1:1
+      return { width: 800, height: 800 };
+    }
+
     async function performCropAndUpload() {
       if (!cropper) return;
-      const canvas = cropper.getCroppedCanvas({
-        width: currentCropType === 'main' ? 800 : 780,
-        height: currentCropType === 'main' ? 1000 : 360,
-      });
+      const dims = cropDimsFor(currentCropType);
+      const canvas = cropper.getCroppedCanvas(dims);
       canvas.toBlob(async (blob) => {
         const fd = new FormData();
         fd.append('image', blob, 'cropped.jpg');
@@ -3143,15 +3550,17 @@
           const res = await fetch('../icons/syslndng.php', { method: 'POST', body: fd });
           const data = await res.json();
           if (data.status) {
-            if (currentCropType === 'main') landingDataAdmin.main_sliders[currentCropIndex].img = data.url;
-            else landingDataAdmin.sec_sliders[currentCropIndex].img = data.url;
-            renderLandingAdmin();
+            const url = data.url;
+            if (currentCropType === 'main') { landingDataAdmin.main_sliders[currentCropIndex].img = url; renderLandingAdmin(); }
+            else if (currentCropType === 'sec') { landingDataAdmin.sec_sliders[currentCropIndex].img = url; renderLandingAdmin(); }
+            else if (currentCropType === 'promoimg') { siteSettings.promo_imgs[currentCropIndex].img = url; renderSettingsForm(); }
+            else if (currentCropType === 'profile') { applyAdminProfilePhoto(url); }
             okMsg('Gambar berhasil diunggah');
           } else errMsg(data.message || 'Gagal upload');
         } catch (e) { errMsg('Gagal upload gambar'); }
         if (cropper) cropper.destroy();
         cropper = null;
-      }, 'image/jpeg', 0.85);
+      }, 'image/jpeg', 0.88);
     }
     
     async function deleteLandingImg(url) {
@@ -3178,6 +3587,64 @@
       } catch (e) { errMsg('Gagal menyimpan landing page'); }
     }
     
+    /* ---------------- Runtime voucher (stok live dari voucherdata.php) ---------------- */
+    let voucherRuntime = { stock: {}, used: {} };
+    async function fetchVoucherRuntime() {
+      try {
+        const res = await fetch('../voucherdata.php?action=get');
+        const d = await res.json();
+        if (d && d.status) {
+          voucherRuntime = { stock: d.stock || {}, used: d.used || {} };
+          renderSettingsForm();
+        }
+      } catch (e) { /* jembatan belum diunggah -> diabaikan */ }
+    }
+    async function resetVoucherStock(i) {
+      const v = siteSettings.vouchers[i];
+      if (!v || !v.code) return errMsg('Kode voucher kosong');
+      const stock = parseInt(v.stock) || 0;
+      if (!confirm('Isi ulang stok voucher ' + v.code + ' menjadi ' + stock + ' dan hapus catatan pemakaiannya?')) return;
+      try {
+        const res = await fetch('../voucherdata.php', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reset', code: v.code, stock: stock })
+        });
+        const d = await res.json();
+        if (d && d.status) { okMsg(d.message || 'Stok voucher direset'); fetchVoucherRuntime(); }
+        else errMsg(d.message || 'Gagal reset stok');
+      } catch (e) { errMsg('Gagal terhubung ke voucherdata.php'); }
+    }
+
+    /* ---------------- Foto banner "Promo Untukmu" ---------------- */
+    function addPromoImageRow() {
+      siteSettings.promo_imgs = siteSettings.promo_imgs || [];
+      siteSettings.promo_imgs.push({ img: '', title: '' });
+      renderSettingsForm();
+    }
+    function deletePromoImgRow(i) {
+      const p = siteSettings.promo_imgs[i];
+      if (p && p.img) deleteLandingImg(p.img);
+      siteSettings.promo_imgs.splice(i, 1);
+      renderSettingsForm();
+    }
+    function uploadPromoImg(input, index) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $('cropperModal').classList.remove('hidden');
+        const image = $('cropperImage');
+        image.src = e.target.result;
+        if (cropper) cropper.destroy();
+        // Rasio 11:5 sesuai banner "Promo Untukmu"
+        cropper = new Cropper(image, { aspectRatio: 11 / 5, viewMode: 1, background: false });
+        currentCropType = 'promoimg';
+        currentCropIndex = index;
+        input.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
     /* ---------------- Row adders ---------------- */
     function addPromoRow() {
       siteSettings.promos = siteSettings.promos || [];
@@ -3186,7 +3653,7 @@
     }
     function addVoucherRow() {
       siteSettings.vouchers = siteSettings.vouchers || [];
-      siteSettings.vouchers.push({ code: "DISCOUNT5", title: "Diskon Rp5.000", desc: "Min. Rp20.000", val: 5000, type: "flat", min: 20000, max: 5000, svc: [], exp: "31 Des 2026", claimed: true, used: false });
+      siteSettings.vouchers.push({ code: "DISCOUNT5", title: "Diskon Rp5.000", desc: "Min. Rp20.000", val: 5000, type: "flat", min: 20000, max: 5000, svc: [], exp: "31 Des 2026", claimed: true, used: false, once: true, stock: 100 });
       renderSettingsForm();
     }
     function toggleQrisActive() {
@@ -3248,12 +3715,202 @@
       siteSettings.cs_email = $("confCsEmail").value;
       siteSettings.qris_static = $("confQrisStatic").value;
       siteSettings.qris_name = $("confQrisName").value;
+      const waInp = $("confWaAdmin");
+      if (waInp && waInp.value) siteSettings.cs_phone = waInp.value;
       try {
         const data = await secureFetch("seting.php", { settings: siteSettings });
         okMsg(data.message || "Pengaturan berhasil disimpan!");
+        // Sinkron stok voucher ke jembatan voucherdata.php (voucher baru saja)
+        try {
+          await fetch('../voucherdata.php', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'sync', vouchers: siteSettings.vouchers || [] })
+          });
+          fetchVoucherRuntime();
+        } catch (e2) {}
       } catch (e) { errMsg("Gagal menyimpan pengaturan."); }
     }
     
+    /* ========================================================================
+       SIARAN MASSAL (BROADCAST)
+       Disimpan di siteSettings.broadcasts = [ {id, title, body, img, show_count,
+         target:'all'|'selected', targets:[uid...], created_at} ]
+       Gambar memakai jembatan icons/syslndng.php (sama seperti foto landing).
+       ===================================================================== */
+    let editingBcId = '';
+
+    function bcTargetEl() {
+      const r = document.querySelector('input[name="bcTarget"]:checked');
+      return r ? r.value : 'all';
+    }
+    function bcSelectedUids() {
+      return [...document.querySelectorAll('.bc-user-cb:checked')].map(cb => cb.value);
+    }
+    function toggleBcTarget() {
+      const val = bcTargetEl();
+      $("bcUserPickWrap").style.display = (val === 'selected') ? 'block' : 'none';
+      if (val === 'selected') renderBcUserList(bcSelectedUids());
+    }
+    function bcSelectAll(on) {
+      document.querySelectorAll('.bc-user-cb').forEach(cb => cb.checked = on);
+    }
+    function renderBcUserList(preselect = []) {
+      const wrap = $("bcUserList");
+      if (!wrap) return;
+      const list = (usersData || []).filter(u => (u.jenis_akun || 'member') !== 'admin');
+      if (!list.length) { wrap.innerHTML = '<div class="tbl-empty"><i class="fas fa-user-slash"></i>Belum ada data user. Muat data dulu.</div>'; return; }
+      wrap.innerHTML = list.map(u => {
+        const key = userBlockKey(u);
+        const checked = preselect.includes(key) || preselect.includes(String(u.uid)) ? 'checked' : '';
+        const photo = u.user && u.user.photo;
+        return `<label style="display:flex;align-items:center;gap:.45rem;padding:.35rem .5rem;border:1px solid var(--border);border-radius:var(--r-sm);font-size:.68rem;cursor:pointer;background:var(--surface-2);">
+          <input type="checkbox" class="bc-user-cb" value="${esc(key)}" ${checked} style="accent-color:var(--pri);">
+          <span style="width:1.4rem;height:1.4rem;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--pri-soft);flex-shrink:0;">
+            ${photo ? `<img src="../${esc(String(photo).replace(/^\.?\//,'').replace(/^(\.\.\/)+/,''))}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-user" style="font-size:.6rem;color:var(--pri-text);"></i>'}
+          </span>
+          <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><b>${esc(u.user?.name || '-')}</b> · ${esc(u.user?.phone || u.uid || '')}</span>
+        </label>`;
+      }).join('');
+    }
+
+    function uploadBcImage(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const fd = new FormData();
+      fd.append('image', file);
+      fd.append('action', 'upload');
+      fetch('../icons/syslndng.php', { method: 'POST', body: fd })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status) {
+            const old = $("bcImgPreview").dataset.url;
+            if (old) deleteLandingImg(old);
+            $("bcImgPreview").src = '../' + data.url;
+            $("bcImgPreview").dataset.url = data.url;
+            $("bcImgPreview").style.display = 'block';
+            $("bcImgPh").style.display = 'none';
+            okMsg('Gambar siaran diunggah');
+          } else errMsg(data.message || 'Gagal mengunggah gambar');
+        }).catch(() => errMsg('Gagal mengunggah gambar siaran'));
+      input.value = '';
+    }
+    function clearBcImage() {
+      const old = $("bcImgPreview").dataset.url;
+      if (old) deleteLandingImg(old);
+      $("bcImgPreview").src = '';
+      $("bcImgPreview").dataset.url = '';
+      $("bcImgPreview").style.display = 'none';
+      $("bcImgPh").style.display = '';
+    }
+
+    function resetBcForm() {
+      editingBcId = '';
+      $("bcTitle").value = '';
+      $("bcBody").value = '';
+      $("bcShow").value = '1';
+      clearBcImage();
+      const all = document.querySelector('input[name="bcTarget"][value="all"]');
+      if (all) all.checked = true;
+      toggleBcTarget();
+      $("bcSaveBtn").innerHTML = '<i class="fas fa-paper-plane"></i> Simpan &amp; Kirim Siaran';
+    }
+    function newBroadcast() { resetBcForm(); $("bcTitle").focus(); }
+
+    function editBroadcast(id) {
+      const b = (siteSettings.broadcasts || []).find(x => x.id === id);
+      if (!b) return;
+      editingBcId = id;
+      $("bcTitle").value = b.title || '';
+      $("bcBody").value = b.body || '';
+      $("bcShow").value = (b.show_count === undefined ? 1 : b.show_count);
+      const radio = document.querySelector('input[name="bcTarget"][value="' + (b.target === 'selected' ? 'selected' : 'all') + '"]');
+      if (radio) radio.checked = true;
+      toggleBcTarget();
+      if (b.target === 'selected') renderBcUserList(b.targets || []);
+      if (b.img) {
+        $("bcImgPreview").src = '../' + b.img;
+        $("bcImgPreview").dataset.url = b.img;
+        $("bcImgPreview").style.display = 'block';
+        $("bcImgPh").style.display = 'none';
+      } else clearBcImage();
+      $("bcSaveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Perbarui Siaran';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function saveBroadcast(id) {
+      const title = $("bcTitle").value.trim();
+      const body = $("bcBody").value.trim();
+      const img = $("bcImgPreview").dataset.url || '';
+      const showCount = Math.max(0, parseInt($("bcShow").value) || 1);
+      const target = bcTargetEl();
+      const targets = target === 'selected' ? bcSelectedUids() : [];
+      if (!title && !body && !img) return errMsg('Isi judul / pesan / gambar siaran terlebih dahulu.');
+      if (target === 'selected' && !targets.length) return errMsg('Pilih minimal satu user untuk siaran terpilih.');
+      siteSettings.broadcasts = siteSettings.broadcasts || [];
+      const existing = id ? siteSettings.broadcasts.find(x => x.id === id) : null;
+      if (existing) {
+        if (img && existing.img && existing.img !== img) deleteLandingImg(existing.img);
+        Object.assign(existing, { title, body, img, show_count: showCount, target, targets });
+      } else {
+        siteSettings.broadcasts.unshift({
+          id: 'bc_' + Date.now().toString(36),
+          title, body, img, show_count: showCount, target, targets,
+          created_at: new Date().toISOString()
+        });
+      }
+      try {
+        await secureFetch("seting.php", { settings: siteSettings });
+        okMsg(existing ? 'Siaran diperbarui' : 'Siaran terkirim ke ' + (target === 'all' ? 'SEMUA pengguna' : targets.length + ' pengguna terpilih'));
+        resetBcForm();
+        renderBroadcastList();
+      } catch (e) { errMsg('Gagal menyimpan siaran ke seting.php'); }
+    }
+
+    async function deleteBroadcast(id) {
+      const b = (siteSettings.broadcasts || []).find(x => x.id === id);
+      if (!b) return;
+      if (!confirm('Hapus siaran "' + (b.title || 'tanpa judul') + '"?')) return;
+      if (b.img) deleteLandingImg(b.img);
+      siteSettings.broadcasts = siteSettings.broadcasts.filter(x => x.id !== id);
+      try {
+        await secureFetch("seting.php", { settings: siteSettings });
+        okMsg('Siaran dihapus');
+        if (editingBcId === id) resetBcForm();
+        renderBroadcastList();
+      } catch (e) { errMsg('Gagal menghapus siaran'); }
+    }
+
+    function renderBroadcastList() {
+      const c = $("bcListContainer");
+      if (!c) return;
+      const list = siteSettings.broadcasts || [];
+      if (!list.length) { c.innerHTML = '<div class="tbl-empty"><i class="fas fa-tower-cell"></i>Belum ada siaran. Buat siaran baru di atas.</div>'; return; }
+      c.innerHTML = list.map(b => `
+        <div class="list-item" style="display:flex;gap:.7rem;align-items:flex-start;">
+          <div class="thumb" style="width:5rem;height:3.6rem;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;">
+            ${b.img
+              ? `<img src="../${esc(b.img)}" style="object-fit:cover;cursor:zoom-in;" onclick="openImgView('../${esc(b.img)}')" title="Klik untuk ukuran penuh">`
+              : `<span class="ph" style="font-size:.6rem;">Teks</span>`}
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div class="row" style="gap:.4rem;flex-wrap:wrap;">
+              <b style="font-size:.74rem;">${esc(b.title || '(Tanpa judul)')}</b>
+              <span class="badge ${b.target === 'selected' ? 'b-warn' : 'b-ok'}" style="font-size:.58rem;">
+                <i class="fas ${b.target === 'selected' ? 'fa-user-check' : 'fa-users'}"></i>
+                ${b.target === 'selected' ? 'Terpilih (' + (b.targets || []).length + ' user)' : 'Semua User'}
+              </span>
+              <span class="badge b-info" style="font-size:.58rem;"><i class="fas fa-eye"></i> Tampil ${b.show_count === 0 ? '∞' : b.show_count + 'x'}</span>
+            </div>
+            <p style="font-size:.66rem;color:var(--text-2);margin-top:.25rem;white-space:pre-wrap;">${esc(b.body || '')}</p>
+          </div>
+          <div class="row" style="gap:.3rem;flex-shrink:0;">
+            <button class="btn btn-xs btn-soft" onclick="editBroadcast('${esc(b.id)}')"><i class="fas fa-pen"></i> Edit</button>
+            <button class="btn btn-xs btn-danger" onclick="deleteBroadcast('${esc(b.id)}')"><i class="fas fa-trash"></i> Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
     /* ========================================================================
        ANTRIAN TOP UP
        ===================================================================== */
@@ -3400,23 +4057,71 @@
       }
     }
     
+    /* ========================================================================
+       LIVE CEK STATUS TRANSAKSI
+       Pola mengikuti PERSIS index.html: menentukan endpoint dari sid
+       transaksi (xl_akrab -> api/api1.php, lainnya -> api/api4.php),
+       memanggil dengan secureFetch + {action:'status', refid}, lalu
+       menampilkan RESPON MENTAH JSON dari server apa adanya.
+       ===================================================================== */
+    function apiUrlForTx(t) {
+      const sid = String(t && (t.sid || t.service_id || t.sid_layanan) || '').toLowerCase();
+      // Top up / QRIS / transaksi internal tidak punya ref provider
+      return (sid === 'xl_akrab' || sid.includes('xl_akrab') || sid.includes('akrab')) ? 'api/api1.php' : 'api/api4.php';
+    }
+    function txRefOf(t) {
+      return String(t.ref || t.refid || t.id || '');
+    }
+
+    // Menampilkan respon mentah JSON di modal (di-pretty-print agar mudah dibaca)
+    function showRawJsonModal(ref, data, extraTitle) {
+      let pretty = '';
+      try { pretty = JSON.stringify(data, null, 2); } catch (e) { pretty = String(data); }
+      const box = $("rawJsonContent");
+      if (box) box.textContent = pretty;
+      setTxt("rawJsonTitle", (extraTitle || "Respon Mentah Server") + " — Ref: " + ref);
+      $("modalRawJson").classList.remove("hidden");
+    }
+    function closeRawJsonModal() { $("modalRawJson").classList.add("hidden"); }
+    function copyRawJson() {
+      const box = $("rawJsonContent");
+      if (box) copyText(box.textContent);
+    }
+
+    /* Lightbox foto ukuran penuh (foto profil user / gambar promo / siaran) */
+    function openImgView(src) {
+      if (!src) return;
+      const el = $("imgViewEl");
+      el.src = src;
+      $("modalImgView").classList.remove("hidden");
+    }
+    function closeImgView() { $("modalImgView").classList.add("hidden"); }
+
+    // Inti pengecekan status — sama seperti app.checkStatus() di index
+    async function runLiveCheck(t) {
+      const ref = txRefOf(t);
+      const apiUrl = apiUrlForTx(t);
+      // Pola index: secureFetch(apiUrl + "?action=status", { action:"status", refid })
+      const data = await secureFetch(apiUrl + "?action=status", { action: "status", refid: ref });
+      t.raw_response = data;
+      await secureFetch("manager.php?action=save_tx", { uid: t.uid || ('u_' + t.user_phone), tx: t });
+      return data;
+    }
+
     async function liveCheckTxStatusAdmin(ref) {
+      const t = allTxData.find(x => x.ref === ref || x.refid === ref || x.id === ref);
+      if (!t) { errMsg("Transaksi tidak ditemukan: " + ref); return; }
+      toast("Mengambil status ke provider...", 'info');
       try {
-        const res = await fetch("cektrx.php", {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "status", refid: ref })
-        });
-        const data = await res.json();
-        
-        const t = allTxData.find(x => x.ref === ref);
-        if (t) {
-          t.raw_response = data;
-          await secureFetch("manager.php?action=save_tx", { uid: t.uid || ('u_' + t.user_phone), tx: t });
-        }
-    
-        toast("Respon live cektrx.php: " + JSON.stringify(data), 'info', 'Live Status ' + ref);
+        const data = await runLiveCheck(t);
+        // Tampilkan respon mentah JSON dari server
+        showRawJsonModal(ref, data, "Respon Mentah Provider");
+        // Perbarui tampilan detail modal bila sedang terbuka
+        if (!$("modalTxDetail").classList.contains("hidden")) openTxDetailAdmin(ref);
         initAdminDashboard();
-      } catch (e) { errMsg("Gagal melakukan Live Check Status"); }
+      } catch (e) {
+        errMsg("Gagal melakukan Live Check Status ke " + apiUrlForTx(t));
+      }
     }
     
     async function deleteTxAdmin(ref) {
@@ -4109,12 +4814,12 @@
           <td>${r.tags.length ? r.tags.map(t => '<span class="badge b-pri">' + esc(t) + '</span>').join(' ') : '<span class="cell-sub">-</span>'}</td>
           <td>
             <div class="row-wrap" style="gap:.2rem;">
-              <button class="btn btn-xs btn-soft" onclick="txiOpenModal('${esc(r.ref)}')" title="Lacak detail"><i class="fas fa-route"></i></button>
-              <button class="btn btn-xs btn-warn" onclick="txiLiveCheck('${esc(r.ref)}')" title="Live cek provider"><i class="fas fa-bolt"></i></button>
-              <button class="btn btn-xs btn-ok" onclick="txiSetStatus('${esc(r.ref)}','success')" title="Tandai sukses"><i class="fas fa-check"></i></button>
-              <button class="btn btn-xs btn-danger" onclick="txiSetStatus('${esc(r.ref)}','failed')" title="Tandai gagal"><i class="fas fa-xmark"></i></button>
-              <button class="btn btn-xs btn-soft" onclick="txiToggleFlagOne('${esc(r.ref)}')" title="Tandai pantau"><i class="${r.flag ? 'fas' : 'far'} fa-flag"></i></button>
-              <button class="btn btn-xs btn-soft" onclick="txiTraceUser('${esc(r.uid)}')" title="Lacak pengguna"><i class="fas fa-user-magnifying-glass"></i></button>
+              <button class="btn btn-xs btn-soft" onclick="txiOpenModal('${esc(r.ref)}')" title="Lacak detail"><i class="fas fa-route"></i> Detail</button>
+              <button class="btn btn-xs btn-warn" onclick="txiLiveCheck('${esc(r.ref)}')" title="Live cek provider"><i class="fas fa-bolt"></i> Cek</button>
+              <button class="btn btn-xs btn-ok" onclick="txiSetStatus('${esc(r.ref)}','success')" title="Tandai sukses"><i class="fas fa-check"></i> Sukses</button>
+              <button class="btn btn-xs btn-danger" onclick="txiSetStatus('${esc(r.ref)}','failed')" title="Tandai gagal"><i class="fas fa-xmark"></i> Gagal</button>
+              <button class="btn btn-xs btn-soft" onclick="txiToggleFlagOne('${esc(r.ref)}')" title="Tandai pantau"><i class="${r.flag ? 'fas' : 'far'} fa-flag"></i> Pantau</button>
+              <button class="btn btn-xs btn-soft" onclick="txiTraceUser('${esc(r.uid)}')" title="Lacak pengguna"><i class="fas fa-user-magnifying-glass"></i> User</button>
             </div>
           </td>
         </tr>`;
@@ -4179,18 +4884,24 @@
       if (!rows.length) return toast('Pilih transaksi yang ingin dicek', 'warn');
       toast('Menjalankan live check untuk ' + rows.length + ' transaksi…', 'info');
       let ok = 0;
+      let lastData = null, lastRef = null;
       for (const r of rows) {
         try {
-          const res = await fetch('cektrx.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'status', refid: r.ref }) });
-          const data = await res.json();
+          // Pola sama dengan index: api1/api4 + secureFetch action=status
+          const sid = String(r.raw && (r.raw.sid || r.raw.service_id) || r.service || '').toLowerCase();
+          const apiUrl = (sid.includes('xl_akrab') || sid.includes('akrab')) ? 'api/api1.php' : 'api/api4.php';
+          const data = await secureFetch(apiUrl + '?action=status', { action: 'status', refid: r.ref });
           r.raw.raw_response = data;
           await secureFetch('manager.php?action=save_tx', { uid: r.uid, tx: r.raw });
           ok++;
+          lastData = data; lastRef = r.ref;
           txiLog('live_check', r.ref, 'Live cek provider dijalankan');
         } catch (e) {}
       }
-      toast(ok + ' transaksi tersinkron dengan provider', 'ok');
+      toast(ok + ' transaksi tersinkron dengan provider', ok ? 'ok' : 'err');
       await initAdminDashboard();
+      // Tampilkan respon mentah JSON dari transaksi terakhir yang dicek
+      if (lastData) showRawJsonModal(lastRef, lastData, "Respon Mentah Provider (cek terakhir)");
     }
 
     function txiBulkFlag(on) {
@@ -4263,12 +4974,15 @@
     async function txiLiveCheck(ref) {
       const r = TXI.byRef[ref]; if (!r) return;
       try {
-        const res = await fetch('cektrx.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'status', refid: ref }) });
-        const data = await res.json();
+        // Pola sama dengan index: pilih api1/api4 dari sid lalu secureFetch action=status
+        const sid = String(r.raw && (r.raw.sid || r.raw.service_id) || r.service || '').toLowerCase();
+        const apiUrl = (sid.includes('xl_akrab') || sid.includes('akrab')) ? 'api/api1.php' : 'api/api4.php';
+        const data = await secureFetch(apiUrl + '?action=status', { action: 'status', refid: ref });
         r.raw.raw_response = data;
         await secureFetch('manager.php?action=save_tx', { uid: r.uid, tx: r.raw });
         txiLog('live_check', ref, 'Respon: ' + JSON.stringify(data).slice(0, 180));
-        toast('Respon provider: ' + JSON.stringify(data).slice(0, 200), 'info', 'Live Status ' + ref);
+        // Tampilkan respon mentah JSON dari server
+        showRawJsonModal(ref, data, "Respon Mentah Provider");
         await initAdminDashboard();
         if (TXI.modalRef === ref) txiOpenModal(ref);
       } catch (e) { toast('Gagal melakukan live check', 'err'); }
