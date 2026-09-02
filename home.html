@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- META CACHE BUSTING (ANTI CACHE BROWSER) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>H2H Integration Center - dt17.store/h2h/</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=20260727" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js?v=20260727"></script>
+  <style>
+    :root {
+        --bg-body: #080d1a;
+        --panel-bg: rgba(17, 27, 46, 0.85);
+        --panel-card: #111b2e;
+        --primary: #3b82f6;
+        --primary-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        --accent: #10b981;
+        --accent-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --text-main: #f8fafc;
+        --text-sub: #94a3b8;
+        --border-color: rgba(255, 255, 255, 0.08);
+        --border-hover: rgba(59, 130, 246, 0.4);
+        --glass-bg: rgba(15, 23, 42, 0.75);
+        --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(37, 99, 235, 0.05);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 40px; background-image: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.12) 0%, transparent 60%); background-attachment: fixed; }
+    
+    .navbar { background: rgba(8, 13, 26, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(59, 130, 246, 0.25); padding: 10px 22px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); }
+    .logo { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: -0.2px; }
+    .logo i { color: var(--primary); filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.7)); font-size: 16px; }
+    .nav-status-pill { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; display: flex; align-items: center; gap: 5px; letter-spacing: 0.5px; }
+    .nav-status-pill .dot { width: 5px; height: 5px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; animation: pulseDot 1.8s infinite; }
+    @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+    .user-nav { display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 30px; backdrop-filter: blur(8px); }
+    
+    .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+    
+    /* AUTH OVERLAY */
+    #authOverlay { position: fixed; inset: 0; background: rgba(8, 13, 26, 0.88); backdrop-filter: blur(16px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; }
+    .auth-card { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 360px; padding: 25px; box-shadow: var(--shadow-card); transition: transform 0.3s ease; }
+    .auth-title { font-size: 18px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; text-align: center; }
+    .auth-subtitle { font-size: 11px; color: var(--text-sub); text-align: center; margin-bottom: 20px; }
+    
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 10px; font-weight: 600; color: var(--text-sub); margin-bottom: 4px; letter-spacing: 0.2px; }
+    input, select { width: 100%; padding: 8px 11px; background: rgba(8, 13, 26, 0.7); border: 1px solid var(--border-color); border-radius: 8px; color: white; font-size: 11px; outline: none; transition: all 0.2s ease; }
+    input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); background: rgba(8, 13, 26, 0.9); }
+    
+    .btn { background: var(--primary-gradient); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4); opacity: 0.95; }
+    .btn:active { transform: translateY(0); }
+    .btn-block { width: 100%; }
+    .btn-success { background: var(--accent-gradient); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25); }
+    .btn-success:hover { box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4); }
+    .btn-danger { background: linear-gradient(135deg, #dc2626, #ef4444); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
+    .btn-warning { background: linear-gradient(135deg, #d97706, #f59e0b); color: #000; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); }
+    .btn-outline { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-main); box-shadow: none; }
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); }
+    
+    .checkbox-group { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sub); margin-bottom: 15px; cursor: pointer; user-select: none; }
+    .checkbox-group input { width: auto; accent-color: var(--primary); }
+    
+    /* DASHBOARD GRID */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .card { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; box-shadow: var(--shadow-card); backdrop-filter: blur(8px); transition: border-color 0.3s; }
+    .card:hover { border-color: var(--border-hover); }
+    
+    .key-box { background: rgba(8, 13, 26, 0.8); padding: 10px 11px; border-radius: 8px; font-family: monospace; color: #38bdf8; font-size: 11px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); margin: 10px 0; word-break: break-all; }
+    .key-box i:hover { color: #7dd3fc; }
+    
+    /* TABS & DOCUMENTATION */
+    .tab-nav { display: flex; gap: 5px; background: rgba(8, 13, 26, 0.6); padding: 5px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; scrollbar-width: none; }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-btn { padding: 8px 14px; background: transparent; border: 1px solid transparent; color: var(--text-sub); font-weight: 700; cursor: pointer; white-space: nowrap; transition: all 0.25s ease; font-size: 11px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; }
+    .tab-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+    .tab-btn.active { color: #60a5fa; background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(59, 130, 246, 0.1) 100%); border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15); }
+    
+    pre { background: #060a14; padding: 12px; border-radius: 10px; font-size: 10px; color: #a7f3d0; overflow-x: auto; border: 1px solid var(--border-color); margin-top: 8px; line-height: 1.5; word-break: break-all; font-family: monospace; }
+    .badge { font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; }
+    .badge-admin { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-user { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-success { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-fail { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 12px; font-size: 11px; }
+    th, td { padding: 10px 9px; border-bottom: 1px solid var(--border-color); text-align: left; }
+    th { color: var(--text-sub); font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px; background: rgba(8, 13, 26, 0.4); }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    
+    .modal { position: fixed; inset: 0; background: rgba(4, 8, 16, 0.85); backdrop-filter: blur(10px); z-index: 10001; display: none; align-items: center; justify-content: center; padding: 15px; }
+    .modal-content { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 420px; padding: 22px; box-shadow: var(--shadow-card); }
+    .url-highlight { background: #060a14; border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; font-family: monospace; color: #38bdf8; font-size: 11px; margin-top: 5px; display: inline-block; word-break: break-all; }
+    
+    /* KTP CARD & BANK BALANCE STYLING */
+    .ktp-card { background: linear-gradient(135deg, #091122 0%, #132240 45%, #0a162d 100%); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 16px; padding: 20px; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65), inset 0 0 25px rgba(59, 130, 246, 0.12); }
+    .ktp-card::before { content: 'dt17 VIP MEMBER'; position: absolute; right: -20px; bottom: -20px; font-size: 60px; font-weight: 900; color: rgba(255, 255, 255, 0.025); pointer-events: none; letter-spacing: 2px; }
+    .ktp-card::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%); pointer-events: none; }
+    .ktp-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px; margin-bottom: 14px; }
+    .ktp-chip { width: 36px; height: 26px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%); border-radius: 5px; border: 1px solid rgba(255,255,255,0.3); position: relative; box-shadow: inset 0 1px 2px rgba(255,255,255,0.5), 0 2px 6px rgba(0,0,0,0.5); }
+    .ktp-chip::before { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px; }
+    .balance-bank-box { background: rgba(6, 10, 20, 0.85); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 12px 15px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 2px 8px rgba(0,0,0,0.5); }
+    .balance-bank-text { font-size: 20px; font-weight: 800; color: #10b981; font-family: 'Consolas', 'Courier New', monospace; letter-spacing: 1px; text-shadow: 0 0 12px rgba(16, 185, 129, 0.4); }
+    .stat-card { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 10px; }
+    .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .admin-info-card { background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%); border: 2px solid rgba(59, 130, 246, 0.5); border-radius: 14px; padding: 18px; margin-top: 20px; box-shadow: 0 0 25px rgba(37, 99, 235, 0.25); position: relative; overflow: hidden; }
+    
+    /* MOBILE COMPACT STYLING (40% SMALLER & ULTRA COMPACT) */
+    @media (max-width: 768px) {
+        body { padding-bottom: 20px; }
+        .navbar { padding: 8px 12px; }
+        .logo { font-size: 12px; gap: 6px; }
+        .nav-status-pill { display: none !important; }
+        .user-nav { gap: 6px !important; padding: 4px 8px !important; border-radius: 20px !important; }
+        .hide-mobile-text { display: none !important; }
+        #navUsername { display: inline-block; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+        .container { padding: 0 10px; margin: 10px auto; }
+        .grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 15px; }
+        .card { padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+        
+        .auth-card { padding: 14px; border-radius: 10px; max-width: 95%; }
+        .auth-title { font-size: 14px; margin-bottom: 4px; }
+        .auth-subtitle { font-size: 9px; margin-bottom: 12px; }
+        .form-group { margin-bottom: 8px; }
+        label { font-size: 8px; margin-bottom: 3px; }
+        input, select { padding: 5px 7px; font-size: 9px; border-radius: 5px; }
+        
+        .btn { padding: 5px 8px; font-size: 9px; border-radius: 5px; gap: 4px; }
+        .key-box { padding: 6px 8px; font-size: 9px; margin: 6px 0; border-radius: 5px; }
+        
+        .tab-nav { gap: 2px; margin-bottom: 10px; }
+        .tab-btn { padding: 5px 8px; font-size: 9px; border-radius: 5px; }
+        
+        table { font-size: 9px; }
+        th, td { padding: 5px 6px; }
+        th { font-size: 8px; }
+        
+        pre { padding: 6px; font-size: 8px; border-radius: 6px; line-height: 1.2; }
+        .badge { font-size: 6px; padding: 2px 4px; border-radius: 3px; }
+        
+        .modal { padding: 8px; }
+        .modal-content { padding: 12px; border-radius: 8px; max-width: 95%; }
+        .modal-content h3 { font-size: 12px; margin-bottom: 6px !important; }
+        
+        h2 { font-size: 12px !important; }
+        h3 { font-size: 11px !important; font-weight: 700; }
+        p { font-size: 9px !important; }
+        
+        .url-highlight { padding: 4px 6px; font-size: 8px; border-radius: 4px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-network-wired"></i>
+      <span>H2H Integration Center <small style="font-size: 11px; color: var(--text-sub); font-weight: 500;">- dt17.store</small></span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div class="nav-status-pill">
+        <span class="dot"></span> SYSTEM ONLINE
+      </div>
+      <div class="user-nav" id="userNavInfo" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #10b981); display: flex; align-items: center; justify-content: center; font-size: 12px; color: white;">
+            <i class="fas fa-user"></i>
+          </div>
+          <span id="navUsername" style="font-weight: 700; font-size: 12px;"></span>
+        </div>
+        <span id="navRoleBadge" class="badge"></span>
+        <button class="btn btn-outline" onclick="handleLogout()" style="padding: 5px 10px; font-size: 11px; border-radius: 20px; border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">
+          <i class="fas fa-sign-out-alt"></i> <span class="hide-mobile-text">Keluar</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- AUTH OVERLAY MODAL -->
+  <div id="authOverlay">
+    <!-- LOGIN FORM -->
+    <div class="auth-card" id="loginForm">
+      <div class="auth-title">Login Member H2H</div>
+      <div class="auth-subtitle">Masuk untuk mengakses Dashboard & API Key</div>
+
+      <div class="form-group">
+        <label>Nomor WhatsApp</label>
+        <input type="text" id="logWA" placeholder="Contoh: 087812345678" />
+      </div>
+      <div class="form-group">
+        <label>Kata Sandi</label>
+        <input type="password" id="logPass" placeholder="Masukkan Password" />
+      </div>
+
+      <label class="checkbox-group">
+        <input type="checkbox" id="saveLogin"> Simpan Sesi Login (Save Login)
+      </label>
+
+      <button class="btn btn-block" onclick="handleLogin()">Masuk Sekarang</button>
+
+      <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-sub);">
+        Belum punya akun? <span style="color: var(--primary); cursor: pointer; font-weight: 700;" onclick="switchAuth('register')">Daftar Disini</span>
+      </div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="auth-card" id="registerForm" style="display: none;">
+      <div class="auth-title">Buat Akun Member</div>
+      <div class="auth-subtitle">Pendaftar pertama otomatis menjadi ADMIN</div>
+
+      <!-- STEP 1: FORM PENGISIAN DATA -->
+      <div id="regFieldsSection">
+        <div class="form-group"><label>Username</label><input type="text" id="regUsername" placeholder="reseller123" /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="nama@email.com" /></div>
+        <div class="form-group"><label>Nomor WhatsApp</label><input type="text" id="regWA" placeholder="08xxxxxxxxxx" /></div>
+        <div class="form-group"><label>Kata Sandi</label><input type="password" id="regPass" placeholder="Minimal 6 karakter" /></div>
+        <div class="form-group"><label>Konfirmasi Kata Sandi</label><input type="password" id="regPassConfirm" placeholder="Ulangi Kata Sandi" /></div>
+
+        <button class="btn btn-success btn-block" onclick="handleRegister()">Daftar Gratis</button>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-sub);">
+        Sudah punya akun? <span style="color: var(--primary); cursor: pointer; font-weight: 700;" onclick="switchAuth('login')">Masuk Akun</span>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- OVERLAY AKUN DITANGGUHKAN / BLOKIR -->
+  <div id="suspendedOverlay" style="display: none; position: fixed; inset: 0; background: rgba(8, 13, 26, 0.96); backdrop-filter: blur(20px); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+    <div style="position: absolute; top: 20px; right: 25px;">
+      <button class="btn btn-outline" onclick="handleLogout()" style="padding: 8px 16px; font-size: 12px; border-color: rgba(239, 68, 68, 0.5); color: #fca5a5;">
+        <i class="fas fa-sign-out-alt"></i> Keluar / Logout
+      </button>
+    </div>
+    <div style="background: var(--panel-card); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 20px; max-width: 480px; width: 100%; padding: 35px 25px; text-align: center; box-shadow: 0 0 35px rgba(239, 68, 68, 0.25);">
+      <div style="width: 70px; height: 70px; background: rgba(239, 68, 68, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; color: #ef4444; font-size: 32px;">
+        <i class="fas fa-user-slash"></i>
+      </div>
+      <h2 style="font-size: 20px; color: #ffffff; margin-bottom: 10px; font-weight: 800;">Akses Ditangguhkan</h2>
+      <p style="font-size: 13px; color: #cbd5e1; line-height: 1.6; margin-bottom: 25px;">
+        Akun Anda Sedang Di Tangguhkan Oleh Admin. Silakan hubungi admin untuk informasi lebih lanjut mengenai pemulihan akun Anda.
+      </p>
+      <a href="https://wa.me/6285156776974" target="_blank" class="btn btn-success btn-block" style="padding: 12px; font-size: 13px; font-weight: 700; text-decoration: none;">
+        <i class="fab fa-whatsapp" style="font-size: 16px;"></i> Hubungi Admin via WhatsApp
+      </a>
+    </div>
+  </div>
+  <!-- MAIN DASHBOARD CONTENT -->
+  <div class="container" id="mainDashboard" style="display: none;">
+
+    <!-- USER PROFILE & API KEY -->
+    <div class="grid" style="display: none;">
+      <div class="card">
+        <h3 style="font-size: 16px; margin-bottom: 10px;"><i class="fas fa-key" style="color: var(--primary);"></i> API Key Anda</h3>
+        <p style="font-size: 12px; color: var(--text-sub);">Wajib disertakan pada setiap request transaksi ke server.</p>
+        <div class="key-box">
+          <span id="displayApiKey">dt17_••••••••</span>
+          <div style="display:flex; gap:10px;">
+            <i class="fas fa-eye" id="eyeApiKeyIcon" style="cursor: pointer;" onclick="toggleApiKeyVisibility()" title="Lihat"></i>
+            <i class="fas fa-copy" style="cursor: pointer;" onclick="copyApiKey()" title="Salin"></i>
+          </div>
+        </div>
+        <button class="btn btn-outline" onclick="regenApiKey()" style="padding: 8px 12px; font-size: 12px;"><i class="fas fa-sync"></i> Regenerate API Key Saya</button>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size: 16px; margin-bottom: 10px;"><i class="fas fa-id-card" style="color: var(--accent);"></i> Detail Akun</h3>
+        <p style="font-size: 13px; margin-bottom: 6px;">Email: <b id="profEmail" style="color: white;">-</b></p>
+        <p style="font-size: 13px; margin-bottom: 6px;">WhatsApp: <b id="profWA" style="color: white;">-</b></p>
+        <p style="font-size: 13px; margin-bottom: 6px;">Sisa Saldo: <b id="profSaldo" style="color: var(--accent);">Rp 0</b></p>
+        <p style="font-size: 13px;">Role Akun: <b id="profRole" style="color: white;">-</b></p>
+      </div>
+    </div>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tabBtnDashboard" onclick="switchTab('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard Utama</button>
+
+      <button class="tab-btn" id="tabBtnTrxLangsung" onclick="switchTab('trxLangsung')"><i class="fas fa-bolt"></i> Daftar Harga</button>
+      <button class="tab-btn" onclick="switchTab('history')"><i class="fas fa-history"></i> Riwayat Saya</button>
+      <button class="tab-btn" onclick="switchTab('doc')"><i class="fas fa-book"></i> Dokumentasi & Response JSON</button>
+      <button class="tab-btn" onclick="switchTab('tester')"><i class="fas fa-vial"></i> Interactive Tester</button>
+
+    </div>
+
+    <!-- TAB MAIN DASHBOARD -->
+    <div id="tabDashboard">
+      <div class="grid">
+        <!-- CARD DETAIL AKUN MODEL KTP -->
+        <div class="ktp-card">
+          <div class="ktp-header">
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="width: 8px; height: 8px; background: #f59e0b; border-radius: 50%; box-shadow: 0 0 8px #f59e0b;"></span>
+                <small style="color: #fbbf24; text-transform: uppercase; font-size: 9px; letter-spacing: 1.5px; font-weight: 800;">PLATINUM VIP MEMBER</small>
+              </div>
+              <span style="font-weight: 900; font-size: 15px; color: white; letter-spacing: -0.2px;">dt17.store OFFICIAL</span>
+            </div>
+            <div class="ktp-chip" title="EMV Smart Security Chip"></div>
+          </div>
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 16px; background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #2563eb 0%, #10b981 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); border: 2px solid rgba(255,255,255,0.2);">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 16px; font-weight: 800; color: #ffffff; letter-spacing: 0.2px;" id="profUsernameKtp">-</div>
+              <div style="font-size: 11px; color: var(--text-sub);" id="profEmailKtp">-</div>
+              <div style="font-size: 10px; margin-top: 4px; display: flex; gap: 6px; align-items: center;">
+                <span id="profRoleKtp" class="badge badge-user">USER</span>
+                <span class="badge badge-success"><i class="fas fa-check-circle"></i> VERIFIED</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 12px; font-size: 11px;">
+            <p style="color: var(--text-sub); display: flex; align-items: center; justify-content: space-between;"><span style="color: #94a3b8;"><i class="fab fa-whatsapp" style="color: #25D366; width: 16px;"></i> WhatsApp</span> <b id="profWAKtp" style="color: white;">-</b></p>
+            <p style="color: var(--text-sub); display: flex; align-items: center; justify-content: space-between;"><span style="color: #94a3b8;"><i class="fas fa-key" style="color: var(--warning); width: 16px;"></i> API Key</span>
+              <span style="display:flex; align-items:center; gap:6px;">
+                <code id="displayApiKeyKtp" style="color: #38bdf8; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">dt17_••••••••</code>
+                <i class="fas fa-eye" id="eyeApiKeyIcon" style="cursor: pointer; color:var(--text-sub);" onclick="toggleApiKeyVisibility()" title="Lihat/Sembunyikan"></i>
+              </span>
+            </p>
+          </div>
+          <div style="margin-top: 12px; margin-bottom: 12px; display: flex; gap: 8px;">
+            <button class="btn btn-outline" onclick="copyApiKey()" style="flex: 1; font-size: 11px; border-color: rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.08);"><i class="fas fa-copy" style="color: #60a5fa;"></i> Salin API Key</button>
+            <button class="btn btn-outline" onclick="regenApiKey()" style="flex: 1; font-size: 11px; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.08);"><i class="fas fa-sync" style="color: #fbbf24;"></i> Reset Key</button>
+          </div>
+          <!-- BALANCE BANK STYLE -->
+          <div class="balance-bank-box">
+            <div>
+              <span style="font-size: 9px; color: var(--text-sub); text-transform: uppercase; display: block; font-weight: 800; letter-spacing: 0.8px;">SALDO REKENING H2H AKTIF</span>
+              <span class="balance-bank-text" id="profSaldo">Rp 0</span>
+            </div>
+            <button onclick="toggleBalanceVisibility()" class="btn btn-outline" style="padding: 7px 11px; border-radius: 10px; background: rgba(255,255,255,0.05);" title="Sembunyikan/Tampilkan Saldo">
+              <i class="fas fa-eye" id="eyeBalanceIcon"></i>
+            </button>
+          </div>
+          <button class="btn btn-success btn-block" onclick="openTopupModal()" style="margin-top: 14px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); background: linear-gradient(135deg, #10b981 0%, #059669 100%);"><i class="fas fa-wallet"></i> Topup Saldo (Transfer Manual)</button>
+        </div>
+
+        <!-- INFO SALDO TERPAKAI & AKUMULASI -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="margin-bottom: 15px; padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 10px;">
+            <p style="font-size: 11px; color: #93c5fd; margin-bottom: 10px; line-height: 1.5;">
+              <strong>Ingin punya Website Agen PPOB sendiri?</strong> Tim dt17 Group melayani jasa pembuatan / penjualan Base Website PPOB Siap Pakai untuk bisnis Anda <em>(Perhatian: Produk ini terpisah/berbeda dengan script web H2H ini)</em>.<br>
+              Sudah termasuk Free Maintenance & Fix Bug IT 1 Tahun, serta biaya penambahan custom fitur yang sangat bersahabat.
+            </p>
+            <a href="https://agen.dt17.store" target="_blank" class="btn btn-outline btn-block" style="border-color: #3b82f6; color: #60a5fa; text-decoration: none; font-weight: bold;"><i class="fas fa-external-link-alt"></i> Cek Demo Website PPOB Agen (Harga Seller)</a>
+          </div>
+          <h3 style="font-size: 15px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-wallet" style="color: var(--accent);"></i> Ringkasan Keuangan & Transaksi</h3>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="stat-card">
+              <div class="stat-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;"><i class="fas fa-arrow-down"></i></div>
+              <div>
+                <small style="color: var(--text-sub); font-size: 11px;">Akumulasi Saldo Terpakai</small>
+                <div style="font-size: 16px; font-weight: 800; color: #fca5a5;" id="profSaldoTerpakai">Rp 0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;"><i class="fas fa-check-circle"></i></div>
+              <div>
+                <small style="color: var(--text-sub); font-size: 11px;">Akumulasi Transaksi Berhasil</small>
+                <div style="font-size: 16px; font-weight: 800; color: #6ee7b7;" id="profTotalTrxBerhasil">0 Transaksi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- GRAFIK PEMBELIAN BULAN AN TRADING STYLE -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h2 style="font-size: 16px;"><i class="fas fa-chart-line" style="color: var(--primary);"></i> Grafik Bulanan Multi-Dataset</h2>
+            <p style="font-size: 11px; color: var(--text-sub);">Monitoring simultan nominal saldo terpakai, transaksi berhasil, dan transaksi gagal</p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="badge badge-success"><i class="fas fa-circle" style="font-size: 6px;"></i> MULTI-DATA ANALYTICS</span>
+          </div>
+        </div>
+        <div style="position: relative; width: 100%; height: 280px; background: rgba(6, 10, 20, 0.8); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px;">
+          <canvas id="monthlyTradingChart" style="width: 100%; height: 100%;"></canvas>
+        </div>
+        <!-- REKAP PEMBELIAN BULAN INI -->
+        <div class="grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 15px; margin-bottom: 0;">
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center;">
+            <small style="color: var(--text-sub); font-size: 10px; display: block;">TOTAL PEMBELIAN BULAN INI</small>
+            <b style="font-size: 16px; color: #38bdf8;" id="monthTotalTrx">0 TRX</b>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 12px; border-radius: 10px; text-align: center;">
+            <small style="color: var(--text-sub); font-size: 10px; display: block;">PEMBELIAN BERHASIL</small>
+            <b style="font-size: 16px; color: #10b981;" id="monthSuccessTrx">0 TRX</b>
+          </div>
+          <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); padding: 12px; border-radius: 10px; text-align: center;">
+            <small style="color: var(--text-sub); font-size: 10px; display: block;">PEMBELIAN GAGAL</small>
+            <b style="font-size: 16px; color: #ef4444;" id="monthFailedTrx">0 TRX</b>
+          </div>
+        </div>
+      </div>
+      <!-- INDIKATOR STATUS API SERVER -->
+      <div class="card" style="margin-bottom: 20px;">
+        <h3 style="font-size: 15px; margin-bottom: 12px;"><i class="fas fa-server" style="color: var(--primary);"></i> Indikator Status API Server</h3>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 0;">
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div><b style="font-size: 13px; display: block;">Server api1</b><small style="font-size: 10px; color: var(--text-sub);">AkrabStable</small></div>
+            <span id="statusApi1Badge" class="badge badge-success">ONLINE</span>
+          </div>
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div><b style="font-size: 13px; display: block;">Server api2</b><small style="font-size: 10px; color: var(--text-sub);">AkrabSuper</small></div>
+            <span id="statusApi2Badge" class="badge badge-success">ONLINE</span>
+          </div>
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div><b style="font-size: 13px; display: block;">Server api3</b><small style="font-size: 10px; color: var(--text-sub);">AkrabSmart</small></div>
+            <span id="statusApi3Badge" class="badge badge-success">ONLINE</span>
+          </div>
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div><b style="font-size: 13px; display: block;">Server api4</b><small style="font-size: 10px; color: var(--text-sub);">AkrabOke (PPOB)</small></div>
+            <span id="statusApi4Badge" class="badge badge-success">ONLINE</span>
+          </div>
+        </div>
+      </div>
+      <!-- INFO DETAIL ADMIN MENCOLOK -->
+      <div class="admin-info-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(135deg, #2563eb, #10b981); display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);">
+              <i class="fas fa-user-gear"></i>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: #60a5fa; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">FOUNDER & SYSTEM DEVELOPER</div>
+              <h2 style="font-size: 18px; font-weight: 900; color: #ffffff; text-shadow: 0 0 8px rgba(255,255,255,0.2);">Doni Fiandi Kurniawan</h2>
+              <div style="font-size: 12px; color: var(--text-sub); margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap;">
+                <span><i class="fab fa-instagram" style="color: #e1306c;"></i> @donitata1717</span>
+                <span><i class="fab fa-whatsapp" style="color: #25D366;"></i> 085156776974</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <a href="https://instagram.com/donitata1717" target="_blank" class="btn btn-outline" style="text-decoration: none; border-color: rgba(225, 48, 108, 0.4);"><i class="fab fa-instagram" style="color: #e1306c;"></i> Instagram</a>
+            <a href="https://wa.me/6285156776974" target="_blank" class="btn btn-success" style="text-decoration: none;"><i class="fab fa-whatsapp"></i> Chat Developer</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 1: TRX LANGSUNG (HARGA TERKINI) -->
+    <div id="tabTrxLangsung" style="display: none;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h2 style="font-size: 16px;"><i class="fas fa-tags" style="color: var(--accent);"></i> Harga Terkini</h2>
+            <p style="font-size: 11px; color: var(--text-sub);">Daftar harga produk realtime dengan filter & sub-filter per server API</p>
+          </div>
+          <button class="btn btn-outline" onclick="loadHargaTerkini()" style="padding: 6px 12px; font-size: 11px;"><i class="fas fa-sync"></i> Refresh Harga</button>
+        </div>
+
+        <!-- FILTER & SUB-FILTER -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; justify-content: space-between; background: rgba(8, 13, 26, 0.6); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; flex: 1; min-width: 280px;">
+            <div style="flex: 1; min-width: 140px;">
+              <select id="hargaServerSelect" onchange="loadHargaTerkini()" style="padding: 8px 12px; font-size: 12px;">
+                <option value="api1.php">Server api1 (AkrabStable)</option>
+                <option value="api2.php">Server api2 (AkrabSuper - Off)</option>
+                <option value="api3.php">Server api3 (AkrabSmart)</option>
+                <option value="api4.php">Server api4 (AkrabOke - PPOB)</option>
+              </select>
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+              <select id="hargaSubFilterSelect" onchange="filterHargaTerkini()" style="padding: 8px 12px; font-size: 12px;">
+                <option value="ALL">-- Semua Kategori --</option>
+              </select>
+            </div>
+            <div style="flex: 2; min-width: 180px;">
+              <input type="text" id="hargaSearchInput" placeholder="🔍 Cari Nama / Kode Produk..." onkeyup="filterHargaTerkini()" style="padding: 8px 12px; font-size: 12px;" />
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-sub);" id="hargaCountInfo">Memuat...</div>
+        </div>
+
+        <!-- TABEL HARGA TERKINI (NAMA, KODE, HARGA) -->
+        <div style="overflow-x: auto; max-height: 420px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Produk</th>
+                <th>Kode Produk</th>
+                <th>Harga (Rp)</th>
+              </tr>
+            </thead>
+            <tbody id="hargaTerkiniTable">
+              <tr>
+                <td colspan="3" style="text-align:center;">Memuat data harga produk...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 0: RIWAYAT TRANSAKSI USER -->
+    <div id="tabHistory">
+      <div class="card">
+        <h2><i class="fas fa-receipt"></i> Riwayat Transaksi H2H Saya</h2>
+        <p style="font-size: 13px; color: var(--text-sub);">Terdaftar otomatis di file JSON milik Anda. Status pending otomatis mengecek ke server pusat.</p>
+
+        <!-- FILTER & SEARCH BAR USER -->
+        <div style="display: flex; gap: 10px; margin-top: 15px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; justify-content: space-between; background: rgba(8, 13, 26, 0.6); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; flex: 1; min-width: 280px;">
+            <div style="flex: 2; min-width: 180px;">
+              <input type="text" id="userTrxSearch" placeholder="🔍 Cari RefID / Target / Produk..." onkeyup="filterUserHistory()" style="padding: 8px 12px; font-size: 12px;" />
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+              <input type="date" id="userTrxDate" onchange="filterUserHistory()" style="padding: 8px 12px; font-size: 12px; color-scheme: dark;" />
+            </div>
+            <button class="btn btn-outline" onclick="resetUserTrxFilter()" style="padding: 8px 12px; font-size: 11px;" title="Reset Filter"><i class="fas fa-undo"></i> Reset</button>
+          </div>
+          <div style="font-size: 11px; color: var(--text-sub);" id="userTrxCountInfo">Memuat...</div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>RefID H2H Kita</th>
+                <th>Server</th>
+                <th>Produk / Target</th>
+                <th>Status</th>
+                <th>SN / Keterangan</th>
+              </tr>
+            </thead>
+            <tbody id="userTrxTable">
+              <tr>
+                <td colspan="6" style="text-align:center;">Memuat riwayat transaksi...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGINASI CONTROLS USER -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+          <small style="font-size: 11px; color: var(--text-sub);" id="userPaginationPageText">Halaman 1 dari 1</small>
+          <div style="display: flex; gap: 6px;" id="userPaginationBtns"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tabDoc" style="display: none;">
+      <div class="card" style="margin-bottom: 20px;">
+        <h2><i class="fas fa-code"></i> Panduan Integration Endpoint</h2>
+        <p style="font-size: 13px; color: var(--text-sub); margin-top: 5px;">Setiap request Wajib mengirimkan API Key via Header <code>X-API-KEY</code> atau Parameter Query/Body <code>api_key</code>.</p>
+
+        <!-- SUB NAV TAB DOKUMENTASI -->
+        <div style="display: flex; gap: 10px; margin-top: 18px; margin-bottom: 20px; flex-wrap: wrap;">
+          <button class="btn" id="btnDocStandard" onclick="switchDocTab('standard')" style="padding: 8px 16px; font-size: 12px; background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #60a5fa;"><i class="fas fa-list"></i> Dokumentasi Standard (api1 / api2 / api3)</button>
+          <button class="btn" id="btnDocApi4" onclick="switchDocTab('api4')" style="padding: 8px 16px; font-size: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-main);"><i class="fas fa-layer-group"></i> Tutorial Special api4 (Khusus Produk PPOB)</button>
+        </div>
+
+        <!-- VIEW 1: STANDARD DOCS -->
+        <div id="docStandardView">
+          <h3 style="font-size: 16px; margin-top: 15px; color: var(--primary);">1. Daftar Server Endpoint URL</h3>
+          <div style="font-size: 13px; margin-top: 8px; line-height: 2.2;">
+            • <b>api1 (AkrabStable):</b> <br><span class="url-highlight">https://dt17.store/h2h/api1.php</span><br>
+            • <b>api2 (AkrabSuper):</b> <br><span class="url-highlight">https://dt17.store/h2h/api2.php</span><br>
+            • <b>api3 (AkrabSmart):</b> <br><span class="url-highlight">https://dt17.store/h2h/api3.php</span><br>
+            • <b>api4 (AkrabOke - Khusus Produk PPOB & Token Pascabayar):</b> <br><span class="url-highlight">https://dt17.store/h2h/api4.php</span>
+          </div>
+
+          <h3 style="font-size: 16px; margin-top: 25px; color: var(--primary);">2. Hit Cek Produk / Katalog (GET/POST)</h3>
+          <p style="font-size: 12px; color: var(--text-sub);">Contoh URL Hit Lengkap:</p>
+          <div class="url-highlight">https://dt17.store/h2h/api1.php?action=list&api_key=dt17_e1f063f90349bf69416c598f4c3d9529</div>
+
+          <p style="font-size: 12px; font-weight: bold; margin-top: 15px; color: var(--accent);">[Respon Berhasil Cek Katalog + Realtime Stock]</p>
+          <pre>{
+  "status": true,
+  "message": "Daftar produk berhasil diambil",
+  "data": [
+    {
+      "kode": "XDA1",
+      "stock": "999",
+      "nama": "Paket Akrab Fresh 1GB",
+      "harga": 12500,
+      "status": "READY"
+    }
+  ]
+}</pre>
+
+          <h3 style="font-size: 16px; margin-top: 25px; color: var(--primary);">3. Hit Transaksi / Beli Produk (POST)</h3>
+          <p style="font-size: 12px; color: var(--text-sub);">Target URL Endpoint:</p>
+          <div class="url-highlight">https://dt17.store/h2h/api1.php</div>
+          <p style="font-size: 12px; color: var(--text-sub); margin-top: 8px;">Method: <b>POST</b> | Content-Type: <b>application/json</b></p>
+          <pre>{
+  "action": "order",
+  "kode_produk": "XDA1",
+  "target": "087812345678",
+  "refid": "TRX_MITRA_9901",
+  "api_key": "dt17_e1f063f90349bf69416c598f4c3d9529"
+}</pre>
+
+          <p style="font-size: 12px; font-weight: bold; margin-top: 15px; color: var(--accent);">[Respon BERHASIL Beli]</p>
+          <pre>{
+  "status": true,
+  "trx_status": "BERHASIL",
+  "message": "Transaksi berhasil diproses",
+  "refid": "TRX_MITRA_9901",
+  "sn": "01928301928301293 / REF99120"
+}</pre>
+
+          <h3 style="font-size: 16px; margin-top: 25px; color: var(--primary);">4. Hit Cek Status Transaksi (GET/POST)</h3>
+          <p style="font-size: 12px; color: var(--text-sub);">Contoh URL Hit Lengkap:</p>
+          <div class="url-highlight">https://dt17.store/h2h/api1.php?action=status&refid=TRX_MITRA_9901&api_key=dt17_e1f063f90349bf69416c598f4c3d9529</div>
+        </div>
+
+        <!-- VIEW 2: SPECIAL API4 TUTORIAL -->
+        <div id="docApi4View" style="display: none;">
+          <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+            <h3 style="font-size: 15px; color: #34d399; margin-bottom: 8px;"><i class="fas fa-shield-alt"></i> Panduan Integration Endpoint api4.php (AkrabOke)</h3>
+            <p style="font-size: 12px; color: var(--text-sub); line-height: 1.6;">
+              Endpoint <b>api4.php</b> mendukung transaksi produk reguler, produk opendenom (bebas nominal), serta sistem <b>Pascabayar / PPOB 2-Tahap (Inquiry Cek Tagihan & Payment Token)</b>.
+            </p>
+          </div>
+
+          <!-- TAHAP 1: GET PRODUCT -->
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <h3 style="font-size: 15px; color: #38bdf8; margin-bottom: 6px;"><i class="fas fa-list-ul"></i> Tahap 1: Get Product / Katalog (`action=list` atau `action=produk`)</h3>
+            <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;">Mengambil daftar produk aktif beserta harga yang sudah termasuk markup akun Anda.</p>
+            <p style="font-size: 11px; color: var(--primary);">Endpoint: <span class="url-highlight">https://dt17.store/h2h/api4.php</span></p>
+            <pre>{
+  "action": "list",
+  "api_key": "dt17_e1f063f90349bf69416c598f4c3d9529"
+}</pre>
+            <p style="font-size: 11px; color: var(--accent); margin-top: 8px; font-weight: bold;">[Respon Sukses]:</p>
+            <pre>{
+  "status": true,
+  "message": "Daftar produk AkrabOke berhasil diambil",
+  "data": [
+    {
+      "kode": "TSEL10",
+      "nama": "Telkomsel 10Rb Reguler",
+      "harga": 10500,
+      "status": "READY",
+      "stock": "999"
+    }
+  ]
+}</pre>
+          </div>
+
+          <!-- TAHAP 2: CEK STATUS TRANSAKSI -->
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <h3 style="font-size: 15px; color: #38bdf8; margin-bottom: 6px;"><i class="fas fa-search"></i> Tahap 2: Cek Status Transaksi (`action=status`)</h3>
+            <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;">Memeriksa status akhir transaksi menggunakan RefID H2H Anda.</p>
+            <pre>{
+  "action": "status",
+  "refid": "TRX_MITRA_9901",
+  "api_key": "dt17_e1f063f90349bf69416c598f4c3d9529"
+}</pre>
+            <p style="font-size: 11px; color: var(--accent); margin-top: 8px; font-weight: bold;">[Respon Cek Status]:</p>
+            <pre>{
+  "status": true,
+  "trx_status": "BERHASIL",
+  "message": "Transaksi Sukses",
+  "refid": "TRX_MITRA_9901",
+  "sn": "SN: 01928301928301293"
+}</pre>
+          </div>
+
+          <!-- TAHAP 3: HIT BELI PRODUK NORMAL / LANGSUNG -->
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <h3 style="font-size: 15px; color: #38bdf8; margin-bottom: 6px;"><i class="fas fa-shopping-cart"></i> Tahap 3: Hit Beli Produk Normal / Langsung (`action=bayar`)</h3>
+            <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;">Digunakan untuk pembelian produk reguler seperti Pulsa, Data, E-Wallet, Voucher Game.</p>
+            <pre>{
+  "action": "bayar",
+  "kode": "TSEL10",
+  "tujuan": "081234567890",
+  "ref_id": "TRX_MITRA_9901",
+  "api_key": "dt17_e1f063f90349bf69416c598f4c3d9529"
+}</pre>
+            <p style="font-size: 11px; color: var(--accent); margin-top: 8px; font-weight: bold;">[Respon Sukses Order]:</p>
+            <pre>{
+  "status": true,
+  "message": "Order diterima",
+  "data": {
+    "ref_id": "PDW20260726001",
+    "ref_reseller": "TRX_MITRA_9901",
+    "kode": "TSEL10",
+    "tujuan": "081234567890",
+    "harga": 10500,
+    "status_trx": "pending",
+    "sn": "-",
+    "sisa_saldo": 489500
+  }
+}</pre>
+          </div>
+
+          <!-- TAHAP 4: HIT BELI PRODUK OPENDENOM -->
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <h3 style="font-size: 15px; color: #38bdf8; margin-bottom: 6px;"><i class="fas fa-calculator"></i> Tahap 4: Hit Beli Produk Opendenom / Bebas Nominal (`action=bayar` + `qty`)</h3>
+            <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;">Khusus produk nominal bebas (misal PLN Bebas Nominal). Parameter <code>qty</code> wajib diisi angka nominal (min. 100).</p>
+            <pre>{
+  "action": "bayar",
+  "kode": "PLNBBS",
+  "tujuan": "12345678901",
+  "qty": 50000,
+  "ref_id": "TRX_OPENDENOM_001",
+  "api_key": "dt17_e1f063f90349bf69416c598f4c3d9529"
+}</pre>
+            <p style="font-size: 11px; color: var(--accent); margin-top: 8px; font-weight: bold;">[Respon Sukses]:</p>
+            <pre>{
+  "status": true,
+  "message": "Order diterima",
+  "data": {
+    "ref_id": "PDW20260726002",
+    "ref_reseller": "TRX_OPENDENOM_001",
+    "kode": "PLNBBS",
+    "tujuan": "12345678901",
+    "harga": 51000,
+    "status_trx": "pending",
+    "sn": "-",
+    "sisa_saldo": 438500
+  }
+}</pre>
+          </div>
+
+          <!-- TAHAP 5: HIT BELI PRODUK CEK (INQUIRY PPOB) -->
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <h3 style="font-size: 15px; color: #f59e0b; margin-bottom: 6px;"><i class="fas fa-file-invoice"></i> Tahap 5: Hit Beli Produk Cek / Inquiry PPOB (`action=cek`)</h3>
+            <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;"><b>Langkah 1 PPOB:</b> Cek tagihan PLN Pasca, BPJS, PDAM, dll. Gunakan kode Cek (awalan C misal <code>CPAM</code> atau memuat kata <code>CEK</code> misal <code>PKTCEKCUAN</code>). Parameter tujuan menggunakan <code>tujuan</code> atau <code>target</code>. Backend akan otomatis melakukan polling retry selama 10 detik sampai data tagihan diperoleh.</p>
+            <pre>{
+  "action": "cek",
+  "kode": "CPAM",
+  "tujuan": "12345678",
+  "api_key": "dt17_e1f063f90349bf69416c598f4c3d9529"
+}</pre>
+            <div style="margin-top: 10px; margin-bottom: 12px; padding: 10px; background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; border-radius: 6px; font-size: 11px; color: #fde047; line-height: 1.5;">
+              <i class="fas fa-info-circle"></i> <b>Panduan Penanganan Respon Inquiry:</b><br>
+              1. Backend <code>api4.php</code> telah dilengkapi fitur <b>Auto-Polling Retry</b> (re-check otomatis hingga 5 kali / 10 detik ke server pusat).<br>
+              2. <b>Jika status = true:</b> Data tagihan (<code>TTAG</code>) dan <code>payment_token</code> sudah berhasil didapatkan. Anda dapat melanjutkan ke Tahap 6 untuk eksekusi bayar.<br>
+              3. <b>Jika status = false (Pesan: "Masih Diproses"):</b> Ini terjadi jika server pusat membutuhkan waktu lebih dari 10 detik. Silakan lakukan hit ulang <code>action=cek</code> dengan parameter yang sama setelah 2-3 detik hingga tagihan keluar.
+            </div>
+            <p style="font-size: 11px; color: var(--accent); margin-top: 8px; font-weight: bold;">[Respon Sukses Cek Tagihan (Final Result)]:</p>
+            <pre>{
+  "status": true,
+  "message": "Pengecekan Berhasil",
+  "data": {
+    "ref_inq_pandawa": "INQ-20260726200000123",
+    "tujuan": "12345678",
+    "payment_token": "cmVzZWxsZXIxMjN8QlBBTXwxMjM0NTY3OHxJTlEtMjAyNjA3MjYyMDAwMDAxMjM=",
+    "keterangan": "SUKSES Cek PDAM A/N BUDI | TTAG: 50000"
+  }
+}</pre>
+          </div>
+
+          <!-- TAHAP 6: HIT CEK & BAYAR PAYMENT TOKEN -->
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <h3 style="font-size: 15px; color: #10b981; margin-bottom: 6px;"><i class="fas fa-key"></i> Tahap 6: Hit Cek & Bayar Payment Token (`action=bayar` + `payment_token`)</h3>
+            <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;"><b>Langkah 2 PPOB:</b> Pelunasan tagihan PPOB hasil pengecekan Tahap 5 dengan mengirimkan parameter <code>payment_token</code>. Token berlaku selama 10 menit. Total harga yang dipotong dari saldo adalah <b>(Tagihan Hasil Cek + Admin Server + Markup)</b>.</p>
+            <pre>{
+  "action": "bayar",
+  "payment_token": "cmVzZWxsZXIxMjN8QlBBTXwxMjM0NTY3OHxJTlEtMjAyNjA3MjYyMDAwMDAxMjM=",
+  "ref_id": "TRX_PPOB_PAY_001",
+  "api_key": "dt17_e1f063f90349bf69416c598f4c3d9529"
+}</pre>
+            <p style="font-size: 11px; color: var(--accent); margin-top: 8px; font-weight: bold;">[Respon Sukses Eksekusi Bayar]:</p>
+            <pre>{
+  "status": true,
+  "message": "Order diterima: DIPROSES",
+  "data": {
+    "ref_id": "TRX_PPOB_PAY_001",
+    "ref_reseller": "TRX_PPOB_PAY_001",
+    "kode": "BPAM",
+    "tujuan": "12345678",
+    "harga": 51500,
+    "status_trx": "pending",
+    "sn": "-",
+    "sisa_saldo": 387000
+  }
+}</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- TAB 2: INTERACTIVE TESTER -->
+    <div id="tabTester" style="display: none;">
+      <div class="card" style="border: 1px solid rgba(59, 130, 246, 0.3); background: linear-gradient(180deg, rgba(17, 27, 46, 0.95) 0%, rgba(11, 19, 38, 0.95) 100%);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h2 style="font-size: 18px; color: #fff; display: flex; align-items: center; gap: 10px;">
+              <i class="fas fa-terminal" style="color: var(--primary);"></i> Live API Endpoint Tester & Simulator
+            </h2>
+            <p style="font-size: 12px; color: var(--text-sub); margin-top: 4px;">Uji coba request H2H secara realtime langsung ke server backend tanpa koding</p>
+          </div>
+          <div>
+            <span class="badge badge-success"><i class="fas fa-bolt"></i> REALTIME ENDPOINT</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+          <div style="background: rgba(8, 13, 26, 0.5); padding: 18px; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="font-size: 13px; font-weight: 700; color: #60a5fa; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-sliders-h"></i> PARAMETER REQUEST
+            </div>
+
+            <div class="form-group">
+              <label><i class="fas fa-server" style="color: var(--primary);"></i> Target Server Endpoint</label>
+              <select id="testServer">
+                <option value="api1.php">api1 (AkrabStable)</option>
+                <option value="api2.php">api2 (AkrabSuper)</option>
+                <option value="api3.php">api3 (AkrabSmart)</option>
+                <option value="api4.php">api4 (AkrabOke - Khusus PPOB)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label><i class="fas fa-exchange-alt" style="color: var(--accent);"></i> Action Method</label>
+              <select id="testAction" onchange="toggleTestFields()">
+                <option value="list">Cek Katalog Produk (list)</option>
+                <option value="order">Kirim Transaksi Pembelian (order)</option>
+                <option value="status">Cek Status Transaksi (status)</option>
+              </select>
+            </div>
+
+            <div id="orderFields" style="display: none;">
+              <div class="form-group">
+                <label><i class="fas fa-barcode"></i> Kode Produk</label>
+                <input type="text" id="testKode" placeholder="Contoh: XDA1" />
+              </div>
+              <div class="form-group">
+                <label><i class="fas fa-phone-alt"></i> Nomor Target / Tujuan</label>
+                <input type="text" id="testTarget" placeholder="Contoh: 087812345678" />
+              </div>
+            </div>
+
+            <div id="statusFields" style="display: none;">
+              <div class="form-group">
+                <label><i class="fas fa-hashtag"></i> RefID H2H Mitra</label>
+                <input type="text" id="testRefId" placeholder="Contoh: TRX_MITRA_9901" />
+              </div>
+            </div>
+
+            <button class="btn btn-success btn-block" onclick="executeTest()" style="margin-top: 10px; padding: 12px; font-size: 13px;">
+              <i class="fas fa-paper-plane"></i> Kirim Test Request Sekarang
+            </button>
+          </div>
+
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="margin-bottom: 0; font-size: 12px; color: #a7f3d0; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-code"></i> Realtime JSON Output
+              </label>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn btn-outline" onclick="copyTestOutput()" style="padding: 4px 10px; font-size: 10px; border-radius: 6px;">
+                  <i class="fas fa-copy"></i> Salin JSON
+                </button>
+                <button class="btn btn-outline" onclick="downloadTestOutputPrompt()" style="padding: 4px 10px; font-size: 10px; border-radius: 6px; border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
+                  <i class="fas fa-download"></i> Download JSON
+                </button>
+              </div>
+            </div>
+
+            <div style="background: #040810; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; flex: 1; display: flex; flex-direction: column;">
+              <div style="background: rgba(15, 23, 42, 0.9); padding: 8px 14px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 6px;">
+                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                </div>
+                <small style="font-family: monospace; font-size: 10px; color: var(--text-sub);" id="testResponseStatus">STATUS: READY</small>
+              </div>
+              <pre id="testResult" style="margin-top: 0; border: none; border-radius: 0; background: transparent; min-height: 220px; max-height: 380px; flex: 1; font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; line-height: 1.5; color: #38bdf8;">// Klik 'Kirim Test Request Sekarang' untuk melihat respon API...</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL RESET API KEY (THEME MATCHING) -->
+    <div class="modal" id="modalRegenKey">
+      <div class="modal-content">
+        <h3 style="margin-bottom: 15px;"><i class="fas fa-key" style="color: var(--warning);"></i> Konfirmasi Reset API Key</h3>
+        <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 15px;">
+          Masukkan Kata Sandi akun Anda untuk mengonfirmasi regenerasi API Key baru.
+        </p>
+        <div class="form-group">
+          <label>Kata Sandi Akun</label>
+          <input type="password" id="regenPasswordInput" placeholder="Masukkan password Anda">
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modalRegenKey')">Batal</button>
+          <button class="btn btn-danger" style="flex:1;" onclick="submitRegenApiKey()"><i class="fas fa-sync"></i> Reset API Key</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DETAIL PRODUK HARGA TERKINI -->
+    <div class="modal" id="modalProductDetail">
+      <div class="modal-content" style="max-width: 520px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px;">
+          <h3 style="font-size: 16px; margin: 0; color: #fff;"><i class="fas fa-info-circle" style="color: var(--primary);"></i> Detail Rincian Produk</h3>
+          <button onclick="closeModal('modalProductDetail')" class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;">✕</button>
+        </div>
+        <div id="productDetailBody"></div>
+        <div style="margin-top: 20px; text-align: right;">
+          <button class="btn btn-primary" onclick="closeModal('modalProductDetail')" style="padding: 8px 18px; font-size: 12px;">Tutup</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- MODAL TOPUP -->
+    <div class="modal" id="modalTopup">
+      <div class="modal-content">
+        <h3 style="margin-bottom: 15px;"><i class="fas fa-wallet" style="color: var(--accent);"></i> Topup Saldo</h3>
+        <input type="hidden" id="currentTopupId">
+        <div id="topupInputSection">
+          <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 15px;">
+            Masukkan nominal topup. Sistem akan menambahkan angka unik 3 digit untuk verifikasi otomatis.
+          </p>
+          <div class="form-group">
+            <label>Nominal Topup (Rp)</label>
+            <input type="number" id="topupAmount" placeholder="Minimal Rp 50.000">
+          </div>
+          <div class="form-group">
+            <label>Pilih Metode Pembayaran</label>
+            <select id="topupMethod">
+              <option value="dana">Transfer DANA</option>
+              <option value="seabank">Transfer SeaBank</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modalTopup')">Batal</button>
+            <button class="btn btn-success" style="flex:1;" id="btnReqTopup" onclick="requestTopup()"><i class="fas fa-paper-plane"></i> Request Topup</button>
+          </div>
+        </div>
+        <div id="topupQrisSection" style="display: none; text-align: center;">
+          <div style="background: rgba(8, 13, 26, 0.6); border: 1px solid var(--border-color); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: left;">
+            <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;">Silakan transfer ke rekening berikut:</p>
+            <div id="infoDana" style="display:none; margin-bottom: 5px; padding-bottom: 5px;">
+              <div style="font-size: 14px; font-weight: bold; color: #38bdf8;">DANA</div>
+              <div style="font-size: 16px; font-weight: bold; color: #fff; letter-spacing: 1px;">085156776974</div>
+              <div style="font-size: 11px; color: var(--text-sub);">A/N Doni Fiandi Kurniawan</div>
+            </div>
+            <div id="infoSeaBank" style="display:none; margin-bottom: 5px; padding-bottom: 5px;">
+              <div style="font-size: 14px; font-weight: bold; color: #f59e0b;">SeaBank</div>
+              <div style="font-size: 16px; font-weight: bold; color: #fff; letter-spacing: 1px;">901217952726</div>
+              <div style="font-size: 11px; color: var(--text-sub);">A/N Doni Fiandi Kurniawan</div>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-sub); margin-bottom: 5px; text-transform: uppercase;">Nominal yang harus ditransfer:</div>
+          <div style="font-size: 26px; font-weight: 800; color: var(--accent); margin-bottom: 5px; font-family: monospace;" id="topupUniqueAmount">Rp 0</div>
+          <p style="font-size: 12px; color: var(--warning); margin-bottom: 15px; font-weight: bold;">
+            Transfer TEPAT sesuai nominal di atas hingga 3 digit terakhir agar otomatis masuk.
+          </p>
+          <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 8px; border-radius: 8px; margin-bottom: 15px;">
+            <span style="font-size: 12px; color: #fca5a5; font-weight: bold;">Sisa Waktu: <span id="topupCountdownTimer">60:00</span></span>
+          </div>
+          <a href="https://wa.me/6285156776974?text=Halo%20Admin,%20saya%20sudah%20transfer%20untuk%20topup%20saldo%20tapi%20belum%20masuk." target="_blank" class="btn btn-outline btn-block" style="margin-bottom: 15px; font-size: 11px; border-color: rgba(16, 185, 129, 0.4); color: #34d399; text-decoration: none;">
+            <i class="fab fa-whatsapp"></i> Belum masuk? Klik disini untuk hubungi admin
+          </a>
+          <p style="font-size: 11px; color: var(--text-sub); margin-bottom: 20px;" id="topupStatusText">Menunggu pembayaran...</p>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-danger" style="flex:1;" onclick="cancelTopup()" id="btnCancelTopup"><i class="fas fa-times"></i> Batalkan</button>
+            <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modalTopup')">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let autoRefreshTimer = null;
+      
+      // --- SISTEM TOPUP MANUAL ---
+      let topupCountdownInterval = null;
+      
+      function startTopupTimer(expiredTime) {
+          if (topupCountdownInterval) clearInterval(topupCountdownInterval);
+          const timerEl = document.getElementById('topupCountdownTimer');
+          
+          topupCountdownInterval = setInterval(() => {
+              const now = Date.now();
+              const diff = expiredTime - now;
+              
+              if (diff <= 0) {
+                  clearInterval(topupCountdownInterval);
+                  if(timerEl) timerEl.innerText = "00:00";
+                  const statusEl = document.getElementById('topupStatusText');
+                  if(statusEl) {
+                      statusEl.innerText = "Topup Kedaluwarsa";
+                      statusEl.style.color = "var(--danger)";
+                  }
+              } else {
+                  const minutes = Math.floor(diff / 60000);
+                  const seconds = Math.floor((diff % 60000) / 1000);
+                  if(timerEl) timerEl.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+              }
+          }, 1000);
+      }
+      
+      function openTopupModal() {
+          let pendingStr = localStorage.getItem('dt17_pending_topup_' + currentUser.username);
+          if (pendingStr) {
+              let pending = JSON.parse(pendingStr);
+              if (Date.now() - pending.time < 3600 * 1000) {
+                  document.getElementById('currentTopupId').value = pending.id;
+                  const finalAmount = pending.amount;
+                  document.getElementById('topupUniqueAmount').innerText = 'Rp ' + finalAmount.toLocaleString('id-ID');
+                  
+                  document.getElementById('infoDana').style.display = pending.method === 'dana' ? 'block' : 'none';
+                  document.getElementById('infoSeaBank').style.display = pending.method === 'seabank' ? 'block' : 'none';
+                  
+                  document.getElementById('topupInputSection').style.display = 'none';
+                  document.getElementById('topupQrisSection').style.display = 'block';
+                  document.getElementById('modalTopup').style.display = 'flex';
+                  startTopupTimer(pending.time + (3600 * 1000));
+                  return;
+              } else {
+                  localStorage.removeItem('dt17_pending_topup_' + currentUser.username);
+              }
+          }
+          document.getElementById('topupInputSection').style.display = 'block';
+          document.getElementById('topupQrisSection').style.display = 'none';
+          document.getElementById('topupAmount').value = '';
+          document.getElementById('modalTopup').style.display = 'flex';
+      }
+      
+      async function requestTopup() {
+          const amount = parseInt(document.getElementById('topupAmount').value);
+          const method = document.getElementById('topupMethod').value;
+          if(!amount || amount < 50000) return alert('Minimal topup Rp 50.000');
+          document.getElementById('btnReqTopup').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+          document.getElementById('btnReqTopup').disabled = true;
+          
+          try {
+              const res = await fetch('topup_api.php', { 
+                  method: 'POST', 
+                  body: JSON.stringify({ action: 'request', amount: amount, session_token: currentUser.session_token }) 
+              });
+              const data = await res.json();
+              if(data.status) {
+                  document.getElementById('currentTopupId').value = data.data.id;
+                  const finalAmount = data.data.unique_amount;
+                  const nowTime = Date.now();
+                  localStorage.setItem('dt17_pending_topup_' + currentUser.username, JSON.stringify({ id: data.data.id, amount: finalAmount, time: nowTime, method: method }));
+                  
+                  document.getElementById('topupUniqueAmount').innerText = 'Rp ' + finalAmount.toLocaleString('id-ID');
+                  
+                  document.getElementById('infoDana').style.display = method === 'dana' ? 'block' : 'none';
+                  document.getElementById('infoSeaBank').style.display = method === 'seabank' ? 'block' : 'none';
+                  
+                  document.getElementById('topupInputSection').style.display = 'none';
+                  document.getElementById('topupQrisSection').style.display = 'block';
+                  startTopupTimer(nowTime + (3600 * 1000));
+                  loadUserHistory();
+              } else {
+                  alert(data.message);
+              }
+          } catch(e) {
+              alert('Terjadi kesalahan koneksi.');
+          }
+          document.getElementById('btnReqTopup').innerHTML = '<i class="fas fa-paper-plane"></i> Request Topup';
+          document.getElementById('btnReqTopup').disabled = false;
+      }
+      
+      async function cancelTopup() {
+          const tid = document.getElementById('currentTopupId').value;
+          if(!tid) return;
+          if(!confirm('Yakin ingin membatalkan request topup ini?')) return;
+          document.getElementById('btnCancelTopup').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membatalkan...';
+          document.getElementById('btnCancelTopup').disabled = true;
+          
+          try {
+              const res = await fetch('topup_api.php', {
+                  method: 'POST',
+                  body: JSON.stringify({ action: 'cancel', topup_id: tid, session_token: currentUser.session_token })
+              });
+              const data = await res.json();
+              alert(data.message);
+              if(data.status) {
+                  localStorage.removeItem('dt17_pending_topup_' + currentUser.username);
+                  closeModal('modalTopup');
+                  loadUserHistory();
+              }
+          } catch(e) {
+              alert('Terjadi kesalahan koneksi.');
+          }
+          document.getElementById('btnCancelTopup').innerHTML = '<i class="fas fa-times"></i> Batalkan';
+          document.getElementById('btnCancelTopup').disabled = false;
+      }
+      function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+      
+      function startRealtimeAutoRefresh() {
+          if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+          autoRefreshTimer = setInterval(async () => {
+              if (!currentUser) return;
+              window.isSilentAutoRefresh = true;
+              await loadUserHistory();
+              window.isSilentAutoRefresh = false;
+          }, 5000);
+      }
+      
+      // PROTEKSI SECURITY SHIELD (DISABLE RIGHT CLICK, F12, CTRL+U, CTRL+S)
+      // document.addEventListener('contextmenu', e => e.preventDefault()); // [DIBUKA AGAR BISA COPY TEKS]
+      document.addEventListener('keydown', e => {
+          if (e.keyCode === 123 || 
+             (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
+             (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))) {
+              e.preventDefault();
+              return false;
+          }
+      });
+      
+      let isBalanceVisible = true;
+      let tradingChartInstance = null;
+      
+      function updateBalanceDisplay() {
+          const saldoEls = document.querySelectorAll('#profSaldo');
+          const eyeIcon = document.getElementById('eyeBalanceIcon');
+          if (!currentUser) return;
+          const formatted = 'Rp ' + (currentUser.saldo !== undefined ? currentUser.saldo : 0).toLocaleString('id-ID');
+          saldoEls.forEach(el => {
+              if (isBalanceVisible) el.innerText = formatted;
+              else el.innerText = 'Rp ••••••••';
+          });
+          if (eyeIcon) {
+              eyeIcon.className = isBalanceVisible ? 'fas fa-eye' : 'fas fa-eye-slash';
+          }
+      }
+      function toggleBalanceVisibility() {
+          isBalanceVisible = !isBalanceVisible;
+          updateBalanceDisplay();
+      }
+      
+      let isApiKeyVisible = false;
+      function toggleApiKeyVisibility() {
+          isApiKeyVisible = !isApiKeyVisible;
+          updateApiKeyDisplay();
+      }
+      function updateApiKeyDisplay() {
+          const keyEls = document.querySelectorAll('#displayApiKey, #displayApiKeyKtp');
+          const eyeIcons = document.querySelectorAll('#eyeApiKeyIcon');
+          if (!currentUser) return;
+          keyEls.forEach(el => {
+              el.innerText = isApiKeyVisible ? currentUser.api_key : 'dt17_••••••••';
+          });
+          eyeIcons.forEach(icon => {
+              icon.className = isApiKeyVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
+          });
+      }
+      
+      function renderTradingChart(monthlySaldo, monthlySuccess, monthlyFailed) {
+          const ctx = document.getElementById('monthlyTradingChart');
+          if (!ctx) return;
+          if (tradingChartInstance) tradingChartInstance.destroy();
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
+          tradingChartInstance = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: months,
+                  datasets: [
+                      {
+                          label: 'Saldo Terpakai (Rp)',
+                          data: monthlySaldo || [0,0,0,0,0,0,0,0,0,0,0,0],
+                          borderColor: '#38bdf8',
+                          borderWidth: 2,
+                          backgroundColor: (context) => {
+                              const bgCtx = context.chart.ctx;
+                              const gradient = bgCtx.createLinearGradient(0, 0, 0, 240);
+                              gradient.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
+                              gradient.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+                              return gradient;
+                          },
+                          fill: true,
+                          tension: 0.35,
+                          pointRadius: 4,
+                          pointBackgroundColor: '#38bdf8',
+                          yAxisID: 'y'
+                      },
+                      {
+                          label: 'TRX Berhasil (Qty)',
+                          data: monthlySuccess || [0,0,0,0,0,0,0,0,0,0,0,0],
+                          borderColor: '#10b981',
+                          borderWidth: 2,
+                          backgroundColor: 'transparent',
+                          tension: 0.35,
+                          pointRadius: 4,
+                          pointBackgroundColor: '#10b981',
+                          yAxisID: 'y1'
+                      },
+                      {
+                          label: 'TRX Gagal (Qty)',
+                          data: monthlyFailed || [0,0,0,0,0,0,0,0,0,0,0,0],
+                          borderColor: '#ef4444',
+                          borderWidth: 2,
+                          borderDash: [4, 4],
+                          backgroundColor: 'transparent',
+                          tension: 0.35,
+                          pointRadius: 4,
+                          pointBackgroundColor: '#ef4444',
+                          yAxisID: 'y1'
+                      }
+                  ]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  interaction: {
+                      mode: 'index',
+                      intersect: false
+                  },
+                  plugins: {
+                      legend: {
+                          display: true,
+                          position: 'top',
+                          labels: { color: '#cbd5e1', font: { size: 10, weight: '600' }, usePointStyle: true, boxWidth: 8 }
+                      },
+                      tooltip: {
+                          callbacks: {
+                              label: function(context) {
+                                  let label = context.dataset.label || '';
+                                  if (label) label += ': ';
+                                  if (context.dataset.yAxisID === 'y') {
+                                      label += 'Rp ' + (context.parsed.y || 0).toLocaleString('id-ID');
+                                  } else {
+                                      label += (context.parsed.y || 0) + ' TRX';
+                                  }
+                                  return label;
+                              }
+                          }
+                      }
+                  },
+                  scales: {
+                      x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+                      y: {
+                          type: 'linear',
+                          display: true,
+                          position: 'left',
+                          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                          ticks: {
+                              color: '#38bdf8',
+                              font: { size: 9 },
+                              callback: (val) => 'Rp ' + (val >= 1000 ? (val/1000) + 'k' : val)
+                          }
+                      },
+                      y1: {
+                          type: 'linear',
+                          display: true,
+                          position: 'right',
+                          grid: { drawOnChartArea: false },
+                          ticks: {
+                              color: '#10b981',
+                              font: { size: 9 },
+                              callback: (val) => val + ' TRX'
+                          }
+                      }
+                  }
+              }
+          });
+      }
+      
+      let currentUser = null;
+      document.addEventListener('DOMContentLoaded', () => {
+          // AUTOMATIC CACHE BUSTING & APP VERSION CLEAR
+          const CURRENT_VERSION = '20260727_v1.0';
+          const oldVersion = localStorage.getItem('dt17_app_version');
+          if (oldVersion !== CURRENT_VERSION) {
+              localStorage.setItem('dt17_app_version', CURRENT_VERSION);
+              if (oldVersion && 'caches' in window) {
+                  caches.keys().then(names => { names.forEach(name => caches.delete(name)); });
+              }
+              if (oldVersion) {
+                  location.reload(true);
+                  return;
+              }
+          }
+          const savedSession = localStorage.getItem('dt17_session') || sessionStorage.getItem('dt17_session');
+          if (savedSession) verifySession(savedSession);
+      });
+      
+      function switchAuth(mode) {
+          document.getElementById('loginForm').style.display = mode === 'login' ? 'block' : 'none';
+          document.getElementById('registerForm').style.display = mode === 'register' ? 'block' : 'none';
+      }
+      
+      async function handleRegister() {
+          const username = document.getElementById('regUsername').value.trim();
+          const email = document.getElementById('regEmail').value.trim();
+          const waNo = document.getElementById('regWA').value.trim();
+          const pass = document.getElementById('regPass').value;
+          const passConf = document.getElementById('regPassConfirm').value;
+      
+          if (!username) { alert('Harap isi Username!'); return; }
+          if (!email) { alert('Harap isi Email!'); return; }
+          if (!waNo || waNo.length < 10) { alert('Harap masukkan nomor WhatsApp yang valid!'); return; }
+          if (!pass || pass.length < 6) { alert('Password minimal 6 karakter!'); return; }
+          if (pass !== passConf) { alert('Konfirmasi kata sandi tidak cocok!'); return; }
+      
+          const payload = {
+              action: 'register', username: username,
+              email: email, nomorwa: waNo,
+              password: pass, confirm_password: passConf
+          };
+          const res = await fetch('auth.php', { method: 'POST', body: JSON.stringify(payload) });
+          const data = await res.json();
+          alert(data.message); if (data.status) switchAuth('login');
+      }
+      
+      async function handleLogin() {
+          const saveLogin = document.getElementById('saveLogin').checked;
+          const payload = { action: 'login', nomorwa: document.getElementById('logWA').value, password: document.getElementById('logPass').value, save_login: saveLogin };
+          const res = await fetch('auth.php', { method: 'POST', body: JSON.stringify(payload) });
+          const data = await res.json();
+          if (data.status) {
+              currentUser = data.data;
+              if (saveLogin) localStorage.setItem('dt17_session', currentUser.session_token);
+              else sessionStorage.setItem('dt17_session', currentUser.session_token);
+              renderApp();
+          } else alert(data.message);
+      }
+      
+      async function verifySession(token) {
+          const res = await fetch(`auth.php?action=check_session&session_token=${token}&_t=${Date.now()}`, { cache: "no-store" });
+          const data = await res.json();
+          if (data.status) { currentUser = data.data; renderApp(); }
+          else handleLogout();
+      }
+      
+      let rawHargaList = [];
+      
+      function categorizePPOBItem(item) {
+          const nama = (item.nama_produk || item.keterangan || item.produk || item.name || item.nama || "").trim();
+          const kode = (item.kode_produk || item.kode || item.code || "").trim().toUpperCase();
+          const catRaw = (item.kategori || item.category || item.kode_provider || "").trim().toUpperCase();
+          const fullTxt = (nama + " " + kode + " " + (item.produk || "") + " " + catRaw).toLowerCase();
+      
+          const has = (keys) => (Array.isArray(keys) ? keys : [keys]).some(k => fullTxt.includes(k.toLowerCase()));
+      
+          if (["BBSVABNI", "BBSVABCA", "BBSVABRI", "BBSVAMDR", "BBSVAPMT", "BBSVACIM"].includes(kode)) return "VA Bank";
+          if (catRaw === "TOKEN PLN" || (has(["pln"]) && has(["token", "prabayar"])) || (kode.startsWith("PLN") && !kode.startsWith("C") && !kode.startsWith("B") && !has(["bulanan", "pasca"]))) {
+              if (!has(["brizzi", "flazz", "tapcash", "emoney", "e toll"])) return "Token PLN";
+          }
+          const walletKeys = ["dana", "ovo", "gopay", "gojek", "shopeepay", "shopee", "linkaja", "grab", "maxim", "isaku", "doku", "kaspro", "astrapay", "indriver", "bebas nominal", "nominal bebas"];
+          if (catRaw === "SALDO GOJEK" || catRaw === "NOMINAL BEBAS" || (walletKeys.some(w => has(w)) && !has(["cek kuota", "produk digital", "cicilan", "finance", "tagihan", "pascabayar", "perdana"]))) {
+              return "E-Wallet";
+          }
+          const digitalKeys = ["mobile legend", "free fire", "pubg", "higgs", "domino", "genshin", "roblox", "valorant", "point blank", "call of duty", "cod", "wild rift", "aov", "arena breakout", "ragnarok", "blood strike", "clash", "delta force", "hago", "lita", "eggy", "fc mobile", "garena", "gemscool", "razer", "steam", "unipin", "super sus", "google play", "honor of kings", "indo play", "life after", "lokapala", "lord mobile", "magic chess", "marvel", "spotify", "genflix", "vidio", "wetv", "wifi"];
+          if (catRaw === "GAMES" || catRaw === "DIGITAL" || digitalKeys.some(g => has(g)) || kode.startsWith("TPG")) {
+              if (!walletKeys.some(w => has(w)) && !has(["pulsa", "telkomsel", "indosat", "xl", "axis", "tri", "smartfren"])) return "DIGITAL & Games";
+          }
+          if (has(["brizzi", "flazz", "tapcash", "e toll", "emoney", "e money"])) return "Topup E'Tol";
+          if (catRaw === "TAGIHAN PBB" || has(["pbb", "pajak bumi"])) return "PBB";
+          if (catRaw === "PASCABAYAR") return "Pascabayar";
+          if (catRaw === "AIR PDAM" || kode.startsWith("CPAM") || kode.startsWith("BPAM") || has(["pdam", "pam"])) return "Tagihan PDAM";
+          if (kode.startsWith("CBPJS") || kode.startsWith("BBPJS") || has(["bpjs"])) return "Tagihan BPJS";
+          if (catRaw === "FINANCE" || has(["cicilan", "finance", "baf", "fif", "wom", "adira", "kredit"])) return "Tagihan Finance";
+          if (has(["indihome", "biznet", "first media", "my republic", "cbn", "iconnet", "bali fiber", "telkom"])) return "Tagihan Internet & TV";
+          if (has(["gas", "pgn", "pertagas"])) return "Tagihan Gas";
+          if (catRaw === "TAGIHAN" || kode.startsWith("C") || kode.startsWith("B") || kode.includes("CEK") || kode.includes("BYR") || has(["tagihan"])) return "Tagihan PPOB";
+          if (catRaw === "PULSA TRANSFER" || has(["pulsa transfer", "transfer pulsa"])) return "Pulsa Transfer";
+          if (catRaw === "PULSA" || (has(["pulsa"]) && !has(["kuota", "data", "paket", "voucher"]))) {
+              if (has(["telkomsel", "tsel"])) return "Pulsa Telkomsel";
+              if (has(["indosat", "isat", "im3"])) return "Pulsa Indosat";
+              if (has(["xl"])) return "Pulsa XL";
+              if (has(["axis"])) return "Pulsa Axis";
+              if (has(["tri", "three"])) return "Pulsa Tri";
+              if (has(["smartfren", "smart"])) return "Pulsa Smartfren";
+              if (has(["by.u", "byu"])) return "Pulsa By.U";
+              return "Pulsa Reguler";
+          }
+          if (has(["telkomsel", "tsel"])) return "Telkomsel";
+          if (has(["indosat", "isat", "im3"])) return "Indosat";
+          if (has(["xl"])) return "XL";
+          if (has(["axis"])) return "Axis";
+          if (has(["tri", "three"])) return "Tri";
+          if (has(["smartfren", "smart"])) return "Smartfren";
+          if (has(["by.u", "byu"])) return "By.U";
+      
+          return catRaw || "Lainnya";
+      }
+      
+      function extractItemData(item) {
+          const nama = item.nama_produk || item.keterangan || item.produk || item.name || item.nama || '-';
+          const kode = item.kode_produk || item.kode || item.code || '-';
+          const harga = parseInt(item.harga_final || item.harga_jual || item.price || item.harga || 0);
+          const serverSelect = document.getElementById('hargaServerSelect');
+          const isApi4 = serverSelect && serverSelect.value === 'api4.php';
+          
+          let kategori = (item.kategori || item.category || item.kode_provider || '').toUpperCase().trim();
+          if (isApi4 || !kategori || kategori === 'UMUM') {
+              kategori = categorizePPOBItem(item);
+          }
+          const type = item.type || 'regular';
+          return { nama, kode, harga, kategori, type, raw: item };
+      }
+      
+      async function loadHargaTerkini() {
+          const serverSelect = document.getElementById('hargaServerSelect');
+          const server = serverSelect ? serverSelect.value : 'api1.php';
+          const tbody = document.getElementById('hargaTerkiniTable');
+          const countInfo = document.getElementById('hargaCountInfo');
+          if (tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Memuat daftar harga...</td></tr>';
+          if (countInfo) countInfo.innerText = 'Memuat...';
+      
+          try {
+              const apiKey = currentUser ? currentUser.api_key : '';
+              const res = await fetch(`${server}?action=list&api_key=${apiKey}&_t=${Date.now()}`, { cache: "no-store" });
+              const data = await res.json();
+              
+              const isSuccess = data && (data.ok || data.success || data.status || Array.isArray(data.data) || Array.isArray(data));
+              if (isSuccess) {
+                  const list = data.data || data.produk || (Array.isArray(data) ? data : []);
+                  rawHargaList = list.map(extractItemData);
+                  populateHargaSubFilter();
+                  filterHargaTerkini();
+              } else {
+                  rawHargaList = [];
+                  if (tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger);">Server sedang offline / gagal mengambil data: ' + (data.message || 'Respons tidak valid') + '</td></tr>';
+                  if (countInfo) countInfo.innerText = '0 Produk';
+                  populateHargaSubFilter();
+              }
+          } catch (e) {
+              rawHargaList = [];
+              if (tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger);">Error koneksi ke ' + server + '</td></tr>';
+              if (countInfo) countInfo.innerText = '0 Produk';
+              populateHargaSubFilter();
+          }
+      }
+      
+      function populateHargaSubFilter() {
+          const subSelect = document.getElementById('hargaSubFilterSelect');
+          if (!subSelect) return;
+          
+          let categories = [...new Set(rawHargaList.map(item => item.kategori))].filter(Boolean);
+      
+          let optHtml = '<option value="ALL">-- Semua Kategori --</option>';
+          categories.sort().forEach(cat => {
+              optHtml += `<option value="${cat}">${cat}</option>`;
+          });
+          subSelect.innerHTML = optHtml;
+      }
+      
+      function filterHargaTerkini() {
+          const searchVal = (document.getElementById('hargaSearchInput') ? document.getElementById('hargaSearchInput').value : '').toLowerCase().trim();
+          const subVal = document.getElementById('hargaSubFilterSelect') ? document.getElementById('hargaSubFilterSelect').value : 'ALL';
+      
+          let filtered = rawHargaList.filter(item => {
+              const isHiddenBayar = (item.type === 'payment') || (item.kode.startsWith('B') && item.kode.length > 3) || item.kode.includes('BYR');
+              if (isHiddenBayar) return false;
+      
+              const matchSearch = !searchVal || item.nama.toLowerCase().includes(searchVal) || item.kode.toLowerCase().includes(searchVal);
+              const matchSub = subVal === 'ALL' || item.kategori === subVal;
+      
+              return matchSearch && matchSub;
+          });
+      
+          let html = '';
+          filtered.forEach(item => {
+              html += '<tr onclick="showProductDetail(\'' + item.kode + '\')" style="cursor: pointer;" title="Klik untuk melihat detail produk">' +
+                  '<td><b>' + item.nama + '</b></td>' +
+                  '<td><code style="color:#38bdf8">' + item.kode + '</code></td>' +
+                  '<td><b style="color:var(--accent)">Rp ' + item.harga.toLocaleString('id-ID') + '</b></td>' +
+              '</tr>';
+          });
+      
+          const tbody = document.getElementById('hargaTerkiniTable');
+          if (tbody) tbody.innerHTML = html || '<tr><td colspan="3" style="text-align:center;">Tidak ada produk ditemukan</td></tr>';
+      
+          const countInfo = document.getElementById('hargaCountInfo');
+          if (countInfo) countInfo.innerText = 'Total: ' + filtered.length + ' Produk';
+      }
+      
+      function showProductDetail(kode) {
+          const item = rawHargaList.find(function(p) { return p.kode === kode; });
+          if (!item) return;
+      
+          const raw = item.raw || {};
+          const deskripsi = raw.deskripsi || raw.description || raw.keterangan || item.nama || 'Tidak ada rincian deskripsi untuk produk ini.';
+          const statusVal = raw.status !== undefined ? raw.status : (raw.gangguan === 0 && raw.kosong === 0 ? 'READY' : 'READY');
+          const isReady = (statusVal === 'READY' || statusVal === true || statusVal === '1' || statusVal === 'tersedia' || statusVal === 0);
+          const statusBadge = isReady ? '<span class="badge badge-success">READY / TERSEDIA</span>' : '<span class="badge badge-fail">GANGGUAN / KOSONG</span>';
+      
+          const bodyEl = document.getElementById('productDetailBody');
+          if (bodyEl) {
+              bodyEl.innerHTML = 
+                  '<div style="background: rgba(8, 13, 26, 0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-bottom: 15px;">' +
+                      '<div style="font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 8px;">' + item.nama + '</div>' +
+                      '<div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">' +
+                          '<span class="badge badge-user">Kode: ' + item.kode + '</span>' +
+                          '<span class="badge badge-user">Kategori: ' + item.kategori + '</span>' +
+                          statusBadge +
+                      '</div>' +
+                      '<div style="font-size: 18px; font-weight: 800; color: var(--accent); font-family: monospace;">Rp ' + item.harga.toLocaleString('id-ID') + '</div>' +
+                  '</div>' +
+                  '<div style="font-size: 12px; font-weight: 700; color: #60a5fa; margin-bottom: 6px;"><i class="fas fa-list-ul"></i> RINCIAN & UKURAN PAKET:</div>' +
+                  '<pre style="margin-top: 0; background: #040810; color: #a7f3d0; white-space: pre-wrap; word-break: break-word; font-size: 11px; max-height: 220px; overflow-y: auto; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); line-height: 1.5;">' + deskripsi + '</pre>';
+          }
+          const modal = document.getElementById('modalProductDetail');
+          if (modal) modal.style.display = 'flex';
+      }
+      
+      async function loadApiStatusConfig() {
+          try {
+              const res = await fetch(`auth.php?action=get_api_status&_t=${Date.now()}`, { cache: "no-store" });
+              const data = await res.json();
+              if (data.status && data.data) {
+                  ['api1', 'api2', 'api3', 'api4'].forEach(function(apiKey) {
+                      const isOnline = data.data[apiKey] !== false && data.data[apiKey] !== '0';
+                      const badgeKey = apiKey.charAt(0).toUpperCase() + apiKey.slice(1);
+                      const badge = document.getElementById('status' + badgeKey + 'Badge');
+                      const select = document.getElementById('status' + badgeKey + 'Select');
+                      if (badge) {
+                          badge.className = isOnline ? 'badge badge-success' : 'badge badge-fail';
+                          badge.innerText = isOnline ? 'ONLINE' : 'OFFLINE';
+                      }
+                      if (select) select.value = isOnline ? '1' : '0';
+                  });
+              }
+          } catch(e) {}
+      }
+      
+      async function saveApiStatusConfig() {
+          const payload = {
+              action: 'save_api_status',
+              session_token: currentUser.session_token,
+              api1: document.getElementById('statusApi1Select').value === '1',
+              api2: document.getElementById('statusApi2Select').value === '1',
+              api3: document.getElementById('statusApi3Select').value === '1',
+              api4: document.getElementById('statusApi4Select').value === '1'
+          };
+          const res = await fetch('auth.php', { method: 'POST', body: JSON.stringify(payload) });
+          const data = await res.json();
+          alert(data.message);
+          loadApiStatusConfig();
+      }
+      
+      function renderApp() {
+          if (currentUser.is_blocked || currentUser.status === 'blocked' || currentUser.status === 'suspended') {
+              document.getElementById('suspendedOverlay').style.display = 'flex';
+              document.getElementById('authOverlay').style.display = 'none';
+              document.getElementById('mainDashboard').style.display = 'none';
+              return;
+          } else {
+              document.getElementById('suspendedOverlay').style.display = 'none';
+          }
+      
+          document.getElementById('authOverlay').style.display = 'none';
+          document.getElementById('mainDashboard').style.display = 'block';
+          document.getElementById('userNavInfo').style.display = 'flex';
+      
+          document.getElementById('navUsername').innerText = currentUser.username;
+          document.getElementById('navRoleBadge').innerText = currentUser.role.toUpperCase();
+          document.getElementById('navRoleBadge').className = 'badge ' + (currentUser.role === 'admin' ? 'badge-admin' : 'badge-user');
+      
+          document.getElementById('displayApiKey').innerText = currentUser.api_key;
+          if (document.getElementById('displayApiKeyKtp')) document.getElementById('displayApiKeyKtp').innerText = currentUser.api_key;
+          if (document.getElementById('profUsernameKtp')) document.getElementById('profUsernameKtp').innerText = currentUser.username;
+          if (document.getElementById('profEmailKtp')) document.getElementById('profEmailKtp').innerText = currentUser.email;
+          if (document.getElementById('profWAKtp')) document.getElementById('profWAKtp').innerText = currentUser.nomorwa;
+          if (document.getElementById('profRoleKtp')) {
+              document.getElementById('profRoleKtp').innerText = currentUser.role.toUpperCase();
+              document.getElementById('profRoleKtp').className = 'badge ' + (currentUser.role === 'admin' ? 'badge-admin' : 'badge-user');
+          }
+      
+          document.getElementById('profEmail').innerText = currentUser.email;
+          document.getElementById('profWA').innerText = currentUser.nomorwa;
+          isBalanceVisible = true;
+          updateBalanceDisplay();
+          isApiKeyVisible = false;
+          updateApiKeyDisplay();
+          startRealtimeAutoRefresh();
+          document.getElementById('profRole').innerText = currentUser.role.toUpperCase();
+      
+          switchTab('dashboard');
+          loadHargaTerkini();
+          loadApiStatusConfig();
+          loadUserHistory();
+      
+      
+      }
+      
+      function handleLogout() {
+          localStorage.removeItem('dt17_session'); sessionStorage.removeItem('dt17_session');
+          location.reload();
+      }
+      
+      function copyApiKey() {
+          navigator.clipboard.writeText(currentUser.api_key);
+          alert('API Key disalin!');
+      }
+      
+      function regenApiKey() {
+          document.getElementById("regenPasswordInput").value = "";
+          document.getElementById("modalRegenKey").style.display = "flex";
+      }
+      
+      async function submitRegenApiKey() {
+          const userPass = document.getElementById("regenPasswordInput").value.trim();
+          if (!userPass) {
+              alert("Harap masukkan Kata Sandi!");
+              return;
+          }
+          const res = await fetch("auth.php", { method: "POST", body: JSON.stringify({ action: "regen_key", session_token: currentUser.session_token, password: userPass }) });
+          const data = await res.json();
+          if (data.status) {
+              currentUser.api_key = data.new_api_key;
+              updateApiKeyDisplay();
+              closeModal("modalRegenKey");
+              alert("API Key baru berhasil dibuat!");
+          } else {
+              alert(data.message || "Gagal memperbarui API Key. Pastikan kata sandi benar!");
+          }
+      }
+      
+      function switchDocTab(docType) {
+          const btnStd = document.getElementById('btnDocStandard');
+          const btnApi4 = document.getElementById('btnDocApi4');
+          const docStd = document.getElementById('docStandardView');
+          const docApi4 = document.getElementById('docApi4View');
+          if (!btnStd || !btnApi4 || !docStd || !docApi4) return;
+          
+          btnStd.style.background = docType === 'standard' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.03)';
+          btnStd.style.borderColor = docType === 'standard' ? '#3b82f6' : 'var(--border-color)';
+          btnStd.style.color = docType === 'standard' ? '#60a5fa' : 'var(--text-main)';
+      
+          btnApi4.style.background = docType === 'api4' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.03)';
+          btnApi4.style.borderColor = docType === 'api4' ? '#10b981' : 'var(--border-color)';
+          btnApi4.style.color = docType === 'api4' ? '#34d399' : 'var(--text-main)';
+      
+          docStd.style.display = docType === 'standard' ? 'block' : 'none';
+          docApi4.style.display = docType === 'api4' ? 'block' : 'none';
+      }
+      
+      function switchTab(tab) {
+          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+          if (window.event && window.event.currentTarget && window.event.currentTarget.classList) window.event.currentTarget.classList.add('active');
+          else if (tab === 'dashboard' && document.getElementById('tabBtnDashboard')) document.getElementById('tabBtnDashboard').classList.add('active');
+      
+          if (document.getElementById('tabDashboard')) document.getElementById('tabDashboard').style.display = tab === 'dashboard' ? 'block' : 'none';
+      
+          if (document.getElementById('tabTrxLangsung')) document.getElementById('tabTrxLangsung').style.display = tab === 'trxLangsung' ? 'block' : 'none';
+          document.getElementById('tabHistory').style.display = tab === 'history' ? 'block' : 'none';
+          document.getElementById('tabDoc').style.display = tab === 'doc' ? 'block' : 'none';
+          document.getElementById('tabTester').style.display = tab === 'tester' ? 'block' : 'none';
+      
+      }
+      
+      function toggleTestFields() {
+          const action = document.getElementById('testAction').value;
+          document.getElementById('orderFields').style.display = action === 'order' ? 'block' : 'none';
+          document.getElementById('statusFields').style.display = action === 'status' ? 'block' : 'none';
+      }
+      
+      function copyTestOutput() {
+          const text = document.getElementById('testResult').innerText;
+          navigator.clipboard.writeText(text);
+          alert('JSON Response disalin!');
+      }
+      
+      async function downloadTestOutputPrompt() {
+          const text = document.getElementById('testResult').innerText;
+          if (!text || text.trim().startsWith('//')) {
+              alert('Tidak ada data JSON untuk di-download!');
+              return;
+          }
+          const partsInput = prompt('Pilih jumlah bagian file yang ingin di-download (1 sampai 4):', '1');
+          if (partsInput === null) return;
+          let parts = parseInt(partsInput);
+          if (isNaN(parts) || parts < 1) parts = 1;
+          if (parts > 4) parts = 4;
+      
+          const totalLen = text.length;
+          const chunkSize = Math.ceil(totalLen / parts);
+      
+          for (let i = 0; i < parts; i++) {
+              const start = i * chunkSize;
+              const end = Math.min(start + chunkSize, totalLen);
+              const chunkText = text.slice(start, end);
+              
+              const blob = new Blob([chunkText], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = parts === 1 ? 'response.json' : `response_part_${i + 1}_of_${parts}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+      
+              if (parts > 1 && i < parts - 1) {
+                  await new Promise(resolve => setTimeout(resolve, 250));
+              }
+          }
+      }
+      
+      async function executeTest() {
+          const server = document.getElementById('testServer').value;
+          const action = document.getElementById('testAction').value;
+          const output = document.getElementById('testResult');
+          const statusEl = document.getElementById('testResponseStatus');
+          output.innerText = "// Memproses Request ke " + server + "...";
+          if (statusEl) statusEl.innerText = "STATUS: SENDING...";
+      
+          let payload = { action: action, api_key: currentUser.api_key };
+          if (action === 'order') { payload.kode_produk = document.getElementById('testKode').value; payload.target = document.getElementById('testTarget').value; }
+          else if (action === 'status') { payload.refid = document.getElementById('testRefId').value; }
+      
+          try {
+              const res = await fetch(server, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-API-KEY': currentUser.api_key }, body: JSON.stringify(payload) });
+              const data = await res.json();
+              output.innerText = JSON.stringify(data, null, 2);
+              
+              const trxSt = (data.trx_status || (data.data && data.data.status_trx) || (data.status ? 'PROSES' : 'GAGAL')).toUpperCase();
+              if (statusEl) statusEl.innerText = "STATUS: 200 OK (" + trxSt + ")";
+              
+              loadUserHistory();
+      
+          } catch (err) {
+              output.innerText = "// Error: " + err.message;
+              if (statusEl) statusEl.innerText = "STATUS: ERROR";
+          }
+      }
+      
+      // ==========================================
+      // RIWAYAT TRANSAKSI USER & MONITORING ADMIN (FILTER, SEARCH, PAGINASI MAX 35)
+      // ==========================================
+      let rawUserHistory = [];
+      let userCurrentPage = 1;
+      
+      
+      const TRX_PER_PAGE = 35;
+      
+      function getTodayWIB() {
+          const d = new Date();
+          const wibTime = new Date(d.getTime() + (7 * 3600 * 1000) + (d.getTimezoneOffset() * 60000));
+          const year = wibTime.getFullYear();
+          const month = String(wibTime.getMonth() + 1).padStart(2, '0');
+          const day = String(wibTime.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+      }
+      
+      function initFilterDates() {
+          const todayWIB = getTodayWIB();
+          const uDateEl = document.getElementById('userTrxDate');
+          const aDateEl = document.getElementById('adminTrxDate');
+          if (uDateEl && !uDateEl.value) uDateEl.value = todayWIB;
+          if (aDateEl && !aDateEl.value) aDateEl.value = todayWIB;
+      }
+      
+      function filterUserHistory() {
+          userCurrentPage = 1;
+          renderUserHistoryPage();
+      }
+      
+      function resetUserTrxFilter() {
+          if (document.getElementById('userTrxSearch')) document.getElementById('userTrxSearch').value = '';
+          if (document.getElementById('userTrxDate')) document.getElementById('userTrxDate').value = getTodayWIB();
+          userCurrentPage = 1;
+          renderUserHistoryPage();
+      }
+      
+      function changeUserPage(page) {
+          userCurrentPage = page;
+          renderUserHistoryPage();
+      }
+      
+      function renderUserHistoryPage() {
+          const searchVal = (document.getElementById('userTrxSearch') ? document.getElementById('userTrxSearch').value : '').toLowerCase().trim();
+          const dateVal = document.getElementById('userTrxDate') ? document.getElementById('userTrxDate').value : '';
+      
+          let filtered = rawUserHistory.filter(t => {
+              let matchSearch = true;
+              if (searchVal) {
+                  const ref = (t.refid_h2h || '').toLowerCase();
+                  const target = (t.target || '').toLowerCase();
+                  const kode = (t.kode_produk || '').toLowerCase();
+                  matchSearch = ref.includes(searchVal) || target.includes(searchVal) || kode.includes(searchVal);
+              }
+              let matchDate = true;
+              if (dateVal && t.created_at) {
+                  matchDate = t.created_at.startsWith(dateVal);
+              }
+              return matchSearch && matchDate;
+          });
+      
+          const totalItems = filtered.length;
+          const totalPages = Math.ceil(totalItems / TRX_PER_PAGE) || 1;
+          if (userCurrentPage > totalPages) userCurrentPage = totalPages;
+          if (userCurrentPage < 1) userCurrentPage = 1;
+      
+          const startIdx = (userCurrentPage - 1) * TRX_PER_PAGE;
+          const pageItems = filtered.slice(startIdx, startIdx + TRX_PER_PAGE);
+      
+          let html = '';
+          pageItems.forEach(t => {
+              let badgeClass = t.status === 'BERHASIL' ? 'badge-success' : (t.status === 'GAGAL' ? 'badge-fail' : 'badge-pending');
+              html += `<tr>
+                  <td><small>${t.created_at}</small></td>
+                  <td><code style="color:#38bdf8">${t.refid_h2h}</code></td>
+                  <td><span class="badge badge-user">${t.server_code || t.server}</span></td>
+                  <td><b>${t.kode_produk}</b> / ${t.target}</td>
+                  <td><span class="badge ${badgeClass}">${t.status}</span></td>
+                  <td><small>${(t.status === 'GAGAL' || !t.sn || t.sn === '-' || t.sn === 'Transaksi Diproses') ? (t.message || t.sn || '-') : t.sn}</small></td>
+              </tr>`;
+          });
+      
+          if (document.getElementById('userTrxTable')) {
+              const tableEl = document.getElementById('userTrxTable');
+              const newHtml = html || '<tr><td colspan="6" style="text-align:center;">Tidak ada transaksi ditemukan</td></tr>';
+              if (tableEl.innerHTML !== newHtml) {
+                  tableEl.innerHTML = newHtml;
+              }
+          }
+      
+          if (document.getElementById('userTrxCountInfo')) {
+              document.getElementById('userTrxCountInfo').innerText = `Total Filter: ${totalItems} TRX`;
+          }
+      
+          if (document.getElementById('userPaginationPageText')) {
+              document.getElementById('userPaginationPageText').innerText = `Halaman ${userCurrentPage} dari ${totalPages} (Total ${totalItems} Transaksi)`;
+          }
+      
+          renderPaginationBtns('userPaginationBtns', userCurrentPage, totalPages, 'changeUserPage');
+      }
+      
+      
+      
+      function renderPaginationBtns(containerId, currentPage, totalPages, fnNameStr) {
+          const container = document.getElementById(containerId);
+          if (!container) return;
+          let html = '';
+      
+          const prevDisabled = currentPage <= 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : '';
+          html += `<button class="btn btn-outline" ${prevDisabled} onclick="${fnNameStr}(${currentPage - 1})" style="padding:5px 10px; font-size:11px;"><i class="fas fa-chevron-left"></i> Prev</button>`;
+      
+          let startPage = Math.max(1, currentPage - 2);
+          let endPage = Math.min(totalPages, startPage + 4);
+          if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+      
+          for (let i = startPage; i <= endPage; i++) {
+              const activeClass = i === currentPage ? 'btn-success' : 'btn-outline';
+              html += `<button class="btn ${activeClass}" onclick="${fnNameStr}(${i})" style="padding:5px 10px; font-size:11px;">${i}</button>`;
+          }
+      
+          const nextDisabled = currentPage >= totalPages ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : '';
+          html += `<button class="btn btn-outline" ${nextDisabled} onclick="${fnNameStr}(${currentPage + 1})" style="padding:5px 10px; font-size:11px;">Next <i class="fas fa-chevron-right"></i></button>`;
+      
+          container.innerHTML = html;
+      }
+      
+      async function loadUserHistory() {
+          const res = await fetch(`auth.php?action=my_history&session_token=${currentUser.session_token}&_t=${Date.now()}`, { cache: "no-store" });
+          const data = await res.json();
+          if (data.status) {
+              rawUserHistory = data.data || [];
+              
+              let pendingStr = localStorage.getItem('dt17_pending_topup_' + currentUser.username);
+              if (pendingStr) {
+                  let pending = JSON.parse(pendingStr);
+                  let resolved = rawUserHistory.find(x => x.refid_h2h === pending.id && x.status !== 'PENDING');
+                  if (resolved || (Date.now() - pending.time > 3600 * 1000)) {
+                      localStorage.removeItem('dt17_pending_topup_' + currentUser.username);
+                  } else {
+                      let exists = rawUserHistory.find(x => x.refid_h2h === pending.id);
+                      if (!exists) {
+                          let d = new Date(pending.time);
+                          let ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + ':' + String(d.getSeconds()).padStart(2,'0');
+                          rawUserHistory.unshift({
+                              created_at: ds,
+                              refid_h2h: pending.id,
+                              server_code: 'TOPUP SALDO',
+                              kode_produk: 'SALDO',
+                              target: 'TRANSFER',
+                              harga: pending.amount,
+                              status: 'PENDING',
+                              sn: 'Menunggu Pembayaran / Konfirmasi'
+                          });
+                      }
+                  }
+              }
+      
+              initFilterDates();
+      
+              let totalTerpakai = 0;
+              let countBerhasil = 0;
+              let monthTotal = 0;
+              let monthSuccess = 0;
+              let monthFailed = 0;
+              const now = new Date();
+              const currentYearMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+              const monthlySaldoTerpakai = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+              const monthlyTrxBerhasil = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+              const monthlyTrxGagal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      
+              rawUserHistory.forEach(t => {
+                  const price = parseInt(t.harga || 0);
+                  const isTopup = (t.server_code === 'TOPUP SALDO' || t.kode_produk === 'SALDO' || String(t.refid_h2h).startsWith('TP-'));
+                  if (t.status === 'BERHASIL') {
+                      if (!isTopup) {
+                          totalTerpakai += price;
+                          countBerhasil++;
+                      }
+                  }
+                  if (t.created_at) {
+                      const tDate = new Date(t.created_at);
+                      if (!isNaN(tDate)) {
+                          const mIndex = tDate.getMonth();
+                          if (t.status === 'BERHASIL') {
+                              if (!isTopup) {
+                                  monthlySaldoTerpakai[mIndex] += price;
+                                  monthlyTrxBerhasil[mIndex] += 1;
+                              }
+                          } else if (t.status === 'GAGAL') {
+                              if (!isTopup) {
+                                  monthlyTrxGagal[mIndex] += 1;
+                              }
+                          }
+                          const tYM = tDate.getFullYear() + '-' + String(tDate.getMonth() + 1).padStart(2, '0');
+                          if (tYM === currentYearMonth) {
+                              if (!isTopup) {
+                                  monthTotal++;
+                                  if (t.status === 'BERHASIL') monthSuccess++;
+                                  else if (t.status === 'GAGAL') monthFailed++;
+                              }
+                          }
+                      }
+                  }
+              });
+      
+              if (document.getElementById('profSaldoTerpakai')) document.getElementById('profSaldoTerpakai').innerText = 'Rp ' + totalTerpakai.toLocaleString('id-ID');
+              fetch(`auth.php?action=check_session&session_token=${currentUser.session_token}&_t=${Date.now()}`, { cache: "no-store" }).then(r => r.json()).then(uData => {
+                  if (uData.status && uData.data) {
+                      currentUser.saldo = uData.data.saldo;
+                      updateBalanceDisplay();
+                  }
+              });
+              if (document.getElementById('profTotalTrxBerhasil')) document.getElementById('profTotalTrxBerhasil').innerText = countBerhasil + ' Transaksi';
+              if (document.getElementById('monthTotalTrx')) document.getElementById('monthTotalTrx').innerText = monthTotal + ' TRX';
+              if (document.getElementById('monthSuccessTrx')) document.getElementById('monthSuccessTrx').innerText = monthSuccess + ' TRX';
+              if (document.getElementById('monthFailedTrx')) document.getElementById('monthFailedTrx').innerText = monthFailed + ' TRX';
+              if (!window.isSilentAutoRefresh) {
+                  renderTradingChart(monthlySaldoTerpakai, monthlyTrxBerhasil, monthlyTrxGagal);
+              }
+      
+              renderUserHistoryPage();
+          }
+      }
+      
+      
+      
+      async function adminSyncUpstream(userId, refidH2H) {
+          const payload = {
+              action: 'admin_sync_upstream_status',
+              session_token: currentUser.session_token,
+              target_user_id: userId,
+              refid_h2h: refidH2H
+          };
+          const res = await fetch('auth.php', { method: 'POST', body: JSON.stringify(payload) });
+          const data = await res.json();
+          if (data.status) {
+              alert('=== HASIL RESPON MENTAH API PUSAT ===\n\n' + JSON.stringify(data.raw_response, null, 2));
+          } else {
+              alert('Gagal: ' + (data.message || 'Gagal mengambil respon dari pusat'));
+          }
+          loadAdminAllHistory();
+          loadUserHistory();
+      }
+      
+      async function adminDeleteUser(userId, username) {
+          if (!confirm('Hapus user ' + username + '?')) return;
+          const res = await fetch('auth.php', { method: 'POST', body: JSON.stringify({ action: 'admin_delete_user', session_token: currentUser.session_token, target_id: userId }) });
+          const data = await res.json(); alert(data.message); if (data.status) loadAdminUsers();
+      }
+    </script>
+</body>
+
+</html>
