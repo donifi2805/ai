@@ -21,20 +21,31 @@
         --accent: #10b981;
         --accent-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
         --danger: #ef4444;
+        --danger-gradient: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
         --warning: #f59e0b;
+        --purple: #8b5cf6;
+        --cyan: #06b6d4;
         --text-main: #f8fafc;
         --text-sub: #94a3b8;
         --border-color: rgba(255, 255, 255, 0.08);
-        --border-hover: rgba(59, 130, 246, 0.4);
+        --border-hover: rgba(239, 68, 68, 0.4);
         --glass-bg: rgba(15, 23, 42, 0.75);
-        --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(37, 99, 235, 0.05);
+        --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(239, 68, 68, 0.05);
     }
+    /* ===== UTIL TEKS ===== */
+    .text-success { color: #34d399; }
+    .text-danger  { color: #f87171; }
+    .text-warn    { color: #fbbf24; }
+    .text-blue    { color: #60a5fa; }
+    .text-purple  { color: #a78bfa; }
+    .text-cyan    { color: #22d3ee; }
+    .mono         { font-family: 'Consolas', 'Courier New', monospace; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
     body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 40px; background-image: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.12) 0%, transparent 60%); background-attachment: fixed; }
     
-    .navbar { background: rgba(8, 13, 26, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(59, 130, 246, 0.25); padding: 10px 22px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); }
-    .logo { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: -0.2px; }
-    .logo i { color: var(--primary); filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.7)); font-size: 16px; }
+    .navbar { background: rgba(8, 13, 26, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(239, 68, 68, 0.25); padding: 10px 22px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); gap: 10px; flex-wrap: wrap; }
+    .logo { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: -0.2px; white-space: nowrap; }
+    .logo i { color: var(--danger); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.7)); font-size: 16px; }
     .nav-status-pill { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; display: flex; align-items: center; gap: 5px; letter-spacing: 0.5px; }
     .nav-status-pill .dot { width: 5px; height: 5px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; animation: pulseDot 1.8s infinite; }
     @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
@@ -45,13 +56,14 @@
     /* AUTH OVERLAY */
     #authOverlay { position: fixed; inset: 0; background: rgba(8, 13, 26, 0.88); backdrop-filter: blur(16px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 15px; }
     .auth-card { background: var(--panel-card); border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 360px; padding: 25px; box-shadow: var(--shadow-card); transition: transform 0.3s ease; }
-    .auth-title { font-size: 18px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; text-align: center; }
+    .auth-title { font-size: 19px; font-weight: 800; background: linear-gradient(135deg, #ef4444, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; text-align: center; }
     .auth-subtitle { font-size: 11px; color: var(--text-sub); text-align: center; margin-bottom: 20px; }
     
     .form-group { margin-bottom: 12px; }
     label { display: block; font-size: 10px; font-weight: 600; color: var(--text-sub); margin-bottom: 4px; letter-spacing: 0.2px; }
-    input, select { width: 100%; padding: 8px 11px; background: rgba(8, 13, 26, 0.7); border: 1px solid var(--border-color); border-radius: 8px; color: white; font-size: 11px; outline: none; transition: all 0.2s ease; }
-    input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); background: rgba(8, 13, 26, 0.9); }
+    input, select, textarea { width: 100%; padding: 8px 11px; background: rgba(8, 13, 26, 0.7); border: 1px solid var(--border-color); border-radius: 8px; color: white; font-size: 11px; outline: none; transition: all 0.2s ease; color-scheme: dark; }
+    input:focus, select:focus, textarea:focus { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); background: rgba(8, 13, 26, 0.9); }
+    input[type="checkbox"] { width: auto; accent-color: var(--danger); }
     
     .btn { background: var(--primary-gradient); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
     .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4); opacity: 0.95; }
@@ -78,9 +90,9 @@
     /* TABS & DOCUMENTATION */
     .tab-nav { display: flex; gap: 5px; background: rgba(8, 13, 26, 0.6); padding: 5px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; overflow-x: auto; scrollbar-width: none; }
     .tab-nav::-webkit-scrollbar { display: none; }
-    .tab-btn { padding: 8px 14px; background: transparent; border: 1px solid transparent; color: var(--text-sub); font-weight: 700; cursor: pointer; white-space: nowrap; transition: all 0.25s ease; font-size: 11px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; }
-    .tab-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
-    .tab-btn.active { color: #60a5fa; background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(59, 130, 246, 0.1) 100%); border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15); }
+    .tab-btn { padding: 8px 14px; background: transparent; border: 1px solid transparent; color: var(--text-sub); font-weight: 700; cursor: pointer; white-space: nowrap; transition: all 0.25s ease; font-size: 11px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; position: relative; }
+    .tab-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+    .tab-btn.active { color: #fca5a5; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
     
     pre { background: #060a14; padding: 12px; border-radius: 10px; font-size: 10px; color: #a7f3d0; overflow-x: auto; border: 1px solid var(--border-color); margin-top: 8px; line-height: 1.5; word-break: break-all; font-family: monospace; }
     .badge { font-size: 9px; font-weight: 800; padding: 3px 7px; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; }
@@ -112,6 +124,94 @@
     .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
     .admin-info-card { background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%); border: 2px solid rgba(59, 130, 246, 0.5); border-radius: 14px; padding: 18px; margin-top: 20px; box-shadow: 0 0 25px rgba(37, 99, 235, 0.25); position: relative; overflow: hidden; }
     
+    /* ==========================================================
+       KOMPONEN TEMA PANELADMIN (diseragamkan dengan panel admin)
+       ========================================================== */
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-sm { padding: 4px 8px; font-size: 10px; }
+    .btn-purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25); }
+    .btn-cyan { background: linear-gradient(135deg, #0891b2, #06b6d4); box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25); }
+
+    .grid { display: grid; gap: 15px; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .grid-5 { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .grid-no-mb { margin-bottom: 0 !important; }
+
+    .card-title { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .card-title i { color: var(--danger); }
+    .card-sub { font-size: 11px; color: var(--text-sub); margin-bottom: 14px; }
+
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; background: rgba(8, 13, 26, 0.6); padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 14px; }
+    .fg { display: flex; flex-direction: column; gap: 3px; min-width: 130px; }
+    .fg.grow { flex: 1; min-width: 190px; }
+    .fg label { margin-bottom: 0; }
+    .search-wrap { position: relative; display: flex; align-items: center; }
+    .search-wrap i { position: absolute; left: 10px; color: var(--text-sub); font-size: 10px; pointer-events: none; }
+    .search-wrap input { padding-left: 28px; }
+
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border-color); }
+    .table-wrap table { margin-top: 0; }
+
+    .kpi { border-radius: 12px; padding: 14px; border: 1px solid; position: relative; overflow: hidden; }
+    .kpi small { color: var(--text-sub); font-size: 10px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+    .kpi h3 { font-size: 20px; margin-top: 6px; font-weight: 800; }
+    .kpi .kpi-icon { position: absolute; right: 12px; bottom: 10px; font-size: 30px; opacity: 0.12; }
+    .kpi-blue   { background: rgba(59, 130, 246, 0.08);  border-color: rgba(59, 130, 246, 0.3);  } .kpi-blue h3   { color: #60a5fa; }
+    .kpi-green  { background: rgba(16, 185, 129, 0.08);  border-color: rgba(16, 185, 129, 0.3);  } .kpi-green h3  { color: #34d399; }
+    .kpi-red    { background: rgba(239, 68, 68, 0.08);   border-color: rgba(239, 68, 68, 0.3);   } .kpi-red h3    { color: #f87171; }
+    .kpi-yellow { background: rgba(245, 158, 11, 0.08);  border-color: rgba(245, 158, 11, 0.3);  } .kpi-yellow h3 { color: #fbbf24; }
+    .kpi-purple { background: rgba(139, 92, 246, 0.08);  border-color: rgba(139, 92, 246, 0.3);  } .kpi-purple h3 { color: #a78bfa; }
+    .kpi-cyan   { background: rgba(6, 182, 212, 0.08);   border-color: rgba(6, 182, 212, 0.3);   } .kpi-cyan h3   { color: #22d3ee; }
+
+    .stat-mini { background: rgba(8, 13, 26, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; text-align: center; }
+    .stat-mini b { display: block; font-size: 16px; margin-bottom: 2px; }
+    .stat-mini small { font-size: 9px; color: var(--text-sub); text-transform: uppercase; font-weight: 700; }
+
+    .banner { padding: 10px 14px; border-radius: 10px; font-size: 11px; display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border: 1px solid; }
+    .banner-warn   { background: rgba(245, 158, 11, 0.1);  border-color: rgba(245, 158, 11, 0.35);  color: #fde047; }
+    .banner-danger { background: rgba(239, 68, 68, 0.1);   border-color: rgba(239, 68, 68, 0.35);   color: #fca5a5; }
+    .banner-info   { background: rgba(59, 130, 246, 0.1);  border-color: rgba(59, 130, 246, 0.35);  color: #93c5fd; }
+    .banner-ok     { background: rgba(16, 185, 129, 0.1);  border-color: rgba(16, 185, 129, 0.35);  color: #6ee7b7; }
+
+    .empty { text-align: center; padding: 25px; color: var(--text-sub); font-size: 11px; }
+    .empty i { font-size: 26px; opacity: 0.3; display: block; margin-bottom: 8px; }
+
+    .count-info { font-size: 10px; color: var(--text-sub); margin: 8px 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .pagination { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+    .pagination .pg-info { font-size: 10px; color: var(--text-sub); margin-right: auto; }
+
+    .badge-purple { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .badge-cyan   { background: rgba(6, 182, 212, 0.15);  color: #67e8f9; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .badge-muted  { background: rgba(148, 163, 184, 0.12); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25); }
+
+    .chip-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .chip { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-sub); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+    .chip:hover { background: rgba(255, 255, 255, 0.08); color: var(--text-main); border-color: rgba(255, 255, 255, 0.2); }
+    .chip.active { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.45); color: #fca5a5; }
+
+    mark.hl { background: rgba(250, 204, 21, 0.25); color: #fde047; padding: 0 2px; border-radius: 3px; }
+
+    .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+
+    .kv-grid { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; font-size: 11px; }
+    .kv-grid .k { color: var(--text-sub); font-weight: 700; text-transform: uppercase; font-size: 9px; letter-spacing: 0.4px; }
+    .kv-grid .v { color: var(--text-main); word-break: break-all; }
+
+    /* TOAST NOTIFIKASI */
+    #toastWrap { position: fixed; right: 16px; bottom: 16px; z-index: 99998; display: flex; flex-direction: column; gap: 8px; max-width: 320px; }
+    .toast { background: var(--panel-card); border: 1px solid var(--border-color); border-left: 3px solid var(--primary); border-radius: 10px; padding: 10px 12px; font-size: 11px; color: var(--text-main); box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6); display: flex; gap: 9px; align-items: flex-start; animation: toastIn 0.25s ease; }
+    .toast.out { animation: toastOut 0.3s ease forwards; }
+    .toast b { display: block; margin-bottom: 2px; font-size: 11px; }
+    .toast small { color: var(--text-sub); font-size: 10px; line-height: 1.4; }
+    .toast.success { border-left-color: #10b981; } .toast.success i { color: #34d399; }
+    .toast.error   { border-left-color: #ef4444; } .toast.error i   { color: #f87171; }
+    .toast.warn    { border-left-color: #f59e0b; } .toast.warn i    { color: #fbbf24; }
+    .toast.info    { border-left-color: #3b82f6; } .toast.info i    { color: #60a5fa; }
+    @keyframes toastIn  { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateX(30px); } }
+
     /* MOBILE COMPACT STYLING (40% SMALLER & ULTRA COMPACT) */
     @media (max-width: 768px) {
         body { padding-bottom: 20px; }
@@ -154,11 +254,29 @@
         p { font-size: 9px !important; }
         
         .url-highlight { padding: 4px 6px; font-size: 8px; border-radius: 4px; }
+
+        .card-title { font-size: 12px; }
+        .card-sub { font-size: 9px; margin-bottom: 8px; }
+        .toolbar { padding: 8px 9px; gap: 7px; margin-bottom: 10px; border-radius: 8px; }
+        .fg { min-width: 100px; }
+        .fg.grow { min-width: 130px; }
+        .stat-mini { padding: 7px; }
+        .stat-mini b { font-size: 13px; }
+        .kpi { padding: 9px; border-radius: 8px; }
+        .kpi h3 { font-size: 15px; }
+        .kpi .kpi-icon { font-size: 20px; }
+        .banner { padding: 8px 10px; font-size: 9px; margin-bottom: 10px; }
+        .chip { padding: 3px 8px; font-size: 9px; }
+        .kv-grid { grid-template-columns: 100px 1fr; font-size: 9px; }
+        #toastWrap { right: 8px; left: 8px; bottom: 8px; max-width: none; }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- KONTENER NOTIFIKASI TOAST -->
+  <div id="toastWrap"></div>
 
   <nav class="navbar">
     <div class="logo">
@@ -287,6 +405,7 @@
 
       <button class="tab-btn" id="tabBtnTrxLangsung" onclick="switchTab('trxLangsung')"><i class="fas fa-bolt"></i> Daftar Harga</button>
       <button class="tab-btn" onclick="switchTab('history')"><i class="fas fa-history"></i> Riwayat Saya</button>
+      <button class="tab-btn" id="tabBtnLacak" onclick="switchTab('lacak')"><i class="fas fa-magnifying-glass-chart"></i> Lacak Transaksi</button>
       <button class="tab-btn" onclick="switchTab('doc')"><i class="fas fa-book"></i> Dokumentasi & Response JSON</button>
       <button class="tab-btn" onclick="switchTab('tester')"><i class="fas fa-vial"></i> Interactive Tester</button>
 
@@ -508,8 +627,25 @@
     <!-- TAB 0: RIWAYAT TRANSAKSI USER -->
     <div id="tabHistory">
       <div class="card">
-        <h2><i class="fas fa-receipt"></i> Riwayat Transaksi H2H Saya</h2>
-        <p style="font-size: 13px; color: var(--text-sub);">Terdaftar otomatis di file JSON milik Anda. Status pending otomatis mengecek ke server pusat.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+          <div>
+            <div class="card-title" style="margin-bottom: 2px;"><i class="fas fa-receipt"></i> Riwayat Transaksi H2H Saya</div>
+            <div class="card-sub" style="margin-bottom: 0;">Terdaftar otomatis di file JSON milik Anda. Status pending otomatis mengecek ke server pusat.</div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-outline btn-sm" onclick="loadUserHistory()"><i class="fas fa-rotate-right"></i> Muat Ulang</button>
+            <button class="btn btn-purple btn-sm" onclick="exportUserHistoryCSV()"><i class="fas fa-file-export"></i> Ekspor CSV</button>
+          </div>
+        </div>
+
+        <!-- RINGKASAN RIWAYAT -->
+        <div class="grid grid-5" style="margin-bottom: 14px;">
+          <div class="stat-mini"><b id="histStatTotal">0</b><small>Total</small></div>
+          <div class="stat-mini"><b class="text-success" id="histStatOk">0</b><small>Berhasil</small></div>
+          <div class="stat-mini"><b class="text-danger" id="histStatFail">0</b><small>Gagal</small></div>
+          <div class="stat-mini"><b class="text-warn" id="histStatPend">0</b><small>Pending</small></div>
+          <div class="stat-mini"><b class="text-cyan" id="histStatNominal">Rp 0</b><small>Total Nominal</small></div>
+        </div>
 
         <!-- FILTER & SEARCH BAR USER -->
         <div style="display: flex; gap: 10px; margin-top: 15px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; justify-content: space-between; background: rgba(8, 13, 26, 0.6); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color);">
@@ -521,6 +657,7 @@
               <input type="date" id="userTrxDate" onchange="filterUserHistory()" style="padding: 8px 12px; font-size: 12px; color-scheme: dark;" />
             </div>
             <button class="btn btn-outline" onclick="resetUserTrxFilter()" style="padding: 8px 12px; font-size: 11px;" title="Reset Filter"><i class="fas fa-undo"></i> Reset</button>
+            <button class="btn btn-outline" onclick="clearUserTrxDate()" style="padding: 8px 12px; font-size: 11px;" title="Tampilkan semua tanggal"><i class="fas fa-calendar-days"></i> Semua Tanggal</button>
           </div>
           <div style="font-size: 11px; color: var(--text-sub);" id="userTrxCountInfo">Memuat...</div>
         </div>
@@ -549,6 +686,176 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 12px;">
           <small style="font-size: 11px; color: var(--text-sub);" id="userPaginationPageText">Halaman 1 dari 1</small>
           <div style="display: flex; gap: 6px;" id="userPaginationBtns"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB: LACAK TRANSAKSI ================= -->
+    <div id="tabLacak" style="display: none;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+          <div>
+            <div class="card-title" style="margin-bottom: 2px;"><i class="fas fa-magnifying-glass-chart"></i> Lacak &amp; Telusuri Transaksi</div>
+            <div class="card-sub" style="margin-bottom: 0;">Cukup tempel <b>RefID H2H</b>, <b>RefID Pusat</b>, <b>nomor tujuan</b>, <b>kode/nama produk</b>, <b>SN</b>, atau <b>username</b> — sistem otomatis menebak jenis kata kunci Anda.</div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-outline btn-sm" onclick="lacakRefresh()"><i class="fas fa-rotate-right"></i> Muat Ulang</button>
+            <button class="btn btn-purple btn-sm" onclick="lacakExportCSV()"><i class="fas fa-file-export"></i> Ekspor CSV</button>
+          </div>
+        </div>
+
+        <!-- KOTAK PENCARIAN UTAMA -->
+        <div class="toolbar">
+          <div class="fg grow">
+            <label>Kata Kunci Pencarian (otomatis mendeteksi jenis)</label>
+            <div class="search-wrap">
+              <i class="fas fa-magnifying-glass"></i>
+              <input type="text" id="lacakSearch" oninput="lacakOnInput()" onkeydown="if(event.key==='Enter'){lacakPage=1;renderLacak();}"
+                placeholder="Contoh: TRX_20260101_123  •  KF-0877-8365926  •  087812345678  •  XLB5  •  SN-123" />
+            </div>
+          </div>
+          <div class="fg">
+            <label>Jenis Pencarian</label>
+            <select id="lacakMode" onchange="lacakPage=1;renderLacak()">
+              <option value="auto">Otomatis (Ditebak Sistem)</option>
+              <option value="refid">RefID H2H / Pusat</option>
+              <option value="target">Nomor Tujuan</option>
+              <option value="produk">Kode / Nama Produk</option>
+              <option value="sn">SN / Serial Number</option>
+              <option value="username">Username</option>
+              <option value="semua">Semua Kolom</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>&nbsp;</label>
+            <button class="btn btn-outline btn-sm" onclick="lacakReset()"><i class="fas fa-filter-circle-xmark"></i> Reset</button>
+          </div>
+        </div>
+
+        <div class="banner banner-info" id="lacakDeteksi" style="display: none;"></div>
+
+        <!-- FILTER CEPAT -->
+        <div class="chip-bar" id="lacakChips">
+          <button class="chip" data-chip="all" onclick="lacakChip('all')"><i class="fas fa-layer-group"></i> Semua</button>
+          <button class="chip" data-chip="today" onclick="lacakChip('today')"><i class="fas fa-calendar-day"></i> Hari Ini</button>
+          <button class="chip" data-chip="7d" onclick="lacakChip('7d')"><i class="fas fa-calendar-week"></i> 7 Hari</button>
+          <button class="chip" data-chip="30d" onclick="lacakChip('30d')"><i class="fas fa-calendar"></i> 30 Hari</button>
+          <button class="chip" data-chip="gagal" onclick="lacakChip('gagal')"><i class="fas fa-circle-xmark"></i> Gagal</button>
+          <button class="chip" data-chip="pending" onclick="lacakChip('pending')"><i class="fas fa-hourglass-half"></i> Pending</button>
+          <button class="chip" data-chip="berhasil" onclick="lacakChip('berhasil')"><i class="fas fa-circle-check"></i> Berhasil</button>
+          <button class="chip" data-chip="topup" onclick="lacakChip('topup')"><i class="fas fa-wallet"></i> Topup</button>
+        </div>
+
+        <!-- FILTER LANJUTAN -->
+        <div class="toolbar">
+          <div class="fg">
+            <label>Status</label>
+            <select id="lacakStatus" onchange="lacakPage=1;renderLacak()">
+              <option value="">Semua Status</option>
+              <option value="BERHASIL">BERHASIL</option>
+              <option value="GAGAL">GAGAL</option>
+              <option value="PENDING">PENDING</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Server</label>
+            <select id="lacakServer" onchange="lacakPage=1;renderLacak()">
+              <option value="">Semua Server</option>
+              <option value="api1">api1 — AkrabStable</option>
+              <option value="api2">api2 — AkrabSuper</option>
+              <option value="api3">api3 — AkrabSmart</option>
+              <option value="api4">api4 — AkrabOke (PPOB)</option>
+              <option value="TOPUP">TOPUP SALDO</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Dari Tanggal</label>
+            <input type="date" id="lacakDateFrom" onchange="lacakPage=1;renderLacak()" />
+          </div>
+          <div class="fg">
+            <label>Sampai Tanggal</label>
+            <input type="date" id="lacakDateTo" onchange="lacakPage=1;renderLacak()" />
+          </div>
+          <div class="fg">
+            <label>Harga Minimal</label>
+            <input type="number" id="lacakHargaMin" placeholder="0" oninput="lacakPage=1;renderLacak()" />
+          </div>
+          <div class="fg">
+            <label>Harga Maksimal</label>
+            <input type="number" id="lacakHargaMax" placeholder="0" oninput="lacakPage=1;renderLacak()" />
+          </div>
+        </div>
+
+        <!-- RINGKASAN HASIL -->
+        <div class="grid grid-5" style="margin-bottom: 14px;">
+          <div class="stat-mini"><b id="lacakStatTotal">0</b><small>Hasil</small></div>
+          <div class="stat-mini"><b class="text-success" id="lacakStatOk">0</b><small>Berhasil</small></div>
+          <div class="stat-mini"><b class="text-danger" id="lacakStatFail">0</b><small>Gagal</small></div>
+          <div class="stat-mini"><b class="text-warn" id="lacakStatPend">0</b><small>Pending</small></div>
+          <div class="stat-mini"><b class="text-cyan" id="lacakStatNominal">Rp 0</b><small>Total Nominal</small></div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>RefID H2H Kita</th>
+                <th>RefID Pusat</th>
+                <th>Server</th>
+                <th>Produk / Tujuan</th>
+                <th>Harga</th>
+                <th>Status</th>
+                <th>SN / Keterangan</th>
+                <th style="min-width: 130px;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="lacakTableBody">
+              <tr><td colspan="9" class="empty">Ketik kata kunci di atas untuk mulai melacak transaksi</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="count-info"><span id="lacakCountInfo">-</span><span id="lacakSearchInfo"></span></div>
+        <div class="pagination" id="lacakPagination"></div>
+      </div>
+
+      <!-- ============ CEK STATUS LANGSUNG KE SERVER ============ -->
+      <div class="card">
+        <div class="card-title"><i class="fas fa-satellite-dish"></i> Cek Status Transaksi Langsung ke Server</div>
+        <div class="card-sub">Punya RefID dari H2H kami tapi belum muncul di riwayat? Tempel RefID-nya di sini — panel akan menanyakannya langsung ke server bersangkutan.</div>
+
+        <div class="toolbar">
+          <div class="fg grow">
+            <label>RefID Transaksi</label>
+            <div class="search-wrap">
+              <i class="fas fa-barcode"></i>
+              <input type="text" id="lacakRefIdCek" placeholder="Contoh: TRX_MITRA_9901 atau KF-0877-8365926" onkeydown="if(event.key==='Enter')lacakCekServer()" />
+            </div>
+          </div>
+          <div class="fg">
+            <label>Server Tujuan</label>
+            <select id="lacakServerCek">
+              <option value="ALL">🔎 Coba Semua Server</option>
+              <option value="api1.php">api1 — AkrabStable</option>
+              <option value="api2.php">api2 — AkrabSuper</option>
+              <option value="api3.php">api3 — AkrabSmart</option>
+              <option value="api4.php">api4 — AkrabOke (PPOB)</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>&nbsp;</label>
+            <button class="btn btn-sm" onclick="lacakCekServer()" id="btnLacakCek"><i class="fas fa-paper-plane"></i> Cek Sekarang</button>
+          </div>
+        </div>
+
+        <div id="lacakCekHasil" style="display: none;">
+          <div id="lacakCekRingkasan"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+            <small style="font-size: 10px; color: var(--text-sub); font-family: monospace;" id="lacakCekStatus">STATUS: READY</small>
+            <button class="btn btn-outline btn-sm" onclick="lacakCekCopy()"><i class="fas fa-copy"></i> Salin Respons</button>
+          </div>
+          <pre id="lacakCekJson" style="margin-top: 6px;">// Hasil pengecekan akan tampil di sini...</pre>
         </div>
       </div>
     </div>
@@ -977,8 +1284,93 @@
       </div>
     </div>
 
+    <!-- MODAL DETAIL TRANSAKSI -->
+    <div class="modal" id="modalTrxDetail">
+      <div class="modal-content" style="max-width: 520px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <h3 style="font-size: 14px;"><i class="fas fa-receipt" style="color: var(--danger);"></i> Detail Transaksi</h3>
+          <button class="btn btn-outline btn-sm" onclick="closeModal('modalTrxDetail')"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="trxDetailBody"></div>
+        <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
+          <button class="btn btn-outline btn-sm" onclick="trxDetailCopyRef()"><i class="fas fa-barcode"></i> Salin RefID H2H</button>
+          <button class="btn btn-outline btn-sm" onclick="trxDetailCopyTarget()"><i class="fas fa-phone"></i> Salin Nomor Tujuan</button>
+          <button class="btn btn-purple btn-sm" onclick="trxDetailCekServer()"><i class="fas fa-satellite-dish"></i> Cek ke Server</button>
+        </div>
+      </div>
+    </div>
+
     <script>
       let autoRefreshTimer = null;
+
+      /* ==========================================================
+         UTILITAS BERSAMA (toast, format, clipboard, CSV, highlight)
+         ========================================================== */
+      function esc(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+      function fmtRp(n) { return 'Rp ' + (parseInt(n || 0)).toLocaleString('id-ID'); }
+
+      function toast(type, title, msg, ms) {
+        const wrap = document.getElementById('toastWrap');
+        if (!wrap) { if (window.alert) alert(title + (msg ? '\n' + msg : '')); return; }
+        const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', warn: 'fa-triangle-exclamation', info: 'fa-circle-info' };
+        const el = document.createElement('div');
+        el.className = 'toast ' + (type || 'info');
+        el.innerHTML = '<i class="fas ' + (icons[type] || icons.info) + '" style="margin-top:2px;"></i>' +
+                       '<div style="flex:1;"><b>' + esc(title) + '</b>' + (msg ? '<small>' + esc(msg) + '</small>' : '') + '</div>';
+        wrap.appendChild(el);
+        setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, ms || 4000);
+      }
+
+      function copyToClipboard(text, label) {
+        const done = () => toast('success', 'Berhasil Disalin', (label || 'Teks') + ' disalin ke clipboard');
+        const fallback = () => {
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); done(); } catch (e) { toast('error', 'Gagal Menyalin', 'Clipboard tidak tersedia'); }
+          ta.remove();
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(fallback);
+        else fallback();
+      }
+
+      function downloadFile(name, content, type) {
+        const blob = new Blob([content], { type: type || 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = name;
+        document.body.appendChild(a); a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+        toast('success', 'Unduhan Dimulai', name);
+      }
+
+      function toCSV(rows, cols) {
+        const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+        return [cols.map(c => q(c[1])).join(',')]
+          .concat(rows.map(r => cols.map(c => q(typeof c[0] === 'function' ? c[0](r) : r[c[0]])).join(',')))
+          .join('\r\n');
+      }
+
+      /** Menyisipkan <mark> pada teks yang cocok dengan kata kunci pencarian */
+      function highlight(text, q) {
+        const s = String(text == null ? '' : text);
+        if (!q) return esc(s);
+        const safe = esc(s);
+        const needle = esc(String(q)).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        try { return safe.replace(new RegExp(needle, 'gi'), m => '<mark class="hl">' + m + '</mark>'); }
+        catch (e) { return safe; }
+      }
+
+      function statusBadge(st) {
+        const s = String(st || '').toUpperCase();
+        if (s === 'BERHASIL') return '<span class="badge badge-success">BERHASIL</span>';
+        if (s === 'GAGAL')    return '<span class="badge badge-fail">GAGAL</span>';
+        if (s === 'PENDING')  return '<span class="badge badge-pending">PENDING</span>';
+        if (s === 'PROSES')   return '<span class="badge badge-pending">PROSES</span>';
+        return '<span class="badge badge-muted">' + esc(s || '-') + '</span>';
+      }
       
       // --- SISTEM TOPUP MANUAL ---
       let topupCountdownInterval = null;
@@ -1642,16 +2034,21 @@
       
       function switchTab(tab) {
           document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-          if (window.event && window.event.currentTarget && window.event.currentTarget.classList) window.event.currentTarget.classList.add('active');
+          const pemanggil = (window.event && window.event.currentTarget && window.event.currentTarget.classList) ? window.event.currentTarget : null;
+          if (pemanggil) pemanggil.classList.add('active');
           else if (tab === 'dashboard' && document.getElementById('tabBtnDashboard')) document.getElementById('tabBtnDashboard').classList.add('active');
+          else if (tab === 'lacak' && document.getElementById('tabBtnLacak')) document.getElementById('tabBtnLacak').classList.add('active');
       
           if (document.getElementById('tabDashboard')) document.getElementById('tabDashboard').style.display = tab === 'dashboard' ? 'block' : 'none';
       
           if (document.getElementById('tabTrxLangsung')) document.getElementById('tabTrxLangsung').style.display = tab === 'trxLangsung' ? 'block' : 'none';
           document.getElementById('tabHistory').style.display = tab === 'history' ? 'block' : 'none';
+          if (document.getElementById('tabLacak')) document.getElementById('tabLacak').style.display = tab === 'lacak' ? 'block' : 'none';
           document.getElementById('tabDoc').style.display = tab === 'doc' ? 'block' : 'none';
           document.getElementById('tabTester').style.display = tab === 'tester' ? 'block' : 'none';
       
+          // Segarkan hasil pelacakan setiap kali tab Lacak dibuka
+          if (tab === 'lacak' && typeof renderLacak === 'function') renderLacak();
       }
       
       function toggleTestFields() {
@@ -1767,6 +2164,48 @@
           userCurrentPage = 1;
           renderUserHistoryPage();
       }
+
+      /** Mengosongkan filter tanggal supaya seluruh riwayat tampil */
+      function clearUserTrxDate() {
+          const el = document.getElementById('userTrxDate');
+          if (el) el.value = '';
+          userCurrentPage = 1;
+          renderUserHistoryPage();
+          toast('info', 'Filter Tanggal Dibuka', 'Menampilkan transaksi dari seluruh tanggal');
+      }
+
+      /** Mengambil daftar riwayat yang sedang terfilter (dipakai tabel & ekspor) */
+      function getFilteredUserHistory() {
+          const searchVal = (document.getElementById('userTrxSearch') ? document.getElementById('userTrxSearch').value : '').toLowerCase().trim();
+          const dateVal = document.getElementById('userTrxDate') ? document.getElementById('userTrxDate').value : '';
+          return rawUserHistory.filter(t => {
+              let matchSearch = true;
+              if (searchVal) {
+                  const ref = (t.refid_h2h || '').toLowerCase();
+                  const refp = (t.refid_pusat || '').toLowerCase();
+                  const target = (t.target || '').toLowerCase();
+                  const kode = (t.kode_produk || '').toLowerCase();
+                  const nama = (t.produk_nama || '').toLowerCase();
+                  const sn = (t.sn || '').toLowerCase();
+                  const usr = (t.username || '').toLowerCase();
+                  matchSearch = ref.includes(searchVal) || refp.includes(searchVal) || target.includes(searchVal) ||
+                                kode.includes(searchVal) || nama.includes(searchVal) || sn.includes(searchVal) || usr.includes(searchVal);
+              }
+              let matchDate = true;
+              if (dateVal && t.created_at) matchDate = t.created_at.startsWith(dateVal);
+              return matchSearch && matchDate;
+          });
+      }
+
+      function exportUserHistoryCSV() {
+          const rows = getFilteredUserHistory();
+          if (!rows.length) return toast('warn', 'Data Kosong', 'Tidak ada riwayat yang bisa diekspor');
+          downloadFile('riwayat-transaksi-' + Date.now() + '.csv', toCSV(rows, [
+              ['created_at', 'waktu'], ['refid_h2h', 'refid_h2h'], ['refid_pusat', 'refid_pusat'],
+              ['username', 'username'], ['server_code', 'server'], ['kode_produk', 'kode_produk'],
+              ['target', 'tujuan'], ['harga', 'harga'], ['status', 'status'], ['sn', 'sn'], ['message', 'keterangan']
+          ]), 'text/csv');
+      }
       
       function changeUserPage(page) {
           userCurrentPage = page;
@@ -1781,9 +2220,14 @@
               let matchSearch = true;
               if (searchVal) {
                   const ref = (t.refid_h2h || '').toLowerCase();
+                  const refp = (t.refid_pusat || '').toLowerCase();
                   const target = (t.target || '').toLowerCase();
                   const kode = (t.kode_produk || '').toLowerCase();
-                  matchSearch = ref.includes(searchVal) || target.includes(searchVal) || kode.includes(searchVal);
+                  const nama = (t.produk_nama || '').toLowerCase();
+                  const sn = (t.sn || '').toLowerCase();
+                  const usr = (t.username || '').toLowerCase();
+                  matchSearch = ref.includes(searchVal) || refp.includes(searchVal) || target.includes(searchVal) ||
+                                kode.includes(searchVal) || nama.includes(searchVal) || sn.includes(searchVal) || usr.includes(searchVal);
               }
               let matchDate = true;
               if (dateVal && t.created_at) {
@@ -1791,6 +2235,20 @@
               }
               return matchSearch && matchDate;
           });
+      
+          // --- Perbarui ringkasan statistik riwayat ---
+          let hOk = 0, hFail = 0, hPend = 0, hNom = 0;
+          filtered.forEach(t => {
+              const st = String(t.status || '').toUpperCase();
+              if (st === 'BERHASIL') hOk++; else if (st === 'GAGAL') hFail++; else if (st === 'PENDING') hPend++;
+              hNom += (parseInt(t.harga || 0, 10) || 0);
+          });
+          const hSet = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+          hSet('histStatTotal', filtered.length);
+          hSet('histStatOk', hOk);
+          hSet('histStatFail', hFail);
+          hSet('histStatPend', hPend);
+          hSet('histStatNominal', typeof fmtRp === 'function' ? fmtRp(hNom) : ('Rp ' + hNom.toLocaleString('id-ID')));
       
           const totalItems = filtered.length;
           const totalPages = Math.ceil(totalItems / TRX_PER_PAGE) || 1;
@@ -1857,6 +2315,387 @@
           container.innerHTML = html;
       }
       
+      /* ==========================================================
+         FITUR LACAK TRANSAKSI — PENCARIAN PINTAR MULTI-KRITERIA
+         Bisa mencari berdasarkan: RefID H2H, RefID Pusat, nomor tujuan,
+         kode/nama produk, SN, maupun username.
+         ========================================================== */
+      let lacakPage = 1;
+      let lacakChipAktif = 'all';
+      let lacakDebounceTimer = null;
+      let lacakDetail = null;
+      const LACAK_PER_PAGE = 25;
+
+      function lacakVal(id) { const el = document.getElementById(id); return el ? String(el.value === null ? '' : el.value).trim() : ''; }
+
+      function lacakIsTopup(t) {
+        return (t.server_code === 'TOPUP SALDO' || t.kode_produk === 'SALDO' || String(t.refid_h2h || '').indexOf('TP-') === 0);
+      }
+
+      /** Menebak jenis kata kunci yang diketik user */
+      function lacakDetectMode(q) {
+        const s = String(q || '').trim();
+        if (!s) return 'semua';
+        if (/^\d{8,}$/.test(s)) return 'target';
+        if (/^(sn|serial)[-_ ]?\w/i.test(s)) return 'sn';
+        if (/^[A-Za-z]{2,4}-\d/i.test(s)) return 'refid';
+        if (/^(trx|tp-|lg-|ics-|ok-|s3-|inq-|px)/i.test(s)) return 'refid';
+        if (/^(sn[-_]?|serial)/i.test(s)) return 'sn';
+        if (/^[A-Za-z0-9]{2,14}$/.test(s) && /\d/.test(s) && !/^\d+$/.test(s)) return 'produk';
+        if (/^[A-Za-z_][A-Za-z0-9_.]{2,}$/.test(s) && !/\d/.test(s)) return 'username';
+        return 'semua';
+      }
+
+      function lacakModeLabel(mode) {
+        return ({ refid: 'RefID H2H / Pusat', target: 'Nomor Tujuan', produk: 'Kode / Nama Produk', sn: 'SN / Serial Number', username: 'Username', semua: 'Semua Kolom' })[mode] || 'Semua Kolom';
+      }
+
+      function lacakOnInput() {
+        if (lacakDebounceTimer) clearTimeout(lacakDebounceTimer);
+        lacakDebounceTimer = setTimeout(() => { lacakPage = 1; renderLacak(); }, 220);
+      }
+
+      function lacakChip(jenis) {
+        lacakChipAktif = (lacakChipAktif === jenis) ? 'all' : jenis;
+        const chips = document.querySelectorAll('#lacakChips .chip');
+        chips.forEach(c => { if (c.classList) c.classList.toggle('active', c.getAttribute('data-chip') === lacakChipAktif); });
+        lacakPage = 1;
+        renderLacak();
+      }
+
+      function lacakChipMatch(t) {
+        switch (lacakChipAktif) {
+          case 'all': return true;
+          case 'today': return String(t.created_at || '').slice(0, 10) === getTodayWIB();
+          case '7d':
+          case '30d': {
+            const hari = lacakChipAktif === '7d' ? 7 : 30;
+            const ts = Date.parse(String(t.created_at || '').replace(' ', 'T'));
+            if (isNaN(ts)) return false;
+            return (Date.now() - ts) <= hari * 86400000;
+          }
+          case 'berhasil': return String(t.status || '').toUpperCase() === 'BERHASIL';
+          case 'gagal': return String(t.status || '').toUpperCase() === 'GAGAL';
+          case 'pending': return String(t.status || '').toUpperCase() === 'PENDING';
+          case 'topup': return lacakIsTopup(t);
+        }
+        return true;
+      }
+
+      function lacakServerKey(t) { return String(t.server_code || t.server || '').toLowerCase(); }
+
+      /** Menjalankan penyaringan dengan mode tertentu */
+      function lacakTerapkan(qLow, mode, q) {
+        const stF = lacakVal('lacakStatus');
+        const svF = lacakVal('lacakServer');
+        const d1 = lacakVal('lacakDateFrom');
+        const d2 = lacakVal('lacakDateTo');
+        const hMin = parseInt(lacakVal('lacakHargaMin') || '0', 10) || 0;
+        const hMax = parseInt(lacakVal('lacakHargaMax') || '0', 10) || 0;
+
+        const list = (typeof rawUserHistory !== 'undefined' ? rawUserHistory : []).filter(t => {
+          if (qLow) {
+            const ref = String(t.refid_h2h || '').toLowerCase();
+            const refp = String(t.refid_pusat || '').toLowerCase();
+            const tgt = String(t.target || '').toLowerCase();
+            const kode = String(t.kode_produk || '').toLowerCase();
+            const nama = String(t.produk_nama || '').toLowerCase();
+            const sn = String(t.sn || '').toLowerCase();
+            const usr = String(t.username || '').toLowerCase();
+            const msg = String(t.message || '').toLowerCase();
+            let ok = false;
+            if (mode === 'refid') ok = ref.indexOf(qLow) >= 0 || refp.indexOf(qLow) >= 0;
+            else if (mode === 'target') ok = tgt.replace(/\D/g, '').indexOf(q.replace(/\D/g, '')) >= 0 && q.replace(/\D/g, '') !== '';
+            else if (mode === 'produk') ok = kode.indexOf(qLow) >= 0 || nama.indexOf(qLow) >= 0;
+            else if (mode === 'sn') ok = sn.indexOf(qLow) >= 0;
+            else if (mode === 'username') ok = usr.indexOf(qLow) >= 0;
+            else ok = (ref + ' ' + refp + ' ' + tgt + ' ' + kode + ' ' + nama + ' ' + sn + ' ' + usr + ' ' + msg).indexOf(qLow) >= 0;
+            if (!ok) return false;
+          }
+          if (stF && String(t.status || '').toUpperCase() !== stF) return false;
+          if (svF) {
+            const key = lacakServerKey(t);
+            if (svF === 'TOPUP') { if (key.indexOf('topup') < 0 && String(t.kode_produk || '').toUpperCase() !== 'SALDO') return false; }
+            else if (key.indexOf(svF.toLowerCase()) < 0) return false;
+          }
+          const tgl = String(t.created_at || '').slice(0, 10);
+          if (d1 && tgl && tgl < d1) return false;
+          if (d2 && tgl && tgl > d2) return false;
+          const hr = parseInt(t.harga || 0, 10) || 0;
+          if (hMin > 0 && hr < hMin) return false;
+          if (hMax > 0 && hr > hMax) return false;
+          if (!lacakChipMatch(t)) return false;
+          return true;
+        });
+
+        list.sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+        return list;
+      }
+
+      function lacakFiltered() {
+        const q = lacakVal('lacakSearch');
+        const qLow = q.toLowerCase();
+        const modeInput = lacakVal('lacakMode') || 'auto';
+        const otomatis = (modeInput === 'auto');
+        let mode = otomatis ? lacakDetectMode(q) : modeInput;
+
+        let list = lacakTerapkan(qLow, mode, q);
+
+        // Mode OTOMATIS: bila tebakan awal tidak membuahkan hasil,
+        // ulangi pencarian pada SEMUA kolom agar user tetap mendapat jawaban.
+        if (otomatis && qLow && list.length === 0 && mode !== 'semua') {
+          mode = 'semua';
+          list = lacakTerapkan(qLow, mode, q);
+        }
+
+        return { list: list, mode: mode, q: q };
+      }
+
+      function renderLacak() {
+        if (!document.getElementById('lacakTableBody')) return;
+        const hasil = lacakFiltered();
+        const list = hasil.list;
+        const q = hasil.q;
+
+        // --- Info deteksi jenis pencarian ---
+        const detEl = document.getElementById('lacakDeteksi');
+        if (detEl) {
+          if (!q) detEl.style.display = 'none';
+          else {
+            detEl.style.display = 'flex';
+            detEl.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i><div style="flex:1;">Kata kunci <b>' + esc(q) +
+              '</b> dikenali sebagai pencarian <b>' + esc(lacakModeLabel(hasil.mode)) + '</b>. Ditemukan <b>' + list.length + '</b> transaksi cocok.</div>';
+          }
+        }
+
+        // --- Statistik ---
+        let ok = 0, gagal = 0, pending = 0, nominal = 0;
+        list.forEach(t => {
+          const st = String(t.status || '').toUpperCase();
+          if (st === 'BERHASIL') ok++; else if (st === 'GAGAL') gagal++; else if (st === 'PENDING') pending++;
+          nominal += (parseInt(t.harga || 0, 10) || 0);
+        });
+        const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+        setTxt('lacakStatTotal', list.length);
+        setTxt('lacakStatOk', ok);
+        setTxt('lacakStatFail', gagal);
+        setTxt('lacakStatPend', pending);
+        setTxt('lacakStatNominal', fmtRp(nominal));
+
+        const totalPages = Math.max(1, Math.ceil(list.length / LACAK_PER_PAGE));
+        if (lacakPage > totalPages) lacakPage = totalPages;
+        if (lacakPage < 1) lacakPage = 1;
+        const start = (lacakPage - 1) * LACAK_PER_PAGE;
+        const page = list.slice(start, start + LACAK_PER_PAGE);
+
+        const tbl = document.getElementById('lacakTableBody');
+        if (!list.length) {
+          tbl.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-magnifying-glass"></i>' +
+            (q ? 'Tidak ada transaksi yang cocok dengan "' + esc(q) + '"' : 'Ketik kata kunci di atas untuk mulai melacak transaksi') + '</div></td></tr>';
+        } else {
+          tbl.innerHTML = page.map(t => {
+            const ket = (String(t.status).toUpperCase() === 'GAGAL' || !t.sn || t.sn === '-' || t.sn === 'Transaksi Diproses') ? (t.message || t.sn || '-') : t.sn;
+            const isTop = lacakIsTopup(t);
+            return '<tr>' +
+              '<td><small>' + esc(t.created_at || '-') + '</small></td>' +
+              '<td><code class="mono" style="color:#38bdf8; font-size:10px;">' + highlight(t.refid_h2h || '-', q) + '</code></td>' +
+              '<td><small class="mono">' + highlight(t.refid_pusat || '-', q) + '</small></td>' +
+              '<td><span class="badge ' + (isTop ? 'badge-cyan' : 'badge-user') + '">' + esc(t.server_code || t.server || '-') + '</span></td>' +
+              '<td><b>' + highlight(t.kode_produk || '-', q) + '</b>' + (isTop ? '' : ' / ' + highlight(t.target || '-', q)) + '</td>' +
+              '<td>' + (isTop ? '<span class="text-success">' : '') + fmtRp(t.harga) + (isTop ? '</span>' : '') + '</td>' +
+              '<td>' + statusBadge(t.status) + '</td>' +
+              '<td><small>' + highlight(ket, q) + '</small></td>' +
+              '<td style="white-space:nowrap;">' +
+                '<button class="btn btn-outline btn-sm" title="Lihat detail" onclick="openTrxDetail(\'' + esc(String(t.refid_h2h || '').replace(/'/g, "\\'")) + '\')"><i class="fas fa-eye"></i></button> ' +
+                '<button class="btn btn-outline btn-sm" title="Salin RefID" onclick="copyToClipboard(\'' + esc(String(t.refid_h2h || '').replace(/'/g, "\\'")) + '\', \'RefID H2H\')"><i class="fas fa-copy"></i></button> ' +
+                '<button class="btn btn-purple btn-sm" title="Cek status ke server" onclick="lacakCekServer(\'' + esc(String(t.refid_h2h || '').replace(/'/g, "\\'")) + '\')"><i class="fas fa-satellite-dish"></i></button>' +
+              '</td></tr>';
+          }).join('');
+        }
+
+        const ci = document.getElementById('lacakCountInfo');
+        if (ci) ci.innerText = list.length ? ('Menampilkan ' + (start + 1) + '-' + Math.min(start + LACAK_PER_PAGE, list.length) + ' dari ' + list.length + ' hasil (total riwayat ' + ((typeof rawUserHistory !== 'undefined' ? rawUserHistory.length : 0)) + ')') : 'Tidak ada hasil';
+        const si = document.getElementById('lacakSearchInfo');
+        if (si) si.innerHTML = q ? ('Mode: <b>' + esc(lacakModeLabel(hasil.mode)) + '</b>') : '';
+
+        if (typeof renderPaginationBtns === 'function') renderPaginationBtns('lacakPagination', lacakPage, totalPages, 'lacakGoPage');
+      }
+
+      function lacakGoPage(p) { lacakPage = p; renderLacak(); }
+
+      function lacakReset() {
+        ['lacakSearch', 'lacakStatus', 'lacakServer', 'lacakDateFrom', 'lacakDateTo', 'lacakHargaMin', 'lacakHargaMax'].forEach(id => {
+          const el = document.getElementById(id); if (el) el.value = '';
+        });
+        const m = document.getElementById('lacakMode'); if (m) m.value = 'auto';
+        lacakChipAktif = 'all';
+        document.querySelectorAll('#lacakChips .chip').forEach(c => { if (c.classList) c.classList.toggle('active', c.getAttribute('data-chip') === 'all'); });
+        lacakPage = 1;
+        renderLacak();
+        toast('info', 'Filter Dibersihkan', 'Semua filter pencarian dikembalikan ke awal');
+      }
+
+      async function lacakRefresh() {
+        if (typeof loadUserHistory === 'function') await loadUserHistory();
+        renderLacak();
+        toast('success', 'Data Disegarkan', 'Riwayat transaksi terbaru sudah dimuat ulang');
+      }
+
+      function lacakExportCSV() {
+        const hasil = lacakFiltered();
+        if (!hasil.list.length) return toast('warn', 'Data Kosong', 'Tidak ada hasil pencarian yang bisa diekspor');
+        downloadFile('lacak-transaksi-' + Date.now() + '.csv', toCSV(hasil.list, [
+          ['created_at', 'waktu'], ['refid_h2h', 'refid_h2h'], ['refid_pusat', 'refid_pusat'],
+          ['username', 'username'], ['server_code', 'server'], ['kode_produk', 'kode_produk'],
+          ['target', 'tujuan'], ['harga', 'harga'], ['status', 'status'], ['sn', 'sn'], ['message', 'keterangan']
+        ]), 'text/csv');
+      }
+
+      /* ==========================================================
+         CEK STATUS TRANSAKSI LANGSUNG KE SERVER (api1 s/d api4)
+         ========================================================== */
+      function lacakNormalize(server, data) {
+        const d = (data && data.data && typeof data.data === 'object') ? data.data : {};
+        let st = String(d.status_trx || data.trx_status || data.status_trx || '').toUpperCase();
+        if (!st) st = (data && data.status) ? 'PENDING' : 'GAGAL';
+        return {
+          server: server,
+          ditemukan: !!(data && data.status),
+          status: st,
+          refid: d.ref_id || d.refid || data.refid || '',
+          kode: d.kode || d.kode_produk || '',
+          tujuan: d.tujuan || d.target || '',
+          harga: d.harga || '',
+          sn: d.sn || data.sn || '-',
+          pesan: data.message || d.keterangan || d.message || '-',
+          raw: data
+        };
+      }
+
+      async function lacakCekServer(refidPrefill) {
+        const refEl = document.getElementById('lacakRefIdCek');
+        const ref = String((refidPrefill !== undefined && refidPrefill !== null ? refidPrefill : (refEl ? refEl.value : '')) || '').trim();
+        if (!ref) { toast('warn', 'RefID Kosong', 'Masukkan RefID transaksi yang ingin dicek'); if (refEl) refEl.focus(); return; }
+        if (refEl) refEl.value = ref;
+
+        const hasilEl = document.getElementById('lacakCekHasil');
+        const jsonEl = document.getElementById('lacakCekJson');
+        const ringEl = document.getElementById('lacakCekRingkasan');
+        const stEl = document.getElementById('lacakCekStatus');
+        const btn = document.getElementById('btnLacakCek');
+
+        const sel = document.getElementById('lacakServerCek');
+        const target = (sel && sel.value && sel.value !== 'ALL') ? [sel.value] : ['api1.php', 'api2.php', 'api3.php', 'api4.php'];
+
+        if (hasilEl) hasilEl.style.display = 'block';
+        if (stEl) stEl.innerText = 'STATUS: MENGIRIM...';
+        if (jsonEl) jsonEl.innerText = '// Mengirim permintaan ke ' + target.join(', ') + ' ...';
+        if (ringEl) ringEl.innerHTML = '';
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengecek...'; }
+
+        let ketemu = null;
+        const semua = [];
+        for (const srv of target) {
+          try {
+            const res = await fetch(srv, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-API-KEY': currentUser.api_key },
+              body: JSON.stringify({ action: 'status', refid: ref, api_key: currentUser.api_key })
+            });
+            const data = await res.json();
+            const norm = lacakNormalize(srv, data);
+            semua.push(norm);
+            if (norm.ditemukan) { ketemu = norm; break; }
+          } catch (e) {
+            semua.push({ server: srv, ditemukan: false, status: 'ERROR', pesan: e.message, raw: { error: e.message } });
+          }
+        }
+
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Cek Sekarang'; }
+
+        if (ketemu) {
+          if (stEl) stEl.innerText = 'STATUS: DITEMUKAN DI ' + ketemu.server.toUpperCase();
+          const warna = ketemu.status === 'BERHASIL' ? 'banner-ok' : (ketemu.status === 'GAGAL' ? 'banner-danger' : 'banner-warn');
+          if (ringEl) {
+            ringEl.innerHTML =
+              '<div class="banner ' + warna + '" style="margin-bottom:0;">' +
+                '<i class="fas fa-circle-info" style="font-size:16px;"></i>' +
+                '<div style="flex:1;">RefID <b class="mono">' + esc(ketemu.refid || ref) + '</b> ditemukan di <b>' + esc(ketemu.server) + '</b> — status: ' + statusBadge(ketemu.status) + '</div>' +
+              '</div>' +
+              '<div class="kv-grid" style="margin-top:12px;">' +
+                '<div class="k">Server</div><div class="v">' + esc(ketemu.server) + '</div>' +
+                (ketemu.kode ? '<div class="k">Produk</div><div class="v">' + esc(ketemu.kode) + '</div>' : '') +
+                (ketemu.tujuan ? '<div class="k">Tujuan</div><div class="v mono">' + esc(ketemu.tujuan) + '</div>' : '') +
+                (ketemu.harga !== '' && ketemu.harga !== null ? '<div class="k">Harga</div><div class="v">' + fmtRp(ketemu.harga) + '</div>' : '') +
+                '<div class="k">SN / Token</div><div class="v mono">' + esc(ketemu.sn || '-') + '</div>' +
+                '<div class="k">Keterangan</div><div class="v">' + esc(ketemu.pesan || '-') + '</div>' +
+              '</div>';
+          }
+          if (jsonEl) jsonEl.innerText = JSON.stringify(ketemu.raw, null, 2);
+          toast('success', 'Transaksi Ditemukan', ketemu.server + ' — status ' + ketemu.status);
+        } else {
+          if (stEl) stEl.innerText = 'STATUS: TIDAK DITEMUKAN';
+          if (ringEl) {
+            ringEl.innerHTML = '<div class="banner banner-danger" style="margin-bottom:0;"><i class="fas fa-triangle-exclamation" style="font-size:16px;"></i>' +
+              '<div style="flex:1;">RefID <b class="mono">' + esc(ref) + '</b> tidak ditemukan di server yang dicoba (' + esc(target.join(', ')) + ').' +
+              ' Pastikan RefID sudah benar, atau transaksi memang belum tercatat di sistem kami.</div></div>';
+          }
+          if (jsonEl) jsonEl.innerText = JSON.stringify(semua.map(x => ({ server: x.server, status: x.status, pesan: x.pesan })), null, 2);
+          toast('error', 'Tidak Ditemukan', 'RefID ' + ref + ' tidak ada pada server yang dicek');
+        }
+      }
+
+      function lacakCekCopy() {
+        const el = document.getElementById('lacakCekJson');
+        if (!el || !el.innerText) return toast('warn', 'Belum Ada Data', 'Jalankan pengecekan terlebih dahulu');
+        copyToClipboard(el.innerText, 'Respons server');
+      }
+
+      /* ==========================================================
+         MODAL DETAIL TRANSAKSI
+         ========================================================== */
+      function openTrxDetail(refid) {
+        const t = (typeof rawUserHistory !== 'undefined' ? rawUserHistory : []).find(x => String(x.refid_h2h) === String(refid));
+        if (!t) return toast('error', 'Tidak Ditemukan', 'Transaksi dengan RefID tersebut tidak ada di riwayat');
+        lacakDetail = t;
+        const body = document.getElementById('trxDetailBody');
+        const isTop = lacakIsTopup(t);
+        if (body) {
+          body.innerHTML =
+            '<div class="banner ' + (String(t.status).toUpperCase() === 'BERHASIL' ? 'banner-ok' : (String(t.status).toUpperCase() === 'GAGAL' ? 'banner-danger' : 'banner-warn')) + '">' +
+              '<i class="fas fa-circle-info"></i><div style="flex:1;">Status saat ini: ' + statusBadge(t.status) + '</div>' +
+            '</div>' +
+            '<div class="kv-grid">' +
+              '<div class="k">Waktu</div><div class="v">' + esc(t.created_at || '-') + '</div>' +
+              '<div class="k">RefID H2H</div><div class="v mono" style="color:#38bdf8;">' + esc(t.refid_h2h || '-') + '</div>' +
+              '<div class="k">RefID Pusat</div><div class="v mono">' + esc(t.refid_pusat || '-') + '</div>' +
+              '<div class="k">Username</div><div class="v">' + esc(t.username || '-') + '</div>' +
+              '<div class="k">Server</div><div class="v">' + esc(t.server_code || t.server || '-') + '</div>' +
+              '<div class="k">Kode Produk</div><div class="v mono">' + esc(t.kode_produk || '-') + '</div>' +
+              '<div class="k">Tujuan</div><div class="v mono">' + esc(t.target || '-') + '</div>' +
+              '<div class="k">Harga</div><div class="v"><b>' + fmtRp(t.harga) + '</b>' + (isTop ? ' <small class="text-success">(penambahan saldo)</small>' : '') + '</div>' +
+              '<div class="k">SN / Token</div><div class="v mono">' + esc(t.sn || '-') + '</div>' +
+              '<div class="k">Keterangan</div><div class="v">' + esc(t.message || '-') + '</div>' +
+            '</div>';
+        }
+        const m = document.getElementById('modalTrxDetail');
+        if (m) m.style.display = 'flex';
+      }
+
+      function trxDetailCopyRef() {
+        if (!lacakDetail) return;
+        copyToClipboard(lacakDetail.refid_h2h || '', 'RefID H2H');
+      }
+      function trxDetailCopyTarget() {
+        if (!lacakDetail) return;
+        copyToClipboard(lacakDetail.target || '', 'Nomor tujuan');
+      }
+      function trxDetailCekServer() {
+        if (!lacakDetail) return;
+        closeModal('modalTrxDetail');
+        lacakCekServer(lacakDetail.refid_h2h);
+      }
+
       async function loadUserHistory() {
           const res = await fetch(`auth.php?action=my_history&session_token=${currentUser.session_token}&_t=${Date.now()}`, { cache: "no-store" });
           const data = await res.json();
@@ -1952,6 +2791,7 @@
               }
       
               renderUserHistoryPage();
+              if (typeof renderLacak === 'function') renderLacak();
           }
       }
       
@@ -1980,6 +2820,26 @@
           const res = await fetch('auth.php', { method: 'POST', body: JSON.stringify({ action: 'admin_delete_user', session_token: currentUser.session_token, target_id: userId }) });
           const data = await res.json(); alert(data.message); if (data.status) loadAdminUsers();
       }
+
+      /* ==========================================================
+         PINTASAN KEYBOARD
+         "/" atau Ctrl/Cmd + K : langsung fokus ke kolom Lacak Transaksi
+         Esc                   : tutup semua modal yang terbuka
+         ========================================================== */
+      document.addEventListener('keydown', e => {
+          if (e.key === 'Escape') {
+              document.querySelectorAll('.modal').forEach(m => { m.style.display = 'none'; });
+              return;
+          }
+          const tag = (e.target && e.target.tagName) ? String(e.target.tagName).toLowerCase() : '';
+          const sedangMengetik = (tag === 'input' || tag === 'textarea' || tag === 'select');
+          if ((e.key === '/' && !sedangMengetik) || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+              e.preventDefault();
+              switchTab('lacak');
+              const el = document.getElementById('lacakSearch');
+              if (el) { try { el.focus(); el.select(); } catch (err) {} }
+          }
+      });
     </script>
 </body>
 
