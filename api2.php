@@ -99,6 +99,7 @@ switch ($action) {
             $json['data'] = array_values($json['data']); // Re-index array
             
             inject_stock_to_products($json['data']);
+            ledger_cache_products($json['data']);
             apply_user_markup($json['data'], $userMarkup);
         } elseif (is_array($json)) {
             // FILTER: Sembunyikan kode awalan CND dan PLN
@@ -110,6 +111,7 @@ switch ($action) {
             $json = array_values($json); // Re-index array
             
             inject_stock_to_products($json);
+            ledger_cache_products($json);
             apply_user_markup($json, $userMarkup);
         }
         echo json_encode($json);
@@ -169,7 +171,18 @@ switch ($action) {
             exit();
         }
 
-        deduct_user_balance($userData['id'], $finalPrice);
+        // Potong Saldo User + Catat ke Buku Besar Saldo (Audit)
+        ledger_charge($userData['id'], $finalPrice, array(
+            'jenis'       => 'PEMBELIAN',
+            'refid'       => $refidH2H,
+            'refid_pusat' => $refidPusat,
+            'kode_produk' => $code,
+            'target'      => $dest,
+            'server'      => 'api2',
+            'status'      => 'PENDING',
+            'keterangan'  => 'Beli ' . ledger_product_name($code) . ' (' . $dest . ')',
+            'catatan'     => 'Order dikirim ke Server 2 (Digitalk)',
+        ));
 
         // 1. Simpan Record Awal ke Riwayat H2H dengan Status PENDING
         $trxRecord = [
@@ -233,7 +246,17 @@ switch ($action) {
         $sn = clean_api_message($sn);
 
         if ($statusPusat === 'GAGAL') {
-            add_user_balance($userData['id'], $finalPrice);
+            // Refund saldo + Catat ke Buku Besar Saldo (Audit)
+            ledger_refund($userData['id'], $finalPrice, array(
+                'refid'       => $refidH2H,
+                'refid_pusat' => $refidPusat,
+                'kode_produk' => $code,
+                'target'      => $dest,
+                'server'      => 'api2',
+                'status'      => 'GAGAL',
+                'keterangan'  => 'Refund ' . ledger_product_name($code) . ' (' . $dest . ')',
+                'catatan'     => 'Order ditolak server pusat: ' . $cleanedMsg,
+            ));
             $trxRecord['status']  = 'GAGAL';
             $trxRecord['sn']      = $sn;
             $trxRecord['message'] = $cleanedMsg;

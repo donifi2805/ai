@@ -212,6 +212,28 @@
     .spin { animation: spin 1s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } }
     .empty { text-align: center; padding: 25px; color: var(--text-sub); font-size: 11px; }
     .empty i { font-size: 26px; opacity: 0.3; display: block; margin-bottom: 8px; }
+
+    /* ====== AUDIT SALDO (MENU AUDIT) ====== */
+    .audit-hero { background: linear-gradient(135deg, #065f46 0%, #0f766e 55%, #10b981 100%); border-radius: 14px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; box-shadow: 0 14px 34px -10px rgba(16, 185, 129, 0.55), 0 0 0 1px rgba(52, 211, 153, 0.35) inset; }
+    .audit-hero-label { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,.82); margin-bottom: 4px; }
+    .audit-hero-value { font-size: 32px; font-weight: 900; color: #fff; letter-spacing: -1px; line-height: 1.1; text-shadow: 0 3px 12px rgba(0,0,0,.35); word-break: break-all; }
+    .audit-hero-meta { font-size: 10px; color: rgba(255,255,255,.85); margin-top: 6px; }
+    .audit-hero-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+    .audit-mini { background: rgba(8, 13, 26, 0.42); border: 1px solid rgba(255,255,255,.18); border-radius: 10px; padding: 8px 12px; min-width: 128px; }
+    .audit-mini small { display: block; font-size: 9px; text-transform: uppercase; font-weight: 800; letter-spacing: .4px; color: rgba(255,255,255,.7); }
+    .audit-mini b { display: block; font-size: 14px; color: #fff; margin-top: 3px; font-weight: 800; }
+    .audit-chain-ok { color: #34d399; }
+    .audit-chain-bad { color: #f87171; }
+    .audit-row-break { background: rgba(239, 68, 68, 0.06) !important; box-shadow: inset 3px 0 0 var(--danger); }
+    .audit-mutasi-in { color: #34d399; font-weight: 800; }
+    .audit-mutasi-out { color: #f87171; font-weight: 800; }
+    .audit-simple { background: rgba(8, 13, 26, 0.5); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 14px; font-size: 11px; line-height: 1.9; max-height: 520px; overflow-y: auto; }
+    .audit-simple div { border-bottom: 1px dashed rgba(255,255,255,.06); padding: 3px 0; }
+    .audit-simple div:last-child { border-bottom: none; }
+    .audit-simple .ket { font-weight: 700; }
+    .audit-simple .awal { color: var(--text-sub); }
+    .audit-simple .akhir { color: var(--accent); font-weight: 700; }
+    .audit-simple .ref { color: #93c5fd; font-family: monospace; }
     .avatar { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
     .bulk-bar { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 10px; padding: 8px 12px; display: none; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; font-size: 11px; }
     .bulk-bar.show { display: flex; }
@@ -307,6 +329,7 @@
         <button class="tab-btn" data-tab="users"><i class="fas fa-users"></i> Manajemen User</button>
         <button class="tab-btn" data-tab="trx"><i class="fas fa-list-check"></i> Transaksi & Tracking
           <span class="tab-badge" id="badgeTrx" style="display:none;">0</span></button>
+        <button class="tab-btn" data-tab="audit"><i class="fas fa-clipboard-check"></i> Audit</button>
         <button class="tab-btn" data-tab="debug"><i class="fas fa-bug"></i> Debug Center
           <span class="tab-badge" id="badgeDebug" style="display:none;">0</span></button>
         <button class="tab-btn" data-tab="topup"><i class="fas fa-wallet"></i> Topup Saldo
@@ -570,6 +593,139 @@
           </div>
           <div class="count-info"><span id="trxCountInfo">-</span><span id="trxOmzetInfo"></span></div>
           <div class="pagination" id="trxPagination"></div>
+        </div>
+      </div>
+
+      <!-- ================= TAB: AUDIT SALDO ================= -->
+      <div id="tabAudit" style="display:none;">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <div>
+              <div class="card-title" style="margin-bottom:2px;"><i class="fas fa-clipboard-check"></i> Audit Saldo &amp; Transaksi User</div>
+              <div class="card-sub" style="margin-bottom:0;">Pilih user untuk melihat catatan saldo berantai: saldo awal &rarr; mutasi &rarr; saldo akhir pada setiap pembelian, refund, dan topup.</div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-outline btn-sm" onclick="loadAuditData(true)"><i class="fas fa-rotate-right"></i> Muat Ulang</button>
+              <button class="btn btn-purple btn-sm" onclick="exportAuditCSV()"><i class="fas fa-file-export"></i> Ekspor CSV</button>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="fg grow"><label>Cari User</label>
+              <div class="search-wrap"><i class="fas fa-magnifying-glass"></i><input type="text" id="auditUserSearch"
+                  placeholder="Ketik username / nomor WA / ID user..." oninput="renderAuditUserOptions()"></div>
+            </div>
+            <div class="fg grow"><label>User Yang Mau Di-Audit</label>
+              <select id="auditUserSelect" onchange="loadAuditData()">
+                <option value="">-- Pilih User --</option>
+              </select>
+            </div>
+            <div class="fg"><label>Urutan</label>
+              <select id="auditSortOrder" onchange="renderAuditLedger()">
+                <option value="asc">Terlama &rarr; Terbaru (rantai)</option>
+                <option value="desc">Terbaru &rarr; Terlama</option>
+              </select>
+            </div>
+            <div class="fg"><label>Tampilan</label>
+              <select id="auditViewMode" onchange="renderAuditLedger()">
+                <option value="table">Tabel Detail</option>
+                <option value="simple">Baris Sederhana</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ===== SALDO SAAT INI (MENCOLOK) ===== -->
+          <div id="auditSaldoBox" style="display:none;">
+            <div class="audit-hero">
+              <div style="flex:1; min-width:220px;">
+                <div class="audit-hero-label"><i class="fas fa-wallet"></i> SALDO SAAT INI &mdash; <span id="auditUserName">-</span></div>
+                <div class="audit-hero-value" id="auditSaldoNow">Rp 0</div>
+                <div class="audit-hero-meta" id="auditUserMeta">-</div>
+              </div>
+              <div class="audit-hero-stats">
+                <div class="audit-mini"><small>Saldo Akhir Tercatat</small><b id="auditSaldoTercatat">Rp 0</b></div>
+                <div class="audit-mini"><small>Total Saldo Masuk</small><b id="auditTotalMasuk" style="color:#6ee7b7;">Rp 0</b></div>
+                <div class="audit-mini"><small>Total Saldo Keluar</small><b id="auditTotalKeluar" style="color:#fca5a5;">Rp 0</b></div>
+                <div class="audit-mini"><small>Jumlah Entri</small><b id="auditTotalEntri">0</b></div>
+              </div>
+            </div>
+            <div class="banner banner-danger" id="auditChainBanner" style="display:none; margin-top:14px;">
+              <i class="fas fa-link-slash" style="font-size:16px;"></i>
+              <div style="flex:1;">Ditemukan <b id="auditChainCount">0</b> titik rantai saldo yang <b>TIDAK SAMBUNG</b>.
+                Artinya ada perubahan saldo yang tidak tercatat (misalnya sebelum fitur audit aktif atau lewat jalur lain).</div>
+            </div>
+            <div class="banner banner-info" id="auditEmptyBanner" style="display:none; margin-top:14px;">
+              <i class="fas fa-circle-info" style="font-size:16px;"></i>
+              <div style="flex:1;">User ini <b>belum memiliki catatan saldo</b>. Entri baru akan otomatis tercatat begitu user melakukan
+                transaksi, refund, topup, atau penyesuaian saldo.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="auditDetailCard" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <div>
+              <div class="card-title" style="margin-bottom:2px;"><i class="fas fa-diagram-project"></i> Rantai Catatan Saldo</div>
+              <div class="card-sub" style="margin-bottom:0;">Setiap baris berkesinambungan: <b>saldo akhir</b> baris di atas menjadi <b>saldo awal</b> baris di bawahnya.</div>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="fg grow"><label>Cari (keterangan / refid / produk / target)</label>
+              <div class="search-wrap"><i class="fas fa-magnifying-glass"></i><input type="text" id="auditSearch"
+                  placeholder="Contoh: Pulsa XL 5000 atau 123456" oninput="auditPage=1;renderAuditLedger()"></div>
+            </div>
+            <div class="fg"><label>Jenis</label><select id="auditJenisFilter" onchange="auditPage=1;renderAuditLedger()">
+                <option value="">Semua Jenis</option>
+                <option value="PEMBELIAN">Pembelian</option>
+                <option value="REFUND">Refund</option>
+                <option value="TOPUP">Topup</option>
+                <option value="PENYESUAIAN">Penyesuaian Admin</option>
+                <option value="SALDO_AWAL">Saldo Awal</option>
+              </select></div>
+            <div class="fg"><label>Status</label><select id="auditStatusFilter" onchange="auditPage=1;renderAuditLedger()">
+                <option value="">Semua Status</option>
+                <option value="BERHASIL">BERHASIL</option>
+                <option value="GAGAL">GAGAL</option>
+                <option value="PENDING">PENDING</option>
+              </select></div>
+            <div class="fg"><label>Dari Tanggal</label><input type="date" id="auditDateFrom" onchange="auditPage=1;renderAuditLedger()"></div>
+            <div class="fg"><label>Sampai Tanggal</label><input type="date" id="auditDateTo" onchange="auditPage=1;renderAuditLedger()"></div>
+            <div class="fg"><label>&nbsp;</label><button class="btn btn-outline btn-sm" onclick="resetAuditFilter()"><i class="fas fa-filter-circle-xmark"></i> Reset</button></div>
+          </div>
+
+          <div class="grid grid-4" style="margin-bottom:14px;">
+            <div class="stat-mini"><b id="auditStatPembelian">0</b><small>Pembelian</small></div>
+            <div class="stat-mini"><b class="text-warn" id="auditStatRefund">0</b><small>Refund</small></div>
+            <div class="stat-mini"><b class="text-success" id="auditStatTopup">0</b><small>Topup</small></div>
+            <div class="stat-mini"><b class="text-danger" id="auditStatAdjust">0</b><small>Penyesuaian</small></div>
+          </div>
+
+          <div class="table-wrap" id="auditTableWrap">
+            <table id="auditTable">
+              <thead>
+                <tr>
+                  <th style="width:38px;">#</th>
+                  <th>Waktu</th>
+                  <th>Keterangan</th>
+                  <th>RefID</th>
+                  <th>Server</th>
+                  <th>Saldo Awal</th>
+                  <th>Mutasi</th>
+                  <th>Saldo Akhir</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <tr><td colspan="9" class="empty"><i class="fas fa-clipboard-check"></i>Pilih user terlebih dahulu</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="auditSimpleWrap" style="display:none;"></div>
+
+          <div class="count-info"><span id="auditCountInfo">-</span><span id="auditSaldoInfo"></span></div>
+          <div class="pagination" id="auditPagination"></div>
         </div>
       </div>
 
@@ -1097,11 +1253,12 @@
       latency: null,
       charts: { trx: null, flow: null },
       refreshTimer: null,
+      audit: null,
       idleTimer: null,
       lockPin: '1234',
       prefs: { autoRefresh: 10, stuckMinutes: 30, topupStaleMinutes: 60, maintenance: false, autoLock: true }
     };
-    let userPage = 1, trxPage = 1, topupPage = 1;
+    let userPage = 1, trxPage = 1, topupPage = 1, auditPage = 1;
     const PER_PAGE = 15;
     let selectedUsers = new Set();
     let selectedTrx = new Set();
@@ -1238,7 +1395,7 @@
     });
     
     // ================== API LAYER ==================
-    const GET_ACTIONS = ['check_session', 'list_users', 'admin_list_all_history', 'my_history', 'get_api_status', 'get_okeconnect_config'];
+    const GET_ACTIONS = ['check_session', 'list_users', 'admin_list_all_history', 'my_history', 'get_api_status', 'get_okeconnect_config', 'admin_get_audit'];
     const BASE_CANDIDATES = ['../', '', '/h2h/', './h2h/'];
     
     async function fetchTimeout(url, opts, ms) {
@@ -1530,10 +1687,120 @@
           DEMO.okConfig = { member_id: p.member_id, pin: p.pin, password: p.password };
           return ok(null, 'Kredensial OkeConnect tersimpan (demo)');
         }
+        case 'admin_get_audit': {
+          const u = DEMO.users.find(x => x.id === p.target_user_id || String(x.username).toLowerCase() === String(p.target_user_id || '').toLowerCase());
+          if (!u) return fail('User tidak ditemukan (demo)');
+          const ledger = buildDemoLedger(u.id);
+          const breaks = [];
+          let prev = null;
+          ledger.forEach((e, i) => { if (prev !== null && e.saldo_awal !== prev.saldo_akhir) breaks.push(i); prev = e; });
+          const summary = {
+            total_masuk: 0, total_keluar: 0, pembelian: 0, refund: 0, topup: 0, penyesuaian: 0, entries: ledger.length
+          };
+          ledger.forEach(e => {
+            const j = parseInt(e.jumlah || 0);
+            if (e.arah === 'MASUK') summary.total_masuk += j; else summary.total_keluar += j;
+            if (e.jenis === 'PEMBELIAN') summary.pembelian++;
+            if (e.jenis === 'REFUND') summary.refund++;
+            if (e.jenis === 'TOPUP') summary.topup++;
+            if (e.jenis === 'PENYESUAIAN') summary.penyesuaian++;
+          });
+          const c = Object.assign({}, u); delete c.password;
+          return ok({
+            user: { id: u.id, username: u.username, email: u.email, nomorwa: u.nomorwa, role: u.role },
+            saldo: parseInt(u.saldo || 0),
+            saldo_tercatat: ledger.length ? ledger[ledger.length - 1].saldo_akhir : parseInt(u.saldo || 0),
+            ledger, summary, chain: { valid: breaks.length === 0, breaks, total: ledger.length }
+          });
+        }
         default: return fail('Action demo tidak dikenal: ' + action);
       }
     }
     function DEO_SAFE() { return { member_id: DEMO.okConfig.member_id, pin: DEMO.okConfig.pin, password: DEMO.okConfig.password }; }
+
+    // --- Pembangkit buku besar saldo untuk MODE DEMO ---
+    // Disusun berantai mundur dari saldo user saat ini supaya saldo_akhir
+    // entri terakhir selalu sama dengan saldo user yang tampil di panel.
+    function buildDemoLedger(userId) {
+      const u = DEMO.users.find(x => x.id === userId);
+      if (!u) return [];
+
+      const toWIB = d => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Jakarta', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }).format(d).replace('T', ' ');
+
+      const events = [];
+
+      DEMO.trx.filter(t => String(t.user_id) === String(userId)).forEach(t => {
+        const isTop = (t.server_code === 'TOPUP SALDO' || t.kode_produk === 'SALDO' || String(t.refid_h2h || '').startsWith('TP-'));
+        if (isTop) return; // topup diambil dari DEMO.topups
+        const nama = t.produk_nama || t.kode_produk || 'Produk';
+        const waktu = t.created_at || '';
+        events.push({
+          waktu, jenis: 'PEMBELIAN', arah: 'KELUAR', jumlah: parseInt(t.harga || 0),
+          refid: t.refid_h2h, refid_pusat: t.refid_pusat, kode_produk: t.kode_produk, produk_nama: nama,
+          target: t.target, server: t.server_code, status: (t.status === 'GAGAL' ? 'PENDING' : (t.status || 'BERHASIL')),
+          keterangan: 'Beli ' + nama + ' (' + (t.target || '-') + ')',
+          catatan: 'Order dikirim ke ' + (t.server_code || '-'), admin: ''
+        });
+        if (t.status === 'GAGAL') {
+          events.push({
+            waktu, jenis: 'REFUND', arah: 'MASUK', jumlah: parseInt(t.harga || 0),
+            refid: t.refid_h2h, refid_pusat: t.refid_pusat, kode_produk: t.kode_produk, produk_nama: nama,
+            target: t.target, server: t.server_code, status: 'GAGAL',
+            keterangan: 'Refund ' + nama,
+            catatan: (t.message || 'Transaksi gagal, saldo dikembalikan'), admin: ''
+          });
+        }
+      });
+
+      DEMO.topups.filter(t => String(t.user_id) === String(userId) && t.status === 'BERHASIL').forEach(t => {
+        events.push({
+          waktu: toWIB(new Date((parseInt(t.time) || 0) * 1000)), jenis: 'TOPUP', arah: 'MASUK',
+          jumlah: parseInt(t.unique_amount || t.amount || 0), refid: t.id, refid_pusat: '',
+          kode_produk: 'SALDO', produk_nama: 'Topup Saldo', target: 'TRANSFER',
+          server: 'TOPUP SALDO', status: 'BERHASIL', keterangan: 'Topup saldo',
+          catatan: 'Disetujui admin', admin: 'admin'
+        });
+      });
+
+      events.sort((a, b) => String(a.waktu).localeCompare(String(b.waktu)));
+
+      const saldoUser = parseInt(u.saldo || 0);
+      let net = 0;
+      events.forEach(e => { net += (e.arah === 'MASUK' ? e.jumlah : -e.jumlah); });
+
+      let saldo = Math.max(0, saldoUser - net);
+      const out = [];
+
+      out.push({
+        jenis: 'SALDO_AWAL', arah: 'AWAL', jumlah: 0, saldo_awal: saldo, saldo_akhir: saldo,
+        refid: '-', refid_pusat: '', kode_produk: '', produk_nama: '', target: '', server: 'system',
+        status: 'BERHASIL', keterangan: 'Saldo awal tercatat saat fitur audit diaktifkan',
+        catatan: 'Titik awal pembukuan saldo', admin: '',
+        waktu: events.length ? events[0].waktu : nowWIBStr()
+      });
+
+      events.forEach(e => {
+        const awal = saldo;
+        saldo = e.arah === 'MASUK' ? (awal + e.jumlah) : Math.max(0, awal - e.jumlah);
+        out.push(Object.assign({}, e, { saldo_awal: awal, saldo_akhir: saldo }));
+      });
+
+      // Rekonsiliasi bila rantai belum berujung tepat pada saldo user saat ini
+      if (saldo !== saldoUser) {
+        out.push({
+          jenis: 'PENYESUAIAN', arah: saldoUser > saldo ? 'MASUK' : 'KELUAR',
+          jumlah: Math.abs(saldoUser - saldo), saldo_awal: saldo, saldo_akhir: saldoUser,
+          refid: 'ADJ-DEMO', refid_pusat: '', kode_produk: 'SALDO', produk_nama: 'Penyesuaian Saldo',
+          target: '', server: 'paneladmin', status: 'BERHASIL',
+          keterangan: 'Penyesuaian saldo oleh admin',
+          catatan: 'Penyesuaian penutup agar saldo akhir sama dengan saldo user', admin: 'admin',
+          waktu: nowWIBStr()
+        });
+      }
+
+      out.forEach((e, i) => { e.seq = i + 1; e.id = 'LG-DEMO-' + String(i + 1).padStart(6, '0'); });
+      return out;
+    }
     
     // ================== AUTH & SESI ==================
     async function handleLogin() {
@@ -1596,7 +1863,7 @@
     // ================== TABS ==================
     function switchTab(tab) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      ['dashboard', 'users', 'trx', 'debug', 'topup', 'settings', 'help'].forEach(t => {
+      ['dashboard', 'users', 'trx', 'audit', 'debug', 'topup', 'settings', 'help'].forEach(t => {
         const el = $('tab' + t.charAt(0).toUpperCase() + t.slice(1)); if (el) el.style.display = (t === tab) ? 'block' : 'none';
       });
       if (tab === 'debug') { renderStuckList(); renderAnomalyList(); renderSysInfo(); renderDiagBox(); }
@@ -1705,6 +1972,7 @@
       renderDashboard();
       renderUsersTable();
       renderTrxTable();
+      renderAuditUserOptions();
       renderTopupTable();
       renderStuckList();
       renderAnomalyList();
@@ -1712,6 +1980,8 @@
       updateDebugBadges();
       renderSysInfo();
       renderStorageInfo();
+      // Audit saldo: segarkan hanya saat tab audit sedang dibuka
+      if (S.audit && $('tabAudit') && $('tabAudit').style.display !== 'none') loadAuditData(false);
     }
     
     // ================== ANALITIK DASAR ==================
@@ -2044,7 +2314,7 @@
       else newSaldo = amt;
       askConfirm('Terapkan Penyesuaian', 'Saldo <b>' + esc(u.username) + '</b>: ' + fmtRp(u.saldo) + ' → <b style="color:#34d399;">' + fmtRp(newSaldo) + '</b><br><small class="text-sub">Alasan: ' + esc(note) + '</small>', async () => {
         try {
-          const data = await apiCall('admin_edit_user', { session_token: S.currentUser.session_token, target_id: u.id, username: u.username, email: u.email, nomorwa: u.nomorwa, role: u.role, saldo: newSaldo, markup_api1: u.markup_api1, markup_api2: u.markup_api2, markup_api3: u.markup_api3, markup_api4: u.markup_api4 });
+          const data = await apiCall('admin_edit_user', { session_token: S.currentUser.session_token, target_id: u.id, username: u.username, email: u.email, nomorwa: u.nomorwa, role: u.role, saldo: newSaldo, saldo_note: note, markup_api1: u.markup_api1, markup_api2: u.markup_api2, markup_api3: u.markup_api3, markup_api4: u.markup_api4 });
           toast(data.status ? 'success' : 'error', data.status ? 'Saldo Disesuaikan' : 'Gagal', data.message);
           if (data.status) { audit('ADJUST_SALDO', u.username + ': ' + fmtRp(u.saldo) + ' → ' + fmtRp(newSaldo) + ' (' + note + ')'); closeModal('modalSaldo'); refreshAllData(false); }
         } catch (e) { toast('error', 'Kesalahan', e.message); }
@@ -2610,7 +2880,229 @@
       downloadFile('topup-dt17-' + Date.now() + '.csv', toCSV(rows, [['waktu','waktu'],['username','username'],['id','id_topup'],['amount','nominal_dasar'],['unique_amount','nominal_unik'],['status','status'],['basi','pending_basi']]), 'text/csv');
       audit('EKSPOR_TOPUP_CSV', rows.length + ' baris');
     }
-    
+
+    // ================== AUDIT SALDO (BUKU BESAR PER USER) ==================
+    // State audit disimpan di S.audit = { user, saldo, saldo_tercatat, ledger, summary, chain }
+    const AUDIT_JENIS_LABEL = { PEMBELIAN: 'Pembelian', REFUND: 'Refund', TOPUP: 'Topup', PENYESUAIAN: 'Penyesuaian', SALDO_AWAL: 'Saldo Awal' };
+    const AUDIT_JENIS_ICON  = { PEMBELIAN: 'fa-cart-shopping', REFUND: 'fa-rotate-left', TOPUP: 'fa-wallet', PENYESUAIAN: 'fa-sliders', SALDO_AWAL: 'fa-flag-checkered' };
+
+    function renderAuditUserOptions() {
+      const sel = $('auditUserSelect'); if (!sel) return;
+      const q = (($('auditUserSearch') || {}).value || '').toLowerCase().trim();
+      const prev = sel.value;
+      const list = S.users.filter(u => {
+        const hay = [u.username, u.email, u.nomorwa, u.id].map(x => String(x || '').toLowerCase()).join(' ');
+        return !q || hay.includes(q);
+      }).sort((a, b) => String(a.username).localeCompare(String(b.username)));
+
+      sel.innerHTML = '<option value="">-- Pilih User --</option>' + list.map(u =>
+        '<option value="' + esc(u.id) + '">' + esc(u.username) + ' — ' + fmtRp(u.saldo) + ' (' + esc(u.id) + ')</option>'
+      ).join('');
+
+      if (prev && list.some(u => u.id === prev)) sel.value = prev;
+    }
+
+    async function loadAuditData(showToast) {
+      const sel = $('auditUserSelect');
+      const userId = sel ? sel.value : '';
+      if (!userId) {
+        S.audit = null;
+        if ($('auditSaldoBox')) $('auditSaldoBox').style.display = 'none';
+        if ($('auditDetailCard')) $('auditDetailCard').style.display = 'none';
+        if ($('auditTableBody')) $('auditTableBody').innerHTML = '<tr><td colspan="9" class="empty"><i class="fas fa-clipboard-check"></i>Pilih user terlebih dahulu</td></tr>';
+        return;
+      }
+      try {
+        if (showToast) toast('info', 'Memuat Audit', 'Mengambil buku besar saldo...');
+        const data = await apiCall('admin_get_audit', { target_user_id: userId });
+        if (!data.status) { toast('error', 'Audit Gagal', data.message || 'Tidak bisa mengambil data'); S.audit = null; return; }
+
+        const d = data.data || {};
+        const ledger = Array.isArray(d.ledger) ? d.ledger.slice() : [];
+
+        // Tandai titik rantai yang putus supaya bisa disorot di tabel
+        const breaks = new Set(((d.chain || {}).breaks) || []);
+        ledger.forEach((e, i) => { e._idx = i; e._break = breaks.has(i); });
+
+        S.audit = { user: d.user || {}, saldo: d.saldo || 0, saldo_tercatat: d.saldo_tercatat || 0, ledger, summary: d.summary || {}, chain: d.chain || { valid: true, breaks: [] } };
+        auditPage = 1;
+
+        renderAuditHero();
+        renderAuditLedger();
+
+        if (showToast) toast('success', 'Audit Dimuat', (S.audit.user.username || userId) + ': ' + ledger.length + ' entri tercatat');
+      } catch (e) {
+        logMsg('ERROR', 'AUDIT', 'Gagal memuat audit: ' + e.message);
+        toast('error', 'Kesalahan Jaringan', e.message);
+      }
+    }
+
+    function renderAuditHero() {
+      const a = S.audit;
+      if (!a) { $('auditSaldoBox').style.display = 'none'; $('auditDetailCard').style.display = 'none'; return; }
+
+      $('auditSaldoBox').style.display = 'block';
+      $('auditDetailCard').style.display = 'block';
+
+      $('auditUserName').textContent = a.user.username || '-';
+      $('auditSaldoNow').textContent = fmtRp(a.saldo);
+      $('auditUserMeta').innerHTML = esc(a.user.email || '-') + ' • ' + esc(a.user.nomorwa || '-') + ' • ID: <b>' + esc(a.user.id || '-') + '</b>'
+        + ' • Role: <b>' + esc(a.user.role || 'user') + '</b>';
+
+      const s = a.summary || {};
+      $('auditSaldoTercatat').textContent = fmtRp(a.saldo_tercatat);
+      $('auditTotalMasuk').textContent    = fmtRp(s.total_masuk || 0);
+      $('auditTotalKeluar').textContent   = fmtRp(s.total_keluar || 0);
+      $('auditTotalEntri').textContent    = (a.ledger || []).length;
+
+      const chain = a.chain || {};
+      const broken = (chain.breaks || []).length;
+      $('auditChainBanner').style.display = broken ? 'flex' : 'none';
+      $('auditChainCount').textContent    = broken;
+      $('auditEmptyBanner').style.display = (a.ledger || []).length ? 'none' : 'flex';
+
+      $('auditStatPembelian').textContent = s.pembelian || 0;
+      $('auditStatRefund').textContent    = s.refund || 0;
+      $('auditStatTopup').textContent     = s.topup || 0;
+      $('auditStatAdjust').textContent    = s.penyesuaian || 0;
+
+      // Sorot selisih antara saldo user dan saldo akhir tercatat
+      const el = $('auditSaldoTercatat');
+      if (el) el.style.color = (a.saldo_tercatat === a.saldo) ? '#fff' : '#fde047';
+    }
+
+    function auditStatusBadge(st) {
+      const s = String(st || '').toUpperCase();
+      if (s === 'BERHASIL') return '<span class="badge badge-success">BERHASIL</span>';
+      if (s === 'GAGAL')    return '<span class="badge badge-fail">GAGAL</span>';
+      if (s === 'PENDING')  return '<span class="badge badge-pending">PENDING</span>';
+      return '<span class="badge badge-muted">' + esc(s || '-') + '</span>';
+    }
+
+    function filteredAudit() {
+      if (!S.audit || !Array.isArray(S.audit.ledger)) return [];
+      const q   = (($('auditSearch') || {}).value || '').toLowerCase().trim();
+      const jns = (($('auditJenisFilter') || {}).value || '');
+      const stt = (($('auditStatusFilter') || {}).value || '');
+      const d1  = (($('auditDateFrom') || {}).value || '');
+      const d2  = (($('auditDateTo') || {}).value || '');
+
+      let list = S.audit.ledger.filter(e => {
+        const hay = [e.keterangan, e.refid, e.refid_pusat, e.kode_produk, e.produk_nama, e.target, e.catatan]
+          .map(x => String(x || '').toLowerCase()).join(' ');
+        const tgl = String(e.waktu || '').slice(0, 10);
+        return (!q || hay.includes(q))
+          && (!jns || String(e.jenis || '').toUpperCase() === jns)
+          && (!stt || String(e.status || '').toUpperCase() === stt)
+          && (!d1 || (tgl && tgl >= d1))
+          && (!d2 || (tgl && tgl <= d2));
+      });
+
+      if (($('auditSortOrder') || {}).value === 'desc') list = list.slice().reverse();
+      return list;
+    }
+
+    function renderAuditLedger() {
+      if (!$('auditTableBody')) return;
+      if (!S.audit) { $('auditTableBody').innerHTML = '<tr><td colspan="9" class="empty"><i class="fas fa-clipboard-check"></i>Pilih user terlebih dahulu</td></tr>'; return; }
+
+      const simple = (($('auditViewMode') || {}).value || 'table') === 'simple';
+      const list = filteredAudit();
+      const total = list.length;
+
+      $('auditTableWrap').style.display  = simple ? 'none' : 'block';
+      $('auditSimpleWrap').style.display = simple ? 'block' : 'none';
+
+      if (!total) {
+        const msg = '<div class="empty"><i class="fas fa-clipboard"></i>Tidak ada catatan saldo yang cocok dengan filter</div>';
+        if (simple) $('auditSimpleWrap').innerHTML = msg;
+        else $('auditTableBody').innerHTML = '<tr><td colspan="9">' + msg + '</td></tr>';
+        $('auditCountInfo').textContent = 'Menampilkan 0 dari 0 entri';
+        $('auditSaldoInfo').textContent = '';
+        $('auditPagination').innerHTML = '';
+        return;
+      }
+
+      if (simple) {
+        $('auditSimpleWrap').innerHTML = '<div class="audit-simple">' + list.map(e => {
+          const jml = parseInt(e.jumlah || 0);
+          const arah = (e.arah || '').toUpperCase();
+          const mutasi = jml > 0
+            ? ' <span class="' + (arah === 'MASUK' ? 'audit-mutasi-in' : 'audit-mutasi-out') + '">' + (arah === 'MASUK' ? '+' : '-') + fmtRp(jml) + '</span>'
+            : '';
+          return '<div><span class="ket">- ' + esc(e.keterangan || '-') + '</span>' + mutasi
+            + ' — saldo awal <span class="awal">' + esc(e.saldo_awal) + '</span>'
+            + ' saldo akhir <span class="akhir">' + esc(e.saldo_akhir) + '</span>'
+            + ' refid <span class="ref">' + esc(e.refid || '-') + '</span> '
+            + auditStatusBadge(e.status)
+            + (e._break ? ' <i class="fas fa-link-slash audit-chain-bad" title="Rantai saldo putus di titik ini"></i>' : '')
+            + '<br><small class="text-sub">' + esc(e.waktu || '-') + ' • ' + esc((AUDIT_JENIS_LABEL[e.jenis] || e.jenis || '-')) + (e.server ? ' • ' + esc(e.server) : '') + '</small></div>';
+        }).join('') + '</div>';
+
+        $('auditCountInfo').textContent = 'Menampilkan ' + total + ' dari ' + (S.audit.ledger.length) + ' entri';
+        $('auditPagination').innerHTML = '';
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+      if (auditPage > totalPages) auditPage = totalPages;
+      const start = (auditPage - 1) * PER_PAGE;
+      const page = list.slice(start, start + PER_PAGE);
+
+      $('auditTableBody').innerHTML = page.map(e => {
+        const jml  = parseInt(e.jumlah || 0);
+        const arah = (e.arah || '').toUpperCase();
+        const icon = AUDIT_JENIS_ICON[e.jenis] || 'fa-circle';
+        const mutasi = jml > 0
+          ? '<span class="' + (arah === 'MASUK' ? 'audit-mutasi-in' : 'audit-mutasi-out') + '">' + (arah === 'MASUK' ? '+' : '-') + fmtRp(jml) + '</span>'
+          : '<span class="text-sub">-</span>';
+
+        return '<tr class="' + (e._break ? 'audit-row-break' : '') + '">' +
+          '<td><small class="text-sub">' + esc(e.seq) + '</small></td>' +
+          '<td><small>' + esc(e.waktu || '-') + '</small></td>' +
+          '<td><b><i class="fas ' + icon + '" style="color:var(--primary); margin-right:5px;"></i>' + esc(e.keterangan || '-') + '</b>' +
+            (e.produk_nama ? '<br><small class="text-sub mono">' + esc(e.kode_produk || '') + '</small>' : '') +
+            (e.target ? '<br><small class="text-sub mono">' + esc(e.target) + '</small>' : '') +
+            (e.catatan ? '<br><small class="text-sub">' + esc(e.catatan) + '</small>' : '') +
+            (e._break ? '<br><small class="audit-chain-bad"><i class="fas fa-link-slash"></i> rantai putus</small>' : '') +
+          '</td>' +
+          '<td><span class="mono" style="font-size:10px;">' + esc(e.refid || '-') + '</span>' +
+            (e.refid_pusat ? '<br><small class="text-sub mono">' + esc(e.refid_pusat) + '</small>' : '') + '</td>' +
+          '<td><small>' + esc(e.server || '-') + '</small></td>' +
+          '<td>' + fmtRp(e.saldo_awal) + '</td>' +
+          '<td>' + mutasi + '</td>' +
+          '<td><b>' + fmtRp(e.saldo_akhir) + '</b></td>' +
+          '<td>' + auditStatusBadge(e.status) + '</td>' +
+        '</tr>';
+      }).join('');
+
+      const awal = list.length ? parseInt(list[0].saldo_awal || 0) : 0;
+      const akhir = list.length ? parseInt(list[list.length - 1].saldo_akhir || 0) : 0;
+      $('auditCountInfo').textContent = 'Menampilkan ' + (start + 1) + '-' + Math.min(start + PER_PAGE, total) + ' dari ' + total + ' entri (total ' + S.audit.ledger.length + ')';
+      $('auditSaldoInfo').innerHTML = 'Saldo awal <b>' + fmtRp(awal) + '</b> → saldo akhir <b>' + fmtRp(akhir) + '</b>';
+      renderPagination('auditPagination', auditPage, totalPages, p => { auditPage = p; renderAuditLedger(); });
+    }
+
+    function resetAuditFilter() {
+      ['auditSearch','auditJenisFilter','auditStatusFilter','auditDateFrom','auditDateTo'].forEach(i => { if ($(i)) $(i).value = ''; });
+      auditPage = 1; renderAuditLedger();
+    }
+
+    function exportAuditCSV() {
+      if (!S.audit) return toast('warn', 'Belum Ada Data', 'Pilih user yang mau di-audit terlebih dahulu');
+      const rows = filteredAudit();
+      if (!rows.length) return toast('warn', 'Data Kosong', 'Tidak ada entri yang bisa diekspor');
+      downloadFile('audit-saldo-' + (S.audit.user.username || 'user') + '-' + Date.now() + '.csv',
+        toCSV(rows, [
+          ['seq','no'], ['waktu','waktu'], ['jenis','jenis'], ['keterangan','keterangan'],
+          ['refid','refid'], ['refid_pusat','refid_pusat'], ['kode_produk','kode_produk'],
+          ['target','target'], ['server','server'], ['status','status'],
+          ['jumlah','mutasi'], ['saldo_awal','saldo_awal'], ['saldo_akhir','saldo_akhir'],
+          ['catatan','catatan'], ['admin','admin']
+        ]), 'text/csv');
+      audit('EKSPOR_AUDIT_CSV', (S.audit.user.username || '-') + ': ' + rows.length + ' baris');
+    }
+
     // ================== PENGATURAN ==================
     function renderApiStatusForm() {
       ['api1','api2','api3','api4'].forEach(k => { const el = $('status' + k.charAt(0).toUpperCase() + k.slice(1)); if (el) el.checked = !!S.apiStatus[k]; });

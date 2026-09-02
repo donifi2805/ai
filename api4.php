@@ -357,6 +357,9 @@ function fetch_and_write_product_cache($cacheFile) {
         ];
     }
 
+    // Simpan kamus kode => nama produk untuk keterangan buku besar saldo (audit)
+    ledger_cache_products($processedList);
+
     $cacheContent = [
         'info' => [
             'tanggal'               => date('d'),
@@ -684,8 +687,18 @@ switch ($action) {
             exit;
         }
 
-        // Potong Saldo User
-        deduct_user_balance($user['id'], $hargaJual);
+        // Potong Saldo User + Catat ke Buku Besar Saldo (Audit)
+        ledger_charge($user['id'], $hargaJual, array(
+            'jenis'       => 'PEMBELIAN',
+            'refid'       => $refidH2H,
+            'refid_pusat' => $refPusat,
+            'kode_produk' => $kode,
+            'target'      => $target,
+            'server'      => 'api4',
+            'status'      => 'PENDING',
+            'keterangan'  => 'Beli ' . ledger_product_name($kode) . ' (' . $target . ')',
+            'catatan'     => 'Order dikirim ke Server 4 (OkeConnect)',
+        ));
 
         if (!$isPayToken) {
             $refPusat = 'OK-' . date('YmdHis') . rand(100, 999);
@@ -734,7 +747,17 @@ switch ($action) {
 
         // Jika GAGAL instan dari respon order pusat, refund saldo & update ke GAGAL
         if ($statusTrx === 'GAGAL') {
-            add_user_balance($user['id'], $hargaJual);
+            // Refund saldo + Catat ke Buku Besar Saldo (Audit)
+            ledger_refund($user['id'], $hargaJual, array(
+                'refid'       => $refidH2H,
+                'refid_pusat' => $refPusat,
+                'kode_produk' => $kode,
+                'target'      => $target,
+                'server'      => 'api4',
+                'status'      => 'GAGAL',
+                'keterangan'  => 'Refund ' . ledger_product_name($kode) . ' (' . $target . ')',
+                'catatan'     => 'Order ditolak server pusat: ' . $cleanMsg,
+            ));
             $trxRecord['status']  = 'GAGAL';
             $trxRecord['message'] = $cleanMsg;
             save_user_transaction($user['id'], $trxRecord);

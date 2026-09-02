@@ -113,6 +113,7 @@ switch ($action) {
             $json['data'] = $filteredData;
 
             inject_stock_to_products($json['data']);
+            ledger_cache_products($json['data']);
             apply_user_markup($json['data'], $userMarkup);
 
         } elseif (is_array($json) && !isset($json['status']) && !isset($json['data'])) {
@@ -263,8 +264,18 @@ switch ($action) {
             exit();
         }
 
-        // Potong Saldo User
-        deduct_user_balance($userData['id'], $hargaFinal);
+        // Potong Saldo User + Catat ke Buku Besar Saldo (Audit)
+        ledger_charge($userData['id'], $hargaFinal, array(
+            'jenis'       => 'PEMBELIAN',
+            'refid'       => $refidH2H,
+            'refid_pusat' => $refidPusat,
+            'kode_produk' => $p,
+            'target'      => $t,
+            'server'      => 'api1',
+            'status'      => 'PENDING',
+            'keterangan'  => 'Beli ' . ledger_product_name($p) . ' (' . $t . ')',
+            'catatan'     => 'Order dikirim ke Server 1 (AkrabStable)',
+        ));
 
         // 1. Simpan Record Awal ke Riwayat H2H dengan Status PENDING
         $trxRecord = [
@@ -322,7 +333,17 @@ switch ($action) {
         
         // Jika API Pusat secara instan menolak order, update ke GAGAL dan refund
         if ($statusPusat === 'GAGAL') {
-            add_user_balance($userData['id'], $hargaFinal);
+            // Refund saldo + Catat ke Buku Besar Saldo (Audit)
+            ledger_refund($userData['id'], $hargaFinal, array(
+                'refid'       => $refidH2H,
+                'refid_pusat' => $refidPusat,
+                'kode_produk' => $p,
+                'target'      => $t,
+                'server'      => 'api1',
+                'status'      => 'GAGAL',
+                'keterangan'  => 'Refund ' . ledger_product_name($p) . ' (' . $t . ')',
+                'catatan'     => 'Order ditolak server pusat: ' . $cleanedMsg,
+            ));
             $trxRecord['status']  = 'GAGAL';
             $trxRecord['sn']      = $sn;
             $trxRecord['message'] = $cleanedMsg;
@@ -402,7 +423,17 @@ switch ($action) {
                 
                 // Refund hanya jika status sebelumnya PENDING agar tidak double refund
                 if ($oldStatus === 'PENDING') {
-                    add_user_balance($trx['user_id'], (int)$trx['harga']);
+                    // Refund saldo + Catat ke Buku Besar Saldo (Audit)
+                    ledger_refund($trx['user_id'], (int)$trx['harga'], array(
+                        'refid'       => $trx['refid_h2h'] ?? '-',
+                        'refid_pusat' => $trx['refid_pusat'] ?? '',
+                        'kode_produk' => $trx['kode_produk'] ?? '',
+                        'target'      => $trx['target'] ?? '',
+                        'server'      => $trx['server_code'] ?? 'api1',
+                        'status'      => 'GAGAL',
+                        'keterangan'  => 'Refund ' . ledger_product_name($trx['kode_produk'] ?? ''),
+                        'catatan'     => 'Refund via pengecekan status (regex gagal kustom)',
+                    ));
                 }
                 save_user_transaction($trx['user_id'], $trx); // Update ke DB Hosting
             }

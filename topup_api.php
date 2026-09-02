@@ -82,7 +82,18 @@ if (isset($update['callback_query'])) {
         saveTopups($topups);
         
         if ($action === 'accept') {
-            add_user_balance($tData['user_id'], $tData['unique_amount']);
+            // Tambah saldo + Catat ke Buku Besar Saldo (Audit)
+            ledger_topup($tData['user_id'], $tData['unique_amount'], array(
+                'refid'       => $topupId,
+                'kode_produk' => 'SALDO',
+                'produk_nama' => 'Topup Saldo',
+                'target'      => 'TRANSFER',
+                'server'      => 'TOPUP SALDO',
+                'status'      => 'BERHASIL',
+                'keterangan'  => 'Topup saldo via Telegram',
+                'catatan'     => 'Disetujui admin lewat tombol Telegram',
+                'admin'       => 'telegram-bot',
+            ));
             $trx = [
                 'user_id' => $tData['user_id'],
                 'username' => $tData['username'],
@@ -159,7 +170,18 @@ if ($post['action'] === 'admin_action_topup') {
     saveTopups($topups);
     
     if ($act === 'accept') {
-        add_user_balance($tData['user_id'], $tData['unique_amount']);
+        // Tambah saldo + Catat ke Buku Besar Saldo (Audit)
+        ledger_topup($tData['user_id'], $tData['unique_amount'], array(
+            'refid'       => $topupId,
+            'kode_produk' => 'SALDO',
+            'produk_nama' => 'Topup Saldo',
+            'target'      => 'TRANSFER',
+            'server'      => 'TOPUP SALDO',
+            'status'      => 'BERHASIL',
+            'keterangan'  => 'Topup saldo via Panel Admin',
+            'catatan'     => 'Disetujui admin lewat panel admin',
+            'admin'       => 'admin',
+        ));
         $trx = [
             'user_id' => $tData['user_id'],
             'username' => $tData['username'],
