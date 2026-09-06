@@ -1,0 +1,9 @@
+# Artefak & berkas lokal yang tidak boleh masuk Git
+node_modules/
+.build/
+dist/
+testrxbackup/
+testrx_api.key
+*.log
+.DS_Store
+Thumbs.db
