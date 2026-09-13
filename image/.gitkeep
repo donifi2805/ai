@@ -1,0 +1,3 @@
+Folder penyimpanan gambar BekasiAC.
+Upload via api/api.php — file akan tersimpan di folder ini (public_html/image/).
+Jangan hapus folder ini di hosting.

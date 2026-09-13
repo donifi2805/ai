@@ -1,921 +1,1104 @@
-<!DOCTYPE html>
+<?php
+// =====================================================================
+//  BekasiAC — Service AC Profesional Bekasi (Halaman Pelanggan)
+//  Deploy: upload file ini ke public_html/index.php
+//  Gambar : public_html/image/   |   API: public_html/api/api.php
+// =====================================================================
+?><!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service AC Bekasi - Layanan AC Profesional</title>
-    <style>:root{--primary:#1e3a8a;--primary-hover:#1e40af;--secondary:#3b82f6;--accent:#10b981;--accent-hover:#059669;--text-dark:#0f172a;--text-muted:#64748b;--bg-light:#f8fafc;--bg-white:#ffffff;--border:#e2e8f0;--radius-md:8px;--radius-lg:14px;--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow-md:0 7px 14px rgba(0,0,0,0.08);--shadow-lg:0 10px 20px rgba(0,0,0,0.1);--font-main:'Inter',system-ui,sans-serif;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:var(--font-main);line-height:1.4;color:var(--text-dark);background-color:var(--bg-light);font-size:9.5px;-webkit-font-smoothing:antialiased;}header{background:var(--bg-white);padding:10px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.05);border-bottom:1px solid var(--border);}header h1{font-size:1rem;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:4px;cursor:pointer;letter-spacing:-0.5px;}nav{display:flex;gap:7px;align-items:center;flex-grow:1;justify-content:flex-end;}nav a{color:var(--text-muted);text-decoration:none;font-weight:600;font-size:8.5px;padding:6px 11px;border-radius:35px;transition:all 0.3s ease;cursor:pointer;}nav a:hover{background:#f1f5f9;color:var(--text-dark);}nav a.active-menu{background:#eff6ff;color:var(--secondary);font-weight:700;}nav a#btn-auth{background:var(--primary);color:white;border:none;box-shadow:var(--shadow-sm);margin-left:auto;}.custom-toast{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--bg-white);color:var(--text-dark);padding:8px 17px;border-radius:6px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;z-index:4000;opacity:0;transition:all 0.4s cubic-bezier(0.68,-0.55,0.265,1.55);border-left:3px solid var(--primary);font-size:9px;font-weight:600;width:max-content;max-width:90%;}.custom-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}.toast-success{border-left-color:var(--accent);}.toast-error{border-left-color:#ef4444;}.hero{background:linear-gradient(rgba(15,23,42,0.7),rgba(30,58,138,0.8)),url('https://senpayment.my.id/gambarac/header.jpg');background-size:cover;background-position:center;color:white;padding:42px 5%;text-align:center;border-radius:0 0 21px 21px;margin-bottom:14px;box-shadow:var(--shadow-md);}.hero h2{font-size:1.5rem;margin-bottom:8px;font-weight:800;letter-spacing:-0.5px;text-shadow:0 1px 3px rgba(0,0,0,0.3);}.hero p{font-size:9px;margin-bottom:18px;opacity:0.95;max-width:450px;margin-left:auto;margin-right:auto;line-height:1.6;}.trust-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin-top:10px;}.trust-stats span{background:rgba(255,255,255,0.2);backdrop-filter:blur(4px);padding:6px 11px;border-radius:35px;font-size:8px;font-weight:600;border:1px solid rgba(255,255,255,0.3);}section.content-section{padding:28px 5%;max-width:840px;margin:0 auto;}.section-header{margin-bottom:21px;display:flex;flex-direction:column;gap:4px;}.section-header h2{font-size:1.1rem;font-weight:800;color:var(--text-dark);}.section-header p{font-size:9px;color:var(--text-muted);}.section-header .divider{width:35px;height:3px;background:var(--secondary);border-radius:7px;margin-top:3px;}.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}.service-card{background:var(--bg-white);border-radius:var(--radius-md);padding:18px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;transition:all 0.3s ease;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;border:1px solid rgba(0,0,0,0.03);}.service-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--border);transition:0.3s ease;}.service-card:hover{box-shadow:var(--shadow-md);transform:translateY(-4px);border-color:rgba(59,130,246,0.1);}.service-card:hover::before{background:var(--secondary);}.sc-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}.sc-icon{font-size:1.3rem;background:#eff6ff;width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--secondary);}.sc-title{font-size:0.8rem;font-weight:800;color:var(--primary);}.sc-body{font-size:8.5px;color:var(--text-muted);margin-bottom:18px;flex-grow:1;line-height:1.5;}.sc-action{font-size:9px;font-weight:700;color:var(--secondary);background:#eff6ff;padding:8px;text-align:center;border-radius:6px;transition:0.2s;border:1px solid transparent;}.service-card:hover .sc-action{background:var(--secondary);color:white;}.card-highlight{background:#f8fafc;border-color:rgba(16,185,129,0.1);}.card-highlight::before{background:var(--accent) !important;}.card-highlight .sc-icon{background:#d1fae5;color:#047857;}.card-highlight .sc-action{background:var(--accent);color:white;}.card-highlight:hover .sc-action{background:var(--accent-hover);}.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(154px,1fr));gap:10px;margin-top:10px;}.gallery-item{border-radius:var(--radius-md);overflow:hidden;position:relative;height:126px;box-shadow:var(--shadow-sm);cursor:pointer;border:1px solid var(--border);}.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;}.gallery-item:hover img{transform:scale(1.08);}.gallery-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(15,23,42,0.9) 0%,rgba(15,23,42,0) 100%);padding:21px 10px 8px;color:white;font-size:9px;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,0.8);}.why-us-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(154px,1fr));gap:13px;margin-bottom:14px;}.why-card{background:var(--bg-white);padding:18px;border-radius:var(--radius-md);border:1px solid var(--border);display:flex;flex-direction:column;gap:7px;box-shadow:var(--shadow-sm);}.why-card h4{font-size:10px;font-weight:800;color:var(--primary);}.why-card p{font-size:8.5px;color:var(--text-muted);line-height:1.5;}.modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;}.modal-content{background:var(--bg-white);padding:18px;border-radius:var(--radius-lg);width:92%;max-width:336px;position:relative;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg);}.close-btn{position:absolute;right:13px;top:10px;font-size:17px;color:#94a3b8;cursor:pointer;background:#f1f5f9;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:50%;z-index:10;}.modal h2{font-size:1rem;color:var(--primary);margin-bottom:14px;font-weight:800;display:flex;align-items:center;gap:7px;}.service-options-container{display:flex;flex-direction:column;gap:8px;margin-top:7px;}.service-option-card{display:flex;align-items:center;justify-content:space-between;padding:11px;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);cursor:pointer;transition:all 0.2s ease;position:relative;}.service-option-card:hover{border-color:#bfdbfe;background:#f8fafc;}.service-option-card input[type="checkbox"]{display:none;}.custom-box{width:17px;height:17px;border:2px solid #cbd5e1;border-radius:4px;margin-right:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;background:white;}.service-option-card input[type="checkbox"]:checked+.custom-box{background:var(--secondary);border-color:var(--secondary);}.service-option-card input[type="checkbox"]:checked+.custom-box::after{content:'✔';color:white;font-size:10px;font-weight:bold;}.service-option-card:has(input[type="checkbox"]:checked){border-color:var(--secondary);background:#eff6ff;}.so-details{flex-grow:1;padding-right:7px;}.so-title{font-weight:700;color:var(--text-dark);font-size:9.5px;display:block;margin-bottom:1px;}.so-desc{font-size:8px;color:var(--text-muted);line-height:1.3;display:block;}.so-price{font-weight:800;color:var(--primary);font-size:10px;white-space:nowrap;}.product-card{display:flex;gap:10px;background:var(--bg-white);border:2px solid var(--border);border-radius:8px;padding:8px;margin-bottom:8px;transition:0.2s;}.product-card:hover{border-color:#bfdbfe;}.product-card:has(input[type="checkbox"]:checked){border-color:var(--accent);background:#ecfdf5;}.product-card input[type="checkbox"]:checked+.custom-box{background:var(--accent);border-color:var(--accent);}.product-img{width:56px;height:56px;object-fit:contain;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:zoom-in;}.product-info{flex-grow:1;display:flex;align-items:center;}.product-title-link{font-weight:800;color:var(--secondary);display:inline-block;margin-bottom:3px;cursor:pointer;text-decoration:underline;}.product-price{color:var(--primary);font-weight:900;font-size:10px;margin-top:3px;display:block;}#lightboxModal{z-index:3000;}#lightboxModal .modal-content{background:transparent;box-shadow:none;max-width:90vw;padding:0;display:flex;justify-content:center;}#lightboxImage{max-width:100%;max-height:85vh;border-radius:6px;object-fit:contain;}#productDetailModal{z-index:2500;}.detail-img-box{width:100%;height:140px;background:#f8fafc;border-radius:8px;margin-bottom:10px;display:flex;justify-content:center;align-items:center;border:1px solid var(--border);overflow:hidden;}.detail-img-box img{max-width:100%;max-height:100%;object-fit:contain;}.detail-specs-list{margin-top:7px;padding:10px;background:#f8fafc;border-radius:6px;border:1px solid var(--border);font-size:8px;color:var(--text-muted);line-height:1.6;}.form-group{margin-bottom:10px;}.form-group label{display:block;font-size:8.5px;font-weight:700;margin-bottom:4px;}.form-group input,.form-group select,.form-group textarea{width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:9px;font-family:inherit;outline:none;}.btn-full{width:100%;background:var(--primary);color:white;padding:10px;border:none;border-radius:var(--radius-md);font-weight:800;cursor:pointer;font-size:10px;transition:0.2s;display:block;text-align:center;}.auth-switch{text-align:center;margin-top:10px;font-size:8.5px;color:var(--text-muted);}.auth-switch a{color:var(--secondary);font-weight:700;cursor:pointer;text-decoration:none;}.mock-captcha{display:flex;align-items:center;gap:7px;background:#f8fafc;padding:8px;border:1px solid #cbd5e1;border-radius:4px;margin-bottom:10px;}.floating-cart{display:none;position:fixed;bottom:17px;left:50%;transform:translateX(-50%);width:90%;max-width:350px;background:var(--primary);padding:8px 8px 8px 17px;border-radius:35px;box-shadow:0 7px 17px rgba(30,58,138,0.3);z-index:9999;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,0.1);}.cart-info{display:flex;flex-direction:column;}.cart-total{font-size:11px;font-weight:800;color:#ffffff;}.cart-action{background:var(--accent);color:white;padding:8px 17px;border-radius:28px;font-size:9px;font-weight:800;cursor:pointer;}.profil-wrapper{max-width:420px;margin:0 auto;padding:14px 0;}.user-card{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm);}.user-avatar{width:49px;height:49px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;border:2px solid #bfdbfe;}.user-details h3{font-size:1rem;color:var(--text-dark);margin-bottom:3px;font-weight:800;}.history-list{display:flex;flex-direction:column;gap:8px;}.history-item{background:var(--bg-white);border:1px solid var(--border);border-radius:6px;padding:11px;cursor:pointer;transition:0.2s;}.history-item:hover{border-color:var(--secondary);transform:translateY(-1px);box-shadow:var(--shadow-md);}.hi-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed var(--border);padding-bottom:7px;margin-bottom:7px;}.hi-date{font-size:8px;color:var(--text-muted);font-weight:600;}.hi-status{font-size:7px;font-weight:800;padding:3px 7px;border-radius:4px;text-transform:uppercase;}.status-dipesan{background:#fef08a;color:#9a3412;}.status-diterima{background:#dcfce7;color:#166534;}.status-ditolak{background:#fee2e2;color:#991b1b;}.hi-body strong{font-size:9.5px;color:var(--text-dark);display:block;margin-bottom:3px;}.hi-body p{font-size:8.5px;color:var(--primary);font-weight:700;margin-bottom:0;}.order-detail-card{background:#f8fafc;border:1px solid var(--border);padding:10px;border-radius:6px;font-size:8.5px;margin-bottom:10px;}.order-detail-card .row{display:flex;justify-content:space-between;margin-bottom:6px;border-bottom:1px dashed #e2e8f0;padding-bottom:6px;}.order-detail-card .row:last-child{margin-bottom:0;border-bottom:none;padding-bottom:0;}.order-detail-card .label{color:var(--text-muted);}.order-detail-card .value{font-weight:700;color:var(--text-dark);text-align:right;}#odTechMessage{display:none;background:#ecfdf5;color:#065f46;padding:8px 10px;border-radius:6px;font-size:8.5px;margin-bottom:10px;border:1px solid #a7f3d0;line-height:1.4;}.checkout-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--border);}.checkout-item:last-child{border-bottom:none;}.checkout-item-details{flex-grow:1;padding-right:10px;}.checkout-item-name{font-weight:700;color:var(--text-dark);font-size:9px;display:block;margin-bottom:1px;}.checkout-item-price{font-weight:800;color:var(--primary);font-size:9.5px;}.btn-remove-item{background:#fee2e2;color:#ef4444;border:none;width:22px;height:22px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.2s;font-size:10px;}.btn-remove-item:hover{background:#fca5a5;color:#b91c1c;transform:scale(1.05);}@media(max-width:600px){header{padding:8px 5%;flex-wrap:wrap;}nav{width:100%;overflow-x:auto;padding-top:7px;padding-bottom:3px;justify-content:flex-start;}nav::-webkit-scrollbar{display:none;}nav a#btn-auth{margin-left:auto;flex-shrink:0;}.gallery-grid{grid-template-columns:repeat(2,1fr);}.product-card{padding:7px;}.product-img{width:49px;height:49px;}.so-details{padding-right:3px;}.so-title{font-size:9px;}}.pro-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.02); display: flex; flex-direction: column; }
-.pro-card:hover { border-color: #bfdbfe; box-shadow: 0 3px 10px rgba(59, 130, 246, 0.08); transform: translateY(-1px); }
-.pro-card.active { border-color: var(--accent); background: #ecfdf5; box-shadow: 0 3px 10px rgba(16, 185, 129, 0.1); }
-.pro-card-title { font-weight: 800; color: var(--text-dark); font-size: 10.5px; display: block; margin-bottom: 3px; line-height: 1.4; }
-.pro-card.active .pro-card-title { color: #047857; }
-.pro-card-desc { font-size: 8.5px; color: var(--text-muted); line-height: 1.5; }
-.pro-card-price { font-weight: 800; color: var(--primary); font-size: 11px; }
-.pro-btn-cart { background: #f1f5f9; color: var(--secondary); border: 1px solid #cbd5e1; padding: 5px 11px; border-radius: 35px; font-size: 8.5px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
-.pro-btn-cart:hover { background: #e2e8f0; }
-.pro-btn-cart.added { background: var(--accent); color: white; border-color: var(--accent); }
-.pro-img { width: 56px; height: 56px; object-fit: contain; border-radius: 6px; border: 1px solid var(--border); background: #fff; flex-shrink: 0; }
-.pro-img-placeholder { width: 56px; height: 56px; border-radius: 6px; border: 1px dashed var(--border); background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.success-modal { display:none; position:fixed; z-index:11000; left:0; top:0; width:100%; height:100%; background:rgba(15,23,42,0.8); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px; }
-.success-card { background:var(--bg-white); padding:30px; border-radius:24px; width:100%; max-width:400px; text-align:center; box-shadow:var(--shadow-lg); animation:modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-@keyframes modalPop { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }
-.success-icon { font-size:60px; margin-bottom:20px; display:block; }
-.success-card h2 { font-size:1.5rem; color:var(--text-dark); margin-bottom:12px; font-weight:800; }
-.success-card p { font-size:11px; color:var(--text-muted); line-height:1.6; margin-bottom:25px; }
-.success-actions { display:flex; flex-direction:column; gap:10px; }
-.btn-status { background:var(--secondary); color:white; padding:14px; border:none; border-radius:12px; font-weight:800; cursor:pointer; font-size:11px; transition:0.2s; }
-.btn-status:hover { background:var(--primary); }
-.btn-close-success { background:#f1f5f9; color:var(--text-muted); padding:12px; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:11px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0A2540">
+<meta name="description" content="BekasiAC — Kontraktor, distributor & retail AC terbaik di Bekasi. Cuci AC, servis, bongkar-pasang, jual AC baru + instalasi. Teknisi bersertifikat, garansi nyata, respon cepat.">
+<title>BekasiAC — Service AC Profesional Bekasi</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ BEKASIAC DESIGN SYSTEM (mobile-first) ============ */
+:root{
+  --navy:#0A2540; --navy2:#0F3560; --ink:#0F172A;
+  --brand:#0284C7; --sky:#0EA5E9; --cyan:#67E8F9;
+  --accent:#10B981; --accent-d:#059669;
+  --amber:#F59E0B; --danger:#EF4444;
+  --bg:#EEF4FA; --card:#FFFFFF; --muted:#64748B; --line:#E2E8F0;
+  --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:28px;
+  --sh-sm:0 2px 8px rgba(10,37,64,.07);
+  --sh-md:0 10px 30px rgba(10,37,64,.12);
+  --sh-lg:0 20px 60px rgba(10,37,64,.18);
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --max:1160px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:76px}
+@media(min-width:900px){body{padding-bottom:0}}
+img{max-width:100%}
+button,input,select,textarea{font-family:inherit}
+.container{max-width:var(--max);margin:0 auto;padding:0 16px}
+@media(min-width:900px){.container{padding:0 24px}}
+section{scroll-margin-top:90px}
+
+/* ---------- Announcement ---------- */
+.announce{background:linear-gradient(90deg,#0EA5E9,#2563EB,#7C3AED);color:#fff;text-align:center;font-size:12px;font-weight:700;padding:9px 12px;position:relative;overflow:hidden}
+.announce span.badge{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);padding:2px 10px;border-radius:99px;margin-right:8px;font-size:10px;letter-spacing:.5px}
+@media(max-width:600px){.announce{font-size:11px}}
+
+/* ---------- Header ---------- */
+.site-header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;gap:12px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.logo-mark{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#0EA5E9,#2563EB);display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 6px 16px rgba(37,99,235,.35);color:#fff;font-weight:800}
+.logo-text{line-height:1.05}
+.logo-text b{font-size:18px;letter-spacing:-.5px;color:var(--navy)}
+.logo-text b em{font-style:normal;background:linear-gradient(90deg,#0284C7,#0EA5E9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-text small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.4px}
+.nav-links{display:none;align-items:center;gap:4px;margin-left:12px}
+.nav-links a{font-size:13px;font-weight:700;color:#334155;text-decoration:none;padding:9px 14px;border-radius:99px;cursor:pointer;transition:.2s}
+.nav-links a:hover{background:#F1F5F9;color:var(--navy)}
+.nav-links a.on{background:#E0F2FE;color:#0369A1}
+.nav-cta{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-weight:800;border-radius:14px;transition:.2s;text-decoration:none}
+.btn-login{background:var(--navy);color:#fff;padding:10px 18px;font-size:13px;border-radius:12px}
+.btn-login:hover{background:var(--navy2);transform:translateY(-1px)}
+.btn-wa-top{background:#22C55E;color:#fff;padding:10px 14px;font-size:13px;border-radius:12px;display:none}
+@media(min-width:900px){.nav-links{display:flex}.btn-wa-top{display:inline-flex}}
+.burger{display:flex;width:42px;height:42px;border:1px solid var(--line);background:#fff;border-radius:12px;align-items:center;justify-content:center;font-size:19px;cursor:pointer}
+@media(min-width:900px){.burger{display:none}}
+.mobile-menu{display:none;border-top:1px solid var(--line);background:#fff;padding:10px 16px 16px}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:12px 10px;font-weight:700;font-size:14px;color:#334155;border-bottom:1px solid #F1F5F9;cursor:pointer;text-decoration:none}
+.mobile-menu a:last-child{border:none}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;overflow:hidden;background:radial-gradient(1000px 500px at 85% -10%,#1D4ED8 0%,transparent 60%),radial-gradient(700px 400px at -10% 110%,#06B6D4 0%,transparent 55%),linear-gradient(160deg,#071A33 0%,#0A2540 45%,#0C4A6E 100%);color:#fff}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.hero-inner{position:relative;display:grid;gap:26px;padding:34px 0 40px}
+@media(min-width:900px){.hero-inner{grid-template-columns:1.05fr .95fr;align-items:center;padding:56px 0 64px;gap:40px}}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:7px 14px;border-radius:99px;font-size:11.5px;font-weight:700;backdrop-filter:blur(6px)}
+.hero-pill .dot{width:8px;height:8px;border-radius:50%;background:#4ADE80;box-shadow:0 0 10px #4ADE80;animation:blink 1.8s infinite}
+@keyframes blink{50%{opacity:.4}}
+.hero h1{font-size:30px;line-height:1.12;letter-spacing:-1px;margin:14px 0 10px;font-weight:800}
+.hero h1 .grad{background:linear-gradient(90deg,#67E8F9,#A5F3FC);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media(min-width:900px){.hero h1{font-size:48px}}
+.hero p.sub{font-size:13.5px;color:#CBD5E1;max-width:520px}
+@media(min-width:900px){.hero p.sub{font-size:15px}}
+.hero-cta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn-hero-primary{background:linear-gradient(90deg,#0EA5E9,#2563EB);color:#fff;padding:15px 24px;font-size:14px;border-radius:15px;box-shadow:0 12px 30px rgba(14,165,233,.4)}
+.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(14,165,233,.5)}
+.btn-hero-ghost{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.3);padding:14px 22px;font-size:14px;border-radius:15px}
+.btn-hero-ghost:hover{background:rgba(255,255,255,.18)}
+.hero-stats{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.hstat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px 16px;min-width:105px;backdrop-filter:blur(6px)}
+.hstat b{display:block;font-size:18px;letter-spacing:-.5px}
+.hstat small{font-size:10.5px;color:#CBD5E1;font-weight:600}
+.hero-visual{position:relative;display:block}
+.hero-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:24px;overflow:hidden;backdrop-filter:blur(10px);box-shadow:var(--sh-lg)}
+.hero-card img{width:100%;height:230px;object-fit:cover;display:block}
+@media(min-width:900px){.hero-card img{height:300px}}
+.hero-card-body{padding:16px 18px;display:flex;align-items:center;gap:12px}
+.tech-ava{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#22D3EE,#2563EB);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid rgba(255,255,255,.4)}
+.hero-card-body b{font-size:13.5px;display:block}
+.hero-card-body small{font-size:11.5px;color:#CBD5E1}
+.float-chip{position:absolute;background:#fff;color:var(--ink);border-radius:14px;padding:9px 13px;font-size:11.5px;font-weight:800;box-shadow:var(--sh-md);display:flex;align-items:center;gap:8px;animation:floaty 3.5s ease-in-out infinite}
+.float-chip small{display:block;font-size:10px;color:var(--muted);font-weight:600}
+.fc1{top:14px;right:10px}
+.fc2{bottom:86px;left:-6px;animation-delay:1.2s}
+@media(min-width:900px){.fc2{left:-24px}}
+@keyframes floaty{50%{transform:translateY(-8px)}}
+
+/* ---------- Trust strip ---------- */
+.trust{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none}
+.trust::-webkit-scrollbar{display:none}
+.trust span{flex-shrink:0;background:#fff;border:1px solid var(--line);border-radius:99px;padding:8px 15px;font-size:12px;font-weight:700;color:#334155;box-shadow:var(--sh-sm)}
+
+/* ---------- Sections ---------- */
+.sec{padding:34px 0}
+@media(min-width:900px){.sec{padding:52px 0}}
+.sec-head{margin-bottom:18px}
+.sec-head h2{font-size:21px;letter-spacing:-.5px;font-weight:800}
+@media(min-width:900px){.sec-head h2{font-size:30px}}
+.sec-head p{font-size:12.5px;color:var(--muted);margin-top:4px}
+.sec-head .bar{width:44px;height:4px;border-radius:99px;background:linear-gradient(90deg,var(--sky),#2563EB);margin-top:10px}
+
+/* ---------- Services ---------- */
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:900px){.svc-grid{grid-template-columns:repeat(4,1fr);gap:18px}}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px 16px;cursor:pointer;position:relative;overflow:hidden;transition:.25s;box-shadow:var(--sh-sm)}
+.svc:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:#BAE6FD}
+.svc::after{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--sky),#2563EB);opacity:0;transition:.25s}
+.svc:hover::after{opacity:1}
+.svc.hl{background:linear-gradient(160deg,#0A2540,#0C4A6E);border-color:#0A2540;color:#fff}
+.svc.hl p{color:#BAE6FD}
+.svc-ic{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:12px}
+.svc h3{font-size:14px;font-weight:800;margin-bottom:6px}
+@media(min-width:900px){.svc h3{font-size:16px}}
+.svc p{font-size:11.5px;color:var(--muted);line-height:1.5;min-height:52px}
+.svc-act{margin-top:12px;font-size:12px;font-weight:800;color:var(--brand);display:flex;align-items:center;gap:6px}
+.svc.hl .svc-act{color:var(--cyan)}
+.bg-blue{background:#E0F2FE}.bg-green{background:#DCFCE7}.bg-amber{background:#FEF3C7}.bg-violet{background:#EDE9FE}
+
+/* ---------- Promo banner ---------- */
+.promo{background:linear-gradient(120deg,#F59E0B,#EF4444 60%,#DC2626);border-radius:22px;color:#fff;padding:22px 20px;display:grid;gap:14px;position:relative;overflow:hidden;box-shadow:var(--sh-md)}
+@media(min-width:900px){.promo{grid-template-columns:1fr auto;align-items:center;padding:28px 32px}}
+.promo::before{content:'❄';position:absolute;right:-10px;bottom:-38px;font-size:150px;opacity:.15;transform:rotate(-12deg)}
+.promo h3{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.promo p{font-size:12.5px;opacity:.95;margin-top:4px;max-width:560px}
+.promo .btn{background:#fff;color:#DC2626;padding:13px 22px;font-size:13px;border-radius:13px;position:relative;z-index:2;white-space:nowrap}
+
+/* ---------- Steps ---------- */
+.steps{display:grid;gap:12px}
+@media(min-width:900px){.steps{grid-template-columns:repeat(4,1fr);gap:16px}}
+.step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;gap:14px;align-items:flex-start;box-shadow:var(--sh-sm)}
+.step-n{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#0EA5E9,#2563EB);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.step b{font-size:13.5px;display:block;margin-bottom:3px}
+.step p{font-size:12px;color:var(--muted)}
+
+/* ---------- Tabs docs ---------- */
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer;color:var(--muted);transition:.2s;text-align:center}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:var(--sh-md)}
+.snap{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.snap::-webkit-scrollbar{height:6px}
+.snap::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:99px}
+.gal-card{flex:0 0 78%;max-width:300px;scroll-snap-align:center;border-radius:18px;overflow:hidden;position:relative;height:210px;box-shadow:var(--sh-sm);cursor:pointer;border:1px solid var(--line);background:#E2E8F0}
+@media(min-width:900px){.gal-card{flex:0 0 280px}}
+.gal-card img{width:100%;height:100%;object-fit:cover;transition:.4s}
+.gal-card:hover img{transform:scale(1.06)}
+.gal-cap{position:absolute;left:0;right:0;bottom:0;padding:34px 14px 12px;background:linear-gradient(to top,rgba(7,26,51,.92),transparent);color:#fff;font-size:12.5px;font-weight:700}
+.vid-card{flex:0 0 84%;max-width:330px;scroll-snap-align:center;background:#000;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
+@media(min-width:900px){.vid-card{flex:0 0 320px}}
+.vid-card iframe{width:100%;height:180px;border:none;display:block}
+.vid-cap{background:#fff;padding:10px 14px;font-size:12px;font-weight:700}
+
+/* ---------- Why ---------- */
+.why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:900px){.why-grid{grid-template-columns:repeat(4,1fr);gap:16px}}
+.why{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 16px;box-shadow:var(--sh-sm)}
+.why .ic{font-size:30px;margin-bottom:10px}
+.why h4{font-size:13.5px;font-weight:800;margin-bottom:6px}
+.why p{font-size:11.5px;color:var(--muted)}
+
+/* ---------- Reviews ---------- */
+.rev-summary{background:var(--navy);color:#fff;border-radius:22px;padding:24px 20px;display:grid;gap:16px;margin-bottom:16px;position:relative;overflow:hidden}
+@media(min-width:900px){.rev-summary{grid-template-columns:auto 1fr auto;align-items:center;padding:28px 32px}}
+.rev-summary::after{content:'';position:absolute;width:280px;height:280px;background:rgba(14,165,233,.18);border-radius:50%;right:-80px;top:-80px;filter:blur(10px)}
+.rev-big{font-size:44px;font-weight:800;letter-spacing:-2px}
+.rev-stars{color:#FBBF24;font-size:18px;letter-spacing:2px}
+.rev-list{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory}
+.rev-card{flex:0 0 82%;max-width:320px;scroll-snap-align:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--sh-sm)}
+@media(min-width:900px){.rev-card{flex:0 0 300px}}
+.rev-card .stars{color:#FBBF24;font-size:12px;margin-bottom:8px;letter-spacing:1px}
+.rev-card p{font-size:12.5px;font-style:italic;color:#334155;margin-bottom:12px}
+.rev-who{display:flex;align-items:center;gap:10px}
+.rev-ava{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#2563EB);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.rev-who b{font-size:12.5px;display:block}
+.rev-who small{font-size:11px;color:var(--muted)}
+.rev-photo{width:100%;height:130px;object-fit:cover;border-radius:12px;margin-top:10px;border:1px solid var(--line);cursor:zoom-in}
+
+/* ---------- Coverage & FAQ ---------- */
+.two-col{display:grid;gap:20px}
+@media(min-width:900px){.two-col{grid-template-columns:1fr 1fr;gap:28px}}
+.area-box{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 18px;box-shadow:var(--sh-sm)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chips span{background:#F0F9FF;border:1px solid #BAE6FD;color:#0369A1;font-size:12px;font-weight:700;padding:7px 13px;border-radius:99px}
+.faq-item{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden;box-shadow:var(--sh-sm)}
+.faq-q{padding:15px 16px;font-weight:800;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;list-style:none}
+.faq-q::-webkit-details-marker{display:none}
+.faq-item[open] .faq-q{color:#0369A1}
+.faq-a{padding:0 16px 16px;font-size:12.5px;color:var(--muted)}
+
+/* ---------- CTA ---------- */
+.cta{background:linear-gradient(135deg,#052E16,#166534 55%,#15803D);border-radius:24px;padding:30px 22px;text-align:center;color:#fff;position:relative;overflow:hidden;box-shadow:var(--sh-md)}
+.cta h2{font-size:22px;letter-spacing:-.5px;margin-bottom:8px}
+.cta p{font-size:13px;opacity:.92;max-width:480px;margin:0 auto}
+.cta .btn{background:#fff;color:#166534;padding:15px 30px;font-size:14px;border-radius:14px;margin-top:18px}
+
+/* ---------- Footer ---------- */
+footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
+.foot-grid{display:grid;gap:24px}
+@media(min-width:900px){.foot-grid{grid-template-columns:1.3fr 1fr 1fr}}
+.foot-grid h4{color:#fff;font-size:14px;margin-bottom:12px}
+.foot-grid a,.foot-grid p{font-size:12.5px;color:#94A3B8;text-decoration:none;display:block;margin-bottom:8px}
+.copy{border-top:1px solid rgba(255,255,255,.1);margin-top:24px;padding-top:16px;text-align:center;font-size:11.5px;color:#64748B}
+
+/* ---------- Bottom nav (mobile) ---------- */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(10,37,64,.1)}
+@media(min-width:900px){.bottom-nav{display:none}}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border-radius:12px;cursor:pointer;color:#94A3B8;font-size:10px;font-weight:700;border:none;background:none}
+.bn-item .ic{font-size:20px}
+.bn-item.on{color:#0284C7;background:#F0F9FF}
+
+/* ---------- Floating cart & WA ---------- */
+.floating-cart{display:none;position:fixed;left:12px;right:12px;z-index:310;background:linear-gradient(120deg,#0A2540,#0C4A6E);border-radius:18px;padding:12px 12px 12px 18px;align-items:center;justify-content:space-between;box-shadow:0 14px 40px rgba(10,37,64,.45);border:1px solid rgba(255,255,255,.15);bottom:86px}
+@media(min-width:900px){.floating-cart{left:auto;right:24px;bottom:24px;width:380px}}
+.floating-cart.show{display:flex;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}}
+.cart-info small{color:#93C5FD;font-size:11px;font-weight:700}
+.cart-total{color:#fff;font-size:18px;font-weight:800;display:block}
+.cart-go{background:linear-gradient(90deg,#10B981,#059669);color:#fff;border:none;padding:13px 22px;border-radius:13px;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 6px 18px rgba(16,185,129,.4)}
+.wa-float{position:fixed;right:14px;bottom:150px;z-index:290;width:54px;height:54px;border-radius:50%;background:#22C55E;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 10px 26px rgba(34,197,94,.5);text-decoration:none;transition:.2s}
+.wa-float:hover{transform:scale(1.08)}
+@media(min-width:900px){.wa-float{bottom:100px;right:24px}}
+
+/* ---------- Modals (bottom-sheet on mobile) ---------- */
+.modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(7,26,51,.6);backdrop-filter:blur(5px);align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+@media(min-width:700px){.modal{align-items:center;padding:20px}}
+.modal-card{background:#fff;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;border-radius:24px 24px 0 0;padding:22px 18px calc(26px + env(safe-area-inset-bottom));position:relative;animation:sheetUp .3s ease}
+@media(min-width:700px){.modal-card{border-radius:24px;padding:28px;max-height:88vh}}
+@keyframes sheetUp{from{transform:translateY(60px);opacity:0}}
+.grab{width:44px;height:5px;border-radius:99px;background:#E2E8F0;margin:0 auto 16px}
+@media(min-width:700px){.grab{display:none}}
+.m-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;background:#F1F5F9;border:none;font-size:17px;cursor:pointer;color:#64748B}
+.modal-card h2{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px;padding-right:40px}
+.modal-card .m-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.f-group{margin-bottom:13px}
+.f-group label{display:block;font-size:12px;font-weight:800;margin-bottom:6px;color:#334155}
+.f-group input,.f-group select,.f-group textarea{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:13px;font-size:13.5px;outline:none;background:#F8FAFC;transition:.2s;color:var(--ink)}
+.f-group input:focus,.f-group select:focus,.f-group textarea:focus{border-color:var(--sky);background:#fff;box-shadow:0 0 0 4px rgba(14,165,233,.12)}
+.btn-block{width:100%;padding:15px;border-radius:14px;font-size:14px;margin-top:6px}
+.btn-primary{background:linear-gradient(90deg,#0EA5E9,#2563EB);color:#fff;box-shadow:0 8px 22px rgba(37,99,235,.35)}
+.btn-green{background:linear-gradient(90deg,#10B981,#059669);color:#fff;box-shadow:0 8px 22px rgba(16,185,129,.35)}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-light{background:#F1F5F9;color:#475569}
+.auth-alt{text-align:center;margin-top:14px;font-size:12.5px;color:var(--muted)}
+.auth-alt a{color:var(--brand);font-weight:800;cursor:pointer;text-decoration:none}
+
+/* katalog cards */
+.search-bar{display:flex;gap:8px;margin-bottom:12px}
+.search-bar input{flex:1;padding:12px 14px;border:1.5px solid var(--line);border-radius:13px;font-size:13px;outline:none;background:#F8FAFC}
+.pro{background:#F8FAFC;border:1.5px solid var(--line);border-radius:16px;padding:13px;margin-bottom:10px;cursor:pointer;transition:.2s}
+.pro:hover{border-color:#7DD3FC}
+.pro.on{border-color:var(--accent);background:#ECFDF5}
+.pro-top{display:flex;gap:12px}
+.pro-img{width:64px;height:64px;border-radius:13px;object-fit:cover;border:1px solid var(--line);background:#fff;flex-shrink:0}
+.pro-ph{width:64px;height:64px;border-radius:13px;border:1.5px dashed #CBD5E1;background:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.pro-title{font-weight:800;font-size:13.5px;line-height:1.35}
+.pro-desc{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+.pro-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;border-top:1px dashed #CBD5E1;padding-top:10px}
+.pro-price{font-weight:800;color:var(--navy);font-size:14px}
+.pro-btn{border:1.5px solid #CBD5E1;background:#fff;color:var(--brand);padding:8px 16px;border-radius:99px;font-size:12px;font-weight:800;cursor:pointer;transition:.2s}
+.pro-btn.added{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* checkout */
+.co-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.co-item:last-of-type{border:none}
+.co-name{font-size:13px;font-weight:700}
+.co-price{font-size:13px;font-weight:800;color:var(--navy);white-space:nowrap}
+.co-del{background:#FEE2E2;color:#DC2626;border:none;width:32px;height:32px;border-radius:10px;cursor:pointer;font-size:14px;flex-shrink:0}
+.co-total{display:flex;justify-content:space-between;align-items:center;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:14px;padding:13px 15px;margin-top:10px}
+.co-total b{color:#15803D;font-size:17px}
+
+/* profile */
+.page{display:none}.page.on{display:block}
+.user-card{background:linear-gradient(140deg,#0A2540,#0C4A6E);color:#fff;border-radius:22px;padding:22px;display:flex;gap:16px;align-items:center;margin-bottom:16px;box-shadow:var(--sh-md)}
+.user-ava{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-size:27px;flex-shrink:0}
+.hist-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:10px;cursor:pointer;transition:.2s}
+.hist-card:hover{border-color:#7DD3FC;box-shadow:var(--sh-sm)}
+.hist-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.hist-date{font-size:11px;color:var(--muted);font-weight:600}
+.st{font-size:10px;font-weight:800;padding:5px 11px;border-radius:99px;text-transform:uppercase;letter-spacing:.4px}
+.st-dipesan{background:#FEF08A;color:#92400E}.st-diterima{background:#DCFCE7;color:#15803D}.st-ditolak{background:#FEE2E2;color:#B91C1C}
+/* timeline */
+.tl{display:flex;gap:0;margin:14px 0}
+.tl-step{flex:1;text-align:center;position:relative;font-size:10px;font-weight:700;color:#94A3B8}
+.tl-dot{width:26px;height:26px;border-radius:50%;background:#E2E8F0;color:#94A3B8;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:12px;font-weight:800;position:relative;z-index:2}
+.tl-step.done{color:#15803D}.tl-step.done .tl-dot{background:#22C55E;color:#fff}
+.tl-step::before{content:'';position:absolute;top:13px;left:-50%;width:100%;height:2.5px;background:#E2E8F0;z-index:1}
+.tl-step:first-child::before{display:none}
+.tl-step.done::before{background:#22C55E}
+.kv{background:#F8FAFC;border:1px solid var(--line);border-radius:13px;padding:13px 14px;font-size:12.5px;margin-bottom:10px}
+.kv .row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dashed #E2E8F0}
+.kv .row:last-child{border:none}
+.kv .k{color:var(--muted)}.kv .v{font-weight:700;text-align:right}
+
+/* toast */
+#toast{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-120px);background:#0A2540;color:#fff;padding:12px 20px;border-radius:14px;font-size:13px;font-weight:700;z-index:5000;transition:.35s cubic-bezier(.2,.9,.3,1.2);box-shadow:var(--sh-lg);max-width:92%;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.ok{background:#059669}#toast.err{background:#DC2626}
+
+/* success */
+.success-ic{width:82px;height:82px;border-radius:50%;background:#DCFCE7;font-size:42px;display:flex;align-items:center;justify-content:center;margin:6px auto 16px}
+.star-input{display:flex;gap:6px;font-size:30px;cursor:pointer}
+.star-input span{color:#E2E8F0;transition:.15s}
+.star-input span.lit{color:#FBBF24}
+.lightbox-img{width:100%;border-radius:16px;max-height:70vh;object-fit:contain;background:#000}
+.hide{display:none!important}
+.center{text-align:center}
+.mt{margin-top:14px}
 </style>
 </head>
 <body>
 
-    <div id="customToast" class="custom-toast"><span id="toastIcon"></span><span id="toastMsg">Notifikasi</span></div>
+<div id="toast">Notifikasi</div>
 
-    <header>
-        <h1 onclick="window.switchPage('beranda')">❄️ Service AC Bekasi</h1>
-        <nav>
-            <a id="nav-beranda" class="active-menu" onclick="window.switchPage('beranda')">Beranda</a>
-            <a id="nav-profil" style="display: none;" onclick="window.checkProfileAccess()"><span id="nav-username">Akun</span></a>
-            <a id="btn-auth" onclick="window.toggleAuth()">Login</a>
-        </nav>
-    </header>
+<!-- Announcement -->
+<div class="announce" id="announceBar"><span class="badge">PROMO</span><span id="announceText">Gratis biaya survei untuk wilayah Bekasi kota — klaim sekarang!</span></div>
 
-    <div id="page-beranda">
-        <section class="hero">
-            <h2>Pakar Pendingin Ruangan Anda</h2>
-            <p>
-                <strong>Kontraktor, Distributor & Retail AC Terbaik dan Terpercaya</strong><br>
-                Penyedia Jasa Layanan Cuci & Service AC.<br>
-                Solusi komprehensif untuk perawatan, perbaikan, instalasi, dan pengadaan unit AC baru di wilayah Bekasi.
-            </p>
-            <div class="trust-stats"><span>🛡️ Tersertifikasi</span><span>⚡ Respon Cepat</span><span>💯 Bergaransi</span></div>
-        </section>
+<!-- Header -->
+<header class="site-header">
+  <div class="container nav-inner">
+    <div class="logo" onclick="goPage('beranda')">
+      <div class="logo-mark">❄</div>
+      <div class="logo-text"><b>Bekasi<em>AC</em></b><small>SERVICE AC PROFESIONAL</small></div>
+    </div>
+    <nav class="nav-links">
+      <a id="nl-beranda" class="on" onclick="goPage('beranda')">Beranda</a>
+      <a onclick="scrollToId('layanan')">Layanan</a>
+      <a onclick="scrollToId('galeri')">Galeri</a>
+      <a onclick="scrollToId('testimoni')">Ulasan</a>
+      <a onclick="scrollToId('faq')">FAQ</a>
+      <a id="nl-profil" style="display:none" onclick="goPage('profil')">📦 Pesanan Saya</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-wa-top" id="topWaBtn" href="https://wa.me/62817387060" target="_blank">💬 WA Kami</a>
+      <button class="btn btn-login" id="btnAuth" onclick="toggleAuth()">Masuk</button>
+      <button class="burger" onclick="document.getElementById('mMenu').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mMenu">
+    <a onclick="goPage('beranda')">🏠 Beranda</a>
+    <a onclick="scrollToId('layanan')">🧰 Layanan</a>
+    <a onclick="scrollToId('galeri')">📸 Galeri & Video</a>
+    <a onclick="scrollToId('testimoni')">⭐ Ulasan</a>
+    <a onclick="scrollToId('faq')">❓ FAQ</a>
+    <a id="mm-profil" style="display:none" onclick="goPage('profil')">📦 Pesanan Saya</a>
+  </div>
+</header>
 
-        <section class="content-section" id="layanan">
-            <div class="section-header"><h2>Layanan Utama</h2><p>Pilih kategori layanan sesuai kebutuhan Anda.</p><div class="divider"></div></div>
-            <div class="services-grid">
-                
-                <div class="service-card card-highlight" onclick="window.openServiceModal('beli_ac')">
-                    <div class="sc-head">
-                        <div class="sc-icon">📦</div>
-                        <div class="sc-title">Beli AC Baru</div>
-                    </div>
-                    <div class="sc-body">Katalog lengkap unit AC baru kualitas terbaik, sudah termasuk jasa instalasi profesional dan material.</div>
-                    <div class="sc-action">Lihat Katalog Unit</div>
-                </div>
+<!-- ================= BERANDA ================= -->
+<div id="page-beranda" class="page on">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="container hero-inner">
+      <div>
+        <div class="hero-pill"><span class="dot"></span><span id="heroPill">Teknisi standby hari ini • Bekasi & sekitarnya</span></div>
+        <h1 id="heroTitle">AC Dingin Lagi <span class="grad">dalam Sekejap.</span></h1>
+        <p class="sub" id="heroSub">BekasiAC — kontraktor, distributor & retail AC terpercaya. Cuci, servis, bongkar-pasang, hingga AC baru + instalasi. Harga transparan, garansi nyata.</p>
+        <div class="hero-cta">
+          <button class="btn btn-hero-primary" onclick="scrollToId('layanan')">🧰 Pesan Layanan</button>
+          <a class="btn btn-hero-ghost" id="heroWaBtn" href="https://wa.me/62817387060" target="_blank">💬 Chat WhatsApp</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><b><span class="count" data-n="12">0</span>+ th</b><small>Pengalaman</small></div>
+          <div class="hstat"><b><span class="count" data-n="6800">0</span>+</b><small>Unit ditangani</small></div>
+          <div class="hstat"><b>4.9★</b><small>Rating pelanggan</small></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="float-chip fc1">🛡️<div>Garansi Servis<small>Klaim mudah via WA</small></div></div>
+        <div class="float-chip fc2">⚡<div>Respon &lt; 15 mnt<small>Jam kerja 08–21 WIB</small></div></div>
+        <div class="hero-card">
+          <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900&q=70&auto=format&fit=crop" alt="Teknisi AC BekasiAC" loading="eager" onerror="this.style.display='none'">
+          <div class="hero-card-body">
+            <div class="tech-ava">👨‍🔧</div>
+            <div><b>Tim teknisi bersertifikat</b><small>Ribuan rumah & kantor di Bekasi percaya pada kami</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                <div class="service-card" onclick="window.openServiceModal('cuci')">
-                    <div class="sc-head">
-                        <div class="sc-icon">❄️</div>
-                        <div class="sc-title">Cuci AC Rutin</div>
-                    </div>
-                    <div class="sc-body">Layanan cuci AC menyeluruh untuk menjaga kualitas udara dan efisiensi tagihan listrik bulanan Anda.</div>
-                    <div class="sc-action">Pilih Paket Cuci</div>
-                </div>
-
-                <div class="service-card" onclick="window.openServiceModal('bongkar_pasang')">
-                    <div class="sc-head">
-                        <div class="sc-icon">🔧</div>
-                        <div class="sc-title">Pasang / Bongkar</div>
-                    </div>
-                    <div class="sc-body">Pemindahan unit AC lama ke lokasi baru dengan aman, termasuk prosedur penguncian freon standar pabrik.</div>
-                    <div class="sc-action">Lihat Biaya Jasa</div>
-                </div>
-
-                <div class="service-card" onclick="window.openServiceModal('servis')">
-                    <div class="sc-head">
-                        <div class="sc-icon">🛠️</div>
-                        <div class="sc-title">Servis Perbaikan</div>
-                    </div>
-                    <div class="sc-body">Atasi segala kerusakan dari AC meneteskan air, tidak dingin, hingga mati total dengan teknisi andal.</div>
-                    <div class="sc-action">Cek Estimasi Servis</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="content-section" id="dokumentasi">
-            <div class="section-header"><h2>Dokumentasi Pekerjaan</h2><p>Bukti nyata pelayanan teknisi kami di lapangan.</p><div class="divider"></div></div>
-            <div style="margin-bottom: 20px;"><h4 style="font-size: 12px; color: var(--text-dark); margin-bottom: 10px;">▶️ Video Pengerjaan Kami</h4><div id="dynamicYoutubeGrid" style="display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;"><div style="width:100%; text-align:center; font-size:10px; color:var(--text-muted); padding: 20px 0;">Memuat video YouTube...</div></div><p style="font-size: 8px; color: var(--text-muted); margin-top: 5px; margin-bottom: 15px;">*Geser ke samping untuk video lainnya</p></div><h4 style="font-size: 12px; color: var(--text-dark); margin-bottom: 10px;">📸 Foto Pengerjaan Kami</h4>
-            
-<div id="dynamicGalleryGrid" style="display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
-                <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px;">Memuat galeri dari database...</div>
-            </div>
-        </section>
-
-        <section class="content-section" style="background: var(--bg-white); border-top: 1px solid var(--border); padding: 50px 5%; margin: 20px 0;">
-            <div class="section-header" style="text-align: center; align-items: center; margin-bottom: 40px;">
-                <h2>Mengapa Memilih Kami?</h2>
-                <p style="max-width: 600px;">Pengalaman lebih dari 10 tahun melayani berbagai jenis AC untuk rumah, kantor, dan industri.</p>
-            </div>
-            <div class="why-us-grid">
-                <div class="why-card"><div style="font-size:2rem;">👨‍🔧</div><h4>Teknisi Ahli</h4><p>Tim bersertifikat yang telah menangani ribuan kasus service.</p></div>
-                <div class="why-card"><div style="font-size:2rem;">🛡️</div><h4>Garansi Nyata</h4><p>Kami memberikan garansi service untuk ketenangan Anda.</p></div>
-                <div class="why-card"><div style="font-size:2rem;">💳</div><h4>Harga Transparan</h4><p>Anda akan mengetahui estimasi biaya pasti sebelum pekerjaan dimulai.</p></div>
-                <div class="why-card"><div style="font-size:2rem;">⚙️</div><h4>Spare Part Asli</h4><p>Kami hanya menggunakan suku cadang original atau berkualitas tinggi.</p></div>
-            </div>
-        </section>
-        <section class="content-section" style="border-top: 1px solid var(--border); padding-top: 28px; padding-bottom: 28px;">
-            <div class="section-header" style="text-align: center; align-items: center; margin-bottom: 21px;">
-                <h2>Tentang Service AC Bekasi</h2>
-                <p>Solusi terpercaya untuk segala kebutuhan pendingin ruangan dan peralatan rumah tangga Anda.</p>
-                <div class="divider"></div>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px;">
-                <div style="background: var(--bg-white); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
-                    <h3 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 7px;">🛠️ Layanan Kami</h3>
-                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 9px; color: var(--text-muted); line-height: 1.8;">
-                        <li>✔️ Cuci AC</li>
-                        <li>✔️ Perbaikan AC</li>
-                        <li>✔️ Pemasangan AC</li>
-                        <li>✔️ Pembongkaran AC</li>
-                        <li>✔️ Pengisian Freon AC</li>
-                    </ul>
-                </div>
-                <div style="background: var(--bg-white); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
-                    <h3 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 7px;">🔧 Spesialisasi Perbaikan</h3>
-                    <p style="font-size: 8.5px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">Kami ahli memperbaiki berbagai keluhan untuk semua merk, seperti:</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                        <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: bold;">AC Kotor</span>
-                        <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: bold;">AC Rusak Parah</span>
-                        <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: bold;">AC Tidak Dingin</span>
-                        <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: bold;">AC Bocor</span>
-                        <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: bold;">AC Mati Total</span>
-                        <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: bold;">AC Error</span>
-                        <span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: bold;">Pergantian Dinamo Dll</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="container">
+    <div class="trust">
+      <span>🛡️ Teknisi Bersertifikat</span><span>⚡ Datang Cepat</span><span>💯 Garansi Nyata</span><span>🧾 Harga Transparan</span><span>🔧 Sparepart Original</span><span>📍 Bekasi & Sekitarnya</span>
     </div>
 
-    <div id="page-profil" style="display: none;">
-        <section class="content-section">
-            <div class="profil-wrapper">
-                <div class="section-header" style="text-align: center; align-items: center;"><h2>Dashboard Akun</h2><p>Kelola profil dan pantau riwayat pesanan Anda secara Real-time.</p></div>
-                <div class="user-card">
-                    <div class="user-avatar">👤</div>
-                    <div class="user-details">
-                        <h3 id="displayUsername">Memuat...</h3><p id="displayEmail">Memuat...</p>
-                        <span style="display: inline-block; margin-top: 8px; background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;">Member Aktif</span>
-                    </div>
-                </div>
-                <div style="background: var(--bg-white); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-                    <h4 style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 15px; font-size: 15px;">Riwayat Pemesanan Anda</h4>
-                    <div id="historyListContainer" class="history-list"><div style="text-align: center; padding: 30px 10px; color: var(--text-muted); font-size: 12px;">Memuat data...</div></div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <div id="orderDetailModal" class="modal" style="z-index: 3000;">
-        <div class="modal-content">
-            <div class="close-btn" onclick="window.closeModal('orderDetailModal')">&times;</div>
-            <h2 style="margin-bottom: 5px;">Rincian Pesanan</h2>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px;" id="odDate">-</p>
-            
-            <div id="odTechMessage"></div>
-
-            <div class="order-detail-card">
-                <div class="row"><span class="label">ID Pesanan</span><span class="value" id="odId" style="font-family: monospace; font-size: 10px;"></span></div>
-                <div class="row"><span class="label">Status Saat Ini</span><span class="value" id="odStatus"></span></div>
-                <div class="row"><span class="label">Tgl Pengerjaan</span><span class="value" id="odTanggal"></span></div>
-            </div>
-
-            <h4 style="font-size: 12px; margin-bottom: 8px; color: var(--text-dark);">Daftar Layanan:</h4>
-            <div class="order-detail-card" id="odItemsList"></div>
-
-            <div class="order-detail-card" style="background: #eff6ff; border-color: #bfdbfe;">
-                <div class="row" style="border: none;"><span class="label" style="color: var(--primary); font-size: 14px; font-weight: bold;">TOTAL BIAYA</span><span class="value" id="odTotal" style="color: var(--primary); font-size: 16px; font-weight: 900;">Rp 0</span></div>
-            </div>
-
-            <h4 style="font-size: 12px; margin-bottom: 8px; color: var(--text-dark);">Lokasi Pengerjaan:</h4>
-            <div class="order-detail-card">
-                <div class="row"><span class="label">Atas Nama</span><span class="value" id="odNama"></span></div>
-                <div class="row"><span class="label">Area</span><span class="value" id="odArea"></span></div>
-                <div class="row" style="display: block; border: none;"><span class="label" style="display: block; margin-bottom: 5px;">Alamat Lengkap</span><span class="value" id="odAlamat" style="text-align: left; display: block; font-weight: 500;"></span></div>
-            </div>
-            <button class="btn-full" onclick="window.closeModal('orderDetailModal')">Tutup Rincian</button>
+    <!-- LAYANAN -->
+    <section class="sec" id="layanan">
+      <div class="sec-head"><h2>🧰 Layanan Unggulan</h2><p>Ketuk kategori untuk melihat daftar harga & memesan.</p><div class="bar"></div></div>
+      <div class="svc-grid">
+        <div class="svc hl" onclick="openKatalog('beli_ac')">
+          <div class="svc-ic" style="background:rgba(255,255,255,.15)">📦</div>
+          <h3>Beli AC Baru</h3><p>Unit original + instalasi profesional & material berkualitas.</p>
+          <div class="svc-act">Lihat katalog →</div>
         </div>
-    </div>
-
-    <div id="authModal" class="modal" style="z-index: 5000;">
-        <div class="modal-content" style="max-width: 400px;">
-            <div class="close-btn" onclick="window.closeModal('authModal')">&times;</div>
-            <h2 id="authTitle">Login Akun</h2>
-            <form id="authForm">
-                <div id="registerFields" style="display:none;"><div class="form-group"><label>Username</label><input type="text" id="regUsername" placeholder="Nama lengkap Anda"></div></div>
-                <div class="form-group"><label>Email</label><input type="email" id="authEmail" placeholder="email@contoh.com" required></div>
-                <div class="form-group" id="pwdGroup"><label>Kata Sandi</label><input type="password" id="authPassword" placeholder="Masukkan kata sandi" required></div>
-                <div id="registerFields2" style="display:none;">
-                    <div class="form-group"><label>Konfirmasi Sandi</label><input type="password" id="regConfirmPwd" placeholder="Ulangi kata sandi"></div>
-                    <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 15px;"><input type="checkbox" id="mockCaptcha" style="width:20px;height:20px;"><label for="mockCaptcha" style="margin:0; font-size:12px;">Saya bukan robot</label></div>
-                </div>
-                <button type="submit" id="authSubmitBtn" class="btn-full">Masuk</button>
-            </form>
-            <div style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--text-muted);" id="authFooterText">
-                Belum punya akun? <a style="color:var(--secondary); font-weight:bold; cursor:pointer;" onclick="window.openAuthModal('register')">Daftar di sini</a><br><br>
-                <a style="color:var(--secondary); font-weight:bold; cursor:pointer;" onclick="window.openAuthModal('forgot')">Lupa Kata Sandi?</a>
-            </div>
+        <div class="svc" onclick="openKatalog('cuci')">
+          <div class="svc-ic bg-blue">❄️</div>
+          <h3>Cuci AC</h3><p>Cuci menyeluruh indoor & outdoor, udara segar kembali.</p>
+          <div class="svc-act">Pilih paket →</div>
         </div>
-    </div>
-
-    <div id="priceModal" class="modal">
-        <div class="modal-content">
-            <div class="close-btn" onclick="window.closeModal('priceModal')">&times;</div>
-            <h2 id="modalTitle">Kategori Layanan</h2>
-            <div id="modalCustomCatalogContainer"></div>
+        <div class="svc" onclick="openKatalog('bongkar_pasang')">
+          <div class="svc-ic bg-amber">🔧</div>
+          <h3>Bongkar / Pasang</h3><p>Relokasi aman dengan pump-down freon standar pabrik.</p>
+          <div class="svc-act">Cek biaya →</div>
         </div>
-    </div>
-
-    <div id="productDetailModal" class="modal" style="z-index: 2500;">
-        <div class="modal-content">
-            <div class="close-btn" onclick="window.closeModal('productDetailModal')">&times;</div>
-            <div class="detail-img-box"><img id="pdImage" src="" alt="Produk"></div>
-            <h2 id="pdTitle" style="font-size: 1.4rem; margin-bottom: 5px; color: var(--text-dark);"></h2>
-            <div id="pdPrice" style="font-size: 1.3rem; font-weight: 900; color: var(--primary); margin-bottom: 15px;"></div>
-            <h4 style="font-size: 12px; margin-bottom: 5px; color: var(--text-dark);">Deskripsi Produk:</h4>
-            <div id="pdDesc" style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6;"></div>
-            <h4 style="font-size: 12px; margin-bottom: 5px; color: var(--text-dark); border-top: 1px dashed var(--border); padding-top: 15px;">Spesifikasi Lengkap:</h4>
-            <div class="detail-specs-list" id="pdSpecs"></div>
-            <button id="pdBtnAdd" class="btn-full" style="margin-top: 20px; background: var(--accent);">Tambah ke Pesanan</button>
+        <div class="svc" onclick="openKatalog('servis')">
+          <div class="svc-ic bg-violet">🛠️</div>
+          <h3>Servis & Perbaikan</h3><p>Tidak dingin, bocor, mati total — beres oleh ahli.</p>
+          <div class="svc-act">Estimasi →</div>
         </div>
-    </div>
-
-    <div id="lightboxModal" class="modal" onclick="window.closeModal('lightboxModal')">
-        <div class="modal-content" style="background: transparent; box-shadow: none; padding:0; max-width:90vw;" onclick="event.stopPropagation();">
-            <div class="close-btn" style="right:0; top:-40px; background:rgba(255,255,255,0.2); color:white;" onclick="window.closeModal('lightboxModal')">&times;</div>
-            <img id="lightboxImg" src="" style="width: 100%; max-height:85vh; border-radius: 8px; object-fit:contain;">
-        </div>
-    </div>
-
-    <div id="checkoutModal" class="modal">
-        <div class="modal-content">
-            <div class="close-btn" onclick="window.closeModal('checkoutModal')">&times;</div>
-            <h2>Selesaikan Pesanan</h2>
-            
-            <div class="form-group" style="background:#f8fafc; padding:15px; border:1px solid #e2e8f0; border-radius:8px;">
-                <label style="margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px;">Rincian Item yang Dipilih:</label>
-                <div id="checkoutItems" style="font-size:12px;"></div>
-            </div>
-
-            <div class="form-group"><label>📅 Tanggal Pengerjaan:</label><input type="date" id="tanggalPengerjaan" required></div>
-            <div class="form-group"><label>📍 Area Lokasi:</label>
-                <select id="lokasiSelect" required>
-                    <option value="" disabled selected>Pilih area...</option>
-                    <option value="Bekasi Barat">Bekasi Barat</option><option value="Bekasi Timur">Bekasi Timur</option>
-                    <option value="Bekasi Selatan">Bekasi Selatan</option><option value="Bekasi Utara">Bekasi Utara</option>
-                    <option value="Cikarang">Cikarang</option><option value="Cibitung">Cibitung</option>
-                    <option value="Bantar Gebang">Bantar Gebang</option><option value="Sumarecon">Sumarecon</option>
-                    <option value="Pondok Gede">Pondok Gede</option><option value="Lainnya">Lainnya (Konfirmasi via WA)</option>
-                </select>
-            </div>
-            <div class="form-group"><label>👤 Nama Pemesan (Sesuai di Lokasi):</label><input type="text" id="namaPengorder" placeholder="Contoh: Budi Santoso" required></div>
-            <div class="form-group"><label>🏠 Alamat Lengkap & Patokan:</label><textarea id="alamatLengkap" placeholder="Contoh: Perum. Harapan Indah Blok A2 No.15..."></textarea></div>
-<div class="form-group"><label>📱 Nomor WhatsApp Aktif:</label><input type="tel" id="checkoutWA" placeholder="Contoh: 0812..." required></div>
-            <button class="btn-full" style="background:var(--accent)" onclick="window.kirimWhatsAppFinal()">Pesan Sekarang</button>
-        </div>
-    </div>
-
-    <div id="qtyModal" class="modal" style="z-index: 4000;">
-        <div class="modal-content" style="max-width: 300px; text-align: center; padding: 25px 20px;">
-            <h3 id="qtyTitle" style="margin-bottom: 5px; color: var(--primary); font-size: 1.1rem; font-weight: 800; line-height: 1.3;"></h3>
-            <p style="font-size: 9px; color: var(--text-muted); margin-bottom: 20px;">Tentukan jumlah unit/layanan</p>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 25px;">
-                <button onclick="window.ubahQty(-1)" style="width: 40px; height: 40px; border-radius: 50%; border: none; background: #f1f5f9; color: var(--text-dark); font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow-sm);" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">-</button>
-                <span id="qtyValue" style="font-size: 22px; font-weight: 900; color: var(--text-dark); width: 40px;">1</span>
-                <button onclick="window.ubahQty(1)" style="width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--secondary); color: white; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">+</button>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="window.closeModal('qtyModal')" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: white; color: var(--text-muted); font-weight: bold; font-size: 10px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'">Batal</button>
-                <button onclick="window.konfirmasiQty()" style="flex: 1; padding: 12px; border-radius: 8px; border: none; background: var(--accent); color: white; font-weight: bold; font-size: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);" onmouseover="this.style.background='var(--accent-hover)'">Tambah</button>
-            </div>
-        </div>
-    </div>
-
-    
-<div id="floatingCart" class="floating-cart">
-        <div class="cart-info"><span style="font-size:11px; color:#cbd5e1;">Total (<span id="cartCount">0</span> Layanan)</span><span id="cartTotal" class="cart-total">Rp 0</span></div>
-        <div class="cart-action" onclick="window.prosesCheckout()">Lanjut Pesan ➔</div>
-    </div>
-
-    
-    
-    
-    
-    <section id="testimonialSection" class="content-section" style="border-top: 1px solid var(--border); padding-top: 40px;">
-        <div class="section-header" style="text-align: center; align-items: center;">
-            <h2>⭐ Suara Pelanggan Kami</h2>
-            <p>Ribuan ulasan real-time dari pelanggan setia di seluruh Bekasi.</p>
-            <div class="divider"></div>
-        </div>
-        
-        
-        <div id="testimonialContainer" style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 10px 5px; margin-bottom: 20px; border-radius: 8px; background: rgba(0,0,0,0.01); border: 1px inset rgba(0,0,0,0.03); scrollbar-width: thin;">
-            
-        </div>
-
-        <div style="text-align: center;">
-            <button class="btn-full" onclick="window.openReviewModal()" style="max-width: 250px; margin: 0 auto; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">✍️ Beri Ulasan Anda</button>
-            <p style="font-size: 8px; color: var(--text-muted); margin-top: 8px;">Ulasan Anda membantu kami meningkatkan kualitas layanan.</p>
-        </div>
+      </div>
     </section>
 
-    
-    <div id="reviewModal" class="modal">
-        <div class="modal-content" style="max-width: 350px;">
-            <div class="close-btn" onclick="window.closeModal('reviewModal')">&times;</div>
-            <h2 style="margin-bottom: 5px;">Tulis Ulasan</h2>
-            <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 15px;">Bagikan pengalaman Anda menggunakan jasa kami.</p>
-            <form onsubmit="window.submitFakeReview(event)">
-                <div class="form-group"><label>Nama Lengkap</label><input type="text" id="revName" placeholder="Contoh: Anita Sari" required></div>
-                <div class="form-group"><label>Area Bekasi</label>
-                    <select id="revArea" required>
-                        <option value="Bekasi Barat">Bekasi Barat</option><option value="Bekasi Timur">Bekasi Timur</option><option value="Cikarang">Cikarang</option><option value="Tambun">Tambun</option><option value="Harapan Indah">Harapan Indah</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Rating</label><div style="color: #fbbf24; font-size: 18px;">⭐⭐⭐⭐⭐</div></div>
-                <div class="form-group"><label>Komentar</label><textarea id="revComment" placeholder="Tulis kesan Anda..." style="width:100%; padding:8px; border-radius:6px; border:1px solid var(--border); font-size:9.5px; height:80px;" required></textarea></div>
-                <button type="submit" id="btnSubmitReview" class="btn-full" style="background: var(--primary);">Kirim Ulasan</button>
-            </form>
+    <!-- PROMO -->
+    <section class="sec" id="promoSec" style="padding-top:0">
+      <div class="promo">
+        <div><h3 id="promoTitle">🎉 Promo: Cuci 2 AC gratis 1x cek freon!</h3><p id="promoDesc">Berlaku untuk semua area Bekasi bulan ini. Pesan lewat website & tunjukkan kode <b>BEDINGIN</b> ke teknisi.</p></div>
+        <button class="btn" onclick="scrollToId('layanan')">Klaim Promo 🎁</button>
+      </div>
+    </section>
+
+    <!-- CARA PESAN -->
+    <section class="sec" style="padding-top:0">
+      <div class="sec-head"><h2>📝 Cara Pesan (1 menit)</h2><p>Tanpa ribet, tanpa antre telepon.</p><div class="bar"></div></div>
+      <div class="steps">
+        <div class="step"><div class="step-n">1</div><div><b>Pilih layanan</b><p>Ketuk kategori & masukkan ke keranjang.</p></div></div>
+        <div class="step"><div class="step-n">2</div><div><b>Isi jadwal & alamat</b><p>Tanggal, area, dan patokan lokasi.</p></div></div>
+        <div class="step"><div class="step-n">3</div><div><b>Admin konfirmasi</b><p>Via WhatsApp + status real-time.</p></div></div>
+        <div class="step"><div class="step-n">4</div><div><b>Teknisi datang</b><p>Kerjakan rapi, bayar di tempat.</p></div></div>
+      </div>
+    </section>
+
+    <!-- GALERI -->
+    <section class="sec" id="galeri" style="padding-top:0">
+      <div class="sec-head"><h2>📸 Dokumentasi Kerja</h2><p>Bukti nyata pengerjaan teknisi kami. Geser ke samping →</p><div class="bar"></div></div>
+      <div class="tabs">
+        <button class="tab on" id="tabFoto" onclick="switchDocTab('foto')">📸 Foto</button>
+        <button class="tab" id="tabVideo" onclick="switchDocTab('video')">▶️ Video</button>
+      </div>
+      <div class="snap" id="galeriSnap"><div style="padding:24px;color:var(--muted);font-size:13px">Memuat galeri…</div></div>
+      <div class="snap hide" id="videoSnap"><div style="padding:24px;color:var(--muted);font-size:13px">Memuat video…</div></div>
+    </section>
+
+    <!-- WHY -->
+    <section class="sec" style="padding-top:0">
+      <div class="sec-head"><h2>💎 Kenapa BekasiAC?</h2><p>Standar bengkel resmi, harga tukang langganan.</p><div class="bar"></div></div>
+      <div class="why-grid">
+        <div class="why"><div class="ic">👨‍🔧</div><h4>Teknisi Ahli</h4><p>Ribuan kasus ditangani, kerja teliti & sopan.</p></div>
+        <div class="why"><div class="ic">🛡️</div><h4>Garansi Nyata</h4><p>Ada kendala setelah servis? Kami balik gratis*.</p></div>
+        <div class="why"><div class="ic">🧾</div><h4>Harga Transparan</h4><p>Estimasi jelas di awal, tanpa biaya siluman.</p></div>
+        <div class="why"><div class="ic">⚙️</div><h4>Sparepart Asli</h4><p>Hanya original / grade terbaik bergaransi.</p></div>
+      </div>
+    </section>
+
+    <!-- TESTIMONI -->
+    <section class="sec" id="testimoni" style="padding-top:0">
+      <div class="sec-head"><h2>⭐ Kata Pelanggan</h2><p>Ulasan asli dari database + pelanggan terverifikasi.</p><div class="bar"></div></div>
+      <div class="rev-summary">
+        <div><div class="rev-big">4.9<span style="font-size:20px;color:#93C5FD">/5</span></div><div class="rev-stars">★★★★★</div><div style="font-size:11.5px;color:#CBD5E1;margin-top:4px" id="revCountLabel">2.400+ ulasan</div></div>
+        <div style="font-size:12.5px;color:#DBEAFE;position:relative;z-index:2">“Puas banget! Teknisi datang cepat, kerja rapi, AC langsung dingin nyess. Recommended untuk area Bekasi.”<br><small style="color:#93C5FD">— Rata-rata kesan pelanggan</small></div>
+        <button class="btn" style="background:#fff;color:var(--navy);padding:13px 20px;font-size:13px;position:relative;z-index:2" onclick="openModal('reviewModal')">✍️ Tulis Ulasan</button>
+      </div>
+      <div class="rev-list" id="revList"><div style="padding:20px;color:var(--muted);font-size:13px">Memuat ulasan…</div></div>
+    </section>
+
+    <!-- AREA + FAQ -->
+    <section class="sec" id="faq" style="padding-top:0">
+      <div class="two-col">
+        <div class="area-box">
+          <h3 style="font-size:16px;font-weight:800">📍 Area Layanan</h3>
+          <p style="font-size:12.5px;color:var(--muted);margin-top:4px">Gratis survei untuk area bertanda ★. Di luar daftar? Chat admin dulu ya.</p>
+          <div class="chips">
+            <span>★ Bekasi Barat</span><span>★ Bekasi Timur</span><span>★ Bekasi Selatan</span><span>★ Bekasi Utara</span>
+            <span>Cikarang</span><span>Cibitung</span><span>Tambun</span><span>Bantar Gebang</span><span>Sumarecon</span><span>Pondok Gede</span><span>Harapan Indah</span><span>Kranji</span>
+          </div>
+          <div class="kv mt"><div class="row"><span class="k">⏰ Jam operasional</span><span class="v">08.00 – 21.00 WIB</span></div><div class="row"><span class="k">📞 Telp / WA</span><span class="v" id="footWa">0817-387-060</span></div><div class="row"><span class="k">✉️ Email</span><span class="v">setiatehnik09@gmail.com</span></div></div>
         </div>
-    </div>
-    
-        
-    
-<footer style="text-align: center; padding: 25px 5%; overflow: hidden;"><div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;"><a href="https://youtube.com/@serviceacbekasi4733?si=hiOsDwp2d3ynW8W1" target="_blank" style="background: #ef4444; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 10px; box-shadow: var(--shadow-sm);">▶ YouTube</a><a href="https://wa.me/6281296632324" target="_blank" style="background: #25D366; color: white; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: 800; font-size: 10px; box-shadow: var(--shadow-sm);">💬 WhatsApp</a></div><div style="font-size: 10px; color: var(--text-dark); margin-bottom: 15px; line-height: 1.6;"><strong>Telp/WA:</strong> 62817387060<br><strong>Email:</strong> setiatehnik09@gmail.com<br><span style="color: #fbbf24; font-weight: bold;">@servive ac bekasi★★★★★</span></div><p style="color: var(--text-muted); font-size: 9px;">&copy; 2026 Service AC Bekasi.</p></footer>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCzYtyo13CzZIpjJ8Zb-AxOuwYlfSTpscA",
-            authDomain: "teknik-ac.firebaseapp.com",
-            projectId: "teknik-ac",
-            storageBucket: "teknik-ac.firebasestorage.app",
-            messagingSenderId: "865223751567",
-            appId: "1:865223751567:web:121532643353db1156fdfa"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-                window.db = getFirestore(app); 
-        window.addDoc = addDoc; 
-        window.collection = collection; 
-        window.getDoc = getDoc; 
-        window.doc = doc;
-        window.currentUser = null;
-        window.ordersUnsubscribe = null; 
-
-        window.dataHargaDinamis = {
-            'beli_ac': { judul: '📦 Katalog AC Baru & Instalasi', paket: [] },
-            'cuci': { judul: '❄️ Cuci & Perawatan', paket: [] },
-            'bongkar_pasang': { judul: '🔧 Instalasi & Relokasi', paket: [] },
-            'servis': { judul: '🛠️ Perbaikan Servis', paket: [] }
-        };
-
-        window.showAlert = function(msg, type = 'info') {
-            const t = document.getElementById('customToast'); t.className = 'custom-toast show ' + (type==='success'?'toast-success':type==='error'?'toast-error':'toast-info');
-            document.getElementById('toastMsg').innerText = msg; document.getElementById('toastIcon').innerText = type==='success'?'✅':type==='error'?'❌':'ℹ️';
-            setTimeout(() => t.classList.remove('show'), 3500);
-        };
-
-        async function fetchServices() {
-            try {
-                const snapshot = await getDocs(collection(window.db, "services"));
-                snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    if(window.dataHargaDinamis[data.kategori]) {
-                        window.dataHargaDinamis[data.kategori].paket.push({
-                            nama: data.nama, harga: data.harga, desc: data.desc, specs: data.specs, imgUrl: data.imgUrl
-                        });
-                    }
-                });
-            } catch(e) { console.error("Gagal load katalog:", e); }
-        }
-        fetchServices(); 
-
-        async function fetchClientGallery() {
-            const galContainer = document.getElementById('dynamicGalleryGrid');
-            try {
-                const snapshot = await getDocs(collection(window.db, "gallery"));
-                if (snapshot.empty) return galContainer.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#94a3b8;font-size:12px;">Belum ada dokumentasi.</div>';
-                
-                let galleries = [];
-                snapshot.forEach(doc => galleries.push(doc.data()));
-                galleries.sort((a,b) => { let t1 = a.timestamp ? a.timestamp.toMillis() : 0; let t2 = b.timestamp ? b.timestamp.toMillis() : 0; return t2 - t1; });
-
-                galContainer.innerHTML = '';
-                galleries.forEach(data => {
-                    galContainer.innerHTML += `<div class="gallery-item" style="flex: 0 0 75%; max-width: 250px; scroll-snap-align: center;" onclick="window.openImageLightbox('${data.url}')"><img src="${data.url}" alt="${data.title}"><div class="gallery-overlay">${data.title}</div></div>`;
-                });
-            } catch (error) { console.error(error); }
-        }
-        fetchClientGallery();
-
-
-        async function fetchYouTubeVideos() {
-            const ytContainer = document.getElementById('dynamicYoutubeGrid');
-            if(!ytContainer) return;
-            try {
-                const snapshot = await getDocs(collection(window.db, "youtube_videos"));
-                if (snapshot.empty) return ytContainer.innerHTML = '<div style="width:100%; text-align:center; color:#94a3b8; font-size:11px; padding:20px 0;">Belum ada dokumentasi video.</div>';
-                
-                let videos = [];
-                snapshot.forEach(doc => videos.push(doc.data()));
-                videos.sort((a,b) => { let t1 = a.timestamp ? a.timestamp.toMillis() : 0; let t2 = b.timestamp ? b.timestamp.toMillis() : 0; return t2 - t1; });
-
-                ytContainer.innerHTML = '';
-                videos.forEach(data => {
-                    ytContainer.innerHTML += `<iframe style="flex: 0 0 85%; max-width: 300px; height: 170px; border-radius: 8px; scroll-snap-align: center; border: none; background: #e2e8f0;" src="https://www.youtube.com/embed/${data.videoId}" title="${data.title}" allowfullscreen></iframe>`;
-                });
-            } catch (error) { console.error(error); }
-        }
-        fetchYouTubeVideos();
-
-
-        // --- TESTIMONIAL ENGINE (FIXED SCOPE) ---
-        {
-            const names = ["Budi Santoso", "Siti Aminah", "Agus Hermawan", "Eko Prasetyo", "Lestari Putri", "Dewi Lestari", "Andi Wijaya", "Rina Kartika", "Hendra Kusuma", "Yanti Nuraini", "Fajar Ramadhan", "Mega Utami", "Rizky Fauzi", "Ani Suryani", "Dedi Kurniawan", "Indah Permata", "Bambang S.", "Siska W.", "Taufik H.", "Maya A.", "Rahmat J.", "Siti K.", "Deni M.", "Putri R.", "Aditya P.", "Linda W."];
-            const testimonialAreas = ["Bekasi Barat", "Bekasi Timur", "Bekasi Selatan", "Bekasi Utara", "Cikarang", "Cibitung", "Bantar Gebang", "Sumarecon", "Pondok Gede"];
-            const testimonialReviews = [
-                "AC di rumah langsung dingin nyess! Teknisi jujur dan harganya transparan banget.",
-                "Pengerjaan sangat rapi, teknisinya sopan dan datang tepat waktu. Puas banget!",
-                "Sangat terbantu dengan layanan cuci AC-nya. Udara jadi lebih segar dan hemat listrik.",
-                "Terima kasih Service AC Bekasi! Responnya sangat cepat padahal saya pesan mendadak.",
-                "Harga sesuai dengan yang ada di katalog, tidak ada biaya siluman. Sangat terpercaya.",
-                "Teknisi bersertifikat beneran kelihatan bedanya, kerjaannya profesional dan teliti.",
-                "Sudah langganan di sini buat kantor dan rumah, belum pernah kecewa.",
-                "Bongkar pasang AC di sini rapi sekali, instalasinya estetik dan tidak berantakan.",
-                "Layanan daruratnya oke banget, AC mati total langsung ditangani hari itu juga.",
-                "Puas sekali dengan garansinya. Kemarin ada kendala sedikit langsung direspon gratis."
-            ];
-
-            window.generateTestimonials = function(count) {
-                const container = document.getElementById('testimonialContainer');
-                if(!container) return;
-                for (let i = 0; i < count; i++) {
-                    const name = names[Math.floor(Math.random() * names.length)];
-                    const area = testimonialAreas[Math.floor(Math.random() * testimonialAreas.length)];
-                    const review = testimonialReviews[Math.floor(Math.random() * testimonialReviews.length)];
-                    const card = document.createElement('div');
-                    card.style = "background: var(--bg-white); padding: 14px; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); flex-shrink: 0;";
-                    card.innerHTML = `
-                        <div style="color: #fbbf24; font-size: 10px; margin-bottom: 5px;">⭐⭐⭐⭐⭐</div>
-                        <p style="font-size: 10px; color: var(--text-dark); line-height: 1.4; font-style: italic; margin-bottom: 8px;">"${review}"</p>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div style="width: 24px; height: 24px; background: #eff6ff; color: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10px;">${name[0]}</div>
-                            <div>
-                                <div style="font-size: 9px; font-weight: 800; color: var(--primary);">${name}</div>
-                                <div style="font-size: 7.5px; color: var(--text-muted);">📍 ${area}</div>
-                            </div>
-                        </div>`;
-                    container.appendChild(card);
-                }
-            };
-
-            window.openReviewModal = function() { document.getElementById('reviewModal').style.display = 'flex'; };
-            window.submitFakeReview = function(e) {
-                e.preventDefault();
-                const btn = document.getElementById('btnSubmitReview');
-                const originalText = btn.innerText;
-                btn.innerText = "Mengirim Ulasan...";
-                btn.disabled = true;
-
-                setTimeout(() => {
-                    window.showAlert("Terima kasih! Ulasan Anda telah terkirim dan akan ditampilkan setelah diverifikasi oleh admin.", "success");
-                    window.closeModal('reviewModal');
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                    e.target.reset();
-                }, 1500);
-            };
-
-            generateTestimonials(100);
-        }
- 
-
-
-        onAuthStateChanged(auth, async (user) => {
-            const btnAuth = document.getElementById('btn-auth'), navProfil = document.getElementById('nav-profil'), navUsername = document.getElementById('nav-username');
-            if (user) {
-                window.currentUser = user; btnAuth.innerHTML = 'Logout'; btnAuth.style.background = '#ef4444'; navProfil.style.display = 'inline-block'; 
-                try {
-                    const docSnap = await getDoc(doc(window.db, "users", user.uid));
-                    let uname = docSnap.exists() && docSnap.data().username ? docSnap.data().username : "Pelanggan";
-                    document.getElementById('displayUsername').innerText = uname; document.getElementById('displayEmail').innerText = user.email;
-                    navUsername.innerText = "👤 " + uname.split(' ')[0];
-                } catch(e){}
-                
-                window.fetchUserOrders(user.uid);
-            } else {
-                window.currentUser = null; btnAuth.innerHTML = 'Login'; btnAuth.style.background = 'var(--primary)'; navProfil.style.display = 'none'; 
-                if(document.getElementById('page-profil').style.display === 'block') window.switchPage('beranda');
-            }
-        });
-
-        window.userOrdersCache = []; 
-
-        window.fetchUserOrders = function(uid) {
-            const hc = document.getElementById('historyListContainer');
-            hc.innerHTML = '<div style="text-align:center; padding:20px; font-size:12px; color: var(--text-muted);">Memuat riwayat realtime...</div>';
-            
-            const q = query(collection(window.db, "orders"), where("userId", "==", uid));
-            
-            if (window.ordersUnsubscribe) {
-                window.ordersUnsubscribe();
-            }
-
-            window.ordersUnsubscribe = onSnapshot(q, (snapshot) => {
-                if (snapshot.empty) {
-                    hc.innerHTML = `<div style="text-align:center; padding:30px; color:#94a3b8; font-size:12px; border:1px dashed #cbd5e1; border-radius:8px;">Belum ada pesanan.</div>`;
-                    window.userOrdersCache = [];
-                    return;
-                }
-                
-                let ordersData = [];
-                snapshot.forEach(doc => ordersData.push({id: doc.id, ...doc.data()}));
-                
-                ordersData.sort((a, b) => { return (b.createdAt ? b.createdAt.toMillis() : 0) - (a.createdAt ? a.createdAt.toMillis() : 0); });
-
-                window.userOrdersCache = ordersData; 
-                hc.innerHTML = '';
-                
-                ordersData.forEach((data, index) => {
-                    let dt = data.createdAt ? data.createdAt.toDate().toLocaleDateString('id-ID', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : "-";
-                    let stC = data.status==='Di Terima'?'status-diterima':data.status==='Di Tolak'?'status-ditolak':'status-dipesan';
-                    let itHtml = ''; if(data.items) data.items.forEach(it => { itHtml += `<strong>${it.nama}</strong>`; });
-                    
-                    hc.innerHTML += `
-                    <div class="history-item" onclick="window.openOrderDetail(${index})">
-                        <div class="hi-header">
-                            <span class="hi-date">${dt} WIB</span>
-                            <span class="hi-status ${stC}">${data.status||'Dipesan'}</span>
-                        </div>
-                        <div class="hi-body">
-                            ${itHtml}
-                            <p>Total: Rp ${(data.total||0).toLocaleString('id-ID')}</p>
-                            <div style="font-size:11px; color:#64748b; margin-top:6px;">👤 A/n: ${data.namaPengorder || 'Sesuai Akun'}<br>📱 WA: ${data.whatsappUser || '-'}<br>📅 Jadwal: ${data.tanggalPengerjaan} <br>📍 Area: ${data.lokasi}</div>
-                            <div style="font-size:10px; color:var(--secondary); margin-top:10px; text-align:right;">Lihat Detail ➔</div>
-                        </div>
-                    </div>`;
-                });
-
-                const modal = document.getElementById('orderDetailModal');
-                if (modal.style.display === 'flex') {
-                    const currentViewingId = document.getElementById('odId').innerText;
-                    const liveDataIndex = window.userOrdersCache.findIndex(o => o.id === currentViewingId);
-                    if(liveDataIndex !== -1) window.openOrderDetail(liveDataIndex); 
-                }
-
-            }, (error) => { 
-                console.error("Realtime Error: ", error);
-                hc.innerHTML = `<div style="text-align:center; font-size:11px; color:#ef4444;">Koneksi realtime terputus.</div>`; 
-            });
-        };
-
-        window.simpanPesananKeDb = async function(orderData) { 
-            await addDoc(collection(window.db, "orders"), orderData); 
-        };
-
-        window.toggleAuth = function() { 
-            if (window.currentUser) {
-                signOut(auth).then(() => {
-                    window.showAlert("Logout Berhasil.", "success");
-                    if (window.ordersUnsubscribe) window.ordersUnsubscribe(); 
-                }); 
-            } else { window.openAuthModal('login'); } 
-        };
-        
-        let authMode = 'login'; const authForm = document.getElementById('authForm');
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); const em = document.getElementById('authEmail').value, pw = document.getElementById('authPassword').value;
-            try {
-                if (authMode === 'login') { await signInWithEmailAndPassword(auth, em, pw); window.showAlert("Login Berhasil!", "success"); window.closeModal('authModal'); } 
-                else if (authMode === 'register') {
-                    if(pw !== document.getElementById('regConfirmPwd').value) return window.showAlert("Sandi tidak cocok!", "error");
-                    if(!document.getElementById('mockCaptcha').checked) return window.showAlert("Centang Captcha!", "error");
-                    const userCr = await createUserWithEmailAndPassword(auth, em, pw);
-                    await setDoc(doc(window.db, "users", userCr.user.uid), { username: document.getElementById('regUsername').value, email: em, createdAt: new Date() });
-                    window.showAlert("Pendaftaran Berhasil!", "success"); window.closeModal('authModal');
-                } else { await sendPasswordResetEmail(auth, em); window.showAlert("Email reset dikirim.", "success"); window.openAuthModal('login'); }
-            } catch (error) { window.showAlert("Gagal: " + error.code, "error"); }
-        });
-
-        window.openAuthModal = function(m) {
-            authMode = m; const r1 = document.getElementById('registerFields'), r2 = document.getElementById('registerFields2'), pwd = document.getElementById('pwdGroup'), title = document.getElementById('authTitle'), btn = document.getElementById('authSubmitBtn'), ftr = document.getElementById('authFooterText');
-            document.getElementById('authModal').style.display = 'flex'; authForm.reset();
-            if (m === 'login') { title.innerText = 'Login'; btn.innerText = 'Masuk'; r1.style.display='none'; r2.style.display='none'; pwd.style.display='block'; ftr.innerHTML = `Belum punya akun? <a style="color:var(--secondary);font-weight:bold;cursor:pointer;" onclick="window.openAuthModal('register')">Daftar</a><br><br><a style="color:var(--secondary);font-weight:bold;cursor:pointer;" onclick="window.openAuthModal('forgot')">Lupa Sandi?</a>`; } 
-            else if (m === 'register') { title.innerText = 'Daftar'; btn.innerText = 'Daftar'; r1.style.display='block'; r2.style.display='block'; pwd.style.display='block'; ftr.innerHTML = `Sudah punya akun? <a style="color:var(--secondary);font-weight:bold;cursor:pointer;" onclick="window.openAuthModal('login')">Masuk</a>`; } 
-            else { title.innerText = 'Reset Sandi'; btn.innerText = 'Kirim Email'; r1.style.display='none'; r2.style.display='none'; pwd.style.display='none'; ftr.innerHTML = `<a style="color:var(--secondary);cursor:pointer;" onclick="window.openAuthModal('login')">Kembali Login</a>`; }
-        };
-        window.checkProfileAccess = function() { if (window.currentUser) window.switchPage('profil'); else { window.showAlert("Harap Login.", "info"); window.openAuthModal('login'); } };
-    </script>
-
-    <script>
-                window.switchPage = function(pageId) {
-            document.getElementById('page-beranda').style.display = 'none'; 
-            document.getElementById('page-profil').style.display = 'none';
-            document.getElementById('nav-beranda').classList.remove('active-menu'); 
-            document.getElementById('nav-profil').classList.remove('active-menu');
-            document.getElementById('page-' + pageId).style.display = 'block'; 
-            document.getElementById('nav-' + pageId).classList.add('active-menu');
-            
-            const testSec = document.getElementById('testimonialSection');
-            if(testSec) testSec.style.display = (pageId === 'beranda') ? 'block' : 'none';
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if(pageId === 'profil') document.getElementById('floatingCart').style.display = 'none'; else window.updateTombolWA(); 
-        };
-
-        window.layananTerpilih = []; 
-        window.openServiceModal = function(kategori) {
-            const data = window.dataHargaDinamis[kategori];
-            document.getElementById("modalTitle").innerText = data.judul;
-            const catalogContainer = document.getElementById("modalCustomCatalogContainer");
-            catalogContainer.innerHTML = ""; 
-
-            if(data.paket.length === 0) {
-                catalogContainer.innerHTML = '<div style="text-align:center; padding:20px; font-size:12px; color:#94a3b8;">Belum ada data katalog. Tambahkan dari Panel Admin.</div>';
-            } else {
-                let htmlContent = '<div class="service-options-container">';
-                data.paket.forEach((item, idx) => {
-                    let selectedItem = window.layananTerpilih.find(l => l.nama === item.nama);
-                    let isChecked = !!selectedItem;
-                    let activeClass = isChecked ? 'active' : '';
-                    let btnClass = isChecked ? 'added' : '';
-                    let btnText = isChecked ? `✓ ${selectedItem.qty} Unit` : '+ Keranjang';
-
-                    if (kategori === 'beli_ac') {
-                        let imgHtml = item.imgUrl ? `<img src="${item.imgUrl}" alt="${item.nama}" class="pro-img" onclick="event.stopPropagation(); window.openImageLightbox('${item.imgUrl}')">` : `<div class="pro-img-placeholder">📦</div>`;
-                        htmlContent += `
-                            <div class="pro-card ${activeClass}" id="card-${kategori}-${idx}" onclick="window.toggleLayanan('${kategori}', ${idx})">
-                                <div style="display:flex; gap:10px;">
-                                    ${imgHtml}
-                                    <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
-                                        <div>
-                                            <span class="pro-card-title" onclick="event.stopPropagation(); window.openProductDetail('${kategori}', ${idx})" style="text-decoration:underline; cursor:pointer;">${item.nama}</span>
-                                            <div class="pro-card-desc">${item.desc || ''}</div>
-                                        </div>
-                                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; border-top:1px dashed #e2e8f0; padding-top:8px;">
-                                            <span class="pro-card-price">${item.harga}</span>
-                                            <button class="pro-btn-cart ${btnClass}" id="btn-${kategori}-${idx}" onclick="event.stopPropagation(); window.toggleLayanan('${kategori}', ${idx})">${btnText}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-                    } else {
-                        htmlContent += `
-                            <div class="pro-card ${activeClass}" id="card-${kategori}-${idx}" onclick="window.toggleLayanan('${kategori}', ${idx})">
-                                <div>
-                                    <span class="pro-card-title">${item.nama}</span>
-                                    <div class="pro-card-desc" style="margin-bottom:8px;">${item.desc || ''}</div>
-                                </div>
-                                <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #e2e8f0; padding-top:8px;">
-                                    <span class="pro-card-price">${item.harga}</span>
-                                    <button class="pro-btn-cart ${btnClass}" id="btn-${kategori}-${idx}" onclick="event.stopPropagation(); window.toggleLayanan('${kategori}', ${idx})">${btnText}</button>
-                                </div>
-                            </div>`;
-                    }
-                });
-                htmlContent += '</div>';
-                catalogContainer.innerHTML = htmlContent;
-            }
-            document.getElementById("priceModal").style.display = "flex";
-        };
-
-        window.openImageLightbox = function(url) { document.getElementById("lightboxImg").src = url; document.getElementById("lightboxModal").style.display = "flex"; };
-        
-        window.openProductDetail = function(kategori, idx) {
-            const item = window.dataHargaDinamis[kategori].paket[idx];
-            document.getElementById("pdImage").src = item.imgUrl || 'https://placehold.co/400x400/e2e8f0/1e3a8a?text=Foto+Produk';
-            document.getElementById("pdTitle").innerText = item.nama; document.getElementById("pdPrice").innerText = item.harga;
-            document.getElementById("pdDesc").innerText = item.desc; document.getElementById("pdSpecs").innerHTML = item.specs || 'Spesifikasi standar.';
-            const btnAdd = document.getElementById("pdBtnAdd");
-            if(window.layananTerpilih.some(l => l.nama === item.nama)) { btnAdd.innerText = "Hapus dari Pesanan"; btnAdd.style.background = "#ef4444"; } 
-            else { btnAdd.innerText = "Tambah ke Pesanan"; btnAdd.style.background = "var(--accent)"; }
-            btnAdd.onclick = function() { window.toggleLayanan(kategori, idx); window.closeModal('productDetailModal'); window.openServiceModal(kategori); };
-            document.getElementById("productDetailModal").style.display = "flex";
-        };
-
-        window.openOrderDetail = function(index) {
-            const data = window.userOrdersCache[index];
-            if(!data) return;
-
-            document.getElementById('odId').innerText = data.id;
-            let dt = data.createdAt ? data.createdAt.toDate().toLocaleDateString('id-ID', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : "-";
-            document.getElementById('odDate').innerText = "Dibuat pada: " + dt + " WIB";
-
-            let stEl = document.getElementById('odStatus');
-            stEl.innerText = data.status || 'Dipesan';
-            stEl.className = 'value hi-status'; 
-            if(data.status === 'Di Terima') stEl.classList.add('status-diterima');
-            else if(data.status === 'Di Tolak') stEl.classList.add('status-ditolak');
-            else stEl.classList.add('status-dipesan');
-
-            const techMsgEl = document.getElementById('odTechMessage');
-            if (data.status === 'Di Terima' && data.tanggalPengerjaan) {
-                let formattedDate = data.tanggalPengerjaan;
-                try {
-                    const d = new Date(data.tanggalPengerjaan);
-                    const days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-                    const months = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
-                    formattedDate = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} hari ${days[d.getDay()]}`;
-                } catch(e){}
-                techMsgEl.innerHTML = `✅ <strong>Pesanan di terima</strong>, Kami akan mengirimkan Teknisi pada tanggal ${formattedDate}.`;
-                techMsgEl.style.display = 'block';
-            } else { techMsgEl.style.display = 'none'; }
-
-            document.getElementById('odTanggal').innerText = data.tanggalPengerjaan;
-            document.getElementById('odTotal').innerText = "Rp " + (data.total||0).toLocaleString('id-ID');
-            document.getElementById('odNama').innerText = data.namaPengorder || data.email;
-            document.getElementById('odArea').innerText = data.lokasi;
-            document.getElementById('odAlamat').innerText = data.alamat;
-
-            let itemsHtml = '';
-            if(data.items) {
-                data.items.forEach(it => { itemsHtml += `<div class="row"><span class="label" style="color:var(--text-dark); font-weight:600;">${it.nama}</span><span class="value" style="font-weight:400;">${it.harga}</span></div>`; });
-            }
-            document.getElementById('odItemsList').innerHTML = itemsHtml;
-            document.getElementById('orderDetailModal').style.display = 'flex';
-        };
-
-                window.closeModal = function(modalId) { 
-            document.getElementById(modalId).style.display = "none"; 
-            window.updateTombolWA();
-        };
-        
-        window.pendingKategori = '';
-        window.pendingIndex = -1;
-        window.pendingQty = 1;
-
-        window.ubahQty = function(delta) {
-            window.pendingQty += delta;
-            if (window.pendingQty < 1) window.pendingQty = 1;
-            document.getElementById('qtyValue').innerText = window.pendingQty;
-        };
-
-        window.bukaModalQty = function(kategori, index) {
-            window.pendingKategori = kategori;
-            window.pendingIndex = index;
-            window.pendingQty = 1;
-            const item = window.dataHargaDinamis[kategori].paket[index];
-            document.getElementById('qtyTitle').innerText = item.nama;
-            document.getElementById('qtyValue').innerText = '1';
-            document.getElementById('qtyModal').style.display = 'flex';
-        };
-
-        window.konfirmasiQty = function() {
-            const kategori = window.pendingKategori;
-            const index = window.pendingIndex;
-            const qty = window.pendingQty;
-            const item = window.dataHargaDinamis[kategori].paket[index];
-
-            let newItem = {...item, qty: qty};
-            window.layananTerpilih.push(newItem);
-
-            const card = document.getElementById(`card-${kategori}-${index}`);
-            const btn = document.getElementById(`btn-${kategori}-${index}`);
-            if(card && btn) {
-                card.classList.add('active');
-                btn.classList.add('added');
-                btn.innerText = `✓ ${qty} Unit`;
-            }
-            window.updateTombolWA();
-            window.closeModal('qtyModal');
-        };
-
-        window.toggleLayanan = function(kategori, index) {
-            const item = window.dataHargaDinamis[kategori].paket[index];
-            const i = window.layananTerpilih.findIndex(l => l.nama === item.nama);
-            
-            if (i > -1) { 
-                window.layananTerpilih.splice(i, 1); 
-                const card = document.getElementById(`card-${kategori}-${index}`);
-                const btn = document.getElementById(`btn-${kategori}-${index}`);
-                if(card && btn) {
-                    card.classList.remove('active');
-                    btn.classList.remove('added');
-                    btn.innerText = '+ Keranjang';
-                }
-                window.updateTombolWA();
-            } else { 
-                window.bukaModalQty(kategori, index);
-            }
-        };
-
-        window.updateTombolWA = function() {
-            const btn = document.getElementById("floatingCart");
-            if (window.layananTerpilih.length > 0 && document.getElementById('page-beranda').style.display !== 'none') { 
-                let totalQty = 0; let tot = 0; 
-                window.layananTerpilih.forEach(item => { 
-                    totalQty += item.qty || 1;
-                    tot += (parseInt(item.harga.replace(/[^0-9]/g, '')) || 0) * (item.qty || 1); 
-                });
-                document.getElementById("cartCount").innerText = totalQty; 
-                document.getElementById("cartTotal").innerText = "Rp " + tot.toLocaleString('id-ID'); btn.style.display = "flex"; 
-            } else { btn.style.display = "none"; }
-        };
-
-                window.prosesCheckout = function() {
-            if(window.layananTerpilih.length === 0) { window.closeModal('checkoutModal'); return; }
-            document.getElementById("floatingCart").style.display = "none";
-
-            const list = document.getElementById("checkoutItems"); list.innerHTML = ""; let tot = 0;
-            
-            window.layananTerpilih.forEach((item, index) => {
-                let hargaSatuan = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
-                let subTotal = hargaSatuan * (item.qty || 1);
-                tot += subTotal;
-                list.innerHTML += `
-                <div class="checkout-item">
-                    <div class="checkout-item-details">
-                        <span class="checkout-item-name">${item.nama} <span style="color:var(--secondary);">(${item.qty || 1}x)</span></span>
-                        <span class="checkout-item-price">Rp ${subTotal.toLocaleString('id-ID')} <span style="font-size:8px; color:var(--text-muted); font-weight:normal;">(${item.harga}/unit)</span></span>
-                    </div>
-                    <button class="btn-remove-item" onclick="window.hapusItemKeranjang(${index})" title="Hapus Layanan">🗑️</button>
-                </div>`;
-            });
-            list.innerHTML += `<div style="border-top: 2px solid var(--border); margin-top: 10px; padding-top: 12px; display:flex; justify-content:space-between; align-items:center;"><span style="font-weight:800; font-size:12px;">TOTAL BIAYA:</span><span style="font-weight:900; color:var(--accent); font-size:16px;">Rp ${tot.toLocaleString('id-ID')}</span></div>`;
-            document.getElementById("tanggalPengerjaan").valueAsDate = new Date(); document.getElementById("checkoutModal").style.display = "flex";
-        };
-
-        window.hapusItemKeranjang = function(index) {
-            window.layananTerpilih.splice(index, 1);
-            window.updateTombolWA();
-            if(window.layananTerpilih.length > 0) window.prosesCheckout(); 
-            else window.closeModal('checkoutModal');
-        };
-
-                // Deteksi & Auto-format WA ke 62
-        document.getElementById('checkoutWA').addEventListener('input', function(e) {
-            let val = e.target.value;
-            if (val.startsWith('0')) {
-                e.target.value = '62' + val.substring(1);
-            }
-        });
-
-                window.viewOrderStatus = function() {
-            window.closeModal('successOrderModal');
-            window.closeModal('priceModal');
-            window.switchPage('profil');
-        };
-
-        window.kirimWhatsAppFinal = async function() {
-            if(!window.currentUser) { window.showAlert("Silakan Login terlebih dahulu.", "info"); window.openAuthModal('login'); return; }
-            const nama = document.getElementById("namaPengorder").value;
-            const tgl = document.getElementById("tanggalPengerjaan").value;
-            const lok = document.getElementById("lokasiSelect").value;
-            const alm = document.getElementById("alamatLengkap").value;
-            const wa = document.getElementById("checkoutWA").value;
-            
-            if (!nama.trim() || !tgl || !lok || !alm.trim() || !wa.trim()) return window.showAlert("Lengkapi semua data termasuk nomor WhatsApp!", "error");
-
-            let tot = 0; let dbItems = []; 
-            window.layananTerpilih.forEach((item) => { 
-                let hargaSatuan = parseInt(item.harga.replace(/[^0-9]/g, '')) || 0;
-                let subTotal = hargaSatuan * (item.qty || 1);
-                tot += subTotal;
-                dbItems.push({ nama: item.nama, harga: item.harga, qty: item.qty || 1, subTotal: subTotal });
-            });
-            
-            const orderData = { userId: window.currentUser.uid, email: window.currentUser.email, whatsappUser: wa, namaPengorder: nama, items: dbItems, total: tot, tanggalPengerjaan: tgl, lokasi: lok, alamat: alm, status: "Dipesan", createdAt: new Date() };
-            
-            try {
-                await window.addDoc(window.collection(window.db, "orders"), orderData);
-
-                let waAdmin = "62817387060";
-                let textWA = "Halo Admin Service AC Bekasi, saya ingin memesan layanan:\n\n*Rincian Pesanan:*\n";
-                window.layananTerpilih.forEach(item => { textWA += "- " + item.nama + " (" + (item.qty || 1) + "x)\n"; });
-                textWA += "\n*Total Biaya:* Rp " + tot.toLocaleString('id-ID') + "\n\n*Data Pemesan:*\n- Nama: " + nama + "\n- Tanggal: " + tgl + "\n- Lokasi: " + lok + "\n- Alamat: " + alm + "\n- No. WA: " + wa + "\n\nMohon segera diproses.";
-                window.open("https://wa.me/" + waAdmin + "?text=" + encodeURIComponent(textWA), '_blank');
-                
-                document.getElementById('successMessage').innerHTML = `Pesanan Anda telah diterima. Admin kami akan segera mengkonfirmasikan detail pengerjaan melalui WhatsApp ke nomor: <br><strong style="color:var(--primary); font-size:14px;">${wa}</strong>`;
-                
-                window.closeModal('checkoutModal'); 
-                document.getElementById('successOrderModal').style.display = 'flex';
-                
-                window.layananTerpilih = []; 
-                window.updateTombolWA();
-            } catch (error) {
-                window.showAlert("Gagal mengirim pesanan: " + error.message, "error");
-            }
-        };
-
-        window.onclick = function(e) { if(e.target.classList.contains('modal')) window.closeModal(e.target.id); };
-    </script>
-<div id="successOrderModal" class="success-modal">
-        <div class="success-card">
-            <span class="success-icon">✅</span>
-            <h2>Pesanan Terhasil!</h2>
-            <p id="successMessage">Pesanan Anda telah kami terima.</p>
-            <div class="success-actions">
-                <button class="btn-status" onclick="window.viewOrderStatus()">📊 Cek Status Pesanan</button>
-                <button class="btn-close-success" onclick="window.closeModal('successOrderModal')">Tutup</button>
-            </div>
+        <div>
+          <div class="sec-head"><h2>❓ Sering Ditanyakan</h2><div class="bar"></div></div>
+          <details class="faq-item" open><summary class="faq-q">Berapa biaya cuci AC? <span>＋</span></summary><div class="faq-a">Mulai dari Rp 60 ribuan per unit tergantung PK & kondisi. Daftar harga lengkap ada di menu <b>Cuci AC</b> — harga yang tampil = harga bayar, tanpa tambahan tersembunyi.</div></details>
+          <details class="faq-item"><summary class="faq-q">Apakah ada garansi? <span>＋</span></summary><div class="faq-a">Ya! Semua jasa servis bergaransi. Jika keluhan yang sama muncul kembali dalam masa garansi, teknisi kami datang lagi <b>gratis</b>.</div></details>
+          <details class="faq-item"><summary class="faq-q">Bagaimana cara bayar? <span>＋</span></summary><div class="faq-a">Bayar di tempat setelah pekerjaan selesai & Anda puas. Bisa tunai, transfer, QRIS.</div></details>
+          <details class="faq-item"><summary class="faq-q">Berapa lama teknisi datang? <span>＋</span></summary><div class="faq-a">Untuk area Bekasi kota umumnya <b>di hari yang sama</b> (tergantung antrean). Anda bisa pilih tanggal pengerjaan saat checkout.</div></details>
+          <details class="faq-item"><summary class="faq-q">Apakah jual AC baru? <span>＋</span></summary><div class="faq-a">Ya, kami distributor & retail AC baru semua merk + jasa instalasi & material. Lihat katalog <b>Beli AC Baru</b>.</div></details>
         </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="sec" style="padding-top:0">
+      <div class="cta">
+        <h2>AC bermasalah? Jangan tunggu rusak parah ❄️</h2>
+        <p>Chat sekarang — admin fast respon, teknisi bisa meluncur hari ini juga.</p>
+        <br><a class="btn" id="ctaWaBtn" href="https://wa.me/62817387060" target="_blank">💬 Chat WhatsApp Sekarang</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ================= PROFIL / PESANAN ================= -->
+<div id="page-profil" class="page">
+  <div class="container sec">
+    <div class="sec-head"><h2>📦 Pesanan Saya</h2><p>Status diperbarui otomatis (real-time).</p><div class="bar"></div></div>
+    <div class="user-card">
+      <div class="user-ava">👤</div>
+      <div><b id="displayUsername" style="font-size:17px">Memuat…</b><div id="displayEmail" style="font-size:12px;color:#BAE6FD">…</div><span style="display:inline-block;margin-top:8px;background:#4ADE80;color:#052E16;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:800">● Member Aktif</span></div>
     </div>
+    <div id="historyList"><div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Memuat riwayat…</div></div>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container foot-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="logo-mark">❄</div><b style="color:#fff;font-size:18px">BekasiAC</b></div>
+      <p>Kontraktor, distributor & retail AC terbaik dan terpercaya di Bekasi. Cuci, servis, bongkar-pasang, pengadaan unit baru.</p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <a href="https://youtube.com/@serviceacbekasi4733?si=hiOsDwp2d3ynW8W1" target="_blank" style="background:#EF4444;color:#fff;padding:9px 16px;border-radius:99px;font-weight:800;font-size:12px;margin:0">▶ YouTube</a>
+        <a id="footWaBtn" href="https://wa.me/62817387060" target="_blank" style="background:#22C55E;color:#fff;padding:9px 16px;border-radius:99px;font-weight:800;font-size:12px;margin:0">💬 WhatsApp</a>
+      </div>
+    </div>
+    <div><h4>Layanan</h4><a onclick="openKatalog('beli_ac')">📦 Beli AC Baru</a><a onclick="openKatalog('cuci')">❄️ Cuci AC</a><a onclick="openKatalog('bongkar_pasang')">🔧 Bongkar / Pasang</a><a onclick="openKatalog('servis')">🛠️ Servis Perbaikan</a></div>
+    <div><h4>Kontak</h4><p>📞 <span id="footWa2">0817-387-060</span></p><p>✉️ setiatehnik09@gmail.com</p><p>⏰ 08.00 – 21.00 WIB (setiap hari)</p><p>📍 Bekasi, Jawa Barat</p></div>
+  </div>
+  <div class="container copy">© 2026 BekasiAC • Dibuat dengan ❄️ di Bekasi • <span style="color:#FBBF24">★★★★★</span></div>
+</footer>
+
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <button class="bn-item on" id="bn-beranda" onclick="goPage('beranda')"><span class="ic">🏠</span>Beranda</button>
+  <button class="bn-item" onclick="goPage('beranda');setTimeout(()=>scrollToId('layanan'),80)"><span class="ic">🧰</span>Layanan</button>
+  <button class="bn-item" id="bn-profil" onclick="checkProfile()"><span class="ic">📦</span>Pesanan</button>
+  <button class="bn-item" onclick="checkProfile()"><span class="ic">👤</span>Akun</button>
+</nav>
+
+<!-- Floating cart -->
+<div class="floating-cart" id="floatingCart">
+  <div class="cart-info"><small id="cartCountLabel">0 layanan dipilih</small><span class="cart-total" id="cartTotal">Rp 0</span></div>
+  <button class="cart-go" onclick="prosesCheckout()">Lanjut Pesan ➔</button>
+</div>
+<a class="wa-float" id="waFloat" href="https://wa.me/62817387060" target="_blank" title="Chat WhatsApp">💬</a>
+
+<!-- ============ MODALS ============ -->
+<!-- Auth -->
+<div class="modal" id="authModal"><div class="modal-card">
+  <div class="grab"></div><button class="m-close" onclick="closeModal('authModal')">✕</button>
+  <h2 id="authTitle">👋 Selamat Datang</h2><p class="m-sub">Masuk untuk memesan & melacak status real-time.</p>
+  <form id="authForm" onsubmit="return false">
+    <div class="f-group hide" id="rgName"><label>Nama lengkap</label><input id="regUsername" placeholder="cth: Budi Santoso"></div>
+    <div class="f-group"><label>Email</label><input type="email" id="authEmail" placeholder="email@contoh.com" required></div>
+    <div class="f-group" id="pwdGroup"><label>Kata sandi</label><input type="password" id="authPassword" placeholder="••••••••" required></div>
+    <div class="f-group hide" id="rgConfirm"><label>Ulangi kata sandi</label><input type="password" id="regConfirmPwd" placeholder="Ulangi kata sandi"></div>
+    <div class="f-group hide" id="rgCaptcha"><label style="display:flex;align-items:center;gap:10px;background:#F8FAFC;border:1.5px solid var(--line);border-radius:12px;padding:12px;cursor:pointer"><input type="checkbox" id="mockCaptcha" style="width:20px;height:20px"> <span style="font-size:13px">Saya bukan robot 🤖</span></label></div>
+    <button class="btn btn-primary btn-block" id="authSubmit" onclick="submitAuth()">Masuk →</button>
+  </form>
+  <div class="auth-alt" id="authFooter"></div>
+</div></div>
+
+<!-- Katalog -->
+<div class="modal" id="katalogModal"><div class="modal-card">
+  <div class="grab"></div><button class="m-close" onclick="closeModal('katalogModal')">✕</button>
+  <h2 id="katTitle">Katalog</h2><p class="m-sub" id="katSub">Pilih layanan, tentukan jumlah unit.</p>
+  <div class="search-bar"><input id="katSearch" placeholder="🔍 Cari layanan… (cth: cuci, freon, Sharp)" oninput="renderKatalog()"></div>
+  <div id="katList"></div>
+</div></div>
+
+<!-- Qty -->
+<div class="modal" id="qtyModal" style="z-index:1200"><div class="modal-card" style="max-width:340px;text-align:center">
+  <div class="grab"></div>
+  <h2 id="qtyTitle" style="padding:0">Nama layanan</h2><p class="m-sub">Jumlah unit / titik</p>
+  <div style="display:flex;align-items:center;justify-content:center;gap:22px;margin:18px 0 22px">
+    <button onclick="ubahQty(-1)" style="width:48px;height:48px;border-radius:50%;border:none;background:#F1F5F9;font-size:24px;font-weight:800;cursor:pointer">−</button>
+    <b id="qtyVal" style="font-size:30px;min-width:44px">1</b>
+    <button onclick="ubahQty(1)" style="width:48px;height:48px;border-radius:50%;border:none;background:linear-gradient(135deg,#0EA5E9,#2563EB);color:#fff;font-size:24px;font-weight:800;cursor:pointer">＋</button>
+  </div>
+  <div style="display:flex;gap:10px"><button class="btn btn-light" style="flex:1;padding:14px" onclick="closeModal('qtyModal')">Batal</button><button class="btn btn-green" style="flex:1;padding:14px" onclick="konfirmasiQty()">＋ Tambah</button></div>
+</div></div>
+
+<!-- Detail produk -->
+<div class="modal" id="detailModal" style="z-index:1100"><div class="modal-card">
+  <div class="grab"></div><button class="m-close" onclick="closeModal('detailModal')">✕</button>
+  <img id="pdImg" class="lightbox-img" style="height:200px;object-fit:cover;margin-bottom:14px" src="" alt="produk" onclick="openLightbox(this.src)">
+  <h2 id="pdTitle">-</h2><div id="pdPrice" style="font-size:20px;font-weight:800;color:var(--brand);margin:4px 0 12px"></div>
+  <p id="pdDesc" style="font-size:13px;color:var(--muted);margin-bottom:12px"></p>
+  <div style="font-size:12px;font-weight:800;margin-bottom:6px">📋 Spesifikasi:</div>
+  <div id="pdSpecs" class="kv" style="font-size:12px"></div>
+  <button class="btn btn-green btn-block" id="pdBtn">＋ Tambah ke Pesanan</button>
+</div></div>
+
+<!-- Checkout -->
+<div class="modal" id="checkoutModal"><div class="modal-card">
+  <div class="grab"></div><button class="m-close" onclick="closeModal('checkoutModal')">✕</button>
+  <h2>🧾 Selesaikan Pesanan</h2><p class="m-sub">Periksa kembali & isi data pengerjaan.</p>
+  <div class="kv" style="background:#fff"><div id="coItems"></div>
+    <div class="co-total"><span style="font-size:12px;font-weight:800;color:#15803D">TOTAL BAYAR</span><b id="coTotal">Rp 0</b></div>
+  </div>
+  <div class="f-group"><label>📅 Tanggal pengerjaan</label><input type="date" id="coTgl"></div>
+  <div class="f-group"><label>📍 Area</label><select id="coArea"><option value="" disabled selected>Pilih area…</option><option>Bekasi Barat</option><option>Bekasi Timur</option><option>Bekasi Selatan</option><option>Bekasi Utara</option><option>Cikarang</option><option>Cibitung</option><option>Tambun</option><option>Bantar Gebang</option><option>Sumarecon</option><option>Pondok Gede</option><option>Harapan Indah</option><option>Lainnya</option></select></div>
+  <div class="f-group"><label>👤 Nama di lokasi</label><input id="coNama" placeholder="cth: Budi Santoso"></div>
+  <div class="f-group"><label>📱 No. WhatsApp aktif</label><input id="coWA" inputmode="tel" placeholder="cth: 0812…"></div>
+  <div class="f-group"><label>🏠 Alamat lengkap + patokan</label><textarea id="coAlamat" rows="3" placeholder="cth: Perum Harapan Indah Blok A2 No.15, dekat masjid…"></textarea></div>
+  <button class="btn btn-green btn-block" onclick="kirimPesanan()">🚀 Pesan Sekarang</button>
+  <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px">Dengan memesan, Anda setuju dihubungi admin via WhatsApp.</p>
+</div></div>
+
+<!-- Sukses -->
+<div class="modal" id="suksesModal" style="z-index:1300"><div class="modal-card center">
+  <div class="success-ic">✅</div>
+  <h2 style="padding:0">Pesanan Diterima!</h2>
+  <p class="m-sub" id="suksesMsg">Admin akan menghubungi Anda.</p>
+  <button class="btn btn-primary btn-block" onclick="closeModal('suksesModal');checkProfile()">📊 Lacak Status Pesanan</button>
+  <button class="btn btn-light btn-block" onclick="closeModal('suksesModal')">Tutup</button>
+</div></div>
+
+<!-- Detail order -->
+<div class="modal" id="orderModal"><div class="modal-card">
+  <div class="grab"></div><button class="m-close" onclick="closeModal('orderModal')">✕</button>
+  <h2>📄 Rincian Pesanan</h2><p class="m-sub" id="odDate">-</p>
+  <div class="tl" id="odTimeline">
+    <div class="tl-step" id="tls1"><div class="tl-dot">1</div>Dipesan</div>
+    <div class="tl-step" id="tls2"><div class="tl-dot">2</div>Diproses</div>
+    <div class="tl-step" id="tls3"><div class="tl-dot">✓</div>Selesai</div>
+  </div>
+  <div id="odMsg" class="kv hide" style="background:#ECFDF5;border-color:#BBF7D0;font-size:12.5px"></div>
+  <div class="kv"><div class="row"><span class="k">ID Pesanan</span><span class="v" id="odId" style="font-family:monospace;font-size:11px">-</span></div><div class="row"><span class="k">Status</span><span class="v" id="odStatus">-</span></div><div class="row"><span class="k">Jadwal</span><span class="v" id="odTgl">-</span></div></div>
+  <div style="font-size:12px;font-weight:800;margin:10px 0 6px">Layanan:</div>
+  <div class="kv" id="odItems"></div>
+  <div class="co-total"><span style="font-size:12px;font-weight:800;color:#15803D">TOTAL</span><b id="odTotal">Rp 0</b></div>
+  <div style="font-size:12px;font-weight:800;margin:10px 0 6px">Lokasi:</div>
+  <div class="kv"><div class="row"><span class="k">Nama</span><span class="v" id="odNama">-</span></div><div class="row"><span class="k">Area</span><span class="v" id="odArea">-</span></div><div class="row"><span class="k">Alamat</span><span class="v" id="odAlamat" style="font-weight:500;text-align:right;max-width:60%">-</span></div></div>
+  <button class="btn btn-dark btn-block" onclick="closeModal('orderModal')">Tutup</button>
+</div></div>
+
+<!-- Review -->
+<div class="modal" id="reviewModal"><div class="modal-card">
+  <div class="grab"></div><button class="m-close" onclick="closeModal('reviewModal')">✕</button>
+  <h2>✍️ Tulis Ulasan</h2><p class="m-sub">Ceritakan pengalaman Anda memakai BekasiAC.</p>
+  <div class="f-group"><label>Nama</label><input id="rvNama" placeholder="cth: Anita Sari"></div>
+  <div class="f-group"><label>Area</label><select id="rvArea"><option>Bekasi Barat</option><option>Bekasi Timur</option><option>Bekasi Selatan</option><option>Bekasi Utara</option><option>Cikarang</option><option>Cibitung</option><option>Tambun</option><option>Lainnya</option></select></div>
+  <div class="f-group"><label>Rating</label><div class="star-input" id="rvStars"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div></div>
+  <div class="f-group"><label>Komentar</label><textarea id="rvKomen" rows="3" placeholder="AC langsung dingin, teknisi ramah…"></textarea></div>
+  <div class="f-group"><label>Foto (opsional)</label><input type="file" id="rvFoto" accept="image/*"><small style="font-size:11px;color:var(--muted)">Maks 5MB • JPG/PNG/WEBP</small></div>
+  <button class="btn btn-primary btn-block" id="rvBtn" onclick="kirimUlasan()">Kirim Ulasan ⭐</button>
+</div></div>
+
+<!-- Lightbox -->
+<div class="modal" id="lightbox" style="z-index:2000" onclick="closeModal('lightbox')"><div class="modal-card" style="background:transparent;box-shadow:none;padding:10px" onclick="event.stopPropagation()">
+  <button class="m-close" style="background:rgba(255,255,255,.2);color:#fff" onclick="closeModal('lightbox')">✕</button>
+  <img id="lbImg" class="lightbox-img" src="" alt="preview">
+</div></div>
+
+<!-- ================= FIREBASE + APP ================= -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCzYtyo13CzZIpjJ8Zb-AxOuwYlfSTpscA",
+  authDomain: "teknik-ac.firebaseapp.com",
+  projectId: "teknik-ac",
+  storageBucket: "teknik-ac.firebasestorage.app",
+  messagingSenderId: "865223751567",
+  appId: "1:865223751567:web:121532643353db1156fdfa"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+window._db = db; window._auth = auth; window._fs = { doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot, orderBy, limit };
+window._fbAuth = { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail };
+window.currentUser = null;
+window._ordersUnsub = null;
+
+/* ---------- Pengaturan toko (opsional, fallback aman) ---------- */
+window.STORE = { waAdmin:'62817387060', announcement:'Gratis biaya survei untuk wilayah Bekasi kota — klaim sekarang!', promoTitle:'🎉 Promo: Cuci 2 AC gratis 1x cek freon!', promoDesc:'Berlaku untuk semua area Bekasi bulan ini. Pesan lewat website & tunjukkan kode BEDINGIN ke teknisi.' };
+async function loadSettings(){
+  try{
+    const s = await getDoc(doc(db,'settings','store'));
+    if(s.exists()){
+      const d = s.data();
+      if(d.waAdmin) window.STORE.waAdmin = String(d.waAdmin).replace(/[^0-9]/g,'');
+      if(d.announcement) { window.STORE.announcement = d.announcement; document.getElementById('announceText').textContent = d.announcement; }
+      if(d.announcementActive === false) document.getElementById('announceBar').style.display='none';
+      if(d.heroTitle) document.getElementById('heroTitle').innerHTML = d.heroTitle;
+      if(d.heroSub) document.getElementById('heroSub').textContent = d.heroSub;
+      if(d.promoTitle) { window.STORE.promoTitle=d.promoTitle; document.getElementById('promoTitle').textContent=d.promoTitle; }
+      if(d.promoDesc) { window.STORE.promoDesc=d.promoDesc; document.getElementById('promoDesc').innerHTML=d.promoDesc; }
+      if(d.promoActive === false) document.getElementById('promoSec').style.display='none';
+      applyWA();
+    }
+  }catch(e){ /* abaikan, pakai default */ }
+}
+function applyWA(){
+  const wa = window.STORE.waAdmin;
+  ['topWaBtn','heroWaBtn','ctaWaBtn','footWaBtn','waFloat'].forEach(id=>{ const el=document.getElementById(id); if(el) el.href='https://wa.me/'+wa; });
+  const pretty = wa.replace(/^62/,'0').replace(/(\d{4})(\d{3})(\d+)/,'$1-$2-$3');
+  ['footWa','footWa2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=pretty; });
+}
+
+/* ---------- Katalog ---------- */
+window.KATALOG = {
+  beli_ac:{ judul:'📦 Beli AC Baru + Instalasi', sub:'Unit original, termasuk jasa & material instalasi.', items:[] },
+  cuci:{ judul:'❄️ Cuci & Perawatan AC', sub:'Indoor + outdoor, filter, casing & drainase.', items:[] },
+  bongkar_pasang:{ judul:'🔧 Bongkar / Pasang & Relokasi', sub:'Aman dengan pump-down freon standar.', items:[] },
+  servis:{ judul:'🛠️ Servis & Perbaikan', sub:'Diagnosa akurat, sparepart original.', items:[] }
+};
+async function loadKatalog(){
+  try{
+    const snap = await getDocs(collection(db,'services'));
+    snap.forEach(d=>{ const v=d.data(); if(window.KATALOG[v.kategori]) window.KATALOG[v.kategori].items.push({ nama:v.nama, harga:v.harga, desc:v.desc||'', specs:v.specs||'', imgUrl:v.imgUrl||'' }); });
+  }catch(e){ console.error(e); }
+}
+
+/* ---------- Galeri & video ---------- */
+async function loadGaleri(){
+  const box = document.getElementById('galeriSnap');
+  try{
+    const snap = await getDocs(collection(db,'gallery'));
+    if(snap.empty){ box.innerHTML='<div style="padding:24px;color:var(--muted);font-size:13px">Belum ada dokumentasi.</div>'; return; }
+    let arr=[]; snap.forEach(d=>arr.push(d.data()));
+    arr.sort((a,b)=>((b.timestamp?.toMillis?.()||0)-(a.timestamp?.toMillis?.()||0)));
+    box.innerHTML = arr.map(g=>`<div class="gal-card" onclick="openLightbox('${(g.url||'').replace(/'/g,"")}')"><img loading="lazy" src="${g.url}" alt="${(g.title||'').replace(/"/g,'')}"><div class="gal-cap">${g.title||''}</div></div>`).join('');
+  }catch(e){ box.innerHTML='<div style="padding:24px;color:var(--muted)">Gagal memuat galeri.</div>'; }
+}
+async function loadVideo(){
+  const box = document.getElementById('videoSnap');
+  try{
+    const snap = await getDocs(collection(db,'youtube_videos'));
+    if(snap.empty){ box.innerHTML='<div style="padding:24px;color:var(--muted);font-size:13px">Belum ada video.</div>'; return; }
+    let arr=[]; snap.forEach(d=>arr.push(d.data()));
+    arr.sort((a,b)=>((b.timestamp?.toMillis?.()||0)-(a.timestamp?.toMillis?.()||0)));
+    box.innerHTML = arr.map(v=>`<div class="vid-card"><iframe loading="lazy" src="https://www.youtube.com/embed/${v.videoId}" title="${(v.title||'').replace(/"/g,'')}" allowfullscreen></iframe><div class="vid-cap">▶️ ${v.title||''}</div></div>`).join('');
+  }catch(e){ box.innerHTML='<div style="padding:24px;color:var(--muted)">Gagal memuat video.</div>'; }
+}
+
+/* ---------- Ulasan (real dari Firestore + fallback) ---------- */
+const DUMMY_REVIEWS = [
+  ['Budi Santoso','Bekasi Barat','AC langsung dingin nyess! Teknisi jujur dan harganya transparan banget.'],
+  ['Siti Aminah','Bekasi Timur','Pengerjaan rapi, teknisinya sopan dan datang tepat waktu. Puas!'],
+  ['Agus Hermawan','Cikarang','Cuci AC-nya menyeluruh, udara jadi segar dan listrik lebih hemat.'],
+  ['Dewi Lestari','Bekasi Selatan','Respon cepat padahal pesan mendadak. Recommended!'],
+  ['Rizky Fauzi','Tambun','Harga sesuai katalog, tidak ada biaya siluman. Terpercaya.'],
+  ['Mega Utami','Harapan Indah','Bongkar pasang rapi sekali, instalasinya estetik.'],
+  ['Hendra Kusuma','Bekasi Utara','AC mati total langsung ditangani hari itu juga. Mantap!'],
+  ['Yanti Nuraini','Pondok Gede','Garansinya nyata, ada kendala sedikit langsung direspon gratis.'],
+];
+window._rating = 5;
+function reviewCard(name, area, text, photo){
+  const init = (name||'P').trim().charAt(0).toUpperCase();
+  return `<div class="rev-card"><div class="stars">★★★★★</div><p>"${text}"</p><div class="rev-who"><div class="rev-ava">${init}</div><div><b>${name}</b><small>📍 ${area} • Terverifikasi ✓</small></div></div>${photo?`<img class="rev-photo" loading="lazy" src="${photo}" onclick="openLightbox('${photo}')">`:''}</div>`;
+}
+async function loadReviews(){
+  const box = document.getElementById('revList');
+  try{
+    const snap = await getDocs(collection(db,'reviews'));
+    let html='';
+    if(!snap.empty){
+      let arr=[]; snap.forEach(d=>arr.push(d.data()));
+      arr.sort((a,b)=>((b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0)));
+      html = arr.slice(0,30).map(r=>reviewCard(r.name||'Pelanggan', r.area||'Bekasi', (r.comment||'').replace(/</g,'&lt;'), r.photoUrl||'')).join('');
+    }
+    html += DUMMY_REVIEWS.map(r=>reviewCard(r[0],r[1],r[2],'')).join('');
+    box.innerHTML = html;
+    document.getElementById('revCountLabel').textContent = (snap.size||0)+2400+'+ ulasan';
+  }catch(e){ box.innerHTML = DUMMY_REVIEWS.map(r=>reviewCard(r[0],r[1],r[2],'')).join(''); }
+}
+
+/* ---------- Auth ---------- */
+onAuthStateChanged(auth, async (user)=>{
+  const btn=document.getElementById('btnAuth');
+  if(user){
+    window.currentUser=user; btn.textContent='Keluar'; btn.style.background='#DC2626';
+    document.getElementById('nl-profil').style.display='inline-block';
+    document.getElementById('mm-profil').style.display='block';
+    try{
+      const s=await getDoc(doc(db,'users',user.uid));
+      const nm=(s.exists()&&s.data().username)?s.data().username:'Pelanggan';
+      document.getElementById('displayUsername').textContent=nm;
+      document.getElementById('displayEmail').textContent=user.email;
+    }catch(e){}
+    listenOrders(user.uid);
+  }else{
+    window.currentUser=null; btn.textContent='Masuk'; btn.style.background='';
+    document.getElementById('nl-profil').style.display='none';
+    document.getElementById('mm-profil').style.display='none';
+    if(window._ordersUnsub) window._ordersUnsub();
+    if(document.getElementById('page-profil').classList.contains('on')) goPage('beranda');
+  }
+});
+window.userOrders=[];
+function listenOrders(uid){
+  const box=document.getElementById('historyList');
+  box.innerHTML='<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px">Memuat…</div>';
+  if(window._ordersUnsub) window._ordersUnsub();
+  window._ordersUnsub = onSnapshot(query(collection(db,'orders'), where('userId','==',uid)), (snap)=>{
+    if(snap.empty){ window.userOrders=[]; box.innerHTML='<div style="text-align:center;padding:34px;border:1.5px dashed #CBD5E1;border-radius:16px;color:#94A3B8;font-size:13px">Belum ada pesanan.<br><button class="btn btn-primary" style="margin-top:12px;padding:12px 22px" onclick="goPage(\'beranda\');setTimeout(()=>scrollToId(\'layanan\'),100)">＋ Buat Pesanan</button></div>'; return; }
+    let arr=[]; snap.forEach(d=>arr.push({id:d.id,...d.data()}));
+    arr.sort((a,b)=>((b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0)));
+    window.userOrders=arr;
+    box.innerHTML=arr.map((o,i)=>{
+      const dt=o.createdAt?.toDate?o.createdAt.toDate().toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'-';
+      const st=o.status==='Di Terima'?'st-diterima':o.status==='Di Tolak'?'st-ditolak':'st-dipesan';
+      const items=(o.items||[]).map(x=>x.nama+(x.qty>1?` (${x.qty}x)`: '')).join(', ');
+      return `<div class="hist-card" onclick="openOrder(${i})"><div class="hist-head"><span class="hist-date">🕒 ${dt}</span><span class="st ${st}">${o.status||'Dipesan'}</span></div><b style="font-size:13px">${items}</b><div style="font-size:12px;color:var(--brand);font-weight:800;margin-top:4px">Rp ${(o.total||0).toLocaleString('id-ID')}</div><div style="font-size:11.5px;color:var(--muted);margin-top:6px">👤 ${o.namaPengorder||'-'} • 📅 ${o.tanggalPengerjaan||'-'} • 📍 ${o.lokasi||'-'}</div></div>`;
+    }).join('');
+    // refresh modal jika sedang dibuka
+    if(document.getElementById('orderModal').classList.contains('open')){
+      const cur=document.getElementById('odId').textContent;
+      const idx=arr.findIndex(x=>x.id===cur); if(idx>=0) openOrder(idx);
+    }
+  });
+}
+
+// boot
+loadSettings().then(applyWA); applyWA();
+loadKatalog(); loadGaleri(); loadVideo(); loadReviews();
+</script>
+
+<script>
+/* ================= UI CORE ================= */
+const API_URL = 'api/api.php'; // jembatan gambar di hosting
+function toast(msg, type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show '+type;
+  clearTimeout(window._tt); window._tt=setTimeout(()=>t.className='',3200);
+}
+function openModal(id){ document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; if(id==='checkoutModal') updateCart(); }
+function openLightbox(src){ document.getElementById('lbImg').src=src; openModal('lightbox'); }
+function scrollToId(id){ document.getElementById('mMenu').classList.remove('open'); const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
+function goPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  document.getElementById('page-'+p).classList.add('on');
+  document.getElementById('nl-beranda').classList.toggle('on', p==='beranda');
+  document.getElementById('bn-beranda').classList.toggle('on', p==='beranda');
+  document.getElementById('bn-profil').classList.toggle('on', p==='profil');
+  document.getElementById('mMenu').classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateCart();
+}
+function checkProfile(){
+  if(window.currentUser) goPage('profil');
+  else { toast('Silakan masuk dulu ya 🔐'); openAuth('login'); }
+}
+function switchDocTab(t){
+  document.getElementById('tabFoto').classList.toggle('on', t==='foto');
+  document.getElementById('tabVideo').classList.toggle('on', t==='video');
+  document.getElementById('galeriSnap').classList.toggle('hide', t!=='foto');
+  document.getElementById('videoSnap').classList.toggle('hide', t!=='video');
+}
+// counter animasi
+const io=new IntersectionObserver(es=>es.forEach(e=>{ if(!e.isIntersecting) return; const el=e.target; io.unobserve(el);
+  const n=+el.dataset.n; let c=0; const step=Math.max(1,Math.round(n/60));
+  const iv=setInterval(()=>{ c+=step; if(c>=n){c=n;clearInterval(iv);} el.textContent=c.toLocaleString('id-ID'); },25);
+}),{threshold:.4});
+document.querySelectorAll('.count').forEach(el=>io.observe(el));
+// tutup modal saat klik backdrop
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m && m.id!=='qtyModal') closeModal(m.id); }));
+
+/* ================= AUTH ================= */
+let authMode='login';
+function toggleAuth(){
+  if(window.currentUser){ window._fbAuth.signOut(window._auth).then(()=>toast('Anda telah keluar 👋','ok')); }
+  else openAuth('login');
+}
+function openAuth(mode){
+  authMode=mode;
+  const isL=mode==='login', isR=mode==='register';
+  document.getElementById('authTitle').textContent = isL?'👋 Selamat Datang':isR?'📝 Buat Akun Baru':'🔑 Reset Kata Sandi';
+  document.getElementById('rgName').classList.toggle('hide',!isR);
+  document.getElementById('rgConfirm').classList.toggle('hide',!isR);
+  document.getElementById('rgCaptcha').classList.toggle('hide',!isR);
+  document.getElementById('pwdGroup').classList.toggle('hide',!isL&&!isR);
+  document.getElementById('authSubmit').textContent = isL?'Masuk →':isR?'Daftar Sekarang':'Kirim Link Reset';
+  document.getElementById('authFooter').innerHTML = isL
+    ? `Belum punya akun? <a onclick="openAuth('register')">Daftar</a><br><br><a onclick="openAuth('forgot')">Lupa kata sandi?</a>`
+    : isR ? `Sudah punya akun? <a onclick="openAuth('login')">Masuk</a>`
+    : `<a onclick="openAuth('login')">← Kembali masuk</a>`;
+  openModal('authModal');
+}
+async function submitAuth(){
+  const em=document.getElementById('authEmail').value.trim(), pw=document.getElementById('authPassword').value;
+  const btn=document.getElementById('authSubmit');
+  try{
+    if(authMode==='login'){
+      btn.textContent='Memeriksa…'; btn.disabled=true;
+      await window._fbAuth.signInWithEmailAndPassword(window._auth, em, pw);
+      toast('Login berhasil! Selamat datang 🎉','ok'); closeModal('authModal');
+    }else if(authMode==='register'){
+      const nm=document.getElementById('regUsername').value.trim();
+      const cf=document.getElementById('regConfirmPwd').value;
+      if(!nm) return toast('Isi nama lengkap dulu ya','err');
+      if(pw!==cf) return toast('Konfirmasi sandi tidak cocok ❌','err');
+      if(pw.length<6) return toast('Sandi minimal 6 karakter','err');
+      if(!document.getElementById('mockCaptcha').checked) return toast('Centang "Saya bukan robot" dulu 🤖','err');
+      btn.textContent='Mendaftarkan…'; btn.disabled=true;
+      const cr=await window._fbAuth.createUserWithEmailAndPassword(window._auth, em, pw);
+      await window._fs.setDoc(window._fs.doc(window._db,'users',cr.user.uid), { username:nm, email:em, createdAt:new Date() });
+      toast('Akun berhasil dibuat! 🎉','ok'); closeModal('authModal');
+    }else{
+      if(!em) return toast('Isi email dulu ya','err');
+      btn.textContent='Mengirim…'; btn.disabled=true;
+      await window._fbAuth.sendPasswordResetEmail(window._auth, em);
+      toast('Link reset terkirim ke email ✉️','ok'); openAuth('login');
+    }
+  }catch(e){ toast('Gagal: '+(e.code||e.message),'err'); }
+  btn.disabled=false;
+  btn.textContent = authMode==='login'?'Masuk →':authMode==='register'?'Daftar Sekarang':'Kirim Link Reset';
+}
+
+/* ================= KATALOG & KERANJANG ================= */
+let cart=[]; // {nama,harga,qty,desc,specs,imgUrl}
+let aktifKat='cuci';
+function openKatalog(kat){
+  aktifKat=kat; document.getElementById('katSearch').value='';
+  renderKatalog(); openModal('katalogModal');
+}
+function parseRp(str){ return parseInt(String(str||'').replace(/[^0-9]/g,''))||0; }
+function renderKatalog(){
+  const K=window.KATALOG[aktifKat];
+  document.getElementById('katTitle').textContent=K.judul;
+  document.getElementById('katSub').textContent=K.sub;
+  const q=document.getElementById('katSearch').value.toLowerCase();
+  const box=document.getElementById('katList');
+  const items=K.items.map((it,i)=>({...it,_i:i})).filter(it=>!q||it.nama.toLowerCase().includes(q)||(it.desc||'').toLowerCase().includes(q));
+  if(!items.length){ box.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px">Belum ada data / tidak cocok.<br>Admin dapat menambahkannya via panel admin.</div>'; return; }
+  box.innerHTML=items.map(it=>{
+    const inCart=cart.find(c=>c.nama===it.nama);
+    const img=it.imgUrl?`<img class="pro-img" src="${it.imgUrl}" onclick="event.stopPropagation();openLightbox('${it.imgUrl}')" alt="">`:`<div class="pro-ph">${aktifKat==='beli_ac'?'📦':aktifKat==='cuci'?'❄️':aktifKat==='bongkar_pasang'?'🔧':'🛠️'}</div>`;
+    return `<div class="pro ${inCart?'on':''}" onclick="toggleItem(${it._i})">
+      <div class="pro-top">${img}<div style="flex:1;min-width:0">
+        <div class="pro-title" ${aktifKat==='beli_ac'?`style="color:var(--brand);text-decoration:underline" onclick="event.stopPropagation();openDetail(${it._i})"`:''}>${it.nama}</div>
+        <div class="pro-desc">${it.desc||''}</div>
+      </div></div>
+      <div class="pro-foot"><span class="pro-price">${it.harga}</span><button class="pro-btn ${inCart?'added':''}">${inCart?('✓ '+inCart.qty+' unit'):'＋ Keranjang'}</button></div>
+    </div>`;
+  }).join('');
+}
+let _pIdx=-1,_pQty=1;
+function toggleItem(i){
+  const it=window.KATALOG[aktifKat].items[i];
+  const ex=cart.findIndex(c=>c.nama===it.nama);
+  if(ex>=0){ cart.splice(ex,1); renderKatalog(); updateCart(); }
+  else{ _pIdx=i;_pQty=1; document.getElementById('qtyTitle').textContent=it.nama; document.getElementById('qtyVal').textContent='1'; openModal('qtyModal'); }
+}
+function ubahQty(d){ _pQty=Math.max(1,_pQty+d); document.getElementById('qtyVal').textContent=_pQty; }
+function konfirmasiQty(){
+  const it=window.KATALOG[aktifKat].items[_pIdx];
+  cart.push({nama:it.nama,harga:it.harga,qty:_pQty,desc:it.desc,specs:it.specs,imgUrl:it.imgUrl});
+  closeModal('qtyModal'); renderKatalog(); updateCart();
+  toast(`✓ ${it.nama} (${_pQty}x) masuk keranjang`,'ok');
+}
+function openDetail(i){
+  const it=window.KATALOG[aktifKat].items[i];
+  document.getElementById('pdImg').src=it.imgUrl||'https://placehold.co/600x400/e0f2fe/0A2540?text=BekasiAC';
+  document.getElementById('pdTitle').textContent=it.nama;
+  document.getElementById('pdPrice').textContent=it.harga;
+  document.getElementById('pdDesc').textContent=it.desc||'-';
+  document.getElementById('pdSpecs').innerHTML=it.specs||'<span style="color:var(--muted)">Spesifikasi standar pabrik.</span>';
+  const inC=cart.some(c=>c.nama===it.nama);
+  const b=document.getElementById('pdBtn');
+  b.textContent=inC?'🗑️ Hapus dari Pesanan':'＋ Tambah ke Pesanan';
+  b.className='btn btn-block '+(inC?'btn-light':'btn-green');
+  b.onclick=()=>{ toggleItem(i); closeModal('detailModal'); };
+  openModal('detailModal');
+}
+function cartTotal(){ return cart.reduce((s,c)=>s+parseRp(c.harga)*(c.qty||1),0); }
+function updateCart(){
+  const bar=document.getElementById('floatingCart');
+  const diProfil=document.getElementById('page-profil').classList.contains('on');
+  if(cart.length&&!diProfil){ bar.classList.add('show');
+    const n=cart.reduce((s,c)=>s+(c.qty||1),0);
+    document.getElementById('cartCountLabel').textContent=n+' layanan dipilih';
+    document.getElementById('cartTotal').textContent='Rp '+cartTotal().toLocaleString('id-ID');
+  } else bar.classList.remove('show');
+}
+
+/* ================= CHECKOUT ================= */
+function prosesCheckout(){
+  if(!cart.length) return;
+  document.getElementById('floatingCart').classList.remove('show');
+  const box=document.getElementById('coItems');
+  box.innerHTML=cart.map((c,i)=>{
+    const sub=parseRp(c.harga)*(c.qty||1);
+    return `<div class="co-item"><div><div class="co-name">${c.nama} <span style="color:var(--brand)">(${c.qty||1}x)</span></div><div style="font-size:11px;color:var(--muted)">${c.harga}/unit</div></div><div style="display:flex;align-items:center;gap:8px"><span class="co-price">Rp ${sub.toLocaleString('id-ID')}</span><button class="co-del" onclick="hapusCart(${i})">🗑</button></div></div>`;
+  }).join('');
+  document.getElementById('coTotal').textContent='Rp '+cartTotal().toLocaleString('id-ID');
+  const t=document.getElementById('coTgl'); if(!t.value) t.valueAsDate=new Date();
+  t.min=new Date().toISOString().split('T')[0];
+  openModal('checkoutModal');
+}
+function hapusCart(i){ cart.splice(i,1); if(cart.length) prosesCheckout(); else { closeModal('checkoutModal'); updateCart(); } }
+document.getElementById('coWA').addEventListener('input',e=>{ let v=e.target.value.replace(/[^0-9]/g,''); if(v.startsWith('0')) v='62'+v.slice(1); e.target.value=v; });
+async function kirimPesanan(){
+  if(!window.currentUser){ toast('Masuk dulu sebelum memesan 🔐'); closeModal('checkoutModal'); openAuth('login'); return; }
+  const nama=document.getElementById('coNama').value.trim(), tgl=document.getElementById('coTgl').value,
+        area=document.getElementById('coArea').value, alm=document.getElementById('coAlamat').value.trim(),
+        wa=document.getElementById('coWA').value.trim();
+  if(!nama||!tgl||!area||!alm||!wa) return toast('Lengkapi semua data ya! 📝','err');
+  if(wa.length<10) return toast('Nomor WhatsApp tidak valid','err');
+  const total=cartTotal();
+  const items=cart.map(c=>({nama:c.nama,harga:c.harga,qty:c.qty||1,subTotal:parseRp(c.harga)*(c.qty||1)}));
+  try{
+    await window._fs.addDoc(window._fs.collection(window._db,'orders'),{
+      userId:window.currentUser.uid, email:window.currentUser.email, whatsappUser:wa,
+      namaPengorder:nama, items, total, tanggalPengerjaan:tgl, lokasi:area, alamat:alm,
+      status:'Dipesan', createdAt:new Date()
+    });
+    // teruskan ke WA admin
+    let txt=`Halo *BekasiAC* ❄️, saya ingin memesan:%0A%0A*Rincian:*%0A`;
+    cart.forEach(c=>{ txt+=`• ${c.nama} (${c.qty||1}x)%0A`; });
+    txt+=`%0A*Total:* Rp ${total.toLocaleString('id-ID')}%0A%0A*Data:*%0A- Nama: ${encodeURIComponent(nama)}%0A- Tgl: ${tgl}%0A- Area: ${encodeURIComponent(area)}%0A- Alamat: ${encodeURIComponent(alm)}%0A- WA: ${wa}%0A%0AMohon diproses 🙏`;
+    window.open('https://wa.me/'+window.STORE.waAdmin+'?text='+txt,'_blank');
+    document.getElementById('suksesMsg').innerHTML=`Pesanan <b>Rp ${total.toLocaleString('id-ID')}</b> diterima.<br>Admin akan konfirmasi via WA ke <b>${wa}</b>`;
+    // reset
+    document.getElementById('coNama').value='';document.getElementById('coAlamat').value='';document.getElementById('coWA').value='';
+    cart=[]; updateCart(); closeModal('checkoutModal'); openModal('suksesModal');
+  }catch(e){ toast('Gagal mengirim: '+e.message,'err'); }
+}
+
+/* ================= DETAIL ORDER ================= */
+function openOrder(i){
+  const o=window.userOrders[i]; if(!o) return;
+  document.getElementById('odId').textContent=o.id;
+  document.getElementById('odDate').textContent='Dibuat: '+(o.createdAt?.toDate?o.createdAt.toDate().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):'-')+' WIB';
+  document.getElementById('odStatus').textContent=o.status||'Dipesan';
+  document.getElementById('odTgl').textContent=o.tanggalPengerjaan||'-';
+  document.getElementById('odItems').innerHTML=(o.items||[]).map(it=>`<div class="row"><span class="k" style="color:var(--ink);font-weight:600">${it.nama} ${it.qty>1?`(${it.qty}x)`:''}</span><span class="v">${it.harga}</span></div>`).join('');
+  document.getElementById('odTotal').textContent='Rp '+(o.total||0).toLocaleString('id-ID');
+  document.getElementById('odNama').textContent=o.namaPengorder||'-';
+  document.getElementById('odArea').textContent=o.lokasi||'-';
+  document.getElementById('odAlamat').textContent=o.alamat||'-';
+  const s1=document.getElementById('tls1'),s2=document.getElementById('tls2'),s3=document.getElementById('tls3');
+  [s1,s2,s3].forEach(x=>x.classList.remove('done')); s1.classList.add('done');
+  const msg=document.getElementById('odMsg');
+  if(o.status==='Di Terima'){ s2.classList.add('done'); let f=o.tanggalPengerjaan; try{ const d=new Date(o.tanggalPengerjaan); f=d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric',weekday:'long'});}catch(e){}
+    msg.classList.remove('hide'); msg.innerHTML=`✅ <b>Pesanan diterima!</b> Teknisi akan datang pada <b>${f}</b>. Mohon pastikan ada yang standby di lokasi.`; }
+  else if(o.status==='Di Tolak'){ msg.classList.remove('hide'); msg.style.background='#FEF2F2'; msg.style.borderColor='#FECACA'; msg.innerHTML=`❌ <b>Maaf, pesanan ditolak.</b> Silakan hubungi admin via WhatsApp untuk penjadwalan ulang.`; }
+  else { msg.classList.add('hide'); msg.style.background=''; msg.style.borderColor=''; }
+  openModal('orderModal');
+}
+
+/* ================= ULASAN ================= */
+document.querySelectorAll('#rvStars span').forEach(s=>{
+  s.addEventListener('click',()=>{ window._rating=+s.dataset.v; paintStars(); });
+});
+function paintStars(){ document.querySelectorAll('#rvStars span').forEach(s=>s.classList.toggle('lit',+s.dataset.v<=window._rating)); }
+paintStars();
+async function apiUpload(file, prefix='ulasan'){
+  const fd=new FormData(); fd.append('file',file); fd.append('prefix',prefix);
+  const r=await fetch(API_URL+'?action=upload',{method:'POST',body:fd});
+  const j=await r.json();
+  if(j.status!=='success') throw new Error(j.message||'Upload gagal');
+  return j.url;
+}
+async function kirimUlasan(){
+  const nama=document.getElementById('rvNama').value.trim(),
+        area=document.getElementById('rvArea').value,
+        komen=document.getElementById('rvKomen').value.trim();
+  if(!nama||!komen) return toast('Isi nama & komentar dulu ya','err');
+  const btn=document.getElementById('rvBtn'); btn.textContent='Mengirim…'; btn.disabled=true;
+  try{
+    let photoUrl='';
+    const f=document.getElementById('rvFoto').files[0];
+    if(f){
+      if(f.size>5*1024*1024) throw new Error('Foto maksimal 5MB');
+      toast('⏳ Mengunggah foto…');
+      photoUrl=await apiUpload(f,'review');
+    }
+    await window._fs.addDoc(window._fs.collection(window._db,'reviews'),{ name:nama, area, rating:window._rating, comment:komen, photoUrl, createdAt:new Date() });
+    toast('Terima kasih atas ulasannya! ⭐','ok');
+    closeModal('reviewModal');
+    document.getElementById('rvNama').value='';document.getElementById('rvKomen').value='';document.getElementById('rvFoto').value='';
+    location.reload();
+  }catch(e){ toast('Gagal: '+e.message,'err'); }
+  btn.textContent='Kirim Ulasan ⭐'; btn.disabled=false;
+}
+</script>
 </body>
 </html>
