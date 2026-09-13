@@ -225,8 +225,42 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
 .copy{border-top:1px solid rgba(255,255,255,.1);margin-top:24px;padding-top:16px;text-align:center;font-size:11.5px;color:#64748B}
 
 /* ---------- Bottom nav (mobile) ---------- */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(10,37,64,.1)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(10,37,64,.1)}
 @media(min-width:900px){.bottom-nav{display:none}}
+
+/* ---------- Page head (banner tiap halaman) ---------- */
+.page-head{background:radial-gradient(700px 300px at 90% -30%,#1D4ED8 0%,transparent 60%),linear-gradient(135deg,#071A33 0%,#0A2540 55%,#0C4A6E 100%);color:#fff;padding:26px 0 30px;position:relative;overflow:hidden}
+.page-head::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.page-head .crumb{position:relative;font-size:11px;color:#7DD3FC;font-weight:800;letter-spacing:.4px;cursor:pointer;margin-bottom:7px;display:inline-block}
+.page-head h1{position:relative;font-size:24px;font-weight:800;letter-spacing:-.6px;line-height:1.15}
+@media(min-width:900px){.page-head h1{font-size:32px}}
+.page-head p{position:relative;font-size:12.5px;color:#BAE6FD;margin-top:5px;max-width:560px}
+
+/* ---------- Explore grid (beranda) ---------- */
+.exp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:900px){.exp-grid{grid-template-columns:repeat(3,1fr);gap:14px}}
+.exp{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:16px;cursor:pointer;box-shadow:var(--sh-sm);transition:.2s}
+.exp:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:#BAE6FD}
+.exp span{font-size:26px;display:block;margin-bottom:8px}
+.exp b{font-size:13.5px;display:block;letter-spacing:-.2px}
+.exp p{font-size:11.5px;color:var(--muted);margin-top:3px}
+.exp i{font-style:normal;display:inline-block;margin-top:9px;font-size:11.5px;font-weight:800;color:var(--brand)}
+
+/* ---------- Tips & edukasi ---------- */
+.tip-grid{display:grid;gap:12px}
+@media(min-width:900px){.tip-grid{grid-template-columns:repeat(2,1fr);gap:16px;align-items:start}}
+.tip{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--sh-sm);overflow:hidden}
+.tip summary{list-style:none;display:flex;gap:12px;align-items:center;padding:15px 16px;cursor:pointer}
+.tip summary::-webkit-details-marker{display:none}
+.tip[open]{border-color:#BAE6FD;box-shadow:var(--sh-md)}
+.tip-ic{width:44px;height:44px;border-radius:12px;background:#E0F2FE;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.tip b{font-size:13.5px;display:block;letter-spacing:-.2px}
+.tip small{font-size:11px;color:var(--muted);font-weight:600}
+.tip .arrow{margin-left:auto;color:#94A3B8;font-size:12px;transition:.2s;flex-shrink:0}
+.tip[open] .arrow{transform:rotate(90deg);color:var(--brand)}
+.tip-body{margin:0 16px 16px;padding-top:12px;border-top:1px dashed var(--line);font-size:12.5px;color:#475569;line-height:1.75}
+.tip-body ul{margin:8px 0 0 18px}
+.tip-body li{margin-bottom:5px}
 .bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border-radius:12px;cursor:pointer;color:#94A3B8;font-size:10px;font-weight:700;border:none;background:none}
 .bn-item .ic{font-size:20px}
 .bn-item.on{color:#0284C7;background:#F0F9FF}
@@ -347,10 +381,11 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
     </div>
     <nav class="nav-links">
       <a id="nl-beranda" class="on" onclick="goPage('beranda')">Beranda</a>
-      <a onclick="scrollToId('layanan')">Layanan</a>
-      <a onclick="scrollToId('galeri')">Galeri</a>
-      <a onclick="scrollToId('testimoni')">Ulasan</a>
-      <a onclick="scrollToId('faq')">FAQ</a>
+      <a id="nl-layanan" onclick="goPage('layanan')">Layanan & Harga</a>
+      <a id="nl-galeri" onclick="goPage('galeri')">Galeri</a>
+      <a id="nl-ulasan" onclick="goPage('ulasan')">Ulasan</a>
+      <a id="nl-tips" onclick="goPage('tips')">Tips AC</a>
+      <a id="nl-tentang" onclick="goPage('tentang')">Tentang</a>
       <a id="nl-profil" style="display:none" onclick="goPage('profil')">📦 Pesanan Saya</a>
     </nav>
     <div class="nav-cta">
@@ -361,10 +396,11 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
   </div>
   <div class="mobile-menu" id="mMenu">
     <a onclick="goPage('beranda')">🏠 Beranda</a>
-    <a onclick="scrollToId('layanan')">🧰 Layanan</a>
-    <a onclick="scrollToId('galeri')">📸 Galeri & Video</a>
-    <a onclick="scrollToId('testimoni')">⭐ Ulasan</a>
-    <a onclick="scrollToId('faq')">❓ FAQ</a>
+    <a onclick="goPage('layanan')">🧰 Layanan & Harga</a>
+    <a onclick="goPage('galeri')">📸 Galeri & Video</a>
+    <a onclick="goPage('ulasan')">⭐ Ulasan Pelanggan</a>
+    <a onclick="goPage('tips')">💡 Tips & Edukasi AC</a>
+    <a onclick="goPage('tentang')">🏢 Tentang & FAQ</a>
     <a id="mm-profil" style="display:none" onclick="goPage('profil')">📦 Pesanan Saya</a>
   </div>
 </header>
@@ -379,7 +415,7 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
         <h1 id="heroTitle">AC Dingin Lagi <span class="grad">dalam Sekejap.</span></h1>
         <p class="sub" id="heroSub">BekasiAC — kontraktor, distributor & retail AC terpercaya. Cuci, servis, bongkar-pasang, hingga AC baru + instalasi. Harga transparan, garansi nyata.</p>
         <div class="hero-cta">
-          <button class="btn btn-hero-primary" onclick="scrollToId('layanan')">🧰 Pesan Layanan</button>
+          <button class="btn btn-hero-primary" onclick="goPage('layanan')">🧰 Pesan Layanan</button>
           <a class="btn btn-hero-ghost" id="heroWaBtn" href="https://wa.me/62817387060" target="_blank">💬 Chat WhatsApp</a>
         </div>
         <div class="hero-stats">
@@ -438,7 +474,67 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
     <section class="sec" id="promoSec" style="padding-top:0">
       <div class="promo">
         <div><h3 id="promoTitle">🎉 Promo: Cuci 2 AC gratis 1x cek freon!</h3><p id="promoDesc">Berlaku untuk semua area Bekasi bulan ini. Pesan lewat website & tunjukkan kode <b>BEDINGIN</b> ke teknisi.</p></div>
-        <button class="btn" onclick="scrollToId('layanan')">Klaim Promo 🎁</button>
+        <button class="btn" onclick="goPage('layanan')">Klaim Promo 🎁</button>
+      </div>
+    </section>
+
+
+    <!-- JELAJAHI -->
+    <section class="sec" style="padding-top:0">
+      <div class="sec-head"><h2>🧭 Jelajahi BekasiAC</h2><p>Setiap fitur kini punya halamannya sendiri — lebih rapi & mudah ditemukan.</p><div class="bar"></div></div>
+      <div class="exp-grid">
+        <div class="exp" onclick="goPage('layanan')"><span>🧰</span><b>Layanan & Harga</b><p>Daftar harga lengkap semua layanan AC.</p><i>Buka menu →</i></div>
+        <div class="exp" onclick="goPage('galeri')"><span>📸</span><b>Galeri & Video</b><p>Dokumentasi asli pekerjaan teknisi kami.</p><i>Lihat bukti →</i></div>
+        <div class="exp" onclick="goPage('ulasan')"><span>⭐</span><b>Ulasan Pelanggan</b><p>Kata mereka yang sudah pakai jasa kami.</p><i>Baca ulasan →</i></div>
+        <div class="exp" onclick="goPage('tips')"><span>💡</span><b>Tips & Edukasi AC</b><p>Rawat AC agar awet & hemat listrik.</p><i>Pelajari →</i></div>
+        <div class="exp" onclick="goPage('tentang')"><span>🏢</span><b>Tentang & FAQ</b><p>Profil, area layanan & tanya jawab.</p><i>Kenali kami →</i></div>
+        <div class="exp" onclick="checkProfile()"><span>📦</span><b>Pesanan Saya</b><p>Lacak status pesanan Anda real-time.</p><i>Cek status →</i></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="sec" style="padding-top:0">
+      <div class="cta">
+        <h2>AC bermasalah? Jangan tunggu rusak parah ❄️</h2>
+        <p>Chat sekarang — admin fast respon, teknisi bisa meluncur hari ini juga.</p>
+        <br><a class="btn" id="ctaWaBtn" href="https://wa.me/62817387060" target="_blank">💬 Chat WhatsApp Sekarang</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ================= HALAMAN LAYANAN ================= -->
+<div id="page-layanan" class="page">
+  <div class="page-head"><div class="container">
+    <span class="crumb" onclick="goPage('beranda')">🏠 Beranda &rsaquo; Layanan & Harga</span>
+    <h1>🧰 Layanan & Daftar Harga</h1>
+    <p>Pilih kategori untuk melihat daftar harga lengkap dan langsung memesan — tanpa telepon, tanpa antre.</p>
+  </div></div>
+  <div class="container">
+    <!-- LAYANAN -->
+    <section class="sec" id="layanan-list">
+      <div class="sec-head"><h2>🧰 Pilih Kategori Layanan</h2><p>Ketuk kategori untuk melihat daftar harga & memesan.</p><div class="bar"></div></div>
+      <div class="svc-grid">
+        <div class="svc hl" onclick="openKatalog('beli_ac')">
+          <div class="svc-ic" style="background:rgba(255,255,255,.15)">📦</div>
+          <h3>Beli AC Baru</h3><p>Unit original + instalasi profesional & material berkualitas.</p>
+          <div class="svc-act">Lihat katalog →</div>
+        </div>
+        <div class="svc" onclick="openKatalog('cuci')">
+          <div class="svc-ic bg-blue">❄️</div>
+          <h3>Cuci AC</h3><p>Cuci menyeluruh indoor & outdoor, udara segar kembali.</p>
+          <div class="svc-act">Pilih paket →</div>
+        </div>
+        <div class="svc" onclick="openKatalog('bongkar_pasang')">
+          <div class="svc-ic bg-amber">🔧</div>
+          <h3>Bongkar / Pasang</h3><p>Relokasi aman dengan pump-down freon standar pabrik.</p>
+          <div class="svc-act">Cek biaya →</div>
+        </div>
+        <div class="svc" onclick="openKatalog('servis')">
+          <div class="svc-ic bg-violet">🛠️</div>
+          <h3>Servis & Perbaikan</h3><p>Tidak dingin, bocor, mati total — beres oleh ahli.</p>
+          <div class="svc-act">Estimasi →</div>
+        </div>
       </div>
     </section>
 
@@ -453,8 +549,45 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
       </div>
     </section>
 
+
+    <!-- JAMINAN -->
+    <section class="sec" style="padding-top:0">
+      <div class="two-col">
+        <div class="area-box">
+          <h3 style="font-size:16px;font-weight:800">🛡️ Jaminan Layanan BekasiAC</h3>
+          <div class="kv mt">
+            <div class="row"><span class="k">✅ Garansi servis</span><span class="v">Klaim mudah via WA</span></div>
+            <div class="row"><span class="k">🧾 Harga transparan</span><span class="v">Sesuai katalog, tanpa biaya siluman</span></div>
+            <div class="row"><span class="k">⚙️ Sparepart</span><span class="v">Original / grade terbaik</span></div>
+            <div class="row"><span class="k">👨‍🔧 Teknisi</span><span class="v">Bersertifikat & berpengalaman</span></div>
+            <div class="row"><span class="k">🧹 Kerapian</span><span class="v">Lokasi bersih setelah pengerjaan</span></div>
+          </div>
+        </div>
+        <div class="area-box">
+          <h3 style="font-size:16px;font-weight:800">💳 Cara Pembayaran</h3>
+          <p style="font-size:12.5px;color:var(--muted);margin-top:4px">Bayar setelah pekerjaan selesai & Anda puas dengan hasilnya.</p>
+          <div class="chips"><span>💵 Tunai</span><span>🏦 Transfer Bank</span><span>📱 QRIS</span><span>💳 E-Wallet</span></div>
+          <div class="kv mt">
+            <div class="row"><span class="k">⏰ Jam operasional</span><span class="v">08.00 – 21.00 WIB</span></div>
+            <div class="row"><span class="k">🚗 Survei area ★</span><span class="v">GRATIS</span></div>
+            <div class="row"><span class="k">📅 Booking</span><span class="v">Bisa pilih tanggal sendiri</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ================= HALAMAN GALERI ================= -->
+<div id="page-galeri" class="page">
+  <div class="page-head"><div class="container">
+    <span class="crumb" onclick="goPage('beranda')">🏠 Beranda &rsaquo; Galeri & Video</span>
+    <h1>📸 Galeri & Video Pengerjaan</h1>
+    <p>Bukti nyata hasil kerja teknisi kami di lapangan — foto asli & video dokumentasi, bukan stok internet.</p>
+  </div></div>
+  <div class="container">
     <!-- GALERI -->
-    <section class="sec" id="galeri" style="padding-top:0">
+    <section class="sec" id="galeri">
       <div class="sec-head"><h2>📸 Dokumentasi Kerja</h2><p>Bukti nyata pengerjaan teknisi kami. Geser ke samping →</p><div class="bar"></div></div>
       <div class="tabs">
         <button class="tab on" id="tabFoto" onclick="switchDocTab('foto')">📸 Foto</button>
@@ -464,6 +597,98 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
       <div class="snap hide" id="videoSnap"><div style="padding:24px;color:var(--muted);font-size:13px">Memuat video…</div></div>
     </section>
 
+  </div>
+</div>
+
+<!-- ================= HALAMAN ULASAN ================= -->
+<div id="page-ulasan" class="page">
+  <div class="page-head"><div class="container">
+    <span class="crumb" onclick="goPage('beranda')">🏠 Beranda &rsaquo; Ulasan Pelanggan</span>
+    <h1>⭐ Ulasan Pelanggan</h1>
+    <p>Penilaian jujur dari pelanggan di seluruh Bekasi. Anda juga bisa menulis ulasan + foto hasil pengerjaan.</p>
+  </div></div>
+  <div class="container">
+    <!-- TESTIMONI -->
+    <section class="sec" id="testimoni">
+      <div class="sec-head"><h2>⭐ Kata Pelanggan</h2><p>Ulasan asli dari database + pelanggan terverifikasi.</p><div class="bar"></div></div>
+      <div class="rev-summary">
+        <div><div class="rev-big">4.9<span style="font-size:20px;color:#93C5FD">/5</span></div><div class="rev-stars">★★★★★</div><div style="font-size:11.5px;color:#CBD5E1;margin-top:4px" id="revCountLabel">2.400+ ulasan</div></div>
+        <div style="font-size:12.5px;color:#DBEAFE;position:relative;z-index:2">“Puas banget! Teknisi datang cepat, kerja rapi, AC langsung dingin nyess. Recommended untuk area Bekasi.”<br><small style="color:#93C5FD">— Rata-rata kesan pelanggan</small></div>
+        <button class="btn" style="background:#fff;color:var(--navy);padding:13px 20px;font-size:13px;position:relative;z-index:2" onclick="openModal('reviewModal')">✍️ Tulis Ulasan</button>
+      </div>
+      <div class="rev-list" id="revList"><div style="padding:20px;color:var(--muted);font-size:13px">Memuat ulasan…</div></div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ================= HALAMAN TIPS ================= -->
+<div id="page-tips" class="page">
+  <div class="page-head"><div class="container">
+    <span class="crumb" onclick="goPage('beranda')">🏠 Beranda &rsaquo; Tips & Edukasi AC</span>
+    <h1>💡 Tips & Edukasi Seputar AC</h1>
+    <p>Panduan praktis dari teknisi BekasiAC agar AC Anda awet, dingin maksimal, dan tagihan listrik tetap hemat.</p>
+  </div></div>
+  <div class="container">
+    <section class="sec">
+      <div class="tip-grid">
+        <details class="tip" open>
+          <summary><div class="tip-ic">🧼</div><div><b>Seberapa sering AC harus dicuci?</b><small>Perawatan rutin</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body">Idealnya setiap <b>3 bulan sekali</b> untuk pemakaian normal rumah tangga (8–10 jam/hari). Jika AC dipakai 24 jam (kamar bayi, kantor, server) atau lingkungan berdebu dekat jalan raya, percepat menjadi <b>2 bulan sekali</b>. AC yang rutin dicuci lebih dingin, lebih awet, dan tagihan listriknya bisa turun hingga 20%.</div>
+        </details>
+        <details class="tip">
+          <summary><div class="tip-ic">🌡️</div><div><b>Suhu remote berapa yang paling hemat?</b><small>Hemat listrik</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body">Setel di <b>24–26°C</b>. Setiap turun 1°C, konsumsi listrik naik sekitar 6%. Menyetel 16°C <b>tidak membuat ruangan lebih cepat dingin</b> — kompresor tetap bekerja dengan kecepatan sama, hanya lebih lama menyala. Kombinasikan dengan mode <i>swing</i> dan kipas agar udara merata.</div>
+        </details>
+        <details class="tip">
+          <summary><div class="tip-ic">💧</div><div><b>Kenapa AC menetes / bocor air?</b><small>Masalah umum</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body">Penyebab paling umum: <ul><li><b>Saluran pembuangan (drainase) tersumbat</b> lumut atau debu — 80% kasus.</li><li>Evaporator kotor sehingga air menetes keluar talang.</li><li>Pemasangan kurang miring ke arah pembuangan.</li><li>Freon kurang sehingga evaporator membeku lalu mencair.</li></ul>Jangan dibiarkan — tetesan bisa merusak tembok & plafon. Cukup panggil teknisi untuk cuci + cek drainase.</div>
+        </details>
+        <details class="tip">
+          <summary><div class="tip-ic">❄️</div><div><b>AC menyala tapi tidak dingin?</b><small>Diagnosa cepat</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body">Cek berurutan: <ul><li>Mode remote harus <b>COOL</b> (gambar ❄), bukan FAN/DRY.</li><li>Filter kotor? Cuci filter bisa langsung terasa bedanya.</li><li>Unit outdoor mati / tidak berputar → masalah kelistrikan atau kapasitor.</li><li>Freon habis/bocor → harus ditangani teknisi bersertifikat.</li></ul>Jika 2 poin pertama aman tapi tetap tidak dingin, saatnya panggil teknisi.</div>
+        </details>
+        <details class="tip">
+          <summary><div class="tip-ic">📏</div><div><b>Pilih PK sesuai ukuran ruangan</b><small>Panduan beli AC</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body">Rumus mudah: luas ruangan (m²) × 500 BTU. <ul><li><b>½ PK</b> → ruangan ≤ 10 m²</li><li><b>¾ PK</b> → 10–14 m²</li><li><b>1 PK</b> → 14–18 m²</li><li><b>1½ PK</b> → 18–24 m²</li><li><b>2 PK</b> → 24–36 m²</li></ul>PK kekecilan = AC ngoyo & boros. PK kebesaran = ruangan lembap. Bingung? Konsultasi gratis via WhatsApp kami.</div>
+        </details>
+        <details class="tip">
+          <summary><div class="tip-ic">⚡</div><div><b>AC Inverter vs Standard, pilih mana?</b><small>Panduan beli AC</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body"><b>Inverter</b>: hemat listrik untuk pemakaian lama (6+ jam nonstop), suhu lebih stabil, harga unit lebih mahal. <b>Standard</b>: harga terjangkau, cocok untuk pemakaian singkat & sering on-off, perawatan lebih murah. Kesimpulan: kamar tidur / ruangan yang menyala semalaman → Inverter. Ruang tamu yang hanya dipakai beberapa jam → Standard sudah cukup.</div>
+        </details>
+        <details class="tip">
+          <summary><div class="tip-ic">🧪</div><div><b>Freon AC bisa habis? Kapan harus isi?</b><small>Edukasi</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body">Freon adalah sistem <b>tertutup</b> — normalnya <b>tidak berkurang</b>. Jika freon habis, artinya ada <b>kebocoran</b> di instalasi yang harus dicari dan diperbaiki dulu. Hati-hati dengan layanan "isi freon" tanpa cek kebocoran — freon akan habis lagi dalam hitungan minggu. Teknisi kami selalu cek tekanan & titik bocor lebih dulu.</div>
+        </details>
+        <details class="tip">
+          <summary><div class="tip-ic">🕐</div><div><b>Tanda-tanda AC minta diservis</b><small>Jangan diabaikan</small></div><span class="arrow">▶</span></summary>
+          <div class="tip-body"><ul><li>Hembusan tidak sedingin dulu meski suhu remote sama.</li><li>Muncul bunyi berisik / getaran tidak wajar.</li><li>Ada bau apek atau bau gosong saat menyala.</li><li>Tagihan listrik naik padahal pemakaian sama.</li><li>Unit sering mati-nyala sendiri.</li></ul>Semakin cepat ditangani, biaya perbaikan semakin murah. Servis dini mencegah kerusakan kompresor yang mahal.</div>
+        </details>
+      </div>
+      <div class="cta" style="margin-top:22px">
+        <h2>Masih ragu diagnosa sendiri? 🤔</h2>
+        <p>Konsultasikan gratis ke teknisi kami via WhatsApp — kirim foto/video AC Anda, kami bantu analisa.</p>
+        <br><a class="btn" id="tipsWaBtn" href="https://wa.me/62817387060" target="_blank">💬 Konsultasi Gratis</a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ================= HALAMAN TENTANG ================= -->
+<div id="page-tentang" class="page">
+  <div class="page-head"><div class="container">
+    <span class="crumb" onclick="goPage('beranda')">🏠 Beranda &rsaquo; Tentang & FAQ</span>
+    <h1>🏢 Tentang BekasiAC</h1>
+    <p>Kontraktor, distributor & retail AC terpercaya di Bekasi — lebih dari 10 tahun mendinginkan rumah, kantor, dan industri.</p>
+  </div></div>
+  <div class="container">
+    <section class="sec">
+      <div class="sec-head"><h2>👋 Siapa Kami?</h2><div class="bar"></div></div>
+      <div class="area-box">
+        <p style="font-size:13px;line-height:1.8;color:#334155"><b>BekasiAC</b> berdiri untuk satu misi sederhana: membuat udara sejuk terasa mudah dan terjangkau bagi warga Bekasi. Berawal dari bengkel servis kecil, kini kami melayani <b>ribuan unit AC</b> setiap tahunnya — mulai dari cuci rutin rumahan, perbaikan darurat, bongkar-pasang relokasi, hingga pengadaan & instalasi unit baru untuk kantor dan gedung.</p>
+        <p style="font-size:13px;line-height:1.8;color:#334155;margin-top:10px">Semua teknisi kami <b>bersertifikat</b>, dibekali peralatan standar pabrik, dan bekerja dengan SOP yang jelas: diagnosa dulu, sampaikan estimasi harga, baru bekerja setelah Anda setuju. Tidak ada biaya siluman, dan setiap pekerjaan bergaransi.</p>
+      </div>
+    </section>
     <!-- WHY -->
     <section class="sec" style="padding-top:0">
       <div class="sec-head"><h2>💎 Kenapa BekasiAC?</h2><p>Standar bengkel resmi, harga tukang langganan.</p><div class="bar"></div></div>
@@ -473,17 +698,6 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
         <div class="why"><div class="ic">🧾</div><h4>Harga Transparan</h4><p>Estimasi jelas di awal, tanpa biaya siluman.</p></div>
         <div class="why"><div class="ic">⚙️</div><h4>Sparepart Asli</h4><p>Hanya original / grade terbaik bergaransi.</p></div>
       </div>
-    </section>
-
-    <!-- TESTIMONI -->
-    <section class="sec" id="testimoni" style="padding-top:0">
-      <div class="sec-head"><h2>⭐ Kata Pelanggan</h2><p>Ulasan asli dari database + pelanggan terverifikasi.</p><div class="bar"></div></div>
-      <div class="rev-summary">
-        <div><div class="rev-big">4.9<span style="font-size:20px;color:#93C5FD">/5</span></div><div class="rev-stars">★★★★★</div><div style="font-size:11.5px;color:#CBD5E1;margin-top:4px" id="revCountLabel">2.400+ ulasan</div></div>
-        <div style="font-size:12.5px;color:#DBEAFE;position:relative;z-index:2">“Puas banget! Teknisi datang cepat, kerja rapi, AC langsung dingin nyess. Recommended untuk area Bekasi.”<br><small style="color:#93C5FD">— Rata-rata kesan pelanggan</small></div>
-        <button class="btn" style="background:#fff;color:var(--navy);padding:13px 20px;font-size:13px;position:relative;z-index:2" onclick="openModal('reviewModal')">✍️ Tulis Ulasan</button>
-      </div>
-      <div class="rev-list" id="revList"><div style="padding:20px;color:var(--muted);font-size:13px">Memuat ulasan…</div></div>
     </section>
 
     <!-- AREA + FAQ -->
@@ -509,14 +723,6 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="sec" style="padding-top:0">
-      <div class="cta">
-        <h2>AC bermasalah? Jangan tunggu rusak parah ❄️</h2>
-        <p>Chat sekarang — admin fast respon, teknisi bisa meluncur hari ini juga.</p>
-        <br><a class="btn" id="ctaWaBtn" href="https://wa.me/62817387060" target="_blank">💬 Chat WhatsApp Sekarang</a>
-      </div>
-    </section>
   </div>
 </div>
 
@@ -552,9 +758,10 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
 <!-- Bottom nav -->
 <nav class="bottom-nav">
   <button class="bn-item on" id="bn-beranda" onclick="goPage('beranda')"><span class="ic">🏠</span>Beranda</button>
-  <button class="bn-item" onclick="goPage('beranda');setTimeout(()=>scrollToId('layanan'),80)"><span class="ic">🧰</span>Layanan</button>
-  <button class="bn-item" id="bn-profil" onclick="checkProfile()"><span class="ic">📦</span>Pesanan</button>
-  <button class="bn-item" onclick="checkProfile()"><span class="ic">👤</span>Akun</button>
+  <button class="bn-item" id="bn-layanan" onclick="goPage('layanan')"><span class="ic">🧰</span>Layanan</button>
+  <button class="bn-item" id="bn-galeri" onclick="goPage('galeri')"><span class="ic">📸</span>Galeri</button>
+  <button class="bn-item" id="bn-tips" onclick="goPage('tips')"><span class="ic">💡</span>Tips</button>
+  <button class="bn-item" id="bn-profil" onclick="checkProfile()"><span class="ic">👤</span>Akun</button>
 </nav>
 
 <!-- Floating cart -->
@@ -817,7 +1024,7 @@ function listenOrders(uid){
   box.innerHTML='<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px">Memuat…</div>';
   if(window._ordersUnsub) window._ordersUnsub();
   window._ordersUnsub = onSnapshot(query(collection(db,'orders'), where('userId','==',uid)), (snap)=>{
-    if(snap.empty){ window.userOrders=[]; box.innerHTML='<div style="text-align:center;padding:34px;border:1.5px dashed #CBD5E1;border-radius:16px;color:#94A3B8;font-size:13px">Belum ada pesanan.<br><button class="btn btn-primary" style="margin-top:12px;padding:12px 22px" onclick="goPage(\'beranda\');setTimeout(()=>scrollToId(\'layanan\'),100)">＋ Buat Pesanan</button></div>'; return; }
+    if(snap.empty){ window.userOrders=[]; box.innerHTML='<div style="text-align:center;padding:34px;border:1.5px dashed #CBD5E1;border-radius:16px;color:#94A3B8;font-size:13px">Belum ada pesanan.<br><button class="btn btn-primary" style="margin-top:12px;padding:12px 22px" onclick="goPage(\'layanan\')">＋ Buat Pesanan</button></div>'; return; }
     let arr=[]; snap.forEach(d=>arr.push({id:d.id,...d.data()}));
     arr.sort((a,b)=>((b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0)));
     window.userOrders=arr;
@@ -854,14 +1061,21 @@ function openLightbox(src){ document.getElementById('lbImg').src=src; openModal(
 function scrollToId(id){ document.getElementById('mMenu').classList.remove('open'); const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
 function goPage(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
-  document.getElementById('page-'+p).classList.add('on');
-  document.getElementById('nl-beranda').classList.toggle('on', p==='beranda');
-  document.getElementById('bn-beranda').classList.toggle('on', p==='beranda');
-  document.getElementById('bn-profil').classList.toggle('on', p==='profil');
+  const pg=document.getElementById('page-'+p); if(pg) pg.classList.add('on');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('on'));
+  const nl=document.getElementById('nl-'+p); if(nl) nl.classList.add('on');
+  document.querySelectorAll('.bottom-nav .bn-item').forEach(b=>b.classList.remove('on'));
+  const bn=document.getElementById('bn-'+(p==='profil'?'profil':p)); if(bn) bn.classList.add('on');
   document.getElementById('mMenu').classList.remove('open');
   window.scrollTo({top:0,behavior:'smooth'});
+  try{ history.replaceState(null,'','#'+p); }catch(e){}
   updateCart();
 }
+// buka halaman sesuai hash (mis. situs.com/#layanan)
+window.addEventListener('DOMContentLoaded',()=>{
+  const h=(location.hash||'').replace('#','');
+  if(h && document.getElementById('page-'+h) && h!=='profil') goPage(h);
+});
 function checkProfile(){
   if(window.currentUser) goPage('profil');
   else { toast('Silakan masuk dulu ya 🔐'); openAuth('login'); }
