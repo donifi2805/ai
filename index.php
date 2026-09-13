@@ -12,7 +12,8 @@
 <meta name="theme-color" content="#0A2540">
 <meta name="description" content="BekasiAC — Kontraktor, distributor & retail AC terbaik di Bekasi. Cuci AC, servis, bongkar-pasang, jual AC baru + instalasi. Teknisi bersertifikat, garansi nyata, respon cepat.">
 <title>BekasiAC — Service AC Profesional Bekasi</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
+<link rel="icon" type="image/png" href="image/logo.png">
+<link rel="apple-touch-icon" href="image/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -47,18 +48,25 @@ section{scroll-margin-top:90px}
 @media(max-width:600px){.announce{font-size:11px}}
 
 /* ---------- Header ---------- */
-.site-header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.nav-inner{display:flex;align-items:center;gap:12px;height:64px}
-.logo{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
-.logo-mark{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#0EA5E9,#2563EB);display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 6px 16px rgba(37,99,235,.35);color:#fff;font-weight:800}
-.logo-text{line-height:1.05}
-.logo-text b{font-size:18px;letter-spacing:-.5px;color:var(--navy)}
-.logo-text b em{font-style:normal;background:linear-gradient(90deg,#0284C7,#0EA5E9);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo-text small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.4px}
+.site-header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.78);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border-bottom:1px solid rgba(226,232,240,.7);transition:box-shadow .25s}
+.site-header::after{content:'';display:block;height:3px;background:linear-gradient(90deg,#0EA5E9,#2563EB,#7C3AED,#0EA5E9);background-size:300% 100%;animation:hdrflow 8s linear infinite}
+@keyframes hdrflow{to{background-position:300% 0}}
+.site-header.scrolled{box-shadow:0 10px 30px rgba(10,37,64,.12)}
+.nav-inner{display:flex;align-items:center;gap:12px;height:66px}
+.logo{display:flex;align-items:center;gap:11px;cursor:pointer;user-select:none}
+.logo-img{width:46px;height:46px;border-radius:14px;box-shadow:0 6px 18px rgba(37,99,235,.35);transition:transform .25s}
+.logo:hover .logo-img{transform:rotate(-8deg) scale(1.06)}
+.logo-mark{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#0EA5E9,#2563EB);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 16px rgba(37,99,235,.35);color:#fff;font-weight:800}
+.logo-text{line-height:1.08}
+.logo-text b{font-size:19px;letter-spacing:-.6px;color:var(--navy);font-weight:800}
+.logo-text b em{font-style:normal;background:linear-gradient(90deg,#0284C7,#0EA5E9,#38BDF8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-text small{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--muted);font-weight:700;letter-spacing:1.1px;margin-top:2px}
+.lt-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px #22C55E;animation:blink 1.8s infinite;display:inline-block}
 .nav-links{display:none;align-items:center;gap:4px;margin-left:12px}
-.nav-links a{font-size:13px;font-weight:700;color:#334155;text-decoration:none;padding:9px 14px;border-radius:99px;cursor:pointer;transition:.2s}
+.nav-links a{position:relative;font-size:13px;font-weight:700;color:#334155;text-decoration:none;padding:9px 14px;border-radius:12px;cursor:pointer;transition:.2s}
 .nav-links a:hover{background:#F1F5F9;color:var(--navy)}
-.nav-links a.on{background:#E0F2FE;color:#0369A1}
+.nav-links a.on{background:linear-gradient(135deg,#E0F2FE,#DBEAFE);color:#0369A1;box-shadow:inset 0 0 0 1px #BAE6FD}
+.nav-links a.on::after{content:'';position:absolute;left:16px;right:16px;bottom:4px;height:2.5px;border-radius:99px;background:linear-gradient(90deg,#0EA5E9,#2563EB)}
 .nav-cta{margin-left:auto;display:flex;align-items:center;gap:8px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-weight:800;border-radius:14px;transition:.2s;text-decoration:none}
 .btn-login{background:var(--navy);color:#fff;padding:10px 18px;font-size:13px;border-radius:12px}
@@ -376,14 +384,14 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
 <header class="site-header">
   <div class="container nav-inner">
     <div class="logo" onclick="goPage('beranda')">
-      <div class="logo-mark">❄</div>
-      <div class="logo-text"><b>Bekasi<em>AC</em></b><small>SERVICE AC PROFESIONAL</small></div>
+      <img class="logo-img" src="image/logo.png" alt="Logo BekasiAC" onerror="this.outerHTML='<div class=\'logo-mark\'>❄</div>'">
+      <div class="logo-text"><b>Bekasi<em>AC</em></b><small><span class="lt-dot"></span>SERVICE AC PROFESIONAL</small></div>
     </div>
     <nav class="nav-links">
       <a id="nl-beranda" class="on" onclick="goPage('beranda')">Beranda</a>
       <a id="nl-layanan" onclick="goPage('layanan')">Layanan & Harga</a>
       <a id="nl-galeri" onclick="goPage('galeri')">Galeri</a>
-      <a id="nl-ulasan" onclick="goPage('ulasan')">Ulasan</a>
+      <a id="nl-ulasan" onclick="scrollToId('testimoni')">Ulasan</a>
       <a id="nl-tips" onclick="goPage('tips')">Tips AC</a>
       <a id="nl-tentang" onclick="goPage('tentang')">Tentang</a>
       <a id="nl-profil" style="display:none" onclick="goPage('profil')">📦 Pesanan Saya</a>
@@ -398,7 +406,7 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
     <a onclick="goPage('beranda')">🏠 Beranda</a>
     <a onclick="goPage('layanan')">🧰 Layanan & Harga</a>
     <a onclick="goPage('galeri')">📸 Galeri & Video</a>
-    <a onclick="goPage('ulasan')">⭐ Ulasan Pelanggan</a>
+    <a onclick="scrollToId('testimoni')">⭐ Ulasan Pelanggan</a>
     <a onclick="goPage('tips')">💡 Tips & Edukasi AC</a>
     <a onclick="goPage('tentang')">🏢 Tentang & FAQ</a>
     <a id="mm-profil" style="display:none" onclick="goPage('profil')">📦 Pesanan Saya</a>
@@ -485,7 +493,7 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
       <div class="exp-grid">
         <div class="exp" onclick="goPage('layanan')"><span>🧰</span><b>Layanan & Harga</b><p>Daftar harga lengkap semua layanan AC.</p><i>Buka menu →</i></div>
         <div class="exp" onclick="goPage('galeri')"><span>📸</span><b>Galeri & Video</b><p>Dokumentasi asli pekerjaan teknisi kami.</p><i>Lihat bukti →</i></div>
-        <div class="exp" onclick="goPage('ulasan')"><span>⭐</span><b>Ulasan Pelanggan</b><p>Kata mereka yang sudah pakai jasa kami.</p><i>Baca ulasan →</i></div>
+        <div class="exp" onclick="scrollToId('testimoni')"><span>⭐</span><b>Ulasan Pelanggan</b><p>Kata mereka yang sudah pakai jasa kami.</p><i>Baca ulasan →</i></div>
         <div class="exp" onclick="goPage('tips')"><span>💡</span><b>Tips & Edukasi AC</b><p>Rawat AC agar awet & hemat listrik.</p><i>Pelajari →</i></div>
         <div class="exp" onclick="goPage('tentang')"><span>🏢</span><b>Tentang & FAQ</b><p>Profil, area layanan & tanya jawab.</p><i>Kenali kami →</i></div>
         <div class="exp" onclick="checkProfile()"><span>📦</span><b>Pesanan Saya</b><p>Lacak status pesanan Anda real-time.</p><i>Cek status →</i></div>
@@ -595,28 +603,6 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
       </div>
       <div class="snap" id="galeriSnap"><div style="padding:24px;color:var(--muted);font-size:13px">Memuat galeri…</div></div>
       <div class="snap hide" id="videoSnap"><div style="padding:24px;color:var(--muted);font-size:13px">Memuat video…</div></div>
-    </section>
-
-  </div>
-</div>
-
-<!-- ================= HALAMAN ULASAN ================= -->
-<div id="page-ulasan" class="page">
-  <div class="page-head"><div class="container">
-    <span class="crumb" onclick="goPage('beranda')">🏠 Beranda &rsaquo; Ulasan Pelanggan</span>
-    <h1>⭐ Ulasan Pelanggan</h1>
-    <p>Penilaian jujur dari pelanggan di seluruh Bekasi. Anda juga bisa menulis ulasan + foto hasil pengerjaan.</p>
-  </div></div>
-  <div class="container">
-    <!-- TESTIMONI -->
-    <section class="sec" id="testimoni">
-      <div class="sec-head"><h2>⭐ Kata Pelanggan</h2><p>Ulasan asli dari database + pelanggan terverifikasi.</p><div class="bar"></div></div>
-      <div class="rev-summary">
-        <div><div class="rev-big">4.9<span style="font-size:20px;color:#93C5FD">/5</span></div><div class="rev-stars">★★★★★</div><div style="font-size:11.5px;color:#CBD5E1;margin-top:4px" id="revCountLabel">2.400+ ulasan</div></div>
-        <div style="font-size:12.5px;color:#DBEAFE;position:relative;z-index:2">“Puas banget! Teknisi datang cepat, kerja rapi, AC langsung dingin nyess. Recommended untuk area Bekasi.”<br><small style="color:#93C5FD">— Rata-rata kesan pelanggan</small></div>
-        <button class="btn" style="background:#fff;color:var(--navy);padding:13px 20px;font-size:13px;position:relative;z-index:2" onclick="openModal('reviewModal')">✍️ Tulis Ulasan</button>
-      </div>
-      <div class="rev-list" id="revList"><div style="padding:20px;color:var(--muted);font-size:13px">Memuat ulasan…</div></div>
     </section>
 
   </div>
@@ -738,11 +724,25 @@ footer{background:#071A33;color:#CBD5E1;margin-top:36px;padding:36px 0 20px}
   </div>
 </div>
 
+<!-- ================= ULASAN GLOBAL (tampil di semua halaman) ================= -->
+<div class="container" id="globalReviews">
+    <!-- TESTIMONI -->
+    <section class="sec" id="testimoni">
+      <div class="sec-head"><h2>⭐ Kata Pelanggan</h2><p>Ulasan asli dari database + pelanggan terverifikasi.</p><div class="bar"></div></div>
+      <div class="rev-summary">
+        <div><div class="rev-big">4.9<span style="font-size:20px;color:#93C5FD">/5</span></div><div class="rev-stars">★★★★★</div><div style="font-size:11.5px;color:#CBD5E1;margin-top:4px" id="revCountLabel">2.400+ ulasan</div></div>
+        <div style="font-size:12.5px;color:#DBEAFE;position:relative;z-index:2">“Puas banget! Teknisi datang cepat, kerja rapi, AC langsung dingin nyess. Recommended untuk area Bekasi.”<br><small style="color:#93C5FD">— Rata-rata kesan pelanggan</small></div>
+        <button class="btn" style="background:#fff;color:var(--navy);padding:13px 20px;font-size:13px;position:relative;z-index:2" onclick="openModal('reviewModal')">✍️ Tulis Ulasan</button>
+      </div>
+      <div class="rev-list" id="revList"><div style="padding:20px;color:var(--muted);font-size:13px">Memuat ulasan…</div></div>
+    </section>
+</div>
+
 <!-- ================= FOOTER ================= -->
 <footer>
   <div class="container foot-grid">
     <div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="logo-mark">❄</div><b style="color:#fff;font-size:18px">BekasiAC</b></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><img src="image/logo.png" alt="Logo BekasiAC" style="width:42px;height:42px;border-radius:12px" onerror="this.outerHTML='<div class=\'logo-mark\'>❄</div>'"><b style="color:#fff;font-size:18px">Bekasi<span style="color:#38BDF8">AC</span></b></div>
       <p>Kontraktor, distributor & retail AC terbaik dan terpercaya di Bekasi. Cuci, servis, bongkar-pasang, pengadaan unit baru.</p>
       <div style="display:flex;gap:8px;margin-top:12px">
         <a href="https://youtube.com/@serviceacbekasi4733?si=hiOsDwp2d3ynW8W1" target="_blank" style="background:#EF4444;color:#fff;padding:9px 16px;border-radius:99px;font-weight:800;font-size:12px;margin:0">▶ YouTube</a>
@@ -1071,6 +1071,8 @@ function goPage(p){
   try{ history.replaceState(null,'','#'+p); }catch(e){}
   updateCart();
 }
+// header shadow saat digulir
+window.addEventListener('scroll',()=>{ document.querySelector('.site-header').classList.toggle('scrolled', window.scrollY>8); },{passive:true});
 // buka halaman sesuai hash (mis. situs.com/#layanan)
 window.addEventListener('DOMContentLoaded',()=>{
   const h=(location.hash||'').replace('#','');
